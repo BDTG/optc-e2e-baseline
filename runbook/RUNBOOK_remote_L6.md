@@ -27,9 +27,8 @@ cd PIDSMaker
 
 # 1.2 Áp patches (đã đóng gói trong patches/)
 #   - all_patches.diff  : 8 file code (config, preprocessing, pipeline, utils)
-#   - pidsmaker_patch.diff : skip JSON lỗi trong create_database_optc.py
-git apply ../patches/all_patches.diff
-git apply ../patches/pidsmaker_patch.diff
+#       → ĐÃ BAO GỒM skip-JSON deviation (malformed JSON guard trong create_database_optc.py)
+git apply ../patches/all_patches.diff  # (chỉ 1 file)
 
 # 1.3 Thay config.py (đã patch sẵn: database=optc_h051_full, dates chuẩn)
 cp ../config/config.py pidsmaker/config/config.py
