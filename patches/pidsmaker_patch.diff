@@ -1,27 +1,217 @@
+diff --git a/dataset_preprocessing/optc/create_database_optc.py b/dataset_preprocessing/optc/create_database_optc.py
+index f162ef7..b8e3ad4 100644
 --- a/dataset_preprocessing/optc/create_database_optc.py
 +++ b/dataset_preprocessing/optc/create_database_optc.py
-@@ -35,7 +35,11 @@ def save_nodes(cfg, raw_dir):
-                 line = line.replace("\\\\\\\\", "/")
-                 temp_dic = json.loads(line.strip())
+@@ -5,6 +5,7 @@ Parses OpTC provenance JSON files and populates PostgreSQL database with nodes
+ """
  
--                if temp_dic["hostname"].split(".")[0] != hostname:
-+                # HERMES-PATCH: skip malformed/empty lines instead of crashing.
-+                # Upstream assumes every line is valid JSON. In practice host051/501
-+                # bundles contain occasional blank or truncated lines near file
-+                # boundaries, causing JSONDecodeError on real data.
-+                if not line.strip():
-                     continue
+ import json
++import gzip
+ import os
  
-                 if temp_dic["action"] not in rel2id:
-@@ -46,6 +50,9 @@ def save_nodes(cfg, raw_dir):
-                 if temp_dic["object"] not in ["FILE", "FLOW", "PROCESS"]:
-                     continue
+ from psycopg2 import extras as ex
+@@ -23,7 +24,10 @@ from pidsmaker.utils.utils import (
  
-+                # HERMES-PATCH: guard against malformed JSON after strip().
+ def save_nodes(cfg, dataset_dir):
+     hostname = optc_hostname_map[cfg.dataset.name]
+-    all_paths = get_all_filelist(dataset_dir)
++    if os.path.isfile(dataset_dir):
++        all_paths = [dataset_dir]
++    else:
++        all_paths = get_all_filelist(dataset_dir)
+ 
+     rel2id = get_rel2id(cfg)
+ 
+@@ -32,11 +36,25 @@ def save_nodes(cfg, dataset_dir):
+     file_uuid2attr = {}
+ 
+     for i, file in enumerate(all_paths):
+-        with open(file, "r") as f:
++        if file.endswith(".gz"):
++            f_handle = gzip.open(file, "rt", encoding="utf-8", errors="replace")
++        else:
++            f_handle = open(file, "r", encoding="utf-8", errors="replace")
++        with f_handle as f:
+             for line in tqdm(f, desc=f"Extracting nodes from {i}-th/{len(all_paths)} file."):
+                 line = line.replace("\\\\", "/")
+-                temp_dic = json.loads(line.strip())
++                line = line.strip()
++                if not line:
++                    continue
 +                try:
 +                    temp_dic = json.loads(line)
-+                except json.JSONDecodeError:
++                    if not isinstance(temp_dic, dict):
++                        continue
++                except (json.JSONDecodeError, TypeError, ValueError):
 +                    continue
-+
-                 src_uuid = temp_dic["actorID"]
-                 dst_uuid = temp_dic["objectID"]
+ 
++                if "hostname" not in temp_dic:
++                    continue
+                 if temp_dic["hostname"].split(".")[0] != hostname:
+                     continue
+ 
+@@ -106,10 +124,20 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving subject nodes.")
+-    sql = """insert into subject_node_table
++    # Deduplicate by (node_uuid, hash_id) to avoid PK violation
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into subject_node_table (node_uuid, hash_id, node_type, label, is_malicious, path, cmd, index_id)
+                              values %s
+-                """
+-    ex.execute_values(cur, sql, datalist, page_size=10000)
++                ON CONFLICT (node_uuid) DO NOTHING"""
++    mapped = [[row[0], row[1], 'SUBJECT', None, 0, row[2], row[3], row[4]] for row in datalist]
++    ex.execute_values(cur, sql, mapped, page_size=10000)
+     connect.commit()
+     log(f"Finished saving subject nodes.")
+     del subject_uuid2attr
+@@ -124,10 +152,19 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving file nodes.")
+-    sql = """insert into file_node_table
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into file_node_table (node_uuid, hash_id, node_type, label, is_malicious, path, index_id)
+                              values %s
+-                """
+-    ex.execute_values(cur, sql, datalist, page_size=10000)
++                ON CONFLICT (node_uuid) DO NOTHING"""
++    mapped = [[row[0], row[1], 'FILE', None, 0, row[2], row[3]] for row in datalist]
++    ex.execute_values(cur, sql, mapped, page_size=10000)
+     connect.commit()
+     log(f"Finished saving file nodes.")
+     del file_uuid2attr
+@@ -139,10 +176,15 @@ def save_nodes(cfg, dataset_dir):
+         temp_data = [
+             net_uuid,
+             stringtomd5(str(net_attr)),
+-            net_attr[0],
+-            net_attr[1],
+-            net_attr[2],
+-            net_attr[3],
++            'NETFLOW',
++            None,
++            0,
++            str(net_attr[0]) if net_attr[0] is not None else None,
++            int(net_attr[1]) if net_attr[1] is not None else None,
++            str(net_attr[2]) if net_attr[2] is not None else None,
++            int(net_attr[3]) if net_attr[3] is not None else None,
++            str(net_attr[4]) if len(net_attr) > 4 and net_attr[4] is not None else None,
++            str(net_attr[5]) if len(net_attr) > 5 and net_attr[5] is not None else None,
+             index_id,
+         ]
+         datalist.append(temp_data)
+@@ -150,9 +192,17 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving net nodes.")
+-    sql = """insert into netflow_node_table
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into netflow_node_table (node_uuid, hash_id, node_type, label, is_malicious, local_ip, local_port, remote_ip, remote_port, protocol, service, index_id)
+                              values %s
+-                """
++                ON CONFLICT (node_uuid) DO NOTHING"""
+     ex.execute_values(cur, sql, datalist, page_size=10000)
+     connect.commit()
+     log(f"Finished saving net nodes.")
+@@ -164,21 +214,35 @@ def save_nodes(cfg, dataset_dir):
+ 
+ def save_events(cfg, uuid2index_id, dataset_dir):
+     hostname = optc_hostname_map[cfg.dataset.name]
+-    all_paths = get_all_filelist(dataset_dir)
++    if os.path.isfile(dataset_dir):
++        all_paths = [dataset_dir]
++    else:
++        all_paths = get_all_filelist(dataset_dir)
+ 
+     rel2id = get_rel2id(cfg)
+ 
+     cur, connect = init_database_connection(cfg)
+ 
+     for i, file in enumerate(all_paths):
+-        with open(file, "r") as f:
++        if file.endswith(".gz"):
++            f_handle = gzip.open(file, "rt", encoding="utf-8", errors="replace")
++        else:
++            f_handle = open(file, "r", encoding="utf-8", errors="replace")
++        with f_handle as f:
+             datalist = []
+             for line in tqdm(f, desc=f"Extracting events from {i}-th/{len(all_paths)} file."):
+                 line = line.replace("\\\\", "/")
+-                temp_dic = json.loads(line.strip())
++                try:
++                    temp_dic = json.loads(line.strip())
++                    if not isinstance(temp_dic, dict):
++                        continue
++                except (json.JSONDecodeError, TypeError, ValueError):
++                    continue
+ 
+                 reverse_flag = False
+ 
++                if "hostname" not in temp_dic:
++                    continue
+                 if temp_dic["hostname"].split(".")[0] != hostname:
+                     continue
+ 
+@@ -213,8 +277,9 @@ def save_events(cfg, uuid2index_id, dataset_dir):
+                         operation,
+                         src_uuid,
+                         src_index_id,
+-                        event_uuid,
++                        rel2id[operation],
+                         timestamp,
++                        event_uuid,
+                     ]
+                 else:
+                     temp_data = [
+@@ -223,8 +288,9 @@ def save_events(cfg, uuid2index_id, dataset_dir):
+                         operation,
+                         dst_uuid,
+                         dst_index_id,
+-                        event_uuid,
++                        rel2id[operation],
+                         timestamp,
++                        event_uuid,
+                     ]
+ 
+                 datalist.append(temp_data)
+@@ -243,7 +309,15 @@ if __name__ == "__main__":
+     cfg = get_yml_cfg(args)
+ 
+     dataset_name = cfg.dataset.name
+-    raw_dir = "/data/"
++    # Hermes patch: /data is the mounted raw root (multi-day bundles, hostname-filtered).
++    # If the env var PIDS_RAW_DIR is set it overrides (e.g. single-file pilot runs).
++    raw_dir = os.environ.get("PIDS_RAW_DIR", "/data")
++    # Hermes patch: --dataset.database is dropped by argparse (dotted args not in
++    # add_cfg_args_to_parser), so allow DB name override via env for multi-day builds.
++    db_override = os.environ.get("PIDS_DB_NAME")
++    if db_override:
++        cfg.dataset.database = db_override
++        cfg.dataset.database_all_file = db_override
+ 
+     uuid2index_id = save_nodes(cfg, raw_dir)
+     log(f"Finished saving nodes.")

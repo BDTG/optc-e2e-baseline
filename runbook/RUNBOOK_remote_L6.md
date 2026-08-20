@@ -4,6 +4,10 @@
 > với split chuẩn train=19-21 / val=22 / test=23-25 — việc máy 16GB không làm được (OOM).
 > Chuẩn bị bởi Hermes (máy BDTG) 2026-08-15. Số pilot subset tham khảo: `LOG.md` P1-41→P1-45.
 
+> 📌 **VỊ TRÍ DATA (máy thầy):** Toàn bộ data lưu tại **`E:\Data\Thai`** (WSL: `/mnt/e/Data/Thai`).
+> Dump/raw/artifacts đều để đó — KHÔNG để trong `/home/vung2` (WSL home nằm ổ C nhỏ).
+> Ví dụ restore: `bash setup_all.sh --dump /mnt/e/Data/Thai/optc_h051_full.dump`
+
 ---
 
 ## 0. Yêu cầu phần cứng

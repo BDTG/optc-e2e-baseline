@@ -159,7 +159,11 @@ if [ -n "$DUMP_PATH" ] && [ -f "$DUMP_PATH" ]; then
   CNT=$(sudo -u postgres psql -tA -d optc_h051_full -c "SELECT count(*) FROM event_table;" 2>/dev/null | tr -d ' ')
   echo "   ✅ event_table count: ${CNT:-?}  (kỳ vọng 19,815,600)"
 else
-  echo "==> [5/6] (không có --dump — bỏ qua restore; DB sẽ tự build từ raw hoặc restore thủ công)"
+  # Data máy thầy lưu TOÀN BỘ ở E:\Data\Thai (WSL: /mnt/e/Data/Thai)
+  DATA_DIR="/mnt/e/Data/Thai"
+  echo "==> [5/6] (không có --dump — bỏ qua restore)"
+  echo "   💡 Dump/raw nên đặt tại $DATA_DIR (E:\\Data\\Thai)."
+  echo "   Ví dụ: bash setup_all.sh --dump $DATA_DIR/optc_h051_full.dump"
 fi
 
 # --------------------------------------------------------------- 6. hướng dẫn
