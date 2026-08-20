@@ -23,12 +23,17 @@ gt/            Ground truth: uuid_index_map (113 nodes), gt_1hop/gt_2hop fragmen
 scripts/       split_frac (matches original load_split), precision_1hop_2hop,
                calib_threshold, reproduce_tfidf_identity
 runbook/       Step-by-step RUNBOOK for the L6 baseline on Machine B (commands + pitfalls)
-vendor/        Finetune_phase0 — backup of the Phase-0 repo (optc/ + legacy/)
+setup_all.sh   ONE-COMMAND auto-setup for a fresh WSL2 Ubuntu: packages → Miniconda →
+               Python 3.9 → deps → PIDSMAKER clone + patches → Postgres (optionally restore dump)
 YEU_CAU_CAI_THIEN_PHASE0.md — protocol requirements for reproducible Phase-0 re-runs
                              (Vietnamese; key points: seed parametrization, AUC-PR as
                              primary metric, VRAM logging, multi-seed/multi-fold)
 DATA_TRANSFER.md — large files (>100 MB) are distributed out-of-band; see the checksums here
 ```
+
+> `vendor/` (Phase-0 code from the private repo `imHaruuu/Finetune`) was REMOVED from this
+> public repo on purpose — it is not needed to run the L6 baseline. Only setup_all.sh +
+> patches + config + GT are required.
 
 ## Pipeline
 
