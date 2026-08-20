@@ -83,14 +83,24 @@ else
 fi
 
 # ----------------------------------------------------------------- 3. deps
-echo "==> [3/6] Cài dependencies (torch CPU + sklearn/networkx/igraph...)"
+echo "==> [3/6] Cài dependencies (khớp pip list container — torch CPU thay vì cu117)..."
 conda run -n pids pip install --quiet --upgrade pip
-conda run -n pids pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+# --- torch 1.13.1 CPU (máy thầy không GPU; container dùng 1.13.1+cu117) ---
+conda run -n pids pip install --quiet torch==1.13.1+cpu torchvision==0.14.1+cpu torchaudio==0.13.1+cpu \
+  --extra-index-url https://download.pytorch.org/whl/cpu
+# --- các dep khác theo Dockerfile/container ---
 conda run -n pids pip install --quiet \
   scikit-learn==1.2.0 networkx==2.8.7 xxhash==3.2.0 graphviz==0.20.1 \
   psutil scipy==1.10.1 matplotlib==3.8.4 wandb==0.24.1 chardet==5.2.0 \
   nltk==3.8.1 igraph==0.11.5 cairocffi==1.7.0 wget==3.2 \
-  psycopg2-binary tqdm
+  gensim==4.3.1 pytz==2024.1 pandas==2.2.2 yacs==0.1.8 \
+  gdown==5.2.0 umap-learn==0.5.6 flask==3.0.3 \
+  psycopg2-binary tqdm setuptools==61.0.0 pytest==8.3.5
+# --- torch_geometric + PyG libs (CPU build cho torch 1.13) ---
+conda run -n pids pip install --quiet torch_geometric==2.5.3
+conda run -n pids pip install --quiet pyg_lib==0.2.0 torch_scatter==2.1.1 \
+  torch_sparse==0.6.17 torch_cluster==1.6.1 torch_spline_conv==1.2.2 \
+  -f https://data.pyg.org/whl/torch-1.13.0+cpu.html
 echo "   OK"
 
 # ----------------------------------------------------------------- 4. repo
