@@ -152,8 +152,10 @@ if [ -n "$DUMP_PATH" ] && [ -f "$DUMP_PATH" ]; then
   echo "==> [5/6] Restore DB từ $DUMP_PATH ..."
   sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='optc_h051_full'" | grep -q 1 || \
     sudo -u postgres createdb -O postgres optc_h051_full
-  sudo -u postgres pg_restore --no-owner --no-privileges -d optc_h051_full "$DUMP_PATH" || \
-    echo "   ⚠️ pg_restore có warning (thường OK — kiểm tra count bên dưới)"
+  # Quan trọng: pipe qua stdin (cat) thay vì để postgres đọc file trực tiếp —
+  # file trong /home/<user> có permission mà postgres không đọc được.
+  cat "$DUMP_PATH" | sudo -u postgres pg_restore --no-owner --no-privileges -d optc_h051_full \
+    || echo "   ⚠️ pg_restore có warning (thường OK — kiểm tra count bên dưới)"
   CNT=$(sudo -u postgres psql -tA -d optc_h051_full -c "SELECT count(*) FROM event_table;" 2>/dev/null | tr -d ' ')
   echo "   ✅ event_table count: ${CNT:-?}  (kỳ vọng 19,815,600)"
 else
