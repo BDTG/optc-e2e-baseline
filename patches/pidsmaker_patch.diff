@@ -1,0 +1,27 @@
+--- a/dataset_preprocessing/optc/create_database_optc.py
++++ b/dataset_preprocessing/optc/create_database_optc.py
+@@ -35,7 +35,11 @@ def save_nodes(cfg, raw_dir):
+                 line = line.replace("\\\\\\\\", "/")
+                 temp_dic = json.loads(line.strip())
+ 
+-                if temp_dic["hostname"].split(".")[0] != hostname:
++                # HERMES-PATCH: skip malformed/empty lines instead of crashing.
++                # Upstream assumes every line is valid JSON. In practice host051/501
++                # bundles contain occasional blank or truncated lines near file
++                # boundaries, causing JSONDecodeError on real data.
++                if not line.strip():
+                     continue
+ 
+                 if temp_dic["action"] not in rel2id:
+@@ -46,6 +50,9 @@ def save_nodes(cfg, raw_dir):
+                 if temp_dic["object"] not in ["FILE", "FLOW", "PROCESS"]:
+                     continue
+ 
++                # HERMES-PATCH: guard against malformed JSON after strip().
++                try:
++                    temp_dic = json.loads(line)
++                except json.JSONDecodeError:
++                    continue
++
+                 src_uuid = temp_dic["actorID"]
+                 dst_uuid = temp_dic["objectID"]

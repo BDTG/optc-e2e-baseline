@@ -1,0 +1,14 @@
+host,day,window_start,window_end,fragment,one_hop_count,two_hop_count,method
+SYSCLIENT0051,09/25,09/25/19 10:29:42,09/25/19 14:24:03,updated notepad++ which downloaded malicious binary update.exe (Meterpreter payload),678,266,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0051,09/25,09/25/19 10:31:08,09/25/19 14:24:03,obtained system via Meterpreter get system; Mimikatz clear-text passwords/hashes,676,265,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0051,09/25,09/25/19 10:40:39,09/25/19 14:24:03,migrated from cKfGW.exe to LSASS; persistence via Autorun RTqWaEHv; timestomp MAC,660,270,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0351,09/25,09/25/19 11:23:31,09/25/19 14:24:03,update to notepadd++ downloaded malicious update.exe; migrated to lwabeat,0,0,SKIP - parquet chưa có host này
+SYSCLIENT0501,09/24,09/24/19 10:36:51,09/24/19 15:42:36,opened malicious attachment payroll.docx; Agent K3G1U8DN checks in,1093,445,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0501,09/24,09/24/19 10:46:02,09/24/19 15:42:36,injected PowerShell script to pivot to PowerShell Empire sports.com 202.6.172.98:443,1087,447,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0501,09/24,09/24/19 11:03:36,09/24/19 15:42:36,DeathStar domain privesc; elevated agent VUBW3KYE on DC1,1079,451,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0501,09/24,09/24/19 11:34:56,09/24/19 15:42:36,WMI subscription persistence; winenum; findtrusteddocuments; plink.exe upload,1063,458,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0501,09/24,09/24/19 13:26:57,09/24/19 15:42:36,RDP + downloaded fileTransfer1000.exe (nc.exe) news.com:8080; exfil export.zip,638,518,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0201,09/23,09/23/19 11:23:29,09/23/19 15:30:00,downloaded runme.bat Empire stager news.com:8000; agent VL8B5T3U/LUAVR71T,0,0,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0201,09/23,09/23/19 11:26:02,09/23/19 15:30:00,Empire bypass UAC; Mimikatz; psinject LSASS; registry persistence,0,0,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0203,09/24,09/24/19 15:28:36,09/24/19 15:42:36,Agent UXCSTKZ9 ran overnight on Sysclient0203 (spread from DC1),0,0,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"
+SYSCLIENT0205,09/23,09/23/19 14:45:13,09/23/19 15:30:00,Agent XH32VTK5 spread to Sysclient0205 via Invoke_wmi,0,0,"pid/ppid BFS ≤2 edges, KHÔNG actor_id"

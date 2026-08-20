@@ -1,0 +1,575 @@
+diff --git a/dataset_preprocessing/optc/create_database_optc.py b/dataset_preprocessing/optc/create_database_optc.py
+index f162ef7..b8e3ad4 100644
+--- a/dataset_preprocessing/optc/create_database_optc.py
++++ b/dataset_preprocessing/optc/create_database_optc.py
+@@ -5,6 +5,7 @@ Parses OpTC provenance JSON files and populates PostgreSQL database with nodes
+ """
+ 
+ import json
++import gzip
+ import os
+ 
+ from psycopg2 import extras as ex
+@@ -23,7 +24,10 @@ from pidsmaker.utils.utils import (
+ 
+ def save_nodes(cfg, dataset_dir):
+     hostname = optc_hostname_map[cfg.dataset.name]
+-    all_paths = get_all_filelist(dataset_dir)
++    if os.path.isfile(dataset_dir):
++        all_paths = [dataset_dir]
++    else:
++        all_paths = get_all_filelist(dataset_dir)
+ 
+     rel2id = get_rel2id(cfg)
+ 
+@@ -32,11 +36,25 @@ def save_nodes(cfg, dataset_dir):
+     file_uuid2attr = {}
+ 
+     for i, file in enumerate(all_paths):
+-        with open(file, "r") as f:
++        if file.endswith(".gz"):
++            f_handle = gzip.open(file, "rt", encoding="utf-8", errors="replace")
++        else:
++            f_handle = open(file, "r", encoding="utf-8", errors="replace")
++        with f_handle as f:
+             for line in tqdm(f, desc=f"Extracting nodes from {i}-th/{len(all_paths)} file."):
+                 line = line.replace("\\\\", "/")
+-                temp_dic = json.loads(line.strip())
++                line = line.strip()
++                if not line:
++                    continue
++                try:
++                    temp_dic = json.loads(line)
++                    if not isinstance(temp_dic, dict):
++                        continue
++                except (json.JSONDecodeError, TypeError, ValueError):
++                    continue
+ 
++                if "hostname" not in temp_dic:
++                    continue
+                 if temp_dic["hostname"].split(".")[0] != hostname:
+                     continue
+ 
+@@ -106,10 +124,20 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving subject nodes.")
+-    sql = """insert into subject_node_table
++    # Deduplicate by (node_uuid, hash_id) to avoid PK violation
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into subject_node_table (node_uuid, hash_id, node_type, label, is_malicious, path, cmd, index_id)
+                              values %s
+-                """
+-    ex.execute_values(cur, sql, datalist, page_size=10000)
++                ON CONFLICT (node_uuid) DO NOTHING"""
++    mapped = [[row[0], row[1], 'SUBJECT', None, 0, row[2], row[3], row[4]] for row in datalist]
++    ex.execute_values(cur, sql, mapped, page_size=10000)
+     connect.commit()
+     log(f"Finished saving subject nodes.")
+     del subject_uuid2attr
+@@ -124,10 +152,19 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving file nodes.")
+-    sql = """insert into file_node_table
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into file_node_table (node_uuid, hash_id, node_type, label, is_malicious, path, index_id)
+                              values %s
+-                """
+-    ex.execute_values(cur, sql, datalist, page_size=10000)
++                ON CONFLICT (node_uuid) DO NOTHING"""
++    mapped = [[row[0], row[1], 'FILE', None, 0, row[2], row[3]] for row in datalist]
++    ex.execute_values(cur, sql, mapped, page_size=10000)
+     connect.commit()
+     log(f"Finished saving file nodes.")
+     del file_uuid2attr
+@@ -139,10 +176,15 @@ def save_nodes(cfg, dataset_dir):
+         temp_data = [
+             net_uuid,
+             stringtomd5(str(net_attr)),
+-            net_attr[0],
+-            net_attr[1],
+-            net_attr[2],
+-            net_attr[3],
++            'NETFLOW',
++            None,
++            0,
++            str(net_attr[0]) if net_attr[0] is not None else None,
++            int(net_attr[1]) if net_attr[1] is not None else None,
++            str(net_attr[2]) if net_attr[2] is not None else None,
++            int(net_attr[3]) if net_attr[3] is not None else None,
++            str(net_attr[4]) if len(net_attr) > 4 and net_attr[4] is not None else None,
++            str(net_attr[5]) if len(net_attr) > 5 and net_attr[5] is not None else None,
+             index_id,
+         ]
+         datalist.append(temp_data)
+@@ -150,9 +192,17 @@ def save_nodes(cfg, dataset_dir):
+         index_id += 1
+ 
+     log(f"Start saving net nodes.")
+-    sql = """insert into netflow_node_table
++    seen = set()
++    deduped = []
++    for row in datalist:
++        key = (row[0], row[1])
++        if key not in seen:
++            seen.add(key)
++            deduped.append(row)
++    datalist = deduped
++    sql = """insert into netflow_node_table (node_uuid, hash_id, node_type, label, is_malicious, local_ip, local_port, remote_ip, remote_port, protocol, service, index_id)
+                              values %s
+-                """
++                ON CONFLICT (node_uuid) DO NOTHING"""
+     ex.execute_values(cur, sql, datalist, page_size=10000)
+     connect.commit()
+     log(f"Finished saving net nodes.")
+@@ -164,21 +214,35 @@ def save_nodes(cfg, dataset_dir):
+ 
+ def save_events(cfg, uuid2index_id, dataset_dir):
+     hostname = optc_hostname_map[cfg.dataset.name]
+-    all_paths = get_all_filelist(dataset_dir)
++    if os.path.isfile(dataset_dir):
++        all_paths = [dataset_dir]
++    else:
++        all_paths = get_all_filelist(dataset_dir)
+ 
+     rel2id = get_rel2id(cfg)
+ 
+     cur, connect = init_database_connection(cfg)
+ 
+     for i, file in enumerate(all_paths):
+-        with open(file, "r") as f:
++        if file.endswith(".gz"):
++            f_handle = gzip.open(file, "rt", encoding="utf-8", errors="replace")
++        else:
++            f_handle = open(file, "r", encoding="utf-8", errors="replace")
++        with f_handle as f:
+             datalist = []
+             for line in tqdm(f, desc=f"Extracting events from {i}-th/{len(all_paths)} file."):
+                 line = line.replace("\\\\", "/")
+-                temp_dic = json.loads(line.strip())
++                try:
++                    temp_dic = json.loads(line.strip())
++                    if not isinstance(temp_dic, dict):
++                        continue
++                except (json.JSONDecodeError, TypeError, ValueError):
++                    continue
+ 
+                 reverse_flag = False
+ 
++                if "hostname" not in temp_dic:
++                    continue
+                 if temp_dic["hostname"].split(".")[0] != hostname:
+                     continue
+ 
+@@ -213,8 +277,9 @@ def save_events(cfg, uuid2index_id, dataset_dir):
+                         operation,
+                         src_uuid,
+                         src_index_id,
+-                        event_uuid,
++                        rel2id[operation],
+                         timestamp,
++                        event_uuid,
+                     ]
+                 else:
+                     temp_data = [
+@@ -223,8 +288,9 @@ def save_events(cfg, uuid2index_id, dataset_dir):
+                         operation,
+                         dst_uuid,
+                         dst_index_id,
+-                        event_uuid,
++                        rel2id[operation],
+                         timestamp,
++                        event_uuid,
+                     ]
+ 
+                 datalist.append(temp_data)
+@@ -243,7 +309,15 @@ if __name__ == "__main__":
+     cfg = get_yml_cfg(args)
+ 
+     dataset_name = cfg.dataset.name
+-    raw_dir = "/data/"
++    # Hermes patch: /data is the mounted raw root (multi-day bundles, hostname-filtered).
++    # If the env var PIDS_RAW_DIR is set it overrides (e.g. single-file pilot runs).
++    raw_dir = os.environ.get("PIDS_RAW_DIR", "/data")
++    # Hermes patch: --dataset.database is dropped by argparse (dotted args not in
++    # add_cfg_args_to_parser), so allow DB name override via env for multi-day builds.
++    db_override = os.environ.get("PIDS_DB_NAME")
++    if db_override:
++        cfg.dataset.database = db_override
++        cfg.dataset.database_all_file = db_override
+ 
+     uuid2index_id = save_nodes(cfg, raw_dir)
+     log(f"Finished saving nodes.")
+diff --git a/pidsmaker/config/config.py b/pidsmaker/config/config.py
+index 51e00a0..f0172b3 100644
+--- a/pidsmaker/config/config.py
++++ b/pidsmaker/config/config.py
+@@ -201,9 +201,9 @@ DATASET_DEFAULT_CONFIG = {
+         "num_edge_types": 10,
+         "start_date": "2019-09-15",
+         "end_date": "2019-09-26",
+-        "train_dates": ["2019-09-19", "2019-09-20", "2019-09-21"],
+-        "val_dates": ["2019-09-22"],
+-        "test_dates": ["2019-09-23", "2019-09-24", "2019-09-25"],
++        "train_dates": ["2019-09-19"],
++        "val_dates": ["2019-09-24"],
++        "test_dates": ["2019-09-25"],
+         "unused_dates": ["2019-09-16", "2019-09-17", "2019-09-18"],
+         "ground_truth_relative_path": [
+             "h201/node_h201_0923.csv",
+@@ -220,9 +220,9 @@ DATASET_DEFAULT_CONFIG = {
+         "num_edge_types": 10,
+         "start_date": "2019-09-15",
+         "end_date": "2019-09-26",
+-        "train_dates": ["2019-09-19", "2019-09-20", "2019-09-21"],
+-        "val_dates": ["2019-09-22"],
+-        "test_dates": ["2019-09-23", "2019-09-24", "2019-09-25"],
++        "train_dates": ["2019-09-19"],
++        "val_dates": ["2019-09-24"],
++        "test_dates": ["2019-09-25"],
+         "unused_dates": ["2019-09-16", "2019-09-17", "2019-09-18"],
+         "ground_truth_relative_path": [
+             "h501/node_h501_0924.csv",
+@@ -232,16 +232,16 @@ DATASET_DEFAULT_CONFIG = {
+         ],
+     },
+     "optc_h051": {
+-        "raw_dir": "",
+-        "database": "optc_051",
+-        "database_all_file": "optc_051",
++            "raw_dir": "",
++            "database": "optc_051_sub",
++            "database_all_file": "optc_051_sub",
+         "num_node_types": 3,
+         "num_edge_types": 10,
+         "start_date": "2019-09-15",
+         "end_date": "2019-09-26",
+-        "train_dates": ["2019-09-19", "2019-09-20", "2019-09-21"],
+-        "val_dates": ["2019-09-22"],
+-        "test_dates": ["2019-09-23", "2019-09-24", "2019-09-25"],
++        "train_dates": ["2019-09-19"],
++        "val_dates": ["2019-09-24"],
++        "test_dates": ["2019-09-25"],
+         "unused_dates": ["2019-09-16", "2019-09-17", "2019-09-18"],
+         "ground_truth_relative_path": [
+             "h051/node_h051_0925.csv",
+diff --git a/pidsmaker/detection/training_methods/training_loop.py b/pidsmaker/detection/training_methods/training_loop.py
+index a033ecd..03ff4be 100644
+--- a/pidsmaker/detection/training_methods/training_loop.py
++++ b/pidsmaker/detection/training_methods/training_loop.py
+@@ -72,8 +72,15 @@ def main(cfg):
+             log("Caching test graphs to disk for visualization reuse...")
+             torch.save((test_data, max_node_num), viz_cache_file)
+ 
++    # Hermes patch: single-day datasets have no train/val split; fall back to test
++    # for the model-shape sample so the pilot can still run end-to-end.
++    if len(train_data) == 0 or len(train_data[0]) == 0:
++        sample_data = test_data[0][0]
++    else:
++        sample_data = train_data[0][0]
++
+     model = build_model(
+-        data_sample=train_data[0][0], device=device, cfg=cfg, max_node_num=max_node_num
++        data_sample=sample_data, device=device, cfg=cfg, max_node_num=max_node_num
+     )
+     optimizer = optimizer_factory(cfg, parameters=set(model.parameters()))
+ 
+@@ -138,7 +145,8 @@ def main(cfg):
+                     loss_acc.backward()
+                     optimizer.step()
+ 
+-            tot_loss /= sum(len(dataset) for dataset in train_data)
++            train_total = sum(len(dataset) for dataset in train_data)
++            tot_loss = (tot_loss / train_total) if train_total > 0 else 0.0
+             epoch_times.append(timer() - start)
+ 
+             _, peak_inference_cpu_memory = tracemalloc.get_traced_memory()
+@@ -196,7 +204,8 @@ def main(cfg):
+                         loss_acc.backward()
+                         optimizer.step()
+ 
+-                tot_loss /= sum(len(dataset) for dataset in train_data)
++                train_total = sum(len(dataset) for dataset in train_data)
++                tot_loss = (tot_loss / train_total) if train_total > 0 else 0.0
+ 
+                 # Validation
+                 val_stats = inference_loop.main(
+diff --git a/pidsmaker/featurization/featurization_utils.py b/pidsmaker/featurization/featurization_utils.py
+index 18debdf..967ec99 100644
+--- a/pidsmaker/featurization/featurization_utils.py
++++ b/pidsmaker/featurization/featurization_utils.py
+@@ -33,6 +33,8 @@ def get_corpus(cfg, doc2vec_format=False, gather_multi_dataset=False):
+     """
+     splits = get_splits_to_train_featurization(cfg)
+     split2nodes = get_split2nodes(cfg, gather_multi_dataset=gather_multi_dataset)
++    # Hermes patch: single-day datasets only have 'test' — keep available splits only
++    splits = [s for s in splits if s in split2nodes] or list(split2nodes.keys())
+     nodes_to_include = set().union(*(split2nodes[split] for split in splits))
+ 
+     words, tags = [], []
+diff --git a/pidsmaker/preprocessing/build_graph_methods/build_default_graphs.py b/pidsmaker/preprocessing/build_graph_methods/build_default_graphs.py
+index c5abfc9..92a4e19 100644
+--- a/pidsmaker/preprocessing/build_graph_methods/build_default_graphs.py
++++ b/pidsmaker/preprocessing/build_graph_methods/build_default_graphs.py
+@@ -65,7 +65,8 @@ def compute_indexid2msg(cfg):
+ 
+     # netflow
+     sql = """
+-        select * from netflow_node_table;
++        select node_uuid, hash_id, node_type, local_ip, local_port, remote_ip, remote_port, protocol, service, index_id
++        from netflow_node_table;
+         """
+     cur.execute(sql)
+     records = cur.fetchall()
+@@ -75,12 +76,14 @@ def compute_indexid2msg(cfg):
+     for i in records:
+         attrs = {
+             "type": "netflow",
+-            "local_ip": str(i[2]),
+-            "local_port": str(i[3]),
+-            "remote_ip": str(i[4]),
+-            "remote_port": str(i[5]),
++            "local_ip": i[3] if i[3] is not None else "0.0.0.0",
++            "local_port": str(i[4]) if i[4] is not None else "0",
++            "remote_ip": i[5] if i[5] is not None else "0.0.0.0",
++            "remote_port": str(i[6]) if i[6] is not None else "0",
++            "protocol": i[7] if i[7] is not None else "tcp",
++            "service": i[8] if i[8] is not None else "unknown",
+         }
+-        index_id = str(i[-1])
++        index_id = str(i[9])
+         node_type = attrs["type"]
+         label_str = get_label_str_from_features(attrs, node_type)
+ 
+@@ -88,7 +91,8 @@ def compute_indexid2msg(cfg):
+ 
+     # subject
+     sql = """
+-    select * from subject_node_table;
++    select node_uuid, hash_id, node_type, label, is_malicious, path, cmd, index_id
++    from subject_node_table;
+     """
+     cur.execute(sql)
+     records = cur.fetchall()
+@@ -96,8 +100,8 @@ def compute_indexid2msg(cfg):
+     log(f"Number of process nodes: {len(records)}")
+ 
+     for i in records:
+-        attrs = {"type": "subject", "path": str(i[2]), "cmd_line": str(i[3])}
+-        index_id = str(i[-1])
++        attrs = {"type": "subject", "path": str(i[5]) if i[5] is not None else "", "cmd_line": str(i[6]) if i[6] is not None else ""}
++        index_id = str(i[7])
+         node_type = attrs["type"]
+         label_str = get_label_str_from_features(attrs, node_type)
+ 
+@@ -105,7 +109,8 @@ def compute_indexid2msg(cfg):
+ 
+     # file
+     sql = """
+-    select * from file_node_table;
++    select node_uuid, hash_id, node_type, label, is_malicious, path, index_id
++    from file_node_table;
+     """
+     cur.execute(sql)
+     records = cur.fetchall()
+@@ -113,8 +118,8 @@ def compute_indexid2msg(cfg):
+     log(f"Number of file nodes: {len(records)}")
+ 
+     for i in records:
+-        attrs = {"type": "file", "path": str(i[2])}
+-        index_id = str(i[-1])
++        attrs = {"type": "file", "path": str(i[5]) if i[5] is not None else ""}
++        index_id = str(i[6])
+         node_type = attrs["type"]
+         label_str = get_label_str_from_features(attrs, node_type)
+ 
+@@ -136,7 +141,11 @@ def save_indexid2msg(indexid2msg, split2nodes, cfg):
+         split2nodes: Mapping of splits to their node sets
+         cfg: Configuration with output directory path
+     """
+-    all_nodes = set().union(*(split2nodes[split] for split in ["train", "val", "test"]))
++    # Hermes patch: fallback for single-day datasets where only some splits exist
++    available_splits = [s for s in ["train", "val", "test"] if s in split2nodes]
++    if not available_splits:
++        available_splits = list(split2nodes.keys())
++    all_nodes = set().union(*(split2nodes[split] for split in available_splits))
+     indexid2msg = {k: v for k, v in indexid2msg.items() if k in all_nodes}
+ 
+     out_dir = cfg.construction._dicts_dir
+@@ -252,10 +261,11 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                 attack_index += 1
+ 
+             sql = """
+-            select * from event_table
++            select src_node, src_index_id, operation, dst_node, dst_index_id, event_uuid, timestamp_rec, _id
++            from event_table
+             where
+                   timestamp_rec>'%s' and timestamp_rec<'%s'
+-                   ORDER BY timestamp_rec, event_uuid;
++                   ORDER BY timestamp_rec, _id;
+             """ % (start_ns_timestamp, end_ns_timestamp)
+             cur.execute(sql)
+             events = cur.fetchall()
+@@ -271,7 +281,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                 dst_node,
+                 dst_index_id,
+                 event_uuid,
+-                timestamp_rec,
++                timestamp,
+                 _id,
+             ) in events:
+                 if operation in include_edge_type:
+@@ -282,7 +292,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                         dst_node,
+                         dst_index_id,
+                         event_uuid,
+-                        timestamp_rec,
++                        timestamp,
+                         _id,
+                     )
+                     events_list.append(event_tuple)
+@@ -294,7 +304,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                 dst_node,
+                 dst_index_id,
+                 event_uuid,
+-                timestamp_rec,
++                timestamp,
+                 _id,
+             ) in mimicry_events:
+                 if operation in include_edge_type:
+@@ -305,7 +315,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                         dst_node,
+                         dst_index_id,
+                         event_uuid,
+-                        timestamp_rec,
++                        timestamp,
+                         _id,
+                     )
+                     events_list.append(event_tuple)
+@@ -343,7 +353,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                             dst_node,
+                             dst_index_id,
+                             event_uuid,
+-                            timestamp_rec,
++                            timestamp,
+                             _id,
+                         ) in temp_list:
+                             if src_index_id not in node_info:
+@@ -363,7 +373,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                                 edge_info[(src_index_id, dst_index_id)] = []
+ 
+                             edge_info[(src_index_id, dst_index_id)].append(
+-                                (timestamp_rec, operation, event_uuid)
++                                (timestamp, operation, event_uuid)
+                             )
+ 
+                         for (src, dst), data in edge_info.items():
+@@ -404,7 +414,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                             dst_node,
+                             dst_index_id,
+                             event_uuid,
+-                            timestamp_rec,
++                            timestamp,
+                             _id,
+                         ) in temp_list:
+                             if src_index_id not in node_info:
+@@ -424,7 +434,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                                 {
+                                     "src": src_index_id,
+                                     "dst": dst_index_id,
+-                                    "time": timestamp_rec,
++                                    "time": timestamp,
+                                     "label": operation,
+                                     "event_uuid": event_uuid,
+                                 }
+diff --git a/pidsmaker/tasks/feat_inference.py b/pidsmaker/tasks/feat_inference.py
+index 197d247..6d65e97 100644
+--- a/pidsmaker/tasks/feat_inference.py
++++ b/pidsmaker/tasks/feat_inference.py
+@@ -55,14 +55,29 @@ def feat_inference(indexid2vec, etype2oh, ntype2oh, sorted_paths, out_dir, cfg):
+ 
+             # Types + node embeddings
+             else:
++                # Hermes patch: word2vec corpus only covers split nodes (single-day:
++                # only 'test') — fall back to a zero vector for out-of-corpus nodes.
++                _emb_dim = None
++                for _v in indexid2vec.values():
++                    _emb_dim = len(_v)
++                    break
++                if _emb_dim is None:
++                    _emb_dim = 1
++
++                def _vec(nid):
++                    v = indexid2vec.get(nid)
++                    if v is None:
++                        return torch.zeros(_emb_dim, dtype=torch.float32)
++                    return torch.from_numpy(v)
++
+                 msg.append(
+                     torch.cat(
+                         [
+                             ntype2oh[graph.nodes[u]["node_type"]],
+-                            torch.from_numpy(indexid2vec[u]),
++                            _vec(u),
+                             edge_label,
+                             ntype2oh[graph.nodes[v]["node_type"]],
+-                            torch.from_numpy(indexid2vec[v]),
++                            _vec(v),
+                         ]
+                     )
+                 )
+diff --git a/pidsmaker/utils/data_utils.py b/pidsmaker/utils/data_utils.py
+index 455c2f7..ea8c84f 100644
+--- a/pidsmaker/utils/data_utils.py
++++ b/pidsmaker/utils/data_utils.py
+@@ -108,11 +108,19 @@ class CollatableTemporalData(TemporalData):
+         return self.node_type_dst.max(dim=1).indices
+ 
+ 
++def _load_data_set_skip_missing(cfg, split, multi_dataset):
++    """Hermes patch: return [] when a split dir is missing (single-day datasets)."""
++    try:
++        return load_data_set(cfg, split=split, multi_dataset=multi_dataset)
++    except FileNotFoundError:
++        return []
++
++
+ def load_all_datasets(cfg, device, only_keep=None):
+     multi_dataset = cfg.batching.multi_dataset_training
+-    train_data = load_data_set(cfg, split="train", multi_dataset=multi_dataset)
+-    val_data = load_data_set(cfg, split="val", multi_dataset=multi_dataset)
+-    test_data = load_data_set(cfg, split="test", multi_dataset=False)
++    train_data = _load_data_set_skip_missing(cfg, split="train", multi_dataset=multi_dataset)
++    val_data = _load_data_set_skip_missing(cfg, split="val", multi_dataset=multi_dataset)
++    test_data = _load_data_set_skip_missing(cfg, split="test", multi_dataset=False)
+ 
+     if only_keep is not None:
+         train_data = train_data[:only_keep]
+diff --git a/pidsmaker/utils/utils.py b/pidsmaker/utils/utils.py
+index 98c0e73..9135895 100644
+--- a/pidsmaker/utils/utils.py
++++ b/pidsmaker/utils/utils.py
+@@ -447,7 +447,7 @@ def get_node_to_path_and_type(cfg):
+ 
+         queries = {
+             "file": "SELECT index_id, path FROM file_node_table;",
+-            "netflow": "SELECT index_id, src_addr, dst_addr, src_port, dst_port FROM netflow_node_table;",
++            "netflow": "SELECT index_id, local_ip, remote_ip, local_port, remote_port FROM netflow_node_table;",
+             "subject": "SELECT index_id, path, cmd FROM subject_node_table;",
+         }
+         node_to_path_type = {}
