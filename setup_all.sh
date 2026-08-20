@@ -18,6 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORK="$HOME/optec-l6"
 PIDS_DIR="$WORK/PIDSMaker"
+PIDS_COMMIT="2289cd9b0adf7289a093f63ca7ff11a3b97e46c3"   # commit patches được tạo từ (HEAD upstream)
 DUMP_PATH=""
 
 # ---- parse args ----
@@ -94,14 +95,33 @@ echo "   OK"
 
 # ----------------------------------------------------------------- 4. repo
 mkdir -p "$WORK"
+# Nếu PIDSMaker đã clone nhưng chưa hoàn chỉnh hoặc sai state → xoá để clone lại sạch
+if [ -d "$PIDS_DIR/.git" ] && ! git -C "$PIDS_DIR" rev-parse --verify "$PIDS_COMMIT^{commit}" >/dev/null 2>&1; then
+  echo "==> [4/6] PIDSMaker cũ chưa đủ history (ping $PIDS_COMMIT), xoá để clone lại sạch..."
+  rm -rf "$PIDS_DIR"
+fi
+
 if [ ! -d "$PIDS_DIR/.git" ]; then
-  echo "==> [4/6] Clone PIDSMAKER + áp patches..."
-  git clone --depth 1 https://github.com/ubc-provenance/PIDSMaker.git "$PIDS_DIR"
-  git -C "$PIDS_DIR" apply "$SCRIPT_DIR/patches/all_patches.diff"
-  git -C "$PIDS_DIR" apply "$SCRIPT_DIR/patches/pidsmaker_patch.diff"
+  echo "==> [4/6] Clone PIDSMAKER (pin $PIDS_COMMIT) + áp patches..."
+  git clone --quiet https://github.com/ubc-provenance/PIDSMaker.git "$PIDS_DIR"
+  git -C "$PIDS_DIR" checkout -q "$PIDS_COMMIT"
+  echo "   (HEAD=$(git -C "$PIDS_DIR" rev-parse --short HEAD))"
+  # Lưu ý: all_patches.diff ĐÃ BAO GỒM CẢ skip-JSON deviation
+  # (file create_database_optc.py đã có 2 chỗ JSONDecodeError guard).
+  # KHÔNG áp riêng pidsmaker_patch.diff — bản cũ bị hỏng (corrupt) và thừa.
+  if ! git -C "$PIDS_DIR" apply --check "$SCRIPT_DIR/patches/all_patches.diff"; then
+    echo "   ⚠️ git apply --check fail, dùng patch -p1 (bỏ qua lỗi whitespace)..."
+    (cd "$PIDS_DIR" && patch -p1 -f --ignore-whitespace < "$SCRIPT_DIR/patches/all_patches.diff") || {
+      echo "   ❌ Cả hai cách áp patch đều thất bại. Báo output này cho BDTG."
+      exit 1
+    }
+  else
+    git -C "$PIDS_DIR" apply "$SCRIPT_DIR/patches/all_patches.diff"
+  fi
   cp "$SCRIPT_DIR/config/config.py" "$PIDS_DIR/pidsmaker/config/config.py"
 else
   echo "==> [4/6] PIDSMAKER đã có tại $PIDS_DIR"
+  git -C "$PIDS_DIR" checkout -q "$PIDS_COMMIT" 2>/dev/null || true
   echo "   (nếu thay đổi patches/config: xoá $PIDS_DIR rồi chạy lại)"
 fi
 

@@ -49,11 +49,12 @@ measure_cpu.py                    real on-device CPU latency/RAM (RQ2/RQ3)
 ## Running the L6 baseline (Machine B)
 
 1. Read [`runbook/RUNBOOK_remote_L6.md`](runbook/RUNBOOK_remote_L6.md) — requires ≥32 GB RAM.
-2. Apply patches:
+2. Apply patches (chỉ 1 file — nó đã bao gồm cả skip-JSON deviation):
    ```bash
    git apply patches/all_patches.diff
-   git apply patches/pidsmaker_patch.diff
    ```
+   > `pidsmaker_patch.diff` cũ đã bỏ — nó bị hỏng (corrupt) và trùng nội dung đã có
+   > trong `all_patches.diff`. Các thay đổi của nó (skip malformed JSON) nằm sẵn trong all_patches.
 3. Replace config: copy `config/config.py` into `pidsmaker/config/`.
 4. Restore the database from `optc_h051_full.dump` (see `DATA_TRANSFER.md`).
 5. Run the 4 systems (Flash / MAGIC / Velox / ORTHRUS) with the commands in the runbook.
