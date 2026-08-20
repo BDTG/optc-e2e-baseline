@@ -18,6 +18,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORK="$HOME/optec-l6"
 PIDS_DIR="$WORK/PIDSMaker"
+# Data máy thầy lưu TOÀN BỘ ở E:\Data\Thai (WSL: /mnt/e/Data/Thai)
+# → artifacts cũng để đó, không để $HOME (WSL home nằm ổ C nhỏ)
+ARTIFACT_DIR="/mnt/e/Data/Thai/artifacts"
 PIDS_COMMIT="2289cd9b0adf7289a093f63ca7ff11a3b97e46c3"   # commit patches được tạo từ (HEAD upstream)
 DUMP_PATH=""
 
@@ -174,13 +177,14 @@ echo "════════════════════════�
 echo
 echo "cd $PIDS_DIR && PYTHONPATH=$PIDS_DIR conda run -n pids python -m pidsmaker.main \\"
 echo "    flash optc_h051 --cpu --database_host localhost --database_user postgres \\"
-echo "    --database_password postgres --artifact_dir $WORK/artifacts \\"
-echo "    --evaluation.ground_truth_version orthrus \\"
-echo "    --batching.intra_graph_batching.used_methods none \\"
-echo "    --training.encoder.used_methods none --training.decoder.use_few_shot False \\"
-echo "    --construction.multi_dataset none --featurization.used_method flash \\"
-echo "    --featurization.training_split all --featurization.multi_dataset_training False \\"
+echo "    --database_password postgres --artifact_dir $ARTIFACT_DIR \"
+echo "    --evaluation.ground_truth_version orthrus \"
+echo "    --batching.intra_graph_batching.used_methods none \"
+echo "    --training.encoder.used_methods none --training.decoder.use_few_shot False \"
+echo "    --construction.multi_dataset none --featurization.used_method flash \"
+echo "    --featurization.training_split all --featurization.multi_dataset_training False \"
 echo "    --batching.multi_dataset_training False 2>&1 | tee $WORK/logs_flash.log"
 echo
 echo "Thay 'flash' -> 'magic' (only_type) / 'velox' (word2vec) / 'orthrus'."
+echo "💡 Artifacts lưu tại $ARTIFACT_DIR (E:\Data\Thai)."
 echo "Chi tiết: $SCRIPT_DIR/runbook/RUNBOOK_remote_L6.md"
