@@ -64,6 +64,16 @@ fi
 source "$HOME/miniconda3/etc/profile.d/conda.sh"
 conda config --set auto_activate_base false
 
+# ---- accept conda ToS (conda 24.x+ yêu cầu trước khi dùng kênh defaults) ----
+echo "==> [2/6] Chấp nhận conda Terms of Service..."
+for ch in \
+  "https://repo.anaconda.com/pkgs/main" \
+  "https://repo.anaconda.com/pkgs/r" \
+  "https://repo.anaconda.com/pkgs/msys2"; do
+  conda tos accept --override-channels --channel "$ch" >/dev/null 2>&1 || true
+done
+echo "   OK"
+
 if ! conda env list | grep -q '^pids\s'; then
   echo "==> [2/6] Tạo env python=3.9 'pids'..."
   conda create -n pids python=3.9 -y >/dev/null 2>&1
