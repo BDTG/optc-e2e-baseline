@@ -142,6 +142,11 @@ sleep 2
 
 sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='postgres'" | grep -q 1 || \
   sudo -u postgres psql -tc "CREATE USER postgres SUPERUSER LOGIN PASSWORD 'postgres';"
+# Quan trọng: user postgres CÓ THỂ đã tồn tại (tạo bởi apt package) với password khác
+# → luôn reset password thành 'postgres' để khớp config/CLI.
+sudo -u postgres psql -tc "ALTER USER postgres WITH PASSWORD 'postgres';"
+sudo -u postgres psql -tc "ALTER USER postgres SUPERUSER;"
+echo "   (postgres user: password khớp 'postgres', superuser OK)"
 
 if [ -n "$DUMP_PATH" ] && [ -f "$DUMP_PATH" ]; then
   echo "==> [5/6] Restore DB từ $DUMP_PATH ..."
