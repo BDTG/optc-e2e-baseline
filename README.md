@@ -10,8 +10,7 @@ This repository is the coordination point between the two machines in the projec
   PIDSMAKER end-to-end, maintains docs/reports.
 - **Machine B (GPU)** — RTX 5070 Ti + Ryzen 9 9950X / 64 GB: runs the full-graph
   (L6) baseline that Machine A cannot fit in memory.
-- **Machine L6 (thầy)** — Win10 22H2, 32 GB, WSL2 Ubuntu: chạy Flash/MAGIC full
-  (WSL2 giới hạn 15.9 GB nên Velox/ORTHRUS phải sang Machine B).
+- **Machine L6** — Win10 22H2, 32 GB, WSL2 Ubuntu: chạy Flash/MAGIC full
   📌 **Toàn bộ data lưu tại `E:\Data\Thai` (WSL `/mnt/e/Data/Thai`)** — dump/raw/artifacts
   đều để đó, không để `/home/vung2`.
 
