@@ -1,0 +1,37 @@
+diff --git a/src/config.py b/src/config.py
+index f7c77c7..efec134 100644
+--- a/src/config.py
++++ b/src/config.py
+@@ -16,7 +16,7 @@ ROOT_GROUND_TRUTH_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abs
+ 
+ 
+ DATABASE_DEFAULT_CONFIG = {
+-     "host": 'postgres',  # Host machine where the db is located
++     "host": 'localhost',  # Host machine where the db is located
+      "user": 'postgres',  # Database user
+      "password": 'postgres',  # The password to the database user
+      "port": '5432',  # The port number for Postgres
+@@ -593,8 +593,8 @@ DATASET_DEFAULT_CONFIG = {
+      },
+      "optc_h051": {
+           "raw_dir": "",
+-          "database": "optc_051",
+-          "database_all_file": "optc_051",
++          "database": "optc_h051_full",
++          "database_all_file": "optc_h051_full",
+           "num_node_types": 3,
+           "num_edge_types": 10,
+           "year_month": "2019-09",
+diff --git a/src/preprocessing/build_graph_methods/build_orthrus_graphs.py b/src/preprocessing/build_graph_methods/build_orthrus_graphs.py
+index 5ccb729..9cc0949 100644
+--- a/src/preprocessing/build_graph_methods/build_orthrus_graphs.py
++++ b/src/preprocessing/build_graph_methods/build_orthrus_graphs.py
+@@ -190,7 +190,7 @@ def gen_edge_fused_tw(indexid2msg, cfg):
+                 attack_index += 1
+ 
+             sql = """
+-            select * from event_table
++            select src_node, src_index_id, operation, dst_node, dst_index_id, event_uuid, timestamp_rec, _id from event_table
+             where
+                   timestamp_rec>'%s' and timestamp_rec<'%s'
+                    ORDER BY timestamp_rec, event_uuid;
