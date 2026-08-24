@@ -1,0 +1,2 @@
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run "wsl.exe -d Ubuntu -- bash -c ""cd /home/vung2/optec-l6/orthrus && export PYTHONPATH=/home/vung2/optec-l6/orthrus/src && echo === ORTHRUS OpTC H051 START === && /home/vung2/miniconda3/envs/pids/bin/python -u src/orthrus.py OPTC_H051 --from_weights 2>&1 | tee /home/vung2/optec-l6/logs/orthrus_run.log; echo; echo === FINISHED — nhan Enter de dong ===; read""", 1, False

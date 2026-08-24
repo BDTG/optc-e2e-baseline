@@ -1,0 +1,1230 @@
+/home/vung2/optec-l6/PIDSMaker/pidsmaker/detection/evaluation_methods/evaluation_utils.py:690: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  plt.figure(figsize=(10, 6))
+2026-08-20 22:41:40 - Running pipeline in 'Standard' mode.
+2026-08-20 22:41:40 - ======= START SUBTASK build_default_graphs.py =======
+2026-08-20 22:41:46 - Number of netflow nodes: 2618180
+2026-08-20 22:41:54 - Number of process nodes: 36524
+2026-08-20 22:41:54 - Number of file nodes: 246040
+2026-08-20 22:41:55 - Building graphs...
+2026-08-20 22:46:32 - Check nodes in train set...
+2026-08-20 22:46:46 - Check nodes in val set...
+2026-08-20 22:47:04 - Check nodes in test set...
+2026-08-20 22:47:04 - Saving split2nodes to disk...
+2026-08-20 22:47:08 - Saving indexid2msg to disk...
+Task done: /home/vung2/optec-l6/artifacts/construction/optc_h051/construction/4f3df746ec876bb2038e026030ad8be6b0da8cec45ac4e69443d45a337d8c923
+
+2026-08-20 22:47:16 - ======= START SUBTASK transformation.py =======
+2026-08-20 22:47:17 - Directory copied successfully from '/home/vung2/optec-l6/artifacts/construction/optc_h051/construction/4f3df746ec876bb2038e026030ad8be6b0da8cec45ac4e69443d45a337d8c923/nx/' to '/home/vung2/optec-l6/artifacts/transformation/optc_h051/transformation/14d8712c8685bea9332a0d69741e8573b087617cbf64cd3661e2cce3701a3028/nx/'.
+Task done: /home/vung2/optec-l6/artifacts/transformation/optc_h051/transformation/14d8712c8685bea9332a0d69741e8573b087617cbf64cd3661e2cce3701a3028
+
+2026-08-20 22:47:17 - ======= START SUBTASK featurization_flash.py =======
+2026-08-20 22:47:26 - Loading training data for ['train', 'val', 'test']...
+2026-08-20 22:49:00 - Tokenizing corpus...
+2026-08-20 22:49:38 - Training word2vec model...
+Task done: /home/vung2/optec-l6/artifacts/featurization/optc_h051/featurization/f437218d492002aae52eeccc591e5d957f824980730b4246638d93d08028c3ed
+
+2026-08-21 00:09:07 - ======= START SUBTASK feat_inference_flash.py =======
+2026-08-21 00:09:16 - Loading training data for ['train', 'val', 'test']...
+2026-08-21 00:10:51 - Tokenizing corpus...
+2026-08-21 00:11:29 - Embeding all nodes in the dataset...
+2026-08-21 01:46:44 - Computing edge embeddings...
+2026-08-21 01:49:04 - Computing edge embeddings...
+2026-08-21 01:50:04 - Computing edge embeddings...
+Task done: /home/vung2/optec-l6/artifacts/feat_inference/optc_h051/feat_inference/243c15680a30b8fd546cd3e5ef341f439f81279ffb3d9240315a379eca200032
+
+2026-08-21 01:51:34 - ======= START SUBTASK batching.py =======
+2026-08-21 01:51:34 - Not saving to disk, skipping this task.
+Task done: /home/vung2/optec-l6/artifacts/batching/batching/c4f6e58b9b9657bcc7f8c77e92966348012c10f7d055e29621a65141ebc11f45/optc_h051
+
+2026-08-21 01:51:34 - ======= START SUBTASK training_loop.py =======
+2026-08-21 01:51:34 - Computing graphs...
+Max node in optc_h051: 2900744
+2026-08-21 01:51:48 - 
+2026-08-21 01:51:48 - Dataset statistics
+2026-08-21 01:51:48 - Train num graphs: 233
+2026-08-21 01:51:48 - Train edges | mean: 23216 | min: 915 | max: 70447
+2026-08-21 01:51:48 - Train nodes | mean: 8925 | min: 731 | max: 29724
+2026-08-21 01:51:48 - 
+2026-08-21 01:51:48 - Val num graphs: 95
+2026-08-21 01:51:48 - Val edges | mean: 24533 | min: 13381 | max: 38622
+2026-08-21 01:51:48 - Val nodes | mean: 9689 | min: 4327 | max: 15349
+2026-08-21 01:51:48 - 
+2026-08-21 01:51:48 - Test num graphs: 148
+2026-08-21 01:51:48 - Test edges | mean: 23749 | min: 5884 | max: 74492
+2026-08-21 01:51:48 - Test nodes | mean: 9414 | min: 3231 | max: 26171
+2026-08-21 01:51:48 - 
+2026-08-21 01:51:48 - Reindexing graphs...
+2026-08-21 01:51:54 - Reindexing graphs...
+2026-08-21 01:51:55 - Reindexing graphs...
+2026-08-21 01:51:56 - Graph data loaded.
+2026-08-21 01:51:56 - Training...
+2026-08-21 01:51:57 - [@epoch00] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.3406
+
+2026-08-21 01:51:57 - Validation...
+2026-08-21 01:52:33 - [@epoch00] Validation finished - Val Loss: 0.1817
+
+2026-08-21 01:52:33 - Testing...
+2026-08-21 01:53:27 - [@epoch00] Test finished - Test Loss: 0.1860
+
+2026-08-21 01:53:27 - Training...
+2026-08-21 01:53:28 - [@epoch01] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2536
+
+2026-08-21 01:53:28 - Validation...
+2026-08-21 01:54:03 - [@epoch01] Validation finished - Val Loss: 0.1550
+
+2026-08-21 01:54:04 - Testing...
+2026-08-21 01:54:58 - [@epoch01] Test finished - Test Loss: 0.1594
+
+2026-08-21 01:54:58 - Training...
+2026-08-21 01:54:58 - [@epoch02] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2348
+
+2026-08-21 01:54:58 - Training...
+2026-08-21 01:54:58 - [@epoch03] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2248
+
+2026-08-21 01:54:58 - Validation...
+2026-08-21 01:55:34 - [@epoch03] Validation finished - Val Loss: 0.1383
+
+2026-08-21 01:55:34 - Testing...
+2026-08-21 01:56:28 - [@epoch03] Test finished - Test Loss: 0.1426
+
+2026-08-21 01:56:28 - Training...
+2026-08-21 01:56:29 - [@epoch04] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2185
+
+2026-08-21 01:56:29 - Training...
+2026-08-21 01:56:29 - [@epoch05] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2143
+
+2026-08-21 01:56:29 - Validation...
+2026-08-21 01:57:05 - [@epoch05] Validation finished - Val Loss: 0.1318
+
+2026-08-21 01:57:05 - Testing...
+2026-08-21 01:57:59 - [@epoch05] Test finished - Test Loss: 0.1361
+
+2026-08-21 01:57:59 - Training...
+2026-08-21 01:57:59 - [@epoch06] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2114
+
+2026-08-21 01:57:59 - Training...
+2026-08-21 01:58:00 - [@epoch07] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2093
+
+2026-08-21 01:58:00 - Validation...
+2026-08-21 01:58:36 - [@epoch07] Validation finished - Val Loss: 0.1286
+
+2026-08-21 01:58:36 - Testing...
+2026-08-21 01:59:30 - [@epoch07] Test finished - Test Loss: 0.1328
+
+2026-08-21 01:59:30 - Training...
+2026-08-21 01:59:30 - [@epoch08] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2077
+
+2026-08-21 01:59:30 - Training...
+2026-08-21 01:59:31 - [@epoch09] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2065
+
+2026-08-21 01:59:31 - Validation...
+2026-08-21 02:00:06 - [@epoch09] Validation finished - Val Loss: 0.1269
+
+2026-08-21 02:00:06 - Testing...
+2026-08-21 02:01:01 - [@epoch09] Test finished - Test Loss: 0.1310
+
+2026-08-21 02:01:01 - Training...
+2026-08-21 02:01:01 - [@epoch10] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2057
+
+2026-08-21 02:01:01 - Training...
+2026-08-21 02:01:02 - [@epoch11] Training finished - GPU memory: 0.00 GB | CPU memory: 0.00 GB | Mean Loss: 0.2050
+
+2026-08-21 02:01:02 - Validation...
+2026-08-21 02:01:37 - [@epoch11] Validation finished - Val Loss: 0.1258
+
+2026-08-21 02:01:37 - Testing...
+2026-08-21 02:02:32 - [@epoch11] Test finished - Test Loss: 0.1300
+
+Task done: /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051
+
+2026-08-21 02:02:37 - Computing time-window labels...
+2026-08-21 02:02:46 - Found 135920/135928 edge labels.
+2026-08-21 02:02:46 - TW 132 -> 12 malicious nodes + 12694 malicious edges
+2026-08-21 02:02:46 - TW 133 -> 33 malicious nodes + 34162 malicious edges
+2026-08-21 02:02:47 - TW 134 -> 48 malicious nodes + 33484 malicious edges
+2026-08-21 02:02:47 - TW 135 -> 27 malicious nodes + 15037 malicious edges
+2026-08-21 02:02:47 - TW 136 -> 19 malicious nodes + 11995 malicious edges
+2026-08-21 02:02:47 - TW 137 -> 12 malicious nodes + 33334 malicious edges
+2026-08-21 02:02:47 - TW 138 -> 15 malicious nodes + 32361 malicious edges
+2026-08-21 02:02:47 - TW 139 -> 15 malicious nodes + 12770 malicious edges
+2026-08-21 02:02:47 - TW 140 -> 14 malicious nodes + 12755 malicious edges
+2026-08-21 02:02:47 - TW 141 -> 14 malicious nodes + 33800 malicious edges
+2026-08-21 02:02:47 - TW 142 -> 18 malicious nodes + 62980 malicious edges
+2026-08-21 02:02:47 - TW 143 -> 13 malicious nodes + 16307 malicious edges
+2026-08-21 02:02:47 - TW 144 -> 22 malicious nodes + 21303 malicious edges
+2026-08-21 02:02:47 - TW 145 -> 15 malicious nodes + 49451 malicious edges
+2026-08-21 02:02:47 - TW 146 -> 24 malicious nodes + 4172 malicious edges
+2026-08-21 02:02:47 - Total distinct malicious nodes across time windows: 114 / 114 ground-truth nodes
+
+2026-08-21 02:02:47 - [@model_epoch_0] - Test Evaluation
+2026-08-21 02:02:50 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_0...
+2026-08-21 02:02:50 - Threshold: 0.530
+2026-08-21 02:02:50 - Compute labels...
+2026-08-21 02:04:58 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:05:19 - Analysis of malicious nodes:
+2026-08-21 02:05:19 - -> Malicious node 36534  : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:05:19 - -> Malicious node 36535  : loss=0.042 | is TP: ❌ None
+2026-08-21 02:05:19 - -> Malicious node 87524  : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:05:19 - -> Malicious node 6303   : loss=0.042 | is TP: ❌ gpupdate.exe
+2026-08-21 02:05:19 - -> Malicious node 8184   : loss=0.042 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:05:19 - -> Malicious node 8187   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 8191   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 8198   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 8673   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 8676   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:05:19 - -> Malicious node 8705   : loss=0.042 | is TP: ❌ sc.exe
+2026-08-21 02:05:19 - -> Malicious node 8713   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:05:19 - -> Malicious node 972586 : loss=0.042 | is TP: ❌ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 972609 : loss=0.042 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:05:19 - -> Malicious node 8752   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 8754   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8763   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8770   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:05:19 - -> Malicious node 8772   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8775   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8779   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8784   : loss=0.042 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:05:19 - -> Malicious node 8786   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8790   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8794   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8797   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8802   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 979084 : loss=0.042 | is TP: ❌ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 979381 : loss=0.042 | is TP: ❌ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 979654 : loss=0.042 | is TP: ❌ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 979926 : loss=0.042 | is TP: ❌ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 980034 : loss=0.042 | is TP: ❌ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 980176 : loss=0.042 | is TP: ❌ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 980371 : loss=0.042 | is TP: ❌ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 980674 : loss=0.042 | is TP: ❌ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 981350 : loss=0.042 | is TP: ❌ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 981979 : loss=0.042 | is TP: ❌ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 8808   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8814   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8817   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8821   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8825   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8833   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8841   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8849   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8863   : loss=0.042 | is TP: ❌ cmd.exe
+2026-08-21 02:05:19 - -> Malicious node 8869   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8883   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8889   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8898   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8902   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8913   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 8917   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 98091  : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:05:19 - -> Malicious node 982460 : loss=0.042 | is TP: ❌ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 982598 : loss=0.042 | is TP: ❌ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 982799 : loss=0.042 | is TP: ❌ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 982946 : loss=0.042 | is TP: ❌ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 983222 : loss=0.042 | is TP: ❌ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 983547 : loss=0.042 | is TP: ❌ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 983876 : loss=0.042 | is TP: ❌ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 984445 : loss=0.042 | is TP: ❌ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 985021 : loss=0.042 | is TP: ❌ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 985447 : loss=0.042 | is TP: ❌ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 985868 : loss=0.042 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:05:19 - -> Malicious node 985869 : loss=0.042 | is TP: ❌ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:05:19 - -> Malicious node 985933 : loss=0.042 | is TP: ❌ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 986266 : loss=0.042 | is TP: ❌ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 986569 : loss=0.042 | is TP: ❌ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 986738 : loss=0.042 | is TP: ❌ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 986880 : loss=0.042 | is TP: ❌ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 8921   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8927   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8930   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8940   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8944   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:05:19 - -> Malicious node 8947   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 987241 : loss=0.042 | is TP: ❌ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 987696 : loss=0.042 | is TP: ❌ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 988259 : loss=0.042 | is TP: ❌ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 988768 : loss=0.042 | is TP: ❌ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 989247 : loss=0.042 | is TP: ❌ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 989830 : loss=0.042 | is TP: ❌ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 990188 : loss=0.042 | is TP: ❌ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 990207 : loss=0.042 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:05:19 - -> Malicious node 9007   : loss=0.042 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:05:19 - -> Malicious node 9242   : loss=0.042 | is TP: ❌ gpupdate.exe
+2026-08-21 02:05:19 - -> Malicious node 9248   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:05:19 - -> Malicious node 9247   : loss=0.042 | is TP: ❌ gpupdate.exe
+2026-08-21 02:05:19 - -> Malicious node 9344   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 9440   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 9480   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 1033715: loss=0.042 | is TP: ❌ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:05:19 - -> Malicious node 1033755: loss=0.042 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:05:19 - -> Malicious node 9688   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 9689   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:05:19 - -> Malicious node 9698   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:05:19 - -> Malicious node 9701   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:05:19 - -> Malicious node 9725   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:05:19 - -> Malicious node 9737   : loss=0.042 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:05:19 - -> Malicious node 9779   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:05:19 - -> Malicious node 9783   : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:05:19 - -> Malicious node 102207 : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:05:19 - -> Malicious node 102210 : loss=0.042 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:05:19 - -> Malicious node 1055780: loss=0.042 | is TP: ❌ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:05:19 - -> Malicious node 1055785: loss=0.042 | is TP: ❌ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:05:19 - -> Malicious node 1055786: loss=0.042 | is TP: ❌ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:05:19 - -> Malicious node 1055787: loss=0.042 | is TP: ❌ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:05:19 - -> Malicious node 1055794: loss=0.042 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:05:19 - -> Malicious node 1055795: loss=0.042 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:05:19 - -> Malicious node 1055798: loss=0.042 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:05:19 - -> Malicious node 1055864: loss=0.042 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:05:19 - -> Malicious node 1055917: loss=0.042 | is TP: ❌ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:05:19 - -> Malicious node 1055920: loss=0.042 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:05:19 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:05:40 - TPs per attack:
+2026-08-21 02:05:56 - [@model_epoch_0] - Stats
+2026-08-21 02:05:56 - precision: 0.0
+2026-08-21 02:05:56 - recall: 0.0
+2026-08-21 02:05:56 - fpr: 0.0001531
+2026-08-21 02:05:56 - fscore: 0.0
+2026-08-21 02:05:56 - ap: 0.00076
+2026-08-21 02:05:56 - accuracy: 0.99972
+2026-08-21 02:05:56 - balanced_acc: 0.49992
+2026-08-21 02:05:56 - auc: 0.46627
+2026-08-21 02:05:56 - lr(+): 0.0
+2026-08-21 02:05:56 - dor: 0.0
+2026-08-21 02:05:56 - mcc: -0.00014
+2026-08-21 02:05:56 - tp: 0
+2026-08-21 02:05:56 - fp: 142
+2026-08-21 02:05:56 - tn: 927220
+2026-08-21 02:05:56 - fn: 114
+2026-08-21 02:05:56 - fp_in_malicious_tw_ratio: 0.049
+2026-08-21 02:05:56 - percent_detected_attacks: 0.0
+2026-08-21 02:05:56 - fps_if_all_attacks_detected: 304
+2026-08-21 02:05:56 - tps_if_all_attacks_detected: 0
+2026-08-21 02:05:56 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:05:56 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:05:56 - adp_score: 0.008
+2026-08-21 02:05:56 - discrim_score_att_0: -0.9599
+2026-08-21 02:05:56 - discrimination: -0.9599
+2026-08-21 02:05:56 - discrim_tp_att_0: 0
+2026-08-21 02:05:56 - discrim_tp_att_sum: 0
+2026-08-21 02:05:56 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_0.pkl
+2026-08-21 02:05:56 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_0.svg
+
+2026-08-21 02:05:56 - [@model_epoch_1] - Test Evaluation
+2026-08-21 02:06:00 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_1...
+2026-08-21 02:06:00 - Threshold: 0.530
+2026-08-21 02:06:00 - Compute labels...
+2026-08-21 02:08:07 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:08:15 - Analysis of malicious nodes:
+2026-08-21 02:08:15 - -> Malicious node 36534  : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:08:15 - -> Malicious node 36535  : loss=0.058 | is TP: ❌ None
+2026-08-21 02:08:15 - -> Malicious node 87524  : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:08:16 - -> Malicious node 6303   : loss=0.058 | is TP: ❌ gpupdate.exe
+2026-08-21 02:08:16 - -> Malicious node 8184   : loss=0.058 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:08:16 - -> Malicious node 8187   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 8191   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 8198   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 8673   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 8676   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:08:16 - -> Malicious node 8705   : loss=0.058 | is TP: ❌ sc.exe
+2026-08-21 02:08:16 - -> Malicious node 8713   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:08:16 - -> Malicious node 972586 : loss=0.058 | is TP: ❌ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 972609 : loss=0.058 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:08:16 - -> Malicious node 8752   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 8754   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8763   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8770   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:08:16 - -> Malicious node 8772   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8775   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8779   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8784   : loss=0.058 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:08:16 - -> Malicious node 8786   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8790   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8794   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8797   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8802   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 979084 : loss=0.058 | is TP: ❌ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 979381 : loss=0.058 | is TP: ❌ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 979654 : loss=0.058 | is TP: ❌ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 979926 : loss=0.058 | is TP: ❌ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 980034 : loss=0.058 | is TP: ❌ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 980176 : loss=0.058 | is TP: ❌ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 980371 : loss=0.058 | is TP: ❌ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 980674 : loss=0.058 | is TP: ❌ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 981350 : loss=0.058 | is TP: ❌ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 981979 : loss=0.058 | is TP: ❌ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 8808   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8814   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8817   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8821   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8825   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8833   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8841   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8849   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8863   : loss=0.058 | is TP: ❌ cmd.exe
+2026-08-21 02:08:16 - -> Malicious node 8869   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8883   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8889   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8898   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8902   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8913   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 8917   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 98091  : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:08:16 - -> Malicious node 982460 : loss=0.058 | is TP: ❌ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 982598 : loss=0.058 | is TP: ❌ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 982799 : loss=0.058 | is TP: ❌ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 982946 : loss=0.058 | is TP: ❌ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 983222 : loss=0.058 | is TP: ❌ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 983547 : loss=0.058 | is TP: ❌ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 983876 : loss=0.058 | is TP: ❌ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 984445 : loss=0.058 | is TP: ❌ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 985021 : loss=0.058 | is TP: ❌ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 985447 : loss=0.058 | is TP: ❌ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 985868 : loss=0.058 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:08:16 - -> Malicious node 985869 : loss=0.058 | is TP: ❌ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:08:16 - -> Malicious node 985933 : loss=0.058 | is TP: ❌ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 986266 : loss=0.058 | is TP: ❌ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 986569 : loss=0.058 | is TP: ❌ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 986738 : loss=0.058 | is TP: ❌ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 986880 : loss=0.058 | is TP: ❌ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 8921   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8927   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8930   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8940   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8944   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:08:16 - -> Malicious node 8947   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 987241 : loss=0.058 | is TP: ❌ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 987696 : loss=0.058 | is TP: ❌ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 988259 : loss=0.058 | is TP: ❌ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 988768 : loss=0.058 | is TP: ❌ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 989247 : loss=0.058 | is TP: ❌ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 989830 : loss=0.058 | is TP: ❌ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 990188 : loss=0.058 | is TP: ❌ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 990207 : loss=0.058 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:08:16 - -> Malicious node 9007   : loss=0.058 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:08:16 - -> Malicious node 9242   : loss=0.058 | is TP: ❌ gpupdate.exe
+2026-08-21 02:08:16 - -> Malicious node 9248   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:08:16 - -> Malicious node 9247   : loss=0.058 | is TP: ❌ gpupdate.exe
+2026-08-21 02:08:16 - -> Malicious node 9344   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 9440   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 9480   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 1033715: loss=0.058 | is TP: ❌ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:08:16 - -> Malicious node 1033755: loss=0.058 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:08:16 - -> Malicious node 9688   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 9689   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:08:16 - -> Malicious node 9698   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:08:16 - -> Malicious node 9701   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:08:16 - -> Malicious node 9725   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:08:16 - -> Malicious node 9737   : loss=0.058 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:08:16 - -> Malicious node 9779   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:08:16 - -> Malicious node 9783   : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:08:16 - -> Malicious node 102207 : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:08:16 - -> Malicious node 102210 : loss=0.058 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:08:16 - -> Malicious node 1055780: loss=0.058 | is TP: ❌ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:08:16 - -> Malicious node 1055785: loss=0.058 | is TP: ❌ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:08:16 - -> Malicious node 1055786: loss=0.058 | is TP: ❌ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:08:16 - -> Malicious node 1055787: loss=0.058 | is TP: ❌ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:08:16 - -> Malicious node 1055794: loss=0.058 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:08:16 - -> Malicious node 1055795: loss=0.058 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:08:16 - -> Malicious node 1055798: loss=0.058 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:08:16 - -> Malicious node 1055864: loss=0.058 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:08:16 - -> Malicious node 1055917: loss=0.058 | is TP: ❌ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:08:16 - -> Malicious node 1055920: loss=0.058 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:08:16 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:08:37 - TPs per attack:
+2026-08-21 02:08:53 - [@model_epoch_1] - Stats
+2026-08-21 02:08:53 - precision: 0.0
+2026-08-21 02:08:53 - recall: 0.0
+2026-08-21 02:08:53 - fpr: 0.0001531
+2026-08-21 02:08:53 - fscore: 0.0
+2026-08-21 02:08:53 - ap: 0.00075
+2026-08-21 02:08:53 - accuracy: 0.99972
+2026-08-21 02:08:53 - balanced_acc: 0.49992
+2026-08-21 02:08:53 - auc: 0.51925
+2026-08-21 02:08:53 - lr(+): 0.0
+2026-08-21 02:08:53 - dor: 0.0
+2026-08-21 02:08:53 - mcc: -0.00014
+2026-08-21 02:08:53 - tp: 0
+2026-08-21 02:08:53 - fp: 142
+2026-08-21 02:08:53 - tn: 927220
+2026-08-21 02:08:53 - fn: 114
+2026-08-21 02:08:53 - fp_in_malicious_tw_ratio: 0.056
+2026-08-21 02:08:53 - percent_detected_attacks: 0.0
+2026-08-21 02:08:53 - fps_if_all_attacks_detected: 161
+2026-08-21 02:08:53 - tps_if_all_attacks_detected: 0
+2026-08-21 02:08:53 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:08:53 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:08:53 - adp_score: 0.009
+2026-08-21 02:08:53 - discrim_score_att_0: -0.9452
+2026-08-21 02:08:53 - discrimination: -0.9452
+2026-08-21 02:08:53 - discrim_tp_att_0: 0
+2026-08-21 02:08:53 - discrim_tp_att_sum: 0
+2026-08-21 02:08:53 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_1.pkl
+2026-08-21 02:08:53 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_1.svg
+
+2026-08-21 02:08:54 - [@model_epoch_3] - Test Evaluation
+2026-08-21 02:08:57 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_3...
+2026-08-21 02:08:57 - Threshold: 0.530
+2026-08-21 02:08:57 - Compute labels...
+2026-08-21 02:11:04 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:11:12 - Analysis of malicious nodes:
+2026-08-21 02:11:12 - -> Malicious node 36534  : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:11:12 - -> Malicious node 36535  : loss=0.209 | is TP: ❌ None
+2026-08-21 02:11:12 - -> Malicious node 87524  : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:11:12 - -> Malicious node 6303   : loss=0.209 | is TP: ❌ gpupdate.exe
+2026-08-21 02:11:12 - -> Malicious node 8184   : loss=0.209 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:11:12 - -> Malicious node 8187   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:12 - -> Malicious node 8191   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:12 - -> Malicious node 8198   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:13 - -> Malicious node 8673   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:13 - -> Malicious node 8676   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:11:13 - -> Malicious node 8705   : loss=0.209 | is TP: ❌ sc.exe
+2026-08-21 02:11:13 - -> Malicious node 8713   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:11:13 - -> Malicious node 972586 : loss=0.209 | is TP: ❌ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 972609 : loss=0.209 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:11:13 - -> Malicious node 8752   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:13 - -> Malicious node 8754   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8763   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8770   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:11:13 - -> Malicious node 8772   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8775   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8779   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8784   : loss=0.209 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:11:13 - -> Malicious node 8786   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8790   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8794   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8797   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8802   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 979084 : loss=0.209 | is TP: ❌ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 979381 : loss=0.209 | is TP: ❌ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 979654 : loss=0.209 | is TP: ❌ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 979926 : loss=0.209 | is TP: ❌ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 980034 : loss=0.209 | is TP: ❌ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 980176 : loss=0.209 | is TP: ❌ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 980371 : loss=0.209 | is TP: ❌ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 980674 : loss=0.209 | is TP: ❌ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 981350 : loss=0.209 | is TP: ❌ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 981979 : loss=0.209 | is TP: ❌ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 8808   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8814   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8817   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8821   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8825   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8833   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8841   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8849   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8863   : loss=0.209 | is TP: ❌ cmd.exe
+2026-08-21 02:11:13 - -> Malicious node 8869   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8883   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8889   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8898   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8902   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8913   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 8917   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 98091  : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:11:13 - -> Malicious node 982460 : loss=0.209 | is TP: ❌ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 982598 : loss=0.209 | is TP: ❌ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 982799 : loss=0.209 | is TP: ❌ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 982946 : loss=0.209 | is TP: ❌ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 983222 : loss=0.209 | is TP: ❌ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 983547 : loss=0.209 | is TP: ❌ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 983876 : loss=0.209 | is TP: ❌ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 984445 : loss=0.209 | is TP: ❌ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 985021 : loss=0.209 | is TP: ❌ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 985447 : loss=0.209 | is TP: ❌ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 985868 : loss=0.209 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:11:13 - -> Malicious node 985869 : loss=0.209 | is TP: ❌ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:11:13 - -> Malicious node 985933 : loss=0.209 | is TP: ❌ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 986266 : loss=0.209 | is TP: ❌ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 986569 : loss=0.209 | is TP: ❌ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 986738 : loss=0.209 | is TP: ❌ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 986880 : loss=0.209 | is TP: ❌ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 8921   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8927   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8930   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8940   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8944   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:11:13 - -> Malicious node 8947   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:13 - -> Malicious node 987241 : loss=0.209 | is TP: ❌ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 987696 : loss=0.209 | is TP: ❌ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 988259 : loss=0.209 | is TP: ❌ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 988768 : loss=0.209 | is TP: ❌ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 989247 : loss=0.209 | is TP: ❌ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 989830 : loss=0.209 | is TP: ❌ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 990188 : loss=0.209 | is TP: ❌ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 990207 : loss=0.209 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:11:13 - -> Malicious node 9007   : loss=0.209 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:11:13 - -> Malicious node 9242   : loss=0.209 | is TP: ❌ gpupdate.exe
+2026-08-21 02:11:13 - -> Malicious node 9248   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:11:13 - -> Malicious node 9247   : loss=0.209 | is TP: ❌ gpupdate.exe
+2026-08-21 02:11:13 - -> Malicious node 9344   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 9440   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 9480   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 1033715: loss=0.209 | is TP: ❌ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:11:13 - -> Malicious node 1033755: loss=0.209 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:11:13 - -> Malicious node 9688   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 9689   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:11:13 - -> Malicious node 9698   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:11:13 - -> Malicious node 9701   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:11:13 - -> Malicious node 9725   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:11:13 - -> Malicious node 9737   : loss=0.209 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:11:13 - -> Malicious node 9779   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:11:13 - -> Malicious node 9783   : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:11:13 - -> Malicious node 102207 : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:11:13 - -> Malicious node 102210 : loss=0.209 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:11:13 - -> Malicious node 1055780: loss=0.209 | is TP: ❌ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:11:13 - -> Malicious node 1055785: loss=0.209 | is TP: ❌ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:11:13 - -> Malicious node 1055786: loss=0.209 | is TP: ❌ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:11:13 - -> Malicious node 1055787: loss=0.209 | is TP: ❌ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:11:13 - -> Malicious node 1055794: loss=0.209 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:11:13 - -> Malicious node 1055795: loss=0.209 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:11:13 - -> Malicious node 1055798: loss=0.209 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:11:13 - -> Malicious node 1055864: loss=0.209 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:11:13 - -> Malicious node 1055917: loss=0.209 | is TP: ❌ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:11:13 - -> Malicious node 1055920: loss=0.209 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:11:13 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:11:34 - TPs per attack:
+2026-08-21 02:11:50 - [@model_epoch_3] - Stats
+2026-08-21 02:11:50 - precision: 0.0
+2026-08-21 02:11:50 - recall: 0.0
+2026-08-21 02:11:50 - fpr: 0.0001531
+2026-08-21 02:11:50 - fscore: 0.0
+2026-08-21 02:11:50 - ap: 0.00075
+2026-08-21 02:11:50 - accuracy: 0.99972
+2026-08-21 02:11:50 - balanced_acc: 0.49992
+2026-08-21 02:11:50 - auc: 0.53656
+2026-08-21 02:11:50 - lr(+): 0.0
+2026-08-21 02:11:50 - dor: 0.0
+2026-08-21 02:11:50 - mcc: -0.00014
+2026-08-21 02:11:50 - tp: 0
+2026-08-21 02:11:50 - fp: 142
+2026-08-21 02:11:50 - tn: 927220
+2026-08-21 02:11:50 - fn: 114
+2026-08-21 02:11:50 - fp_in_malicious_tw_ratio: 0.056
+2026-08-21 02:11:50 - percent_detected_attacks: 0.0
+2026-08-21 02:11:50 - fps_if_all_attacks_detected: 287
+2026-08-21 02:11:50 - tps_if_all_attacks_detected: 0
+2026-08-21 02:11:50 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:11:50 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:11:50 - adp_score: 0.009
+2026-08-21 02:11:50 - discrim_score_att_0: -0.8272
+2026-08-21 02:11:50 - discrimination: -0.8272
+2026-08-21 02:11:50 - discrim_tp_att_0: 0
+2026-08-21 02:11:50 - discrim_tp_att_sum: 0
+2026-08-21 02:11:50 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_3.pkl
+2026-08-21 02:11:50 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_3.svg
+
+2026-08-21 02:11:50 - [@model_epoch_5] - Test Evaluation
+2026-08-21 02:11:54 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_5...
+2026-08-21 02:11:54 - Threshold: 0.530
+2026-08-21 02:11:54 - Compute labels...
+2026-08-21 02:14:02 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:14:09 - Analysis of malicious nodes:
+2026-08-21 02:14:09 - -> Malicious node 36534  : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:14:09 - -> Malicious node 36535  : loss=0.430 | is TP: ❌ None
+2026-08-21 02:14:10 - -> Malicious node 87524  : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:14:10 - -> Malicious node 6303   : loss=0.430 | is TP: ❌ gpupdate.exe
+2026-08-21 02:14:10 - -> Malicious node 8184   : loss=0.430 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:14:10 - -> Malicious node 8187   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 8191   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 8198   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 8673   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 8676   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:14:10 - -> Malicious node 8705   : loss=0.430 | is TP: ❌ sc.exe
+2026-08-21 02:14:10 - -> Malicious node 8713   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:14:10 - -> Malicious node 972586 : loss=0.430 | is TP: ❌ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 972609 : loss=0.430 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:14:10 - -> Malicious node 8752   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 8754   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8763   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8770   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:14:10 - -> Malicious node 8772   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8775   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8779   : loss=0.429 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8784   : loss=0.430 | is TP: ❌ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:14:10 - -> Malicious node 8786   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8790   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8794   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8797   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8802   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 979084 : loss=0.430 | is TP: ❌ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 979381 : loss=0.430 | is TP: ❌ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 979654 : loss=0.430 | is TP: ❌ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 979926 : loss=0.430 | is TP: ❌ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 980034 : loss=0.430 | is TP: ❌ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 980176 : loss=0.430 | is TP: ❌ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 980371 : loss=0.430 | is TP: ❌ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 980674 : loss=0.430 | is TP: ❌ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 981350 : loss=0.430 | is TP: ❌ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 981979 : loss=0.430 | is TP: ❌ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 8808   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8814   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8817   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8821   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8825   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8833   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8841   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8849   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8863   : loss=0.430 | is TP: ❌ cmd.exe
+2026-08-21 02:14:10 - -> Malicious node 8869   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8883   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8889   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8898   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8902   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8913   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 8917   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 98091  : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:14:10 - -> Malicious node 982460 : loss=0.430 | is TP: ❌ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 982598 : loss=0.430 | is TP: ❌ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 982799 : loss=0.430 | is TP: ❌ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 982946 : loss=0.430 | is TP: ❌ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 983222 : loss=0.430 | is TP: ❌ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 983547 : loss=0.430 | is TP: ❌ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 983876 : loss=0.430 | is TP: ❌ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 984445 : loss=0.430 | is TP: ❌ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 985021 : loss=0.430 | is TP: ❌ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 985447 : loss=0.430 | is TP: ❌ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 985868 : loss=0.430 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:14:10 - -> Malicious node 985869 : loss=0.430 | is TP: ❌ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:14:10 - -> Malicious node 985933 : loss=0.430 | is TP: ❌ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 986266 : loss=0.430 | is TP: ❌ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 986569 : loss=0.430 | is TP: ❌ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 986738 : loss=0.430 | is TP: ❌ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 986880 : loss=0.430 | is TP: ❌ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 8921   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8927   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8930   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8940   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8944   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:14:10 - -> Malicious node 8947   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 987241 : loss=0.430 | is TP: ❌ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 987696 : loss=0.430 | is TP: ❌ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 988259 : loss=0.430 | is TP: ❌ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 988768 : loss=0.430 | is TP: ❌ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 989247 : loss=0.430 | is TP: ❌ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 989830 : loss=0.430 | is TP: ❌ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 990188 : loss=0.430 | is TP: ❌ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 990207 : loss=0.430 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:14:10 - -> Malicious node 9007   : loss=0.430 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:14:10 - -> Malicious node 9242   : loss=0.430 | is TP: ❌ gpupdate.exe
+2026-08-21 02:14:10 - -> Malicious node 9248   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:14:10 - -> Malicious node 9247   : loss=0.430 | is TP: ❌ gpupdate.exe
+2026-08-21 02:14:10 - -> Malicious node 9344   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 9440   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 9480   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 1033715: loss=0.430 | is TP: ❌ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:14:10 - -> Malicious node 1033755: loss=0.430 | is TP: ❌ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:14:10 - -> Malicious node 9688   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 9689   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:14:10 - -> Malicious node 9698   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:14:10 - -> Malicious node 9701   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:14:10 - -> Malicious node 9725   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:14:10 - -> Malicious node 9737   : loss=0.430 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:14:10 - -> Malicious node 9779   : loss=0.429 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:14:10 - -> Malicious node 9783   : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:14:10 - -> Malicious node 102207 : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:14:10 - -> Malicious node 102210 : loss=0.430 | is TP: ❌ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:14:10 - -> Malicious node 1055780: loss=0.430 | is TP: ❌ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:14:10 - -> Malicious node 1055785: loss=0.430 | is TP: ❌ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:14:10 - -> Malicious node 1055786: loss=0.430 | is TP: ❌ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:14:10 - -> Malicious node 1055787: loss=0.430 | is TP: ❌ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:14:10 - -> Malicious node 1055794: loss=0.430 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:14:10 - -> Malicious node 1055795: loss=0.430 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:14:10 - -> Malicious node 1055798: loss=0.430 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:14:10 - -> Malicious node 1055864: loss=0.430 | is TP: ❌ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:14:10 - -> Malicious node 1055917: loss=0.430 | is TP: ❌ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:14:10 - -> Malicious node 1055920: loss=0.430 | is TP: ❌ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:14:10 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:14:31 - TPs per attack:
+2026-08-21 02:14:48 - [@model_epoch_5] - Stats
+2026-08-21 02:14:48 - precision: 0.0
+2026-08-21 02:14:48 - recall: 0.0
+2026-08-21 02:14:48 - fpr: 0.0001531
+2026-08-21 02:14:48 - fscore: 0.0
+2026-08-21 02:14:48 - ap: 0.00057
+2026-08-21 02:14:48 - accuracy: 0.99972
+2026-08-21 02:14:48 - balanced_acc: 0.49992
+2026-08-21 02:14:48 - auc: 0.56825
+2026-08-21 02:14:48 - lr(+): 0.0
+2026-08-21 02:14:48 - dor: 0.0
+2026-08-21 02:14:48 - mcc: -0.00014
+2026-08-21 02:14:48 - tp: 0
+2026-08-21 02:14:48 - fp: 142
+2026-08-21 02:14:48 - tn: 927220
+2026-08-21 02:14:48 - fn: 114
+2026-08-21 02:14:48 - fp_in_malicious_tw_ratio: 0.07
+2026-08-21 02:14:48 - percent_detected_attacks: 0.0
+2026-08-21 02:14:48 - fps_if_all_attacks_detected: 2226
+2026-08-21 02:14:48 - tps_if_all_attacks_detected: 0
+2026-08-21 02:14:48 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:14:48 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:14:48 - adp_score: 0.002
+2026-08-21 02:14:48 - discrim_score_att_0: -0.6995
+2026-08-21 02:14:48 - discrimination: -0.6995
+2026-08-21 02:14:48 - discrim_tp_att_0: 0
+2026-08-21 02:14:48 - discrim_tp_att_sum: 0
+2026-08-21 02:14:48 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_5.pkl
+2026-08-21 02:14:48 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_5.svg
+
+2026-08-21 02:14:48 - [@model_epoch_7] - Test Evaluation
+2026-08-21 02:14:51 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_7...
+2026-08-21 02:14:51 - Threshold: 0.530
+2026-08-21 02:14:51 - Compute labels...
+2026-08-21 02:16:59 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:17:06 - Analysis of malicious nodes:
+2026-08-21 02:17:06 - -> Malicious node 36534  : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:17:06 - -> Malicious node 36535  : loss=0.735 | is TP: ✅ None
+2026-08-21 02:17:07 - -> Malicious node 87524  : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:17:07 - -> Malicious node 6303   : loss=0.735 | is TP: ✅ gpupdate.exe
+2026-08-21 02:17:07 - -> Malicious node 8184   : loss=0.735 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:17:07 - -> Malicious node 8187   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 8191   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 8198   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 8673   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 8676   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:17:07 - -> Malicious node 8705   : loss=0.735 | is TP: ✅ sc.exe
+2026-08-21 02:17:07 - -> Malicious node 8713   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:17:07 - -> Malicious node 972586 : loss=0.735 | is TP: ✅ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 972609 : loss=0.735 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:17:07 - -> Malicious node 8752   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 8754   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8763   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8770   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:17:07 - -> Malicious node 8772   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8775   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8779   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8784   : loss=0.735 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:17:07 - -> Malicious node 8786   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8790   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8794   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8797   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8802   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 979084 : loss=0.735 | is TP: ✅ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 979381 : loss=0.735 | is TP: ✅ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 979654 : loss=0.735 | is TP: ✅ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 979926 : loss=0.735 | is TP: ✅ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 980034 : loss=0.735 | is TP: ✅ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 980176 : loss=0.735 | is TP: ✅ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 980371 : loss=0.735 | is TP: ✅ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 980674 : loss=0.735 | is TP: ✅ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 981350 : loss=0.735 | is TP: ✅ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 981979 : loss=0.735 | is TP: ✅ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 8808   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8814   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8817   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8821   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8825   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8833   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8841   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8849   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8863   : loss=0.735 | is TP: ✅ cmd.exe
+2026-08-21 02:17:07 - -> Malicious node 8869   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8883   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8889   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8898   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8902   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8913   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 8917   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 98091  : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:17:07 - -> Malicious node 982460 : loss=0.735 | is TP: ✅ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 982598 : loss=0.735 | is TP: ✅ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 982799 : loss=0.735 | is TP: ✅ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 982946 : loss=0.735 | is TP: ✅ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 983222 : loss=0.735 | is TP: ✅ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 983547 : loss=0.735 | is TP: ✅ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 983876 : loss=0.735 | is TP: ✅ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 984445 : loss=0.735 | is TP: ✅ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 985021 : loss=0.735 | is TP: ✅ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 985447 : loss=0.735 | is TP: ✅ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 985868 : loss=0.735 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:17:07 - -> Malicious node 985869 : loss=0.735 | is TP: ✅ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:17:07 - -> Malicious node 985933 : loss=0.735 | is TP: ✅ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 986266 : loss=0.735 | is TP: ✅ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 986569 : loss=0.735 | is TP: ✅ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 986738 : loss=0.735 | is TP: ✅ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 986880 : loss=0.735 | is TP: ✅ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 8921   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8927   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8930   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8940   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8944   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:17:07 - -> Malicious node 8947   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 987241 : loss=0.735 | is TP: ✅ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 987696 : loss=0.735 | is TP: ✅ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 988259 : loss=0.735 | is TP: ✅ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 988768 : loss=0.735 | is TP: ✅ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 989247 : loss=0.735 | is TP: ✅ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 989830 : loss=0.735 | is TP: ✅ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 990188 : loss=0.735 | is TP: ✅ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 990207 : loss=0.735 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:17:07 - -> Malicious node 9007   : loss=0.735 | is TP: ✅ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:17:07 - -> Malicious node 9242   : loss=0.735 | is TP: ❌ gpupdate.exe
+2026-08-21 02:17:07 - -> Malicious node 9248   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:17:07 - -> Malicious node 9247   : loss=0.735 | is TP: ✅ gpupdate.exe
+2026-08-21 02:17:07 - -> Malicious node 9344   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 9440   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 9480   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 1033715: loss=0.735 | is TP: ✅ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:17:07 - -> Malicious node 1033755: loss=0.735 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:17:07 - -> Malicious node 9688   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 9689   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:17:07 - -> Malicious node 9698   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:17:07 - -> Malicious node 9701   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:17:07 - -> Malicious node 9725   : loss=0.735 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:17:07 - -> Malicious node 9737   : loss=0.735 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:17:07 - -> Malicious node 9779   : loss=0.734 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:17:07 - -> Malicious node 9783   : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:17:07 - -> Malicious node 102207 : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:17:07 - -> Malicious node 102210 : loss=0.735 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:17:07 - -> Malicious node 1055780: loss=0.735 | is TP: ✅ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:17:07 - -> Malicious node 1055785: loss=0.735 | is TP: ✅ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:17:07 - -> Malicious node 1055786: loss=0.735 | is TP: ✅ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:17:07 - -> Malicious node 1055787: loss=0.735 | is TP: ✅ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:17:07 - -> Malicious node 1055794: loss=0.735 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:17:07 - -> Malicious node 1055795: loss=0.735 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:17:07 - -> Malicious node 1055798: loss=0.735 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:17:07 - -> Malicious node 1055864: loss=0.735 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:17:07 - -> Malicious node 1055917: loss=0.735 | is TP: ✅ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:17:07 - -> Malicious node 1055920: loss=0.735 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:17:07 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:17:28 - TPs per attack:
+2026-08-21 02:17:28 - attack 0: 87
+2026-08-21 02:17:45 - [@model_epoch_7] - Stats
+2026-08-21 02:17:45 - precision: 9e-05
+2026-08-21 02:17:45 - recall: 0.76316
+2026-08-21 02:17:45 - fpr: 0.9909658
+2026-08-21 02:17:45 - fscore: 0.00019
+2026-08-21 02:17:45 - ap: 0.00054
+2026-08-21 02:17:45 - accuracy: 0.00913
+2026-08-21 02:17:45 - balanced_acc: 0.3861
+2026-08-21 02:17:45 - auc: 0.55266
+2026-08-21 02:17:45 - lr(+): 0.77012
+2026-08-21 02:17:45 - dor: 0.02938
+2026-08-21 02:17:45 - mcc: -0.02665
+2026-08-21 02:17:45 - tp: 87
+2026-08-21 02:17:45 - fp: 918984
+2026-08-21 02:17:45 - tn: 8378
+2026-08-21 02:17:45 - fn: 27
+2026-08-21 02:17:45 - fp_in_malicious_tw_ratio: 0.102
+2026-08-21 02:17:45 - percent_detected_attacks: 1.0
+2026-08-21 02:17:45 - fps_if_all_attacks_detected: 2136
+2026-08-21 02:17:45 - tps_if_all_attacks_detected: 0
+2026-08-21 02:17:45 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:17:45 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:17:45 - adp_score: 0.002
+2026-08-21 02:17:45 - discrim_score_att_0: -0.5762
+2026-08-21 02:17:45 - discrimination: -0.5762
+2026-08-21 02:17:45 - discrim_tp_att_0: 0
+2026-08-21 02:17:45 - discrim_tp_att_sum: 0
+2026-08-21 02:17:45 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_7.pkl
+2026-08-21 02:17:45 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_7.svg
+
+2026-08-21 02:17:45 - [@model_epoch_9] - Test Evaluation
+2026-08-21 02:17:48 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_9...
+2026-08-21 02:17:48 - Threshold: 0.530
+2026-08-21 02:17:48 - Compute labels...
+2026-08-21 02:19:56 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:20:04 - Analysis of malicious nodes:
+2026-08-21 02:20:04 - -> Malicious node 36534  : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:20:04 - -> Malicious node 36535  : loss=0.836 | is TP: ✅ None
+2026-08-21 02:20:04 - -> Malicious node 87524  : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:20:04 - -> Malicious node 6303   : loss=0.836 | is TP: ✅ gpupdate.exe
+2026-08-21 02:20:04 - -> Malicious node 8184   : loss=0.836 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:20:04 - -> Malicious node 8187   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:04 - -> Malicious node 8191   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:04 - -> Malicious node 8198   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:04 - -> Malicious node 8673   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:04 - -> Malicious node 8676   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:20:04 - -> Malicious node 8705   : loss=0.836 | is TP: ✅ sc.exe
+2026-08-21 02:20:04 - -> Malicious node 8713   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:20:04 - -> Malicious node 972586 : loss=0.836 | is TP: ✅ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 972609 : loss=0.836 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:20:04 - -> Malicious node 8752   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:04 - -> Malicious node 8754   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8763   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8770   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:20:04 - -> Malicious node 8772   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8775   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8779   : loss=0.835 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8784   : loss=0.836 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:20:04 - -> Malicious node 8786   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8790   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8794   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8797   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8802   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 979084 : loss=0.836 | is TP: ✅ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 979381 : loss=0.836 | is TP: ✅ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 979654 : loss=0.836 | is TP: ✅ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 979926 : loss=0.836 | is TP: ✅ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 980034 : loss=0.836 | is TP: ✅ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 980176 : loss=0.836 | is TP: ✅ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 980371 : loss=0.836 | is TP: ✅ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 980674 : loss=0.836 | is TP: ✅ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 981350 : loss=0.836 | is TP: ✅ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 981979 : loss=0.836 | is TP: ✅ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 8808   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8814   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8817   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8821   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8825   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8833   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8841   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8849   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8863   : loss=0.836 | is TP: ✅ cmd.exe
+2026-08-21 02:20:04 - -> Malicious node 8869   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8883   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8889   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8898   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8902   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8913   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:04 - -> Malicious node 8917   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 98091  : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:20:04 - -> Malicious node 982460 : loss=0.836 | is TP: ✅ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 982598 : loss=0.836 | is TP: ✅ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 982799 : loss=0.836 | is TP: ✅ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 982946 : loss=0.836 | is TP: ✅ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 983222 : loss=0.836 | is TP: ✅ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 983547 : loss=0.836 | is TP: ✅ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 983876 : loss=0.836 | is TP: ✅ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 984445 : loss=0.836 | is TP: ✅ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 985021 : loss=0.836 | is TP: ✅ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 985447 : loss=0.836 | is TP: ✅ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 985868 : loss=0.836 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:20:04 - -> Malicious node 985869 : loss=0.836 | is TP: ✅ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:20:04 - -> Malicious node 985933 : loss=0.836 | is TP: ✅ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 986266 : loss=0.836 | is TP: ✅ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 986569 : loss=0.836 | is TP: ✅ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 986738 : loss=0.836 | is TP: ✅ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 986880 : loss=0.836 | is TP: ✅ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 8921   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8927   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8930   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8940   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8944   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:20:04 - -> Malicious node 8947   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:04 - -> Malicious node 987241 : loss=0.836 | is TP: ✅ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 987696 : loss=0.836 | is TP: ✅ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 988259 : loss=0.836 | is TP: ✅ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 988768 : loss=0.836 | is TP: ✅ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 989247 : loss=0.836 | is TP: ✅ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 989830 : loss=0.836 | is TP: ✅ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 990188 : loss=0.836 | is TP: ✅ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:20:04 - -> Malicious node 990207 : loss=0.836 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:20:04 - -> Malicious node 9007   : loss=0.836 | is TP: ✅ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:20:04 - -> Malicious node 9242   : loss=0.836 | is TP: ❌ gpupdate.exe
+2026-08-21 02:20:04 - -> Malicious node 9248   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:20:04 - -> Malicious node 9247   : loss=0.836 | is TP: ✅ gpupdate.exe
+2026-08-21 02:20:05 - -> Malicious node 9344   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:05 - -> Malicious node 9440   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:05 - -> Malicious node 9480   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:05 - -> Malicious node 1033715: loss=0.836 | is TP: ✅ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:20:05 - -> Malicious node 1033755: loss=0.836 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:20:05 - -> Malicious node 9688   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:05 - -> Malicious node 9689   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:20:05 - -> Malicious node 9698   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:20:05 - -> Malicious node 9701   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:20:05 - -> Malicious node 9725   : loss=0.836 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:20:05 - -> Malicious node 9737   : loss=0.836 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:20:05 - -> Malicious node 9779   : loss=0.834 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:20:05 - -> Malicious node 9783   : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:20:05 - -> Malicious node 102207 : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:20:05 - -> Malicious node 102210 : loss=0.836 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:20:05 - -> Malicious node 1055780: loss=0.836 | is TP: ✅ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:20:05 - -> Malicious node 1055785: loss=0.836 | is TP: ✅ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:20:05 - -> Malicious node 1055786: loss=0.836 | is TP: ✅ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:20:05 - -> Malicious node 1055787: loss=0.836 | is TP: ✅ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:20:05 - -> Malicious node 1055794: loss=0.836 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:20:05 - -> Malicious node 1055795: loss=0.836 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:20:05 - -> Malicious node 1055798: loss=0.836 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:20:05 - -> Malicious node 1055864: loss=0.836 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:20:05 - -> Malicious node 1055917: loss=0.836 | is TP: ✅ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:20:05 - -> Malicious node 1055920: loss=0.836 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:20:05 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:20:26 - TPs per attack:
+2026-08-21 02:20:26 - attack 0: 87
+2026-08-21 02:20:42 - [@model_epoch_9] - Stats
+2026-08-21 02:20:42 - precision: 9e-05
+2026-08-21 02:20:42 - recall: 0.76316
+2026-08-21 02:20:42 - fpr: 0.9915082
+2026-08-21 02:20:42 - fscore: 0.00019
+2026-08-21 02:20:42 - ap: 0.00053
+2026-08-21 02:20:42 - accuracy: 0.00858
+2026-08-21 02:20:42 - balanced_acc: 0.38582
+2026-08-21 02:20:42 - auc: 0.55283
+2026-08-21 02:20:42 - lr(+): 0.76969
+2026-08-21 02:20:42 - dor: 0.0276
+2026-08-21 02:20:42 - mcc: -0.02754
+2026-08-21 02:20:42 - tp: 87
+2026-08-21 02:20:42 - fp: 919487
+2026-08-21 02:20:42 - tn: 7875
+2026-08-21 02:20:42 - fn: 27
+2026-08-21 02:20:42 - fp_in_malicious_tw_ratio: 0.102
+2026-08-21 02:20:42 - percent_detected_attacks: 1.0
+2026-08-21 02:20:42 - fps_if_all_attacks_detected: 2173
+2026-08-21 02:20:42 - tps_if_all_attacks_detected: 0
+2026-08-21 02:20:42 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:20:42 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:20:42 - adp_score: 0.002
+2026-08-21 02:20:42 - discrim_score_att_0: -0.5446
+2026-08-21 02:20:42 - discrimination: -0.5446
+2026-08-21 02:20:42 - discrim_tp_att_0: 0
+2026-08-21 02:20:42 - discrim_tp_att_sum: 0
+2026-08-21 02:20:42 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_9.pkl
+2026-08-21 02:20:42 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_9.svg
+
+2026-08-21 02:20:42 - [@model_epoch_11] - Test Evaluation
+2026-08-21 02:20:46 - Loading data from /home/vung2/optec-l6/artifacts/training/training/38bbde18ccee9c2d7f1702d75e2b7f345cff8cd6ad0ab9e564a2d852b6753a1a/optc_h051/edge_losses/test/model_epoch_11...
+2026-08-21 02:20:46 - Threshold: 0.530
+2026-08-21 02:20:46 - Compute labels...
+2026-08-21 02:22:54 - Resutls saved to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/results/results.pth
+2026-08-21 02:23:02 - Analysis of malicious nodes:
+2026-08-21 02:23:02 - -> Malicious node 36534  : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/$Extend/$UsnJrnl:$J
+2026-08-21 02:23:02 - -> Malicious node 36535  : loss=1.138 | is TP: ✅ None
+2026-08-21 02:23:02 - -> Malicious node 87524  : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Python27/Lib/site-packages/enum34-1.1.6-py2.7.egg
+2026-08-21 02:23:02 - -> Malicious node 6303   : loss=1.138 | is TP: ✅ gpupdate.exe
+2026-08-21 02:23:02 - -> Malicious node 8184   : loss=1.138 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:23:02 - -> Malicious node 8187   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 8191   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 8198   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 8673   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 8676   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe
+2026-08-21 02:23:02 - -> Malicious node 8705   : loss=1.138 | is TP: ✅ sc.exe
+2026-08-21 02:23:02 - -> Malicious node 8713   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/conhost.exe
+2026-08-21 02:23:02 - -> Malicious node 972586 : loss=1.138 | is TP: ✅ 142.20.56.52:49803->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 972609 : loss=1.138 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49803
+2026-08-21 02:23:02 - -> Malicious node 8752   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 8754   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad0F93B.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8763   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad838E6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8770   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:23:02 - -> Malicious node 8772   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radEB31A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8775   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad076F2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8779   : loss=1.137 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radAF010.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8784   : loss=1.138 | is TP: ✅ %SystemRoot%/system32/csrss.exe
+2026-08-21 02:23:02 - -> Malicious node 8786   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radB895D.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8790   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad9DD75.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8794   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad95EBC.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8797   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad231B5.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8802   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad640CA.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 979084 : loss=1.138 | is TP: ✅ 142.20.56.52:49812->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 979381 : loss=1.138 | is TP: ✅ 142.20.56.52:49814->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 979654 : loss=1.138 | is TP: ✅ 142.20.56.52:49815->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 979926 : loss=1.138 | is TP: ✅ 142.20.56.52:49816->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 980034 : loss=1.138 | is TP: ✅ 142.20.56.52:49817->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 980176 : loss=1.138 | is TP: ✅ 142.20.56.52:49828->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 980371 : loss=1.138 | is TP: ✅ 142.20.56.52:49829->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 980674 : loss=1.138 | is TP: ✅ 142.20.56.52:49831->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 981350 : loss=1.138 | is TP: ✅ 142.20.56.52:49833->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 981979 : loss=1.138 | is TP: ✅ 142.20.56.52:49835->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 8808   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radCBB57.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8814   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad38E8A.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8817   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad41041.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8821   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radE1BA0.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8825   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad5446E.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8833   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad71B66.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8841   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad28DC8.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8849   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC5EB1.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8863   : loss=1.138 | is TP: ✅ cmd.exe
+2026-08-21 02:23:02 - -> Malicious node 8869   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad4F110.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8883   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1BA52.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8889   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8898   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad99E71.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8902   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad54E46.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8913   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 8917   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 98091  : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/windows/system32/scdeviceenum.dll
+2026-08-21 02:23:02 - -> Malicious node 982460 : loss=1.138 | is TP: ✅ 142.20.56.52:49836->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 982598 : loss=1.138 | is TP: ✅ 142.20.56.52:49837->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 982799 : loss=1.138 | is TP: ✅ 142.20.56.52:49838->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 982946 : loss=1.138 | is TP: ✅ 142.20.56.52:49839->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 983222 : loss=1.138 | is TP: ✅ 142.20.56.52:49840->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 983547 : loss=1.138 | is TP: ✅ 142.20.56.52:49842->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 983876 : loss=1.138 | is TP: ✅ 142.20.56.52:49843->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 984445 : loss=1.138 | is TP: ✅ 142.20.56.52:49844->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 985021 : loss=1.138 | is TP: ✅ 142.20.56.52:49846->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 985447 : loss=1.138 | is TP: ✅ 142.20.56.52:49847->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 985868 : loss=1.138 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58878
+2026-08-21 02:23:02 - -> Malicious node 985869 : loss=1.138 | is TP: ✅ 53.192.68.50:58878->142.20.56.52:3389
+2026-08-21 02:23:02 - -> Malicious node 985933 : loss=1.138 | is TP: ✅ 142.20.56.52:49870->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 986266 : loss=1.138 | is TP: ✅ 142.20.56.52:49871->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 986569 : loss=1.138 | is TP: ✅ 142.20.56.52:49872->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 986738 : loss=1.138 | is TP: ✅ 142.20.56.52:49873->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 986880 : loss=1.138 | is TP: ✅ 142.20.56.52:49876->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 8921   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad1CC6C.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8927   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8930   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad9FAD6.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8940   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad77CFB.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8944   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/Temp/rad20015.tmp/biGuWCmNsuCIG.exe
+2026-08-21 02:23:02 - -> Malicious node 8947   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 987241 : loss=1.138 | is TP: ✅ 142.20.56.52:49877->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 987696 : loss=1.138 | is TP: ✅ 142.20.56.52:49878->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 988259 : loss=1.138 | is TP: ✅ 142.20.56.52:49879->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 988768 : loss=1.138 | is TP: ✅ 142.20.56.52:49880->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 989247 : loss=1.138 | is TP: ✅ 142.20.56.52:49882->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 989830 : loss=1.138 | is TP: ✅ 142.20.56.52:49883->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 990188 : loss=1.138 | is TP: ✅ 142.20.56.52:49886->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 990207 : loss=1.138 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:49886
+2026-08-21 02:23:02 - -> Malicious node 9007   : loss=1.138 | is TP: ✅ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:23:02 - -> Malicious node 9242   : loss=1.138 | is TP: ❌ gpupdate.exe
+2026-08-21 02:23:02 - -> Malicious node 9248   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:23:02 - -> Malicious node 9247   : loss=1.138 | is TP: ✅ gpupdate.exe
+2026-08-21 02:23:02 - -> Malicious node 9344   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 9440   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 9480   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 1033715: loss=1.138 | is TP: ✅ 53.192.68.50:58888->142.20.56.52:3389
+2026-08-21 02:23:02 - -> Malicious node 1033755: loss=1.138 | is TP: ✅ 142.20.56.52:3389->53.192.68.50:58888
+2026-08-21 02:23:02 - -> Malicious node 9688   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 9689   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/services.exe
+2026-08-21 02:23:02 - -> Malicious node 9698   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe
+2026-08-21 02:23:02 - -> Malicious node 9701   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/lsass.exe
+2026-08-21 02:23:02 - -> Malicious node 9725   : loss=1.138 | is TP: ❌ /Device/HarddiskVolume1/Windows/system32/svchost.exe
+2026-08-21 02:23:02 - -> Malicious node 9737   : loss=1.138 | is TP: ❌ //?/C:/Program Files (x86)/Mozilla Firefox/firefox.exe
+2026-08-21 02:23:02 - -> Malicious node 9779   : loss=1.136 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:23:02 - -> Malicious node 9783   : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:23:02 - -> Malicious node 102207 : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe
+2026-08-21 02:23:02 - -> Malicious node 102210 : loss=1.138 | is TP: ✅ /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe:Zone.Identifier
+2026-08-21 02:23:02 - -> Malicious node 1055780: loss=1.138 | is TP: ✅ 142.20.56.52:50251->53.192.68.50:8000
+2026-08-21 02:23:02 - -> Malicious node 1055785: loss=1.138 | is TP: ✅ 142.20.56.52:50253->53.192.68.50:8000
+2026-08-21 02:23:02 - -> Malicious node 1055786: loss=1.138 | is TP: ✅ 142.20.56.52:50252->53.192.68.50:8000
+2026-08-21 02:23:02 - -> Malicious node 1055787: loss=1.138 | is TP: ✅ 142.20.56.52:50254->53.192.68.50:8000
+2026-08-21 02:23:02 - -> Malicious node 1055794: loss=1.138 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50251
+2026-08-21 02:23:02 - -> Malicious node 1055795: loss=1.138 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50253
+2026-08-21 02:23:02 - -> Malicious node 1055798: loss=1.138 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50252
+2026-08-21 02:23:02 - -> Malicious node 1055864: loss=1.138 | is TP: ✅ 53.192.68.50:8000->142.20.56.52:50254
+2026-08-21 02:23:02 - -> Malicious node 1055917: loss=1.138 | is TP: ✅ 142.20.56.52:50259->53.192.68.50:8080
+2026-08-21 02:23:02 - -> Malicious node 1055920: loss=1.138 | is TP: ✅ 53.192.68.50:8080->142.20.56.52:50259
+2026-08-21 02:23:02 - Saving figures to /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/...
+2026-08-21 02:23:39 - TPs per attack:
+2026-08-21 02:23:39 - attack 0: 87
+2026-08-21 02:23:56 - [@model_epoch_11] - Stats
+2026-08-21 02:23:56 - precision: 9e-05
+2026-08-21 02:23:56 - recall: 0.76316
+2026-08-21 02:23:56 - fpr: 0.9915502
+2026-08-21 02:23:56 - fscore: 0.00019
+2026-08-21 02:23:56 - ap: 0.00052
+2026-08-21 02:23:56 - accuracy: 0.00854
+2026-08-21 02:23:56 - balanced_acc: 0.3858
+2026-08-21 02:23:56 - auc: 0.56446
+2026-08-21 02:23:56 - lr(+): 0.76966
+2026-08-21 02:23:56 - dor: 0.02746
+2026-08-21 02:23:56 - mcc: -0.02762
+2026-08-21 02:23:56 - tp: 87
+2026-08-21 02:23:56 - fp: 919526
+2026-08-21 02:23:56 - tn: 7836
+2026-08-21 02:23:56 - fn: 27
+2026-08-21 02:23:56 - fp_in_malicious_tw_ratio: 0.101
+2026-08-21 02:23:56 - percent_detected_attacks: 1.0
+2026-08-21 02:23:56 - fps_if_all_attacks_detected: 2362
+2026-08-21 02:23:56 - tps_if_all_attacks_detected: 0
+2026-08-21 02:23:56 - precision_if_all_attacks_detected: 0.0
+2026-08-21 02:23:56 - recall_if_all_attacks_detected: 0.0
+2026-08-21 02:23:56 - adp_score: 0.002
+2026-08-21 02:23:56 - discrim_score_att_0: -0.4678
+2026-08-21 02:23:56 - discrimination: -0.4678
+2026-08-21 02:23:56 - discrim_tp_att_0: 0
+2026-08-21 02:23:56 - discrim_tp_att_sum: 0
+2026-08-21 02:23:56 - scores_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/scores_model_epoch_11.pkl
+2026-08-21 02:23:56 - neat_scores_img_file: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/precision_recall_dir/neat_scores_model_epoch_11.svg
+Task done: /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051
+
+[viz] Wrote /home/vung2/optec-l6/artifacts/evaluation/evaluation/abd2bffbd8e29156ae28ab444aa14b5717fccecfacd6cde08e76d5279e71463f/optc_h051/viz_manifest.json
+2026-08-21 02:23:56 - ============================================================
+2026-08-21 02:23:56 - Run finished.
+2026-08-21 02:23:56 - ============================================================

@@ -1,0 +1,21 @@
+=== CODE BACKUP SUMMARY ===
+Created: Mon Aug 24 13:16:20 +07 2026
+
+Contents:
+- orthrus/src/ : ORTHRUS source code (10+ patches applied)
+- pidsmaker/ : PIDSMaker configs
+- scripts/ : Run scripts, launchers, debug
+- patches/ : orthrus_opc_h051.patch, velox_worktree.patch
+- logs/ : flash, magic, orthrus logs
+- flash_magic_report.md : Report
+
+GitHub: commit 0a7aee2 on BDTG/optc-e2e-baseline
+
+=== ARTIFACTS (for reference) ===
+Backups at E:\Data\Thai\backups\
+total 0
+drwxrwxrwx 1 vung2 vung2 4.0K Aug 21 02:38 artifacts_flash_backup
+drwxrwxrwx 1 vung2 vung2 4.0K Aug 21 10:54 artifacts_flashmagic_full
+drwxrwxrwx 1 vung2 vung2 4.0K Aug 21 10:50 artifacts_flashmagic_main
+drwxrwxrwx 1 vung2 vung2 4.0K Aug 21 10:45 artifacts_magic_backup
+drwxrwxrwx 1 vung2 vung2 4.0K Aug 23 16:43 orthrus_backup
