@@ -1,0 +1,29 @@
+# Install PyTorch with CUDA support FIRST (before installing other packages):
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+#
+# Then install the remaining dependencies:
+#   pip install -r requirements.txt
+
+# Core HuggingFace stack
+transformers>=4.40.0
+datasets>=2.19.0
+accelerate>=0.29.0
+
+# Parameter-efficient fine-tuning (LoRA)
+peft>=0.10.0
+
+# Supervised fine-tuning trainer
+trl>=0.8.6
+
+# 4-bit / 8-bit quantization (QLoRA)
+bitsandbytes>=0.43.0
+
+# Tokenizer dependencies
+sentencepiece
+protobuf
+
+# HuggingFace Hub CLI (login, model downloads)
+huggingface_hub
+
+# Training metrics visualization
+tensorboard
