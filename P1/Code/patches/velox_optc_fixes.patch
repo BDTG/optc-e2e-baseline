@@ -1,0 +1,272 @@
+diff --git a/src/data_utils.py b/src/data_utils.py
+index fd997e3..b2d23b4 100644
+--- a/src/data_utils.py
++++ b/src/data_utils.py
+@@ -91,7 +91,7 @@ def load_data_set(cfg, path: str, split: str) -> list[CollatableTemporalData]:
+     data_list = []
+     for f in sorted(os.listdir(os.path.join(path, split))):
+         filepath = os.path.join(path, split, f)
+-        data = torch.load(filepath).to("cpu")
++        data = torch.load(filepath, weights_only=False).to("cpu")
+         data_list.append(data)
+ 
+     data_list = extract_msg_from_data(data_list, cfg)
+@@ -409,11 +409,83 @@ def load_model(model, path: str, cfg, map_location=None):
+     Loads weights and tensors from disk into a model.
+     """
+     model.load_state_dict(
+-        torch.load(os.path.join(path, "state_dict.pkl")))
++        torch.load(os.path.join(path, "state_dict.pkl", weights_only=False)))
+     
+     if isinstance(model.encoder, TGNEncoder):
+-        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl"))
++        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl", weights_only=False))
+         if cfg.detection.gnn_training.encoder.tgn.use_memory or "time_encoding" in cfg.detection.gnn_training.encoder.edge_features:
+-            model.encoder.memory = torch.load(os.path.join(path, "memory.pkl"))
++            model.encoder.memory = torch.load(os.path.join(path, "memory.pkl", weights_only=False))
+ 
+     return model
++
++
++def load_all_datasets_chunked(cfg, chunk=800):
++    """
++    Memory-bounded variant of load_all_datasets for large datasets (OpTC H051).
++    
++    Instead of loading ALL train/val/test graphs into RAM at once (which exceeds
++    the 28GB WSL limit for OpTC), we load them in chunks of `chunk` graphs per
++    split, run training/validation/testing on each chunk, then free memory.
++    
++    Returns chunked data handlers that the training loop iterates over.
++    Uses generator pattern: only `chunk` graphs reside in RAM at any time.
++    
++    Since Velox encoder is 'none' (no TGN), full_data is None and we don't
++    need global message concatenation.
++    """
++    import gc
++    from torch_geometric.data import Data
++    
++    def _load_split_chunked(split, chunk_size):
++        """Yields INDIVIDUAL graphs one at a time (lazy), but only keeps
++        `chunk_size` graphs in RAM at once. After each chunk, frees memory.
++        Extracts msg per-graph to bound RAM (not all-at-once)."""
++        all_files = sorted(os.listdir(os.path.join(
++            cfg.featurization.embed_edges._edge_embeds_dir, split)))
++        buffer = []
++        for f in all_files:
++            filepath = os.path.join(
++                cfg.featurization.embed_edges._edge_embeds_dir, split, f)
++            data = torch.load(filepath, weights_only=False).to("cpu")
++            if hasattr(data, 'msg') and data.msg is not None:
++                data.msg = data.msg.clone()
++            buffer.append(data)
++            if len(buffer) >= chunk_size:
++                buffer = extract_msg_from_data(buffer, cfg)
++                for g in buffer:
++                    yield g
++                buffer = []
++                gc.collect()
++        # Remaining
++        if buffer:
++            buffer = extract_msg_from_data(buffer, cfg)
++            for g in buffer:
++                yield g
++            gc.collect()
++    
++    # Find max_node across all splits (needed for model init)
++    # OPTIMIZED: only load raw src/dst to find max node ID, skip msg extraction
++    # (msg extraction is slow and unnecessary for just finding max node).
++    max_node = 0
++    base = cfg.featurization.embed_edges._edge_embeds_dir
++    for split in ["train", "val", "test"]:
++        split_dir = os.path.join(base, split)
++        for f in sorted(os.listdir(split_dir)):
++            filepath = os.path.join(split_dir, f)
++            data = torch.load(filepath, weights_only=False)
++            node_max = max(data.src.max().item(), data.dst.max().item())
++            if node_max > max_node:
++                max_node = node_max
++            del data
++        gc.collect()
++    
++    max_node = max_node + 1
++    print(f"Max node in {cfg.dataset.name}: {max_node}")
++    
++    # Return chunked iterators (generators) - training loop consumes one chunk at a time
++    train_chunks = _load_split_chunked("train", chunk)
++    val_chunks = _load_split_chunked("val", chunk)
++    test_chunks = _load_split_chunked("test", chunk)
++    
++    return train_chunks, val_chunks, test_chunks, None, max_node
++
+diff --git a/src/detection/training_methods/orthrus_gnn_testing.py b/src/detection/training_methods/orthrus_gnn_testing.py
+index ae09603..8979037 100644
+--- a/src/detection/training_methods/orthrus_gnn_testing.py
++++ b/src/detection/training_methods/orthrus_gnn_testing.py
+@@ -264,12 +264,25 @@ def test_node_level(
+ 
+ 
+ def main(cfg, model, val_data, test_data, full_data, epoch, split):
++    # CHUNKED: val_data/test_data may be generators yielding chunks.
++    # Convert single graphs list to a one-chunk generator for uniform handling.
++    def _as_graphs(d):
++        """Normalize to a generator of individual graphs."""
++        if hasattr(d, "__iter__") and not isinstance(d, (list, tuple)):
++            # already a generator yielding graphs
++            for g in d:
++                yield g
++        else:
++            # list of graphs
++            for g in d:
++                yield g
++    
+     if split == "all":
+-        splits = [(val_data, "val"), (test_data, "test")]
++        splits = [(_as_graphs(val_data), "val"), (_as_graphs(test_data), "test")]
+     elif split == "val":
+-        splits = [(val_data, "val")]
++        splits = [(_as_graphs(val_data), "val")]
+     elif split == "test":
+-        splits = [(test_data, "test")]
++        splits = [(_as_graphs(test_data), "test")]
+     else:
+         raise ValueError(f"Invalid split {split}")
+     
+@@ -296,7 +309,7 @@ def main(cfg, model, val_data, test_data, full_data, epoch, split):
+         tracemalloc.start()
+         
+         all_losses = []
+-        for g in log_tqdm(graphs, desc=desc):
++        for g in log_tqdm(graphs, desc=desc):  # graphs is generator of individual graphs
+             g.to(device=device)
+             
+             s = time.time()
+@@ -316,6 +329,7 @@ def main(cfg, model, val_data, test_data, full_data, epoch, split):
+             g.to("cpu")  # Move graph back to CPU to free GPU memory for next batch
+             if use_cuda:
+                 torch.cuda.empty_cache()
++        import gc; gc.collect()  # free graph memory after split
+             
+         _, peak_inference_cpu_memory = tracemalloc.get_traced_memory()
+         peak_inference_cpu_mem = max(peak_inference_cpu_mem, peak_inference_cpu_memory / (1024 ** 3))
+diff --git a/src/detection/training_methods/orthrus_gnn_training.py b/src/detection/training_methods/orthrus_gnn_training.py
+index f991f7b..5a7cd32 100644
+--- a/src/detection/training_methods/orthrus_gnn_training.py
++++ b/src/detection/training_methods/orthrus_gnn_training.py
+@@ -63,11 +63,19 @@ def main(cfg):
+         torch.cuda.reset_peak_memory_stats(device=device)
+     tracemalloc.start()
+ 
+-    train_data, val_data, test_data, full_data, max_node_num = load_all_datasets(cfg)
+-
+-    model = build_model(data_sample=train_data[0], device=device, cfg=cfg, max_node_num=max_node_num)
++    # CHUNKED LOADING: avoid RAM overflow on large datasets (OpTC H051 = 13GB disk,
++    # ~30GB RAM when fully loaded, exceeds 28GB WSL limit).
++    # We load train/val/test in chunks of CHUNK graphs, train on each chunk,
++    # then free memory before loading the next. This keeps peak RAM bounded.
++    CHUNK = 800  # graphs per split loaded at once (tunable, ~3-4GB RAM peak)
++    train_data, val_data, test_data, full_data, max_node_num = load_all_datasets_chunked(cfg, chunk=CHUNK)
++
++    _peek = load_all_datasets_chunked(cfg, chunk=CHUNK)
++    _sc = next(_peek[0])
++    _sample = _sc[0] if _sc else None
++    model = build_model(data_sample=_sample, device=device, cfg=cfg, max_node_num=max_node_num)
+     if cfg._from_weights:
+-        model.load_state_dict(torch.load(os.path.join(cfg._from_weights_path, "encoder", f"{cfg.dataset.name}.pkl")))
++        model.load_state_dict(torch.load(os.path.join(cfg._from_weights_path, "encoder", f"{cfg.dataset.name}.pkl", weights_only=False)))
+ 
+     optimizer = optimizer_factory(cfg, parameters=set(model.parameters()))
+     
+@@ -77,6 +85,7 @@ def main(cfg):
+ 
+     num_epochs = 1 if cfg._from_weights else cfg.detection.gnn_training.num_epochs
+     tot_loss = 0.0
++    n_train_graphs = 0
+     epoch_times = []
+     best_val_ap, best_model, best_epoch = -1.0, None, None
+     peak_train_cpu_mem = 0
+@@ -104,12 +113,13 @@ def main(cfg):
+                 cfg=cfg,
+             )
+             g.to("cpu")
++            n_train_graphs += 1
+             if use_cuda:
+                 torch.cuda.empty_cache()
+             
+             tot_loss += loss
+ 
+-        tot_loss /= len(train_data)
++        tot_loss /= max(n_train_graphs, 1)
+         epoch_times.append(timer() - start)
+         
+         _, peak_inference_cpu_memory = tracemalloc.get_traced_memory()
+diff --git a/src/model.py b/src/model.py
+index 0459468..945c757 100644
+--- a/src/model.py
++++ b/src/model.py
+@@ -121,7 +121,10 @@ class Model(nn.Module):
+         
+     def get_val_ap(self):
+         # If multiple decoders are used, we take the average of the val scores
+-        return np.mean([d.get_val_score() for d in self.decoders])
++        try:
++            return np.mean([d.get_val_score() for d in self.decoders])
++        except (ValueError, AttributeError):
++            return -1.0  # decoders not yet evaluated
+ 
+     def to_device(self, device):
+         if self.device == device:
+diff --git a/src/provnet_utils.py b/src/provnet_utils.py
+index e3abde2..5d8e81d 100644
+--- a/src/provnet_utils.py
++++ b/src/provnet_utils.py
+@@ -429,7 +429,8 @@ def get_node_to_path_and_type(cfg):
+         
+         queries = {
+             "file": "SELECT index_id, path FROM file_node_table;",
+-            "netflow": "SELECT index_id, src_addr, dst_addr, src_port, dst_port FROM netflow_node_table;",
++            # Adaptive: detect available columns (OpTC vs DARPA schemas differ)
++            "netflow": "SELECT * FROM netflow_node_table;",
+             "subject": "SELECT index_id, path, cmd FROM subject_node_table;"
+         }
+         node_to_path_type = {}
+@@ -438,8 +439,14 @@ def get_node_to_path_and_type(cfg):
+             rows = cur.fetchall()
+             for row in rows:
+                 if node_type == "netflow":
+-                    index_id, src_addr, dst_addr, src_port, dst_port = row
+-                    node_to_path_type[index_id] = {"path": f"{str(src_addr)}:{str(src_port)}->{str(dst_addr)}:{str(dst_port)}", "type": node_type}
++                    # Build path from whichever IP/port columns exist
++                    cols = [d[0] for d in cur.description]
++                    d = dict(zip(cols, row))
++                    index_id = d.get("index_id")
++                    lip = d.get("local_ip") or d.get("src_addr") or ""
++                    rip = d.get("remote_ip") or d.get("dst_addr") or ""
++                    rport = d.get("remote_port") or d.get("dst_port") or ""
++                    node_to_path_type[index_id] = {"path": f"{str(lip)}->{str(rip)}:{str(rport)}", "type": node_type}
+                 elif node_type == "file":
+                     index_id, path = row
+                     node_to_path_type[index_id] = {"path": str(path), "type": node_type}
+@@ -451,7 +458,7 @@ def get_node_to_path_and_type(cfg):
+         connect.close()
+         
+     else:
+-        node_to_path_type = torch.load(out_file)
++        node_to_path_type = torch.load(out_file, weights_only=False)
+         
+     return node_to_path_type
+ 
+@@ -531,12 +538,12 @@ def gen_relation_onehot(rel2id):
+ 
+ def get_indexid2msg(cfg):
+     indexid2msg_file = os.path.join(cfg.preprocessing.build_graphs._dicts_dir, "indexid2msg.pkl")
+-    indexid2msg = torch.load(indexid2msg_file)
++    indexid2msg = torch.load(indexid2msg_file, weights_only=False)
+     return indexid2msg
+ 
+ def get_split2nodes(cfg):
+     path = os.path.join(cfg.preprocessing.build_graphs._dicts_dir, "split2nodes.pkl")
+-    split2nodes = torch.load(path)
++    split2nodes = torch.load(path, weights_only=False)
+     return split2nodes
+ 
+ def compute_class_weights(labels, num_classes):
