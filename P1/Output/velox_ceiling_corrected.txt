@@ -1,0 +1,13 @@
+label map: 2900744 nodes
+----------------------------------------------------------------------
+k=2000: TP=5 FP=1995 | collide_TP=5 (0.3%) collide_GT=59 unique=1931
+  CORRECTED CEILING PRECISION = 5/10 = 50.00%
+----------------------------------------------------------------------
+k=5000: TP=11 FP=4989 | collide_TP=123 (2.5%) collide_GT=9 unique=4857
+  CORRECTED CEILING PRECISION = 11/134 = 8.21%
+----------------------------------------------------------------------
+k=10000: TP=20 FP=9980 | collide_TP=1350 (13.5%) collide_GT=53 unique=8577
+  CORRECTED CEILING PRECISION = 20/1370 = 1.46%
+----------------------------------------------------------------------
+k=50000: TP=100 FP=49900 | collide_TP=2884 (5.8%) collide_GT=1 unique=47015
+  CORRECTED CEILING PRECISION = 100/2984 = 3.35%
