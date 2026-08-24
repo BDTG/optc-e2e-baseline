@@ -26,6 +26,7 @@ FN (false negative) | 27       | 52       | 105      | (pending)
 TN                  | 7,836    | 741,694  | -        | (pending)
 F1                  | 0.0002   | 0.0007   | -        | (pending)
 Accuracy            | -        | -        | 0.9996   | (pending)
+  NOTE: see "ACCURACY CAVEAT" below - not representative under imbalance
 MCC                 | -        | -        | 0.0126   | (pending)
 LR+                 | -        | -        | 7.48     | (pending)
 --------------------|----------|----------|----------|--------
@@ -56,6 +57,23 @@ Training time       | -        | -        | 252s     | ~66s/epoch (GPU)
 
 5. VELOX: Val AP plateaued at 0.3874 by epoch 1-2 (converged early).
    Needs swap=20GB on WSL to avoid RAM deadlock at epoch05 validation.
+
+================================================================
+                   ACCURACY CAVEAT
+================================================================
+ORTHRUS reports Accuracy = 99.96%. This number is NOT representative
+and should NOT be cited as a sign of good detection:
+
+- Positive class rate is only 114 / ~927,476 nodes = 0.012%.
+- A trivial "predict all benign" baseline would score 99.988%,
+  HIGHER than ORTHRUS.
+- Accuracy is dominated by True Negatives (correctly flagged benign
+  nodes), which are the vast majority.
+- The meaningful metrics under this extreme imbalance are:
+    * ROC-AUC = 0.9409  (ranking power)
+    * Recall   = 0.0790  (caught 9 / 114 malicious)
+    * FP        = 3,406   (false alarms)
+  Use AUC / Recall / Precision@k / F1 for reporting, NOT Accuracy.
 
 ================================================================
                       ARTIFACT LOCATIONS
