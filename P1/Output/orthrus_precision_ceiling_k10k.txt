@@ -1,0 +1,18 @@
+Operating point k=10000: TP=101 FP=9899 GT=114
+recall=0.8860 prec=0.0101
+======================================================================
+TRAN PRECISION @ k=10000 (SLM xem path+cmd, phan loai FP)
+======================================================================
+Tong FP:                          9899
+  FP trung msg voi TP:            9899  (100.00%)  <- KHONG tach duoc
+  FP trung msg voi GT (khong TP): 0  (0.00%)  <- kho, GT bi miss
+  FP msg doc nhat:                0  (0.00%)  <- de tach nhat
+  FP khong co msg (bo qua):       0
+----------------------------------------------------------------------
+Neu SLM hoan hao (giu het 101 TP, loai moi FP tach duoc):
+  FP con lai toi thieu:  9899
+  TRAN PRECISION:        101/10000 = 1.01%
+======================================================================
+k=2000: TP=12 FP=1988 | FP_collide_TP=618 | CEILING=1.90%
+k=5000: TP=49 FP=4951 | FP_collide_TP=2898 | CEILING=1.66%
+SAVED precision_ceiling_k10000.pth
