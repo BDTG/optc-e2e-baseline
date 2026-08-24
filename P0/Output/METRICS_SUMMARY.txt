@@ -1,0 +1,69 @@
+================================================================
+            OPTC H051 BASELINE - METRICS SUMMARY
+            (Temporal split | GT = 114 malicious nodes)
+================================================================
+
+DATASET
+  Host        : vung2 (OpTC H051)
+  Events      : 19,815,600
+  Split       : Temporal (train -> val -> test), NOT random
+  Ground Truth: 114 malicious nodes (node_h051_0925.csv)
+  Machine     : Win10 + WSL2, RTX 5060 Ti 16GB, RAM 28GB
+  Repo        : github.com/BDTG/optc-e2e-baseline  (P0/Output, P1/Output)
+
+================================================================
+                          METRICS TABLE
+================================================================
+Metric              | Flash    | Magic    | ORTHRUS  | Velox*
+--------------------|----------|----------|----------|--------
+ROC-AUC             | 0.5645   | 0.7513   | 0.9409   | (pending)
+PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.3874 (Val AP)
+Recall              | 0.7632   | 0.5439   | 0.0790   | (pending)
+Precision           | 0.0001   | 0.0003   | 0.0026   | (pending)
+TP (true positive)  | 87       | 62       | 9        | (pending)
+FP (false positive) | 919,526  | 185,668  | 3,406    | (pending)
+FN (false negative) | 27       | 52       | 105      | (pending)
+TN                  | 7,836    | 741,694  | -        | (pending)
+F1                  | 0.0002   | 0.0007   | -        | (pending)
+Accuracy            | -        | -        | 0.9996   | (pending)
+MCC                 | -        | -        | 0.0126   | (pending)
+LR+                 | -        | -        | 7.48     | (pending)
+--------------------|----------|----------|----------|--------
+Test scope          | full DB  | full DB  | pilot*   | full (killed)
+Epochs trained      | -        | -        | 8        | 5/8 (killed @ep5)
+Training time       | -        | -        | 252s     | ~66s/epoch (GPU)
+================================================================
+
+* ORTHRUS pilot = test ONLY on attack day 25/09 (1 day), not full 3-day
+  test set, due to 28GB RAM limit. Full run needs >=40GB RAM.
+* Velox = self-train on GPU; killed at epoch05 validation (RAM deadlock
+  99.6%). Val AP 0.3874 achieved. Final metrics pending re-run.
+
+================================================================
+                      KEY FINDINGS
+================================================================
+1. RANKING (AUC): ORTHRUS (0.94) > Magic (0.75) > Flash (0.56)
+
+2. FLASH: AUC ~ random. Recall 76% but 919K FP -> unusable in practice.
+
+3. MAGIC: Better than Flash (AUC 0.75). Still high FP (186K).
+
+4. ORTHRUS: Best ranking power (AUC 0.94). Low recall (7.9%) is a
+   THRESHOLD issue, not model weakness:
+   - 25% of FP fall inside malicious time-windows (real signal)
+   - Strict val-loss threshold: TP=0, FP=8, FPR=0.0025%
+   -> Tune threshold to recover more TP without FP explosion.
+
+5. VELOX: Val AP plateaued at 0.3874 by epoch 1-2 (converged early).
+   Needs swap=20GB on WSL to avoid RAM deadlock at epoch05 validation.
+
+================================================================
+                      ARTIFACT LOCATIONS
+================================================================
+Flash   : P0/Output/logs_flash.log, flash_magic_report.md
+Magic   : P0/Output/logs_magic.log, flash_magic_report.md
+ORTHRUS: P1/Output/orthrus_run.log (+ backups/orthrus_backup on E:)
+Velox   : P1/Output/logs_velox.log (partial)
+
+Generated: 2026-08-24
+================================================================
