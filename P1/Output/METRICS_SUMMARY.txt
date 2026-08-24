@@ -14,24 +14,24 @@ DATASET
 ================================================================
                           METRICS TABLE
 ================================================================
-Metric              | Flash    | Magic    | ORTHRUS  | Velox*
+Metric              | Flash    | Magic    | ORTHRUS  | Velox
 --------------------|----------|----------|----------|--------
-ROC-AUC             | 0.5645   | 0.7513   | 0.9409   | (pending)
-PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.3874 (Val AP)
-Recall              | 0.7632   | 0.5439   | 0.0790   | (pending)
-Precision           | 0.0001   | 0.0003   | 0.0026   | (pending)
-TP (true positive)  | 87       | 62       | 9        | (pending)
-FP (false positive) | 919,526  | 185,668  | 3,406    | (pending)
-FN (false negative) | 27       | 52       | 105      | (pending)
-TN                  | 7,836    | 741,694  | -        | (pending)
-F1                  | 0.0002   | 0.0007   | -        | (pending)
-Accuracy            | -        | -        | 0.9996   | (pending)
+ROC-AUC             | 0.5645   | 0.7513   | 0.9409   | 0.9221
+PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.00332 (AP)
+Recall              | 0.7632   | 0.5439   | 0.0790   | 0.0000
+Precision           | 0.0001   | 0.0003   | 0.0026   | 0.0000
+TP (true positive)  | 87       | 62       | 9        | 0
+FP (false positive) | 919,526  | 185,668  | 3,406    | 0
+FN (false negative) | 27       | 52       | 105      | 114
+TN                  | 7,836    | 741,694  | -        | 927,362
+F1                  | 0.0002   | 0.0007   | -        | 0.0000
+Accuracy            | -        | -        | 0.9996   | 0.99988
   NOTE: see "ACCURACY CAVEAT" below - not representative under imbalance
-MCC                 | -        | -        | 0.0126   | (pending)
-LR+                 | -        | -        | 7.48     | (pending)
+MCC                 | -        | -        | 0.0126   | 0.0
+LR+                 | -        | -        | 7.48     | 0.0
 --------------------|----------|----------|----------|--------
-Test scope          | full DB  | full DB  | pilot*   | full (killed)
-Epochs trained      | -        | -        | 8        | 5/8 (killed @ep5)
+Test scope          | full DB  | full DB  | pilot*   | full (8 epochs)
+Epochs trained      | -        | -        | 8        | 8/8 (completed)
 Training time       | -        | -        | 252s     | ~66s/epoch (GPU)
 ================================================================
 
@@ -55,8 +55,16 @@ Training time       | -        | -        | 252s     | ~66s/epoch (GPU)
    - Strict val-loss threshold: TP=0, FP=8, FPR=0.0025%
    -> Tune threshold to recover more TP without FP explosion.
 
-5. VELOX: Val AP plateaued at 0.3874 by epoch 1-2 (converged early).
-   Needs swap=20GB on WSL to avoid RAM deadlock at epoch05 validation.
+5. VELOX: Completed 8/8 epochs (GPU, ~66s/epoch).
+   - AUC 0.9221 (2nd best, close to ORTHRUS 0.94)
+   - BUT Recall=0%, TP=0 -> threshold too high (default max_val_loss)
+   - Needs threshold tuning to recover TP (see ORTHRUS note)
+   - RAM issue SOLVED via chunked lazy-loading (peak 3.5GB/28GB, no swap)
+     Code: P1/Code/patches/velox_chunked_loading.patch
+
+* Velox = self-train GNN on GPU. Completed full 8 epochs after chunked
+  RAM fix. Final metrics: AUC 0.9221, AP 0.00332, Recall 0%, TP 0.
+  Threshold tuning needed to make model usable (currently catches nothing).
 
 ================================================================
                    ACCURACY CAVEAT

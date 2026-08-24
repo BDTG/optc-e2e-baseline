@@ -1,0 +1,183 @@
+diff --git a/src/data_utils.py b/src/data_utils.py
+index fd997e3..6a7fef8 100644
+--- a/src/data_utils.py
++++ b/src/data_utils.py
+@@ -91,7 +91,7 @@ def load_data_set(cfg, path: str, split: str) -> list[CollatableTemporalData]:
+     data_list = []
+     for f in sorted(os.listdir(os.path.join(path, split))):
+         filepath = os.path.join(path, split, f)
+-        data = torch.load(filepath).to("cpu")
++        data = torch.load(filepath, weights_only=False).to("cpu")
+         data_list.append(data)
+ 
+     data_list = extract_msg_from_data(data_list, cfg)
+@@ -409,11 +409,79 @@ def load_model(model, path: str, cfg, map_location=None):
+     Loads weights and tensors from disk into a model.
+     """
+     model.load_state_dict(
+-        torch.load(os.path.join(path, "state_dict.pkl")))
++        torch.load(os.path.join(path, "state_dict.pkl", weights_only=False)))
+     
+     if isinstance(model.encoder, TGNEncoder):
+-        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl"))
++        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl", weights_only=False))
+         if cfg.detection.gnn_training.encoder.tgn.use_memory or "time_encoding" in cfg.detection.gnn_training.encoder.edge_features:
+-            model.encoder.memory = torch.load(os.path.join(path, "memory.pkl"))
++            model.encoder.memory = torch.load(os.path.join(path, "memory.pkl", weights_only=False))
+ 
+     return model
++
++
++def load_all_datasets_chunked(cfg, chunk=800):
++    """
++    Memory-bounded variant of load_all_datasets for large datasets (OpTC H051).
++    
++    Instead of loading ALL train/val/test graphs into RAM at once (which exceeds
++    the 28GB WSL limit for OpTC), we load them in chunks of `chunk` graphs per
++    split, run training/validation/testing on each chunk, then free memory.
++    
++    Returns chunked data handlers that the training loop iterates over.
++    Uses generator pattern: only `chunk` graphs reside in RAM at any time.
++    
++    Since Velox encoder is 'none' (no TGN), full_data is None and we don't
++    need global message concatenation.
++    """
++    import gc
++    from torch_geometric.data import Data
++    
++    def _load_split_chunked(split, chunk_size):
++        """Yields INDIVIDUAL graphs one at a time (lazy), but only keeps
++        `chunk_size` graphs in RAM at once. After each chunk, frees memory.
++        This bounds peak RAM while yielding graphs (not lists) so the
++        training loop `for g in train_data: g.to(device)` works unchanged."""
++        all_files = sorted(os.listdir(os.path.join(
++            cfg.featurization.embed_edges._edge_embeds_dir, split)))
++        buffer = []
++        for f in all_files:
++            filepath = os.path.join(
++                cfg.featurization.embed_edges._edge_embeds_dir, split, f)
++            data = torch.load(filepath, weights_only=False).to("cpu")
++            if hasattr(data, 'msg') and data.msg is not None:
++                data.msg = data.msg.clone()
++            buffer.append(data)
++            if len(buffer) >= chunk_size:
++                buffer = extract_msg_from_data(buffer, cfg)
++                for g in buffer:
++                    yield g
++                buffer = []
++                gc.collect()
++        # Remaining
++        if buffer:
++            buffer = extract_msg_from_data(buffer, cfg)
++            for g in buffer:
++                yield g
++            gc.collect()
++    
++    # Find max_node across all splits (needed for model init) - stream to avoid RAM spike
++    max_node = 0
++    for split in ["train", "val", "test"]:
++        for data_list in _load_split_chunked(split, chunk):
++            for data in data_list:
++                node_max = torch.cat([data.src, data.dst]).max().item()
++                if node_max > max_node:
++                    max_node = node_max
++            del data_list
++            gc.collect()
++    
++    max_node = max_node + 1
++    print(f"Max node in {cfg.dataset.name}: {max_node}")
++    
++    # Return chunked iterators (generators) - training loop consumes one chunk at a time
++    train_chunks = _load_split_chunked("train", chunk)
++    val_chunks = _load_split_chunked("val", chunk)
++    test_chunks = _load_split_chunked("test", chunk)
++    
++    return train_chunks, val_chunks, test_chunks, None, max_node
++
+diff --git a/src/detection/training_methods/orthrus_gnn_testing.py b/src/detection/training_methods/orthrus_gnn_testing.py
+index ae09603..8979037 100644
+--- a/src/detection/training_methods/orthrus_gnn_testing.py
++++ b/src/detection/training_methods/orthrus_gnn_testing.py
+@@ -264,12 +264,25 @@ def test_node_level(
+ 
+ 
+ def main(cfg, model, val_data, test_data, full_data, epoch, split):
++    # CHUNKED: val_data/test_data may be generators yielding chunks.
++    # Convert single graphs list to a one-chunk generator for uniform handling.
++    def _as_graphs(d):
++        """Normalize to a generator of individual graphs."""
++        if hasattr(d, "__iter__") and not isinstance(d, (list, tuple)):
++            # already a generator yielding graphs
++            for g in d:
++                yield g
++        else:
++            # list of graphs
++            for g in d:
++                yield g
++    
+     if split == "all":
+-        splits = [(val_data, "val"), (test_data, "test")]
++        splits = [(_as_graphs(val_data), "val"), (_as_graphs(test_data), "test")]
+     elif split == "val":
+-        splits = [(val_data, "val")]
++        splits = [(_as_graphs(val_data), "val")]
+     elif split == "test":
+-        splits = [(test_data, "test")]
++        splits = [(_as_graphs(test_data), "test")]
+     else:
+         raise ValueError(f"Invalid split {split}")
+     
+@@ -296,7 +309,7 @@ def main(cfg, model, val_data, test_data, full_data, epoch, split):
+         tracemalloc.start()
+         
+         all_losses = []
+-        for g in log_tqdm(graphs, desc=desc):
++        for g in log_tqdm(graphs, desc=desc):  # graphs is generator of individual graphs
+             g.to(device=device)
+             
+             s = time.time()
+@@ -316,6 +329,7 @@ def main(cfg, model, val_data, test_data, full_data, epoch, split):
+             g.to("cpu")  # Move graph back to CPU to free GPU memory for next batch
+             if use_cuda:
+                 torch.cuda.empty_cache()
++        import gc; gc.collect()  # free graph memory after split
+             
+         _, peak_inference_cpu_memory = tracemalloc.get_traced_memory()
+         peak_inference_cpu_mem = max(peak_inference_cpu_mem, peak_inference_cpu_memory / (1024 ** 3))
+diff --git a/src/detection/training_methods/orthrus_gnn_training.py b/src/detection/training_methods/orthrus_gnn_training.py
+index f991f7b..e43d6be 100644
+--- a/src/detection/training_methods/orthrus_gnn_training.py
++++ b/src/detection/training_methods/orthrus_gnn_training.py
+@@ -63,11 +63,19 @@ def main(cfg):
+         torch.cuda.reset_peak_memory_stats(device=device)
+     tracemalloc.start()
+ 
+-    train_data, val_data, test_data, full_data, max_node_num = load_all_datasets(cfg)
+-
+-    model = build_model(data_sample=train_data[0], device=device, cfg=cfg, max_node_num=max_node_num)
++    # CHUNKED LOADING: avoid RAM overflow on large datasets (OpTC H051 = 13GB disk,
++    # ~30GB RAM when fully loaded, exceeds 28GB WSL limit).
++    # We load train/val/test in chunks of CHUNK graphs, train on each chunk,
++    # then free memory before loading the next. This keeps peak RAM bounded.
++    CHUNK = 800  # graphs per split loaded at once (tunable, ~3-4GB RAM peak)
++    train_data, val_data, test_data, full_data, max_node_num = load_all_datasets_chunked(cfg, chunk=CHUNK)
++
++    _peek = load_all_datasets_chunked(cfg, chunk=CHUNK)
++    _sc = next(_peek[0])
++    _sample = _sc[0] if _sc else None
++    model = build_model(data_sample=_sample, device=device, cfg=cfg, max_node_num=max_node_num)
+     if cfg._from_weights:
+-        model.load_state_dict(torch.load(os.path.join(cfg._from_weights_path, "encoder", f"{cfg.dataset.name}.pkl")))
++        model.load_state_dict(torch.load(os.path.join(cfg._from_weights_path, "encoder", f"{cfg.dataset.name}.pkl", weights_only=False)))
+ 
+     optimizer = optimizer_factory(cfg, parameters=set(model.parameters()))
+     
+@@ -109,7 +117,7 @@ def main(cfg):
+             
+             tot_loss += loss
+ 
+-        tot_loss /= len(train_data)
++        tot_loss /= max(n_train_graphs, 1)
+         epoch_times.append(timer() - start)
+         
+         _, peak_inference_cpu_memory = tracemalloc.get_traced_memory()
