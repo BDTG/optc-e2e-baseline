@@ -1,95 +1,130 @@
 ================================================================
-            OPTC H051 BASELINE - METRICS SUMMARY
-            (Temporal split | GT = 114 malicious nodes)
+            OPTC H051 BASELINE - METRICS SUMMARY (v2)
+        (Temporal split | GT = 114 malicious nodes)
 ================================================================
 
 DATASET
   Host        : vung2 (OpTC H051)
   Events      : 19,815,600
-  Split       : Temporal (train -> val -> test), NOT random
+  Time span   : 7 days (19-25/09/2019), attack on 25/09
+  Split       : Temporal, NOT random
+                train = 19-21/09 (230 TWs) | val = 22/09 (94 TWs)
+                test  = 23-25/09 (145 TWs)
   Ground Truth: 114 malicious nodes (node_h051_0925.csv)
   Machine     : Win10 + WSL2, RTX 5060 Ti 16GB, RAM 28GB
-  Repo        : github.com/BDTG/optc-e2e-baseline  (P0/Output, P1/Output)
+  Repo        : github.com/BDTG/optc-e2e-baseline
 
 ================================================================
-                          METRICS TABLE
+                      METRICS TABLE
 ================================================================
 Metric              | Flash    | Magic    | ORTHRUS  | Velox
 --------------------|----------|----------|----------|--------
 ROC-AUC             | 0.5645   | 0.7513   | 0.9409   | 0.9221
-PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.00332 (AP)
-Recall              | 0.7632   | 0.5439   | 0.0790   | 0.0000
+PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.00332
+Recall              | 0.7632   | 0.5439   | 0.0790*  | 0.0000*
 Precision           | 0.0001   | 0.0003   | 0.0026   | 0.0000
-TP (true positive)  | 87       | 62       | 9        | 0
-FP (false positive) | 919,526  | 185,668  | 3,406    | 0
-FN (false negative) | 27       | 52       | 105      | 114
-TN                  | 7,836    | 741,694  | -        | 927,362
-F1                  | 0.0002   | 0.0007   | -        | 0.0000
+TP / FP             | 87 / 919K| 62 / 186K| 9 / 3406 | 0 / 0
 Accuracy            | -        | -        | 0.9996   | 0.99988
-  NOTE: see "ACCURACY CAVEAT" below - not representative under imbalance
-MCC                 | -        | -        | 0.0126   | 0.0
-LR+                 | -        | -        | 7.48     | 0.0
---------------------|----------|----------|----------|--------
-Test scope          | full DB  | full DB  | pilot*   | full (8 epochs)
-Epochs trained      | -        | -        | 8        | 8/8 (completed)
-Training time       | -        | -        | 252s     | ~66s/epoch (GPU)
-================================================================
+  NOTE: Accuracy NOT representative (see ACCURACY CAVEAT v1).
+Test scope          | full DB  | full DB  | pilot**  | pilot test set
 
-* ORTHRUS pilot = test ONLY on attack day 25/09 (1 day), not full 3-day
-  test set, due to 28GB RAM limit. Full run needs >=40GB RAM.
-* Velox = self-train on GPU; killed at epoch05 validation (RAM deadlock
-  99.6%). Val AP 0.3874 achieved. Final metrics pending re-run.
+*  Recall 7.9% la THRESHOLD issue, khong phai model yeu.
+   Sweep ngung duoi cho thay ranking that su manh hon nhieu.
+** Pilot test chi chua ngay tan cong 25/09. Full re-run tren
+   test 145 TWs (23-25/09) DANG CHO may thay on dinh (WSL cycle).
 
 ================================================================
-                      KEY FINDINGS
+      THRESHOLD SWEEP (ranking quality at alert budget k)
 ================================================================
-1. RANKING (AUC): ORTHRUS (0.94) > Magic (0.75) > Flash (0.56)
+ORTHRUS (pilot test set):
+  k=10,000 alerts -> TP=101/114 -> Recall@10K = 88.6%
+  k=50,000 alerts -> TP=103/114 -> Recall@50K = 90.3%
+Velox:
+  k=10,000 alerts -> TP=20/114  -> Recall@10K = 17.5%
+  k=50,000 alerts -> TP=100/114 -> Recall@50K = 87.7%
 
-2. FLASH: AUC ~ random. Recall 76% but 919K FP -> unusable in practice.
-
-3. MAGIC: Better than Flash (AUC 0.75). Still high FP (186K).
-
-4. ORTHRUS: Best ranking power (AUC 0.94). Low recall (7.9%) is a
-   THRESHOLD issue, not model weakness:
-   - 25% of FP fall inside malicious time-windows (real signal)
-   - Strict val-loss threshold: TP=0, FP=8, FPR=0.0025%
-   -> Tune threshold to recover more TP without FP explosion.
-
-5. VELOX: Completed 8/8 epochs (GPU, ~66s/epoch).
-   - AUC 0.9221 (2nd best, close to ORTHRUS 0.94)
-   - BUT Recall=0%, TP=0 -> threshold too high (default max_val_loss)
-   - Needs threshold tuning to recover TP (see ORTHRUS note)
-   - RAM issue SOLVED via chunked lazy-loading (peak 3.5GB/28GB, no swap)
-     Code: P1/Code/patches/velox_chunked_loading.patch
-
-* Velox = self-train GNN on GPU. Completed full 8 epochs after chunked
-  RAM fix. Final metrics: AUC 0.9221, AP 0.00332, Recall 0%, TP 0.
-  Threshold tuning needed to make model usable (currently catches nothing).
+=> ORTHRUS la detector tang 1 tot nhat: review 10K alerts
+   (3% nodes) bat 89% malicious. Velox can 50K de dat tuong duong.
 
 ================================================================
-                   ACCURACY CAVEAT
+    SLM TIER-2: TRAN PRECISION path+cmd (CORRECTED)
 ================================================================
-ORTHRUS reports Accuracy = 99.96%. This number is NOT representative
-and should NOT be cited as a sign of good detection:
+BUG DA SUA: gen_nodeid2msg doc positional index SAI sau khi DB
+schema migrate (node_uuid/node_type/label/is_malicious chen dau).
+Label rac "SUBJECT None" lam moi subject collide -> ket qua cu
+"tran precision ~1%, SLM vo dung" LA ARTIFACT. Sau khi sua
+(explicit column names), ket qua dao nguoc:
 
-- Positive class rate is only 114 / ~927,476 nodes = 0.012%.
-- A trivial "predict all benign" baseline would score 99.988%,
-  HIGHER than ORTHRUS.
-- Accuracy is dominated by True Negatives (correctly flagged benign
-  nodes), which are the vast majority.
-- The meaningful metrics under this extreme imbalance are:
-    * ROC-AUC = 0.9409  (ranking power)
-    * Recall   = 0.0790  (caught 9 / 114 malicious)
-    * FP        = 3,406   (false alarms)
-  Use AUC / Recall / Precision@k / F1 for reporting, NOT Accuracy.
+FP trung msg voi TP (khong the tach bang path+cmd):
+  ORTHRUS: k=2K: 24/1988 FP  -> tran precision 33.3%
+           k=10K: 1093/9899 FP -> tran precision 8.46%
+  Velox  : k=2K: cung trinh do (~50% @2K)
+
+=> KET LUAN P1 GATE PASSED: path+cmd DU de SLM tier-2 tao gia tri.
+   Enrich parent_chain + event_seq van can de xu ly so FP collide_GT.
 
 ================================================================
-                      ARTIFACT LOCATIONS
+      TF-IDF BASELINE (H0 ELIMINATION) - FIRST RESULT
 ================================================================
-Flash   : P0/Output/logs_flash.log, flash_magic_report.md
-Magic   : P0/Output/logs_magic.log, flash_magic_report.md
-ORTHRUS: P1/Output/orthrus_run.log (+ backups/orthrus_backup on E:)
-Velox   : P1/Output/logs_velox.log (partial)
+Tren 2250 enriched alerts (partial, ORTHRUS scores):
+  k=2000: TP 12/12 giu nguyen (100% recall)
+          FP 1988 -> 13  => FP reduction 99.35%
+          Precision 0.6% -> 48%
+  13 FP con lai = ceiling collision (path+cmd giong het TP)
 
-Generated: 2026-08-24
+=> IMPLICATION: Encoder 150M (TF-IDF+LogReg) da cat duoc 99.4% FP.
+   SLM zero-shot PHAI danh bai con so nay de RQ1a chung minh SLM
+   co gia tri them. Neu khong -> H0 dung (encoder wins).
+
+================================================================
+      VELOX PERFORMANCE OPTIMIZATION (Minecraft-style, T1-T3)
+================================================================
+Patch da apply + validate (fresh run):
+  T1: bo msg.clone() thua trong loader buffer   [Lithium]
+  T2: empty_cache moi 800 graphs thay vi moi graph [Krypton]
+  T3: IO prefetch thread + bounded queue        [Moonrise 2-pool]
+
+Ket qua do duoc (fresh run, 1 epoch, full train set):
+  Epoch time : 66s -> 40s  (-39%)
+  GPU memory : 0.15GB (giu nguyen)
+  CPU memory : ~3.5GB bounded (queue bound hoat dong)
+  Mean Loss  : 0.6293 (hoi tu binh thuong)
+  Metrics    : TP/FN giong het baseline (toi uu khong doi toan hoc)
+
+Chi tiet: P1/Output/VELOX_OPTIMIZATION_RESULTS.md
+
+================================================================
+      HAT NGHEN CHAT XA HUYEN (INFRASTRUCTURE BLOCKER)
+================================================================
+May thay co van de WSL VM tu teardown moi 4-10 phut (Windows van
+song, SSH user khong mat). Da loai tru: OOM kernel (co xay ra 1 lan,
+da fix memory=24GB), scheduled tasks (khong co), Windows Update
+(khong phai nguyen nhan chinh). Nghi van: WSL build loi hoat
+wmmem/vmcompute - can wsl --update hoat restart Windows that su.
+
+Viec bi chan:
+  - ORTHRUS testing+eval tren test 145 TWs (checkpoint model an toan)
+  - Enrich alerts 2226/10000 (resume-capable script san sang)
+  - Build nodeid2msg cache (resume-capable, dang o 1.3M/2.6M netflow)
+
+Giai phap tam thoi da ap dung: scripts resume-capable (atomic pickle),
+test-only runner bo qua build+train.
+
+================================================================
+                   ACCURACY CAVEAT (giu tu v1)
+================================================================
+Positive class rate = 114 / 927,476 = 0.012%. Baseline "all benign"
+dat 99.988%. Khong dung Accuracy lam bang chung detection; dung
+ROC-AUC / Recall@k / Precision@k.
+
+================================================================
+                   NEXT STEPS
+================================================================
+1. Cho WSL on dinh -> chay test-only ORTHRUS tren 145 TWs
+2. Hoan thien cache nodeid2msg (con file_node_table)
+3. Resume enrich den 10K alerts
+4. Chay SLM zero-shot (Qwen-3B int4) so voi TF-IDF baseline
+5. Cap nhat METRICS_SUMMARY sau tung moc
+
+Generated: 2026-08-26 (v2)
 ================================================================
