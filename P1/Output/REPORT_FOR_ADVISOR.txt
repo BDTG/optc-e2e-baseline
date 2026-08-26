@@ -1,0 +1,105 @@
+================================================================
+   BAO CAO KET QUA PHASE 1 - OPtc H051 (gui thay)
+   Ngay: 2026-08-26 | Repo: github.com/BDTG/optc-e2e-baseline
+================================================================
+
+1. TONG QUAN
+------------
+Dataset : DARPA OpTC H051, 19,815,600 events, 7 ngay (19-25/09/2019),
+          tan cong ngay 25/09. Temporal split (KHONG random):
+          train = 19-21/09 | val = 22/09 | test = 23-25/09 (145 TWs)
+GT      : 114 malicious nodes. LUU Y QUAN TRONG: chi 34-37 nodes GT
+          co hoat dong trong test period (80 nodes con lai khong xuat
+          hien trong bat ky edge nao cua 3 ngay test) -> recall ceiling
+          thuc te tren test ~30%. Moi so recall /114 can doc kem
+          ceiling nay.
+Hw      : Train tren may thay (RTX 5060 Ti 16GB, WSL2). Full-test
+          inference chay tren laptop CPU-only (torrent artifacts ve,
+          mount ext4.vhdx) vi WSL may thay khong on dinh.
+
+2. KET QUA CHINH - CA 4 MODELS FULL COVERAGE (KHONG CON PILOT)
+---------------------------------------------------------------
+Recall@k tinh tren active-GT ceiling (~34/37 nodes):
+
+Model    | AUC    | R@10K | R@20K | R@50K | Scope
+---------|--------|-------|-------|-------|---------------------------
+Velox    | 0.9170 | 57%   | 81%   | 86%   | full test 2940 TWs
+ORTHRUS  | 0.8879 | 38%   | 79%   | 82%   | full test 145 TWs
+Flash    | 0.5645 |  5%   | 32%   | 32%   | full DB 7 ngay
+Magic    | 0.7513 |  3%   |  8%   |  8%   | full DB 7 ngay
+
+Default threshold (max_val_loss), ORTHRUS full test:
+  TP=0, FP=6, AP=0.00373 -> threshold qua nghiem, phai dung sweep.
+
+AP: ORTHRUS 0.00373 | Velox 0.00268
+
+3. PHAT HIEN CHINH
+------------------
+a) Velox vuot ORTHRUS tren full test o moi ngan sach alert
+   (AUC 0.917 vs 0.888; @10K 57% vs 38%). Dao nguoc ket luan pilot
+   truoc day ("ORTHRUS tot nhat"). Nguyen nhan gia thiet: Velox dung
+   time-window nho hon (2940 vs 145) nen phan biet tot hon trong
+   giai doan binh thuong. CAN PHAN TICH SAU THEM truoc khi chot.
+
+b) Pilot recall@10K=88.6% cua ORTHRUS la do test scope hep (chi
+   ngay 25/09). Full test that su chi dat 38% (@10K) tinh tren
+   active-GT. Bai hoc methodology: pilot scope lam thay doi ket
+   luan dang ke.
+
+c) Recall ceiling ~30%: 80/114 GT nodes "im" trong test period.
+   De nghi phan tich tiep: cac node nay co hoat dong o giai doan
+   nao cua du lieu?
+
+d) Flash/Magic ranking gan random (AUC 0.56/0.75) du recall tho
+   cao - xac nhan 2 baseline P0 khong dung duoc lam detector chinh.
+
+4. SLM TIER-2 (PHASE 2 GATE) - PASSED
+-------------------------------------
+Bug nghiem trong da sua: gen_nodeid2msg doc positional index SAI
+sau khi DB schema migrate -> label rac -> ket luan cu "tran
+precision ~1%, SLM vo dung" LA ARTIFACT. Sau khi sua:
+
+  Tran precision path+cmd (FP trung msg voi TP):
+    k=2K : 33.3%
+    k=10K: 8.46%
+
+=> path+cmd DU de SLM tier-2 tao gia tri. P1 GATE PASSED.
+
+TF-IDF baseline (H0 elimination) tren 2250 enriched alerts:
+  k=2000: giu 12/12 TP (100% recall), cat FP 1988 -> 13 (-99.35%),
+  Precision 0.6% -> 48%. SLM zero-shot phai danh bai con so nay de
+  chung minh gia tri them (RQ1a); nguoc lai H0 dung (encoder re wins).
+
+5. VELOX OPTIMIZATION (da validate)
+-----------------------------------
+T1 bo msg.clone() thua + T2 empty_cache dinh ky + T3 IO prefetch:
+epoch 66s -> 40s (-39%), RAM bounded ~3.5GB KHONG swap, GPU 0.15GB,
+metrics khong doi (toi uu khong anh huong toan hoc).
+
+6. SU CO HA TANG & CACH XU LY (minh bach quy trinh)
+---------------------------------------------------
+WSL may thay tu teardown moi 4-10 phut -> khong the chay inference
+dai. Da loai tru OOM (fix 24GB), scheduled tasks. Giai phap: torrent
+ext4.vhdx (56GB) ve laptop, mount bang wsl --mount --vhd, chay
+full-test CPU-only. Toan bo patch cho phep chay khong DB (DB-free
+evaluation) da commit len GitHub, ai cung reproduce duoc.
+
+7. FILE THAM CHIEU TREN GITHUB (P1/Output/)
+-------------------------------------------
+- METRICS_SUMMARY.txt            : tong hop day du v5
+- FINAL_METRICS_full_test.json   : metrics ORTHRUS full test
+- FM_SWEEP_full.json             : sweep Flash/Magic
+- VELOX_OPTIMIZATION_RESULTS.md  : benchmark T1-T3
+
+8. BUOC TIEP THEO
+-----------------
+1. Phan tich vi sao Velox vuot ORTHRUS (TW granularity? decoder?)
+   - quan trong truoc khi bao cao.
+2. Resume enrich den 10K alerts + SLM zero-shot vs TF-IDF (RQ1a).
+3. Phan tich 80 GT nodes "im" trong test period.
+4. Velox: tune threshold de thu hoi TP o default threshold.
+
+================================================================
+So lieu chi tiet (sweep tung model, JSON): xem P1/Output/ tren repo.
+Bao cao nay sinh tu METRICS_SUMMARY v5 (commit 1ce82f3 tro ve sau).
+================================================================
