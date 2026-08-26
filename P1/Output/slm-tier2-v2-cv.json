@@ -1,0 +1,24 @@
+{
+  "baseline": {
+    "model": "tfidf_logreg_cv5_oof",
+    "k": 2000,
+    "ap_oof": 0.2540423825981585,
+    "fold_aps": [
+      0.2696078431372549,
+      0.75,
+      0.02035559986706547,
+      0.5181818181818182,
+      0.05877238741088506
+    ],
+    "tp_before": 12,
+    "fp_before": 1988,
+    "precision_before": 0.006,
+    "recall_before": 1.0,
+    "tp_after_baseline": 6,
+    "fp_after_baseline": 54,
+    "precision_after_baseline": 0.1,
+    "recall_after": 0.5,
+    "fp_reduction_baseline": 0.9728370221327968,
+    "filtered_baseline": 1940
+  }
+}

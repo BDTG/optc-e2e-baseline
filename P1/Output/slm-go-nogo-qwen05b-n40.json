@@ -1,0 +1,411 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "subset": 40,
+  "ap": 0.3,
+  "baseline": 0.254,
+  "verdict": "GO",
+  "lat_p50": 6925.046750002366,
+  "lat_p95": 7923.782765001306,
+  "results": [
+    {
+      "nid": "8191",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": ".exe | cmd: None\n  netflow 10.20.3.184:65032 -> 224",
+      "latency_ms": 7359.135899998364,
+      "input_len": 512
+    },
+    {
+      "nid": "898581",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5811.828999998397,
+      "input_len": 215
+    },
+    {
+      "nid": "1053840",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, CLASSIFICATION: MALICIOUS, REASON: The endpoint traffic contains malicious activities such as opening files without authorization, which is indicative of a",
+      "latency_ms": 5690.367200004403,
+      "input_len": 189
+    },
+    {
+      "nid": "1040709",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5630.384399999457,
+      "input_len": 215
+    },
+    {
+      "nid": "8676",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "86)/Google/Update/GoogleUpdate.exe | cmd: None\n  subject /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe",
+      "latency_ms": 7166.195099998731,
+      "input_len": 512
+    },
+    {
+      "nid": "7391",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " | cmd: None\n  subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system",
+      "latency_ms": 7778.147799996077,
+      "input_len": 512
+    },
+    {
+      "nid": "948830",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 6021.605000001728,
+      "input_len": 215
+    },
+    {
+      "nid": "824022",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 6043.177100000321,
+      "input_len": 215
+    },
+    {
+      "nid": "505707",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, Reason: The endpoint activity includes multiple open commands for the same process (`svchost.exe`), which is not typical behavior for benign processes",
+      "latency_ms": 7147.825300002296,
+      "input_len": 303
+    },
+    {
+      "nid": "6612",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "host.exe 0xffffffff -ForceV1\n\n=== System Information ===\n  system name: Windows Server 2016\n  version: 1",
+      "latency_ms": 8130.635500005155,
+      "input_len": 512
+    },
+    {
+      "nid": "1034567",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 6752.766800003883,
+      "input_len": 215
+    },
+    {
+      "nid": "8917",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "Volume1/Windows/Temp/rad1C3A2.tmp/biGuWCmNsuCIG.exe | cmd: \"C:/Windows/",
+      "latency_ms": 7671.325299997989,
+      "input_len": 512
+    },
+    {
+      "nid": "9663",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " [CREATE] -> subject /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe | cmd: C:/Windows/SYSTEM32/cmd.exe",
+      "latency_ms": 7918.397000001278,
+      "input_len": 512
+    },
+    {
+      "nid": "948168",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5839.98309999879,
+      "input_len": 215
+    },
+    {
+      "nid": "8752",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "HbYXTpViwX.vbs\"\n  subject /Device/HarddiskVolume1/Windows/system32/svchost.exe | cmd",
+      "latency_ms": 7364.48129999917,
+      "input_len": 512
+    },
+    {
+      "nid": "7282",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": ".exe | cmd: schtasks  /query /tn \"KickoffAutoLoginRandom\"",
+      "latency_ms": 5248.025900000357,
+      "input_len": 512
+    },
+    {
+      "nid": "7432",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "/System32/svchost.exe -k wsappx\n  subject /Device/HarddiskVolume1/Windows/system32/conhost.exe |",
+      "latency_ms": 7392.32869999978,
+      "input_len": 512
+    },
+    {
+      "nid": "7733",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " gpupdate.exe | cmd: gpupdate.exe /target:computer\n  subject gpupdate.exe | cmd: gpupdate.exe /target:computer -> [CREATE",
+      "latency_ms": 7458.333700000367,
+      "input_len": 512
+    },
+    {
+      "nid": "8921",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "/TEMP/myHbYXTpViwX.vbs\" -> [OPEN] -> subject /Device/HarddiskVolume1/Windows/Temp/r",
+      "latency_ms": 7305.980899996939,
+      "input_len": 512
+    },
+    {
+      "nid": "1010895",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5696.573999994143,
+      "input_len": 215
+    },
+    {
+      "nid": "1010902",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5716.62159999687,
+      "input_len": 215
+    },
+    {
+      "nid": "9242",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " | cmd: gpupdate.exe /target:computer\n  subject gpupdate.exe | cmd: None -> [CREATE] -> subject /Device/HarddiskVolume",
+      "latency_ms": 7262.870400001702,
+      "input_len": 512
+    },
+    {
+      "nid": "910501",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5785.725900001125,
+      "input_len": 215
+    },
+    {
+      "nid": "8673",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "ost.exe | cmd: \"C:/Users/dcoombes/AppData/Local/Temp/cKfGW.exe\"\n\n=== Process Tree (down to ",
+      "latency_ms": 8026.1123000018415,
+      "input_len": 512
+    },
+    {
+      "nid": "979375",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5975.145299998985,
+      "input_len": 215
+    },
+    {
+      "nid": "1034303",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 6050.175900003524,
+      "input_len": 215
+    },
+    {
+      "nid": "996582",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 6050.736800003506,
+      "input_len": 215
+    },
+    {
+      "nid": "8187",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "\n  subject /Device/HarddiskVolume1/Windows/system32/lsass.exe | cmd: None -> [OPEN] -> subject /Device/H",
+      "latency_ms": 7397.68219999678,
+      "input_len": 512
+    },
+    {
+      "nid": "843676",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5752.92559999798,
+      "input_len": 215
+    },
+    {
+      "nid": "9779",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " -> subject /Device/HarddiskVolume1/Users/dcoombes/Downloads/update.exe | cmd: None\n  subject /Device/HarddiskVolume1",
+      "latency_ms": 7097.326700000849,
+      "input_len": 512
+    },
+    {
+      "nid": "7390",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": ".exe | cmd: None\n  subject /Device/HarddiskVolume1/lwabeat//lwabeat.exe | cmd: None -> [OPEN]",
+      "latency_ms": 7290.534799998568,
+      "input_len": 512
+    },
+    {
+      "nid": "979698",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5824.407699998119,
+      "input_len": 215
+    },
+    {
+      "nid": "953769",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5689.725600001111,
+      "input_len": 215
+    },
+    {
+      "nid": "1044851",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5840.58869999717,
+      "input_len": 215
+    },
+    {
+      "nid": "989222",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5804.834800001117,
+      "input_len": 215
+    },
+    {
+      "nid": "8198",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "2/svchost.exe | cmd: C:/Windows/system32/svchost.exe -k LocalSystemNetworkRestricted\n  subject /Device/H",
+      "latency_ms": 7389.391600001545,
+      "input_len": 512
+    },
+    {
+      "nid": "8889",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "IG.exe | cmd: \"C:/Windows/Temp/radC50E7.tmp/biGuWCmNsuCIG.exe\"\n\n=== Process",
+      "latency_ms": 7448.106400006509,
+      "input_len": 512
+    },
+    {
+      "nid": "6540",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "host.exe | cmd: None -> [OPEN] -> subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: None\n",
+      "latency_ms": 7196.544400001585,
+      "input_len": 512
+    },
+    {
+      "nid": "854090",
+      "gt": 0,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": "MALICIOUS, [1.0], The activity is benign as it does not contain any malicious indicators such as commands or requests that could be used for unauthorized",
+      "latency_ms": 5874.25020000228,
+      "input_len": 215
+    },
+    {
+      "nid": "8927",
+      "gt": 1,
+      "score": 0.5,
+      "pred": "uncertain",
+      "conf": 0.5,
+      "resp": " /Device/HarddiskVolume1/Windows/Temp/radD85FE.tmp/biGuWCmNsuCIG.exe | cmd: \"",
+      "latency_ms": 7200.362700001278,
+      "input_len": 512
+    }
+  ]
+}

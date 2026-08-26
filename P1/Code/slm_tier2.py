@@ -21,17 +21,9 @@ import time
 import argparse
 from typing import List, Dict, Optional, Tuple
 
-# SLM prompt template (English, designed for Qwen2.5 instruction format)
-SYSTEM_PROMPT = """You are a cybersecurity analyst examining endpoint telemetry for malicious activity.
-
-Given a sequence of system events (process creation, file access, network connections) and the process tree context, classify whether this activity is MALICIOUS or BENIGN.
-
-Consider:
-- Command-line arguments: obfuscation, LOLBin usage, encoded scripts
-- Process tree: unusual parent-child relationships
-- Network destinations: known-good IPs vs suspicious (C2, data exfil)
-- File paths: normal locations vs staging paths (Downloads, Temp, AppData)
-- Timing: burst patterns, unusual hours
+# SLM prompt template — Kerckhoffs compliant (format-only, no detection logic)
+# Per Note.md: prompt chỉ hướng dẫn format, không chứa signature/TTP.
+SYSTEM_PROMPT = """You are a cybersecurity analyst. Examine the endpoint telemetry provided and classify the activity.
 
 Respond with exactly one of:
 CLASSIFICATION: MALICIOUS
@@ -65,16 +57,18 @@ def load_enriched_alerts(jsonl_path: str, limit: Optional[int] = None) -> List[D
 
 
 def format_alert_for_prompt(alert: Dict) -> str:
-    """Format a single enriched alert into the user prompt."""
-    parent_chain = "\n".join(
-        f"  {p.get('node', '?')} [{p.get('op', '?')}]"
-        for p in alert.get("parent_chain", [])
-    ) or "  (no ancestors found)"
+    """Format a single enriched alert into the user prompt. Uses msg if available."""
+    def _pc_label(p):
+        # prefer msg (real path/cmd/netflow) over generic node id
+        label = p.get("msg") or p.get("node", "?")
+        return f"  {label} [{p.get('op', '?')}]"
+    parent_chain = "\n".join(_pc_label(p) for p in alert.get("parent_chain", [])) or "  (no ancestors found)"
     
-    event_seq = "\n".join(
-        f"  {e.get('src', '?')} -> [{e.get('op', '?')}] -> {e.get('dst', '?')}"
-        for e in alert.get("event_seq", [])[:20]
-    ) or "  (no events)"
+    def _ev_label(e):
+        src = e.get("src_msg") or e.get("src", "?")
+        dst = e.get("dst_msg") or e.get("dst", "?")
+        return f"  {src} -> [{e.get('op', '?')}] -> {dst}"
+    event_seq = "\n".join(_ev_label(e) for e in alert.get("event_seq", [])[:20]) or "  (no events)"
     
     return USER_PROMPT_TEMPLATE.format(
         self_label=alert.get("self_label", "unknown"),
@@ -247,83 +241,112 @@ def compute_metrics(
     }
 
 
-def run_baseline_tfidf(
-    alerts: List[Dict],
-    gt_nids: set,
-    alert_k: int,
-) -> Dict:
-    """
-    Baseline: TF-IDF char n-gram + logistic regression.
-    Trains on enriched text (parent_chain + event_seq), predicts on held-out.
-    
-    This serves as the encoder baseline (H0 elimination test).
-    """
-    try:
-        from sklearn.feature_extraction.text import TfidfVectorizer
-        from sklearn.linear_model import LogisticRegression
-        from sklearn.metrics import precision_score, recall_score
-    except ImportError:
-        print("ERROR: pip install scikit-learn")
-        sys.exit(1)
-    
-    # Prepare text features
-    texts = []
-    labels = []
+def _build_tfidf_texts(alerts: List[Dict], gt_nids: set):
+    """Helper: build texts using msg-enriched fields if available."""
+    texts, labels = [], []
     for alert in alerts:
         parts = []
         parts.append(alert.get("self_label", ""))
         for p in alert.get("parent_chain", []):
-            parts.append(f"{p.get('op', '')} {p.get('node', '')}")
+            # prefer msg over node id (P1/Output/alerts_enriched_v2.jsonl has msg)
+            label = p.get("msg") or p.get("node", "")
+            parts.append(f"{p.get('op','')} {label}")
         for e in alert.get("event_seq", [])[:10]:
-            parts.append(f"{e.get('src', '')} {e.get('op', '')} {e.get('dst', '')}")
+            src = e.get("src_msg") or e.get("src","")
+            dst = e.get("dst_msg") or e.get("dst","")
+            parts.append(f"{src} {e.get('op','')} {dst}")
         texts.append(" ".join(parts))
         labels.append(1 if str(alert.get("nid")) in gt_nids else 0)
+    return texts, labels
+
+def run_baseline_tfidf(
+    alerts: List[Dict],
+    gt_nids: set,
+    alert_k: int,
+    cv: bool = False,
+) -> Dict:
+    """
+    Baseline: TF-IDF char n-gram + logistic regression.
+    - cv=False (default): leakage-free evaluation not, kept for backward compat but warns.
+      For correct H0, use cv=True which does 5-fold OOF.
+    - cv=True: Stratified 5-fold OOF, metrics computed on OOF scores ranked globally.
+    This serves as the encoder baseline (H0 elimination test). Use cv=True for paper.
+    """
+    try:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.model_selection import StratifiedKFold
+        from sklearn.metrics import average_precision_score
+    except ImportError:
+        print("ERROR: pip install scikit-learn")
+        sys.exit(1)
     
-    # TF-IDF char n-gram (captures obfuscation patterns)
-    tfidf = TfidfVectorizer(
-        analyzer="char_wb",
-        ngram_range=(2, 5),
-        max_features=50000,
-        sublinear_tf=True,
-    )
-    X = tfidf.fit_transform(texts)
-    
-    # Logistic regression (fast, interpretable)
-    clf = LogisticRegression(max_iter=1000, class_weight="balanced")
-    clf.fit(X, labels)
-    
-    # Predict scores and rank by confidence
-    scores = clf.predict_proba(X)[:, 1]
-    
-    # Rank by score (descending)
+    texts, labels = _build_tfidf_texts(alerts, gt_nids)
     import numpy as np
-    order = np.argsort(-scores)
-    top_k_idx = order[:alert_k]
-    
-    tp_before = int(sum(labels[i] for i in top_k_idx))
-    fp_before = alert_k - tp_before
-    
-    # Threshold: keep only predictions > 0.5
-    tp_after = int(sum(1 for i in top_k_idx if scores[i] > 0.5 and labels[i] == 1))
-    fp_after = int(sum(1 for i in top_k_idx if scores[i] > 0.5 and labels[i] == 0))
-    filtered = int(sum(1 for i in top_k_idx if scores[i] <= 0.5))
-    
-    precision_before = tp_before / max(alert_k, 1)
-    precision_after = tp_after / max(tp_after + fp_after, 1)
-    fp_reduction = 1 - (fp_after / max(fp_before, 1))
-    
-    return {
-        "model": "tfidf_logreg",
-        "k": alert_k,
-        "tp_before": tp_before,
-        "fp_before": fp_before,
-        "precision_before": precision_before,
-        "tp_after_baseline": tp_after,
-        "fp_after_baseline": fp_after,
-        "precision_after_baseline": precision_after,
-        "fp_reduction_baseline": fp_reduction,
-        "filtered_baseline": filtered,
-    }
+    labels_np = np.array(labels)
+
+    if not cv:
+        # LEGACY leakage path — warn but keep for compat
+        print("WARNING: run_baseline_tfidf(cv=False) is LEAKAGE (fit+predict same data). Use cv=True for H0 paper numbers.")
+        tfidf = TfidfVectorizer(analyzer="char_wb", ngram_range=(2,5), max_features=50000, sublinear_tf=True)
+        X = tfidf.fit_transform(texts)
+        clf = LogisticRegression(max_iter=1000, class_weight="balanced", solver="liblinear")
+        clf.fit(X, labels)
+        scores = clf.predict_proba(X)[:, 1]
+        ap = average_precision_score(labels_np, scores) if labels_np.sum()>0 else 0
+        order = np.argsort(-scores)
+        top_k_idx = order[:alert_k]
+        tp_before = int(sum(labels[i] for i in top_k_idx))
+        fp_before = alert_k - tp_before
+        tp_after = int(sum(1 for i in top_k_idx if scores[i] > 0.5 and labels[i] == 1))
+        fp_after = int(sum(1 for i in top_k_idx if scores[i] > 0.5 and labels[i] == 0))
+        filtered = int(sum(1 for i in top_k_idx if scores[i] <= 0.5))
+        precision_before = tp_before / max(alert_k, 1)
+        precision_after = tp_after / max(tp_after + fp_after, 1)
+        fp_reduction = 1 - (fp_after / max(fp_before, 1))
+        return {
+            "model": "tfidf_logreg_leakage",
+            "k": alert_k, "ap_leakage": ap,
+            "tp_before": tp_before, "fp_before": fp_before, "precision_before": precision_before,
+            "tp_after_baseline": tp_after, "fp_after_baseline": fp_after, "precision_after_baseline": precision_after,
+            "fp_reduction_baseline": fp_reduction, "filtered_baseline": filtered,
+        }
+    else:
+        # CORRECT: 5-fold OOF
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        oof = np.zeros(len(labels_np))
+        fold_aps=[]
+        for tr, te in skf.split(texts, labels_np):
+            tfidf = TfidfVectorizer(analyzer="char_wb", ngram_range=(2,5), max_features=50000, sublinear_tf=True)
+            Xtr = tfidf.fit_transform([texts[i] for i in tr])
+            Xte = tfidf.transform([texts[i] for i in te])
+            clf = LogisticRegression(max_iter=1000, class_weight="balanced", solver="liblinear")
+            clf.fit(Xtr, labels_np[tr])
+            oof[te] = clf.predict_proba(Xte)[:, 1]
+            ap_fold = average_precision_score(labels_np[te], oof[te]) if labels_np[te].sum()>0 else 0
+            fold_aps.append(ap_fold)
+        ap_oof = average_precision_score(labels_np, oof) if labels_np.sum()>0 else 0
+        order = np.argsort(-oof)
+        top_k_idx = order[:alert_k]
+        tp_before = int(sum(labels[i] for i in top_k_idx))
+        fp_before = alert_k - tp_before
+        tp_after = int(sum(1 for i in top_k_idx if oof[i] > 0.5 and labels[i] == 1))
+        fp_after = int(sum(1 for i in top_k_idx if oof[i] > 0.5 and labels[i] == 0))
+        filtered = int(sum(1 for i in top_k_idx if oof[i] <= 0.5))
+        precision_before = tp_before / max(alert_k, 1)
+        precision_after = tp_after / max(tp_after + fp_after, 1) if (tp_after+fp_after)>0 else 0
+        fp_reduction = 1 - (fp_after / max(fp_before, 1)) if fp_before>0 else 0
+        recall_before = tp_before / max(labels_np.sum(),1)
+        recall_after = tp_after / max(labels_np.sum(),1)
+        return {
+            "model": "tfidf_logreg_cv5_oof",
+            "k": alert_k, "ap_oof": ap_oof, "fold_aps": fold_aps,
+            "tp_before": tp_before, "fp_before": fp_before, "precision_before": precision_before,
+            "recall_before": recall_before,
+            "tp_after_baseline": tp_after, "fp_after_baseline": fp_after,
+            "precision_after_baseline": precision_after, "recall_after": recall_after,
+            "fp_reduction_baseline": fp_reduction, "filtered_baseline": filtered,
+        }
 
 
 def main():
@@ -332,6 +355,8 @@ def main():
                         help="Path to enriched alerts JSONL")
     parser.add_argument("--gt_csv", type=str, default=None,
                         help="Ground truth CSV (if None, use TP nids from results pth)")
+    parser.add_argument("--gt_json", type=str, default=None,
+                        help="Ground truth JSON (gt_and_scores.json with gt_nids)")
     parser.add_argument("--orthrus_results_pth", type=str, default=None,
                         help="ORTHRUS/Velox result pth for GT + score ranking")
     parser.add_argument("--alert_k", type=int, default=10000,
@@ -342,6 +367,8 @@ def main():
     parser.add_argument("--skip_slm", action="store_true",
                         help="Skip SLM inference (run baseline only)")
     parser.add_argument("--output", type=str, default="slm_tier2_results.json")
+    parser.add_argument("--cv", action="store_true",
+                        help="Use 5-fold OOF for TF-IDF (correct H0, not leakage)")
     args = parser.parse_args()
     
     # Load enriched alerts
@@ -359,6 +386,32 @@ def main():
         score_map = {str(r.get("nid")): r.get("score", 0) for r in results if "nid" in r}
         alerts.sort(key=lambda a: score_map.get(str(a.get("nid", "")), 0), reverse=True)
         print(f"  GT nodes: {len(gt_nids)}, alerts sorted by score")
+    elif args.gt_json:
+        import json as _js
+        with open(args.gt_json) as _f:
+            _d = _js.load(_f)
+        gt_nids = set(str(x) for x in _d.get("gt_nids", []))
+        print(f"  GT nodes from gt_json: {len(gt_nids)}")
+    elif args.gt_csv:
+        import csv as _csv
+        with open(args.gt_csv) as _f:
+            _r = _csv.DictReader(_f)
+            for row in _r:
+                # try common column names
+                for col in ["node_id","nid","id","object_id"]:
+                    if col in row and row[col]:
+                        gt_nids.add(str(row[col]).strip())
+                        break
+        print(f"  GT nodes from gt_csv: {len(gt_nids)}")
+    else:
+        # try default location
+        default_gt = r"D:\OpTC-thesis\P1\Output\gt_and_scores.json"
+        if os.path.exists(default_gt):
+            import json as _js
+            with open(default_gt) as _f:
+                _d = _js.load(_f)
+            gt_nids = set(str(x) for x in _d.get("gt_nids", []))
+            print(f"  GT nodes from default gt_and_scores.json: {len(gt_nids)}")
     
     print(f"  Alert budget: k={args.alert_k}")
     print(f"  GT malicious: {len(gt_nids)}")
@@ -367,10 +420,14 @@ def main():
     
     # --- Baseline: TF-IDF + LogReg ---
     print("\n=== BASELINE: TF-IDF char n-gram + LogReg ===")
-    baseline_results = run_baseline_tfidf(alerts, gt_nids, args.alert_k)
-    all_results["baseline"] = baseline_results
-    for k, v in baseline_results.items():
-        print(f"  {k}: {v}")
+    if len(gt_nids)==0:
+        print("  WARNING: GT empty, cannot compute TF-IDF baseline (single class). Skipping.")
+        all_results["baseline"] = {"error": "empty GT"}
+    else:
+        baseline_results = run_baseline_tfidf(alerts, gt_nids, args.alert_k, cv=args.cv)
+        all_results["baseline"] = baseline_results
+        for k, v in baseline_results.items():
+            print(f"  {k}: {v}")
     
     # --- SLM Zero-shot ---
     if not args.skip_slm:

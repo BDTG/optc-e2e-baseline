@@ -1,0 +1,167 @@
+{
+  "v1": {
+    "leakage_ap": 0.9999999999999999,
+    "global_ap": 0.1844168317350806,
+    "fold_aps": [
+      0.515625,
+      0.5625,
+      0.11960784313725491,
+      0.3686868686868687,
+      0.06340674251122012
+    ],
+    "leakage_at_k": {
+      "k500": {
+        "tp_ranked": 12,
+        "fp_ranked": 488,
+        "prec_ranked": 0.024,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 13,
+        "prec_after": 0.48,
+        "fp_reduction": 0.9733606557377049,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      },
+      "k1000": {
+        "tp_ranked": 12,
+        "fp_ranked": 988,
+        "prec_ranked": 0.012,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 13,
+        "prec_after": 0.48,
+        "fp_reduction": 0.9868421052631579,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      },
+      "k2000": {
+        "tp_ranked": 12,
+        "fp_ranked": 1988,
+        "prec_ranked": 0.006,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 13,
+        "prec_after": 0.48,
+        "fp_reduction": 0.9934607645875252,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      }
+    },
+    "cv_at_k": {
+      "k500": {
+        "tp_ranked": 11,
+        "fp_ranked": 489,
+        "prec_ranked": 0.022,
+        "tp_after_thresh0.5": 4,
+        "fp_after_thresh0.5": 21,
+        "prec_after": 0.16,
+        "fp_reduction": 0.9570552147239264,
+        "recall_ranked": 0.9166666666666666,
+        "recall_after": 0.3333333333333333
+      },
+      "k1000": {
+        "tp_ranked": 12,
+        "fp_ranked": 988,
+        "prec_ranked": 0.012,
+        "tp_after_thresh0.5": 4,
+        "fp_after_thresh0.5": 21,
+        "prec_after": 0.16,
+        "fp_reduction": 0.978744939271255,
+        "recall_ranked": 1.0,
+        "recall_after": 0.3333333333333333
+      },
+      "k2000": {
+        "tp_ranked": 12,
+        "fp_ranked": 1988,
+        "prec_ranked": 0.006,
+        "tp_after_thresh0.5": 4,
+        "fp_after_thresh0.5": 21,
+        "prec_after": 0.16,
+        "fp_reduction": 0.9894366197183099,
+        "recall_ranked": 1.0,
+        "recall_after": 0.3333333333333333
+      }
+    },
+    "holdout_ap": 0.5161290322580645
+  },
+  "v2": {
+    "leakage_ap": 0.8543893062275415,
+    "global_ap": 0.2540423825981585,
+    "fold_aps": [
+      0.2696078431372549,
+      0.75,
+      0.02035559986706547,
+      0.5181818181818182,
+      0.05877238741088506
+    ],
+    "leakage_at_k": {
+      "k500": {
+        "tp_ranked": 12,
+        "fp_ranked": 488,
+        "prec_ranked": 0.024,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 52,
+        "prec_after": 0.1875,
+        "fp_reduction": 0.8934426229508197,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      },
+      "k1000": {
+        "tp_ranked": 12,
+        "fp_ranked": 988,
+        "prec_ranked": 0.012,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 52,
+        "prec_after": 0.1875,
+        "fp_reduction": 0.9473684210526316,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      },
+      "k2000": {
+        "tp_ranked": 12,
+        "fp_ranked": 1988,
+        "prec_ranked": 0.006,
+        "tp_after_thresh0.5": 12,
+        "fp_after_thresh0.5": 52,
+        "prec_after": 0.1875,
+        "fp_reduction": 0.9738430583501007,
+        "recall_ranked": 1.0,
+        "recall_after": 1.0
+      }
+    },
+    "cv_at_k": {
+      "k500": {
+        "tp_ranked": 11,
+        "fp_ranked": 489,
+        "prec_ranked": 0.022,
+        "tp_after_thresh0.5": 6,
+        "fp_after_thresh0.5": 54,
+        "prec_after": 0.1,
+        "fp_reduction": 0.8895705521472392,
+        "recall_ranked": 0.9166666666666666,
+        "recall_after": 0.5
+      },
+      "k1000": {
+        "tp_ranked": 12,
+        "fp_ranked": 988,
+        "prec_ranked": 0.012,
+        "tp_after_thresh0.5": 6,
+        "fp_after_thresh0.5": 54,
+        "prec_after": 0.1,
+        "fp_reduction": 0.9453441295546559,
+        "recall_ranked": 1.0,
+        "recall_after": 0.5
+      },
+      "k2000": {
+        "tp_ranked": 12,
+        "fp_ranked": 1988,
+        "prec_ranked": 0.006,
+        "tp_after_thresh0.5": 6,
+        "fp_after_thresh0.5": 54,
+        "prec_after": 0.1,
+        "fp_reduction": 0.9728370221327968,
+        "recall_ranked": 1.0,
+        "recall_after": 0.5
+      }
+    },
+    "holdout_ap": 0.5196078431372549
+  },
+  "note": "v1 leakage vs cv; v2 enriched with real msg. k evaluation is on TF-IDF ranked list; threshold 0.5 filtering. For tier2 FP reduction, compare cv_at_k."
+}

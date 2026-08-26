@@ -1,3 +1,15 @@
 vendor/Finetune_phase0/results.jsonl
 runs/
 vendor/Finetune_phase0
+
+# === Project data (32GB, never commit) ===
+data/
+Note.md
+*.pkl
+*.pth
+
+# === Logs & temp ===
+*.log
+logs/
+__pycache__/
+*.tmp
