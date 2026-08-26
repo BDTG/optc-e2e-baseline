@@ -22,7 +22,7 @@ def load_all_datasets(cfg):
     for _sp in ["train", "val", "test"]:
         _sd = os.path.join(_dir_base, _sp)
         for _f in sorted(os.listdir(_sd)):
-            _d = _t.load(os.path.join(_sd, _f)).to("cpu")
+            _d = _t.load(os.path.join(_sd, _f), weights_only=False).to("cpu")
             _all_msg.append(_d.msg)
             _all_t.append(_d.t)
             # raw TemporalData may lack edge_type (added later by
@@ -55,7 +55,7 @@ class _LazyGraphList(list):
     def __len__(self):
         return len(self._files)
     def __getitem__(self, i):
-        _d = torch.load(os.path.join(self._dir, self._files[i])).to("cpu")
+        _d = torch.load(os.path.join(self._dir, self._files[i]), weights_only=False, map_location="cpu").to("cpu")
         out = extract_msg_from_data([_d], self._cfg)[0]
         # extract_msg_from_data splits msg into fields and deletes the raw
         # `msg` attr; the batch loader + encoder expect `msg` present.
@@ -81,7 +81,7 @@ def load_data_set(cfg, path: str, split: str) -> list[TemporalData]:
     data_list = []
     for f in sorted(os.listdir(os.path.join(path, split))):
         filepath = os.path.join(path, split, f)
-        data = torch.load(filepath).to("cpu")
+        data = torch.load(filepath, map_location="cpu").to("cpu")
         data_list.append(data)
 
     if cfg.edge_featurization.embed_nodes.used_method.strip() == "only_type":
@@ -298,9 +298,9 @@ def load_model(model, path: str, neigh_loader: bool=True):
     Loads weights and tensors from disk into a model.
     """
     model.load_state_dict(
-        torch.load(os.path.join(path, "state_dict.pkl")))
+        torch.load(os.path.join(path, "state_dict.pkl"), weights_only=False, map_location="cpu"))
     
     if neigh_loader and isinstance(model.encoder, OrthrusEncoder):
-        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl"))
+        model.encoder.neighbor_loader = torch.load(os.path.join(path, "neighbor_loader.pkl"), weights_only=False, map_location="cpu")
 
     return model

@@ -41,7 +41,11 @@ def standard_evaluation(cfg, evaluation_fn):
         if os.path.exists(pr):
             stats["precision_recall_img"] = wandb.Image(pr)
         
-        wandb.log(stats)
+        pass  # wandb disabled on laptop
+    log(f'stats saved locally')
+    import json as _json
+    with open('eval_stats.json', 'w') as _f:
+        _json.dump({k: (v if not hasattr(v, 'tolist') else v.tolist()) for k, v in stats.items()}, _f, indent=2, default=str)
         
         if stats["mcc"] > best_mcc:
             best_mcc = stats["mcc"]

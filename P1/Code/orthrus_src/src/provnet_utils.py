@@ -117,6 +117,21 @@ def datetime_to_timestamp_US(date):
     return int(timeStamp)
 
 def init_database_connection(cfg):
+    # LAPTOP MODE: no postgres - return dummy connection/cursor (cache hook covers gen_nodeid2msg)
+    if os.environ.get("ORTHRUS_NO_DB") == "1":
+        import psycopg2 as _ps2
+        class _DummyCur:
+            def execute(self, *a, **k): pass
+            def fetchall(self): return []
+            def close(self): pass
+        class _DummyConn:
+            def commit(self): pass
+            def rollback(self): pass
+            def close(self): pass
+        return _DummyCur(), _DummyConn()
+    return _init_db_orig(cfg)
+
+def _init_db_orig(cfg):
     if cfg.graph_construction.build_graphs.use_all_files:
         database_name = cfg.dataset.database_all_file
     else:
@@ -138,7 +153,18 @@ def init_database_connection(cfg):
     cur = connect.cursor()
     return cur, connect
 
-def gen_nodeid2msg(cur, use_cmd=True, use_port=False):
+CACHE_PATH = os.environ.get("NID2MSG_CACHE", "D:/orthrus_laptop/nid2msg_cache.pkl")
+def gen_nodeid2msg(cur):
+    """T4-cache: load from pickle if available (~5s) instead of DB query (~5min)."""
+    import os as _os
+    if _os.path.exists(CACHE_PATH):
+        import pickle as _pickle
+        print(f"[cache] loading nodeid2msg from {CACHE_PATH}...", flush=True)
+        with open(CACHE_PATH, "rb") as f:
+            return _pickle.load(f)
+    return _gen_nodeid2msg_orig(cur)
+
+def _gen_nodeid2msg_orig(cur, use_cmd=True, use_port=False):
     # node hash id to node label and type
     # {hash_id: index_id} and {index_id: {node_type:msg}}
     indexid2msg = {}
