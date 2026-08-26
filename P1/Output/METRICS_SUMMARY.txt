@@ -1,5 +1,5 @@
 ================================================================
-            OPTC H051 BASELINE - METRICS SUMMARY (v2)
+            OPTC H051 BASELINE - METRICS SUMMARY (v3)
         (Temporal split | GT = 114 malicious nodes)
 ================================================================
 
@@ -11,11 +11,40 @@ DATASET
                 train = 19-21/09 (230 TWs) | val = 22/09 (94 TWs)
                 test  = 23-25/09 (145 TWs)
   Ground Truth: 114 malicious nodes (node_h051_0925.csv)
-  Machine     : Win10 + WSL2, RTX 5060 Ti 16GB, RAM 28GB
+                trong do chi 34 nodes CO HOAT DONG trong test period
+                (80 nodes con lai khong xuat hien trong edges 23-25/09)
+  Machine     : Win10 + WSL2, RTX 5060 Ti 16GB (train)
+                Laptop Win11 CPU-only (full-test inference)
   Repo        : github.com/BDTG/optc-e2e-baseline
 
 ================================================================
-                      METRICS TABLE
+              ORTHRUS FULL TEST (145 TWs, v3 NEW)
+================================================================
+Chay tren laptop sau khi torrent artifacts tu may thay.
+Model: checkpoint epoch_1 (train xong 06:12 tren may thay).
+Scored: 914,520 unique nodes tren toan bo test period.
+
+Default threshold (max_val_loss):
+  TP=0, FP=6, FN=34(active), ROC-AUC=0.8879, AP=0.00373
+  83.3% FP roi vao malicious time-windows (tin hieu that)
+
+THRESHOLD SWEEP (tren full test 145 TWs):
+  k=10,000  -> TP=13/34 active  (38.2% active | 11.4% of 114)
+  k=20,000  -> TP=27/34 active  (79.4% active | 23.7% of 114)
+  k=50,000  -> TP=28/34 active  (82.4% active | 24.6% of 114)
+
+RECALL CEILING QUAN TRONG: vi 80/114 GT nodes khong hoat dong
+trong test period, recall toi da co the dat = 34/114 = 29.8%.
+Moi so recall tinh tren /114 phai doc trong boi canh nay.
+So sanh voi pilot (chi ngay 25/09, 56 TWs): recall@10K=88.6%
+tren pilot cao hon vi pilot chua dung cac TW co tan cong.
+
+KET LUAN: ROC-AUC 0.888 tren full test xac nhan ranking power
+giu duoc (0.94 pilot). Recall phu thuoc ngan sach alert va
+phan tram GT node thuc su hoat dong trong test window.
+
+================================================================
+                      METRICS TABLE (pilot, tham chieu)
 ================================================================
 Metric              | Flash    | Magic    | ORTHRUS  | Velox
 --------------------|----------|----------|----------|--------
@@ -24,14 +53,10 @@ PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.00332
 Recall              | 0.7632   | 0.5439   | 0.0790*  | 0.0000*
 Precision           | 0.0001   | 0.0003   | 0.0026   | 0.0000
 TP / FP             | 87 / 919K| 62 / 186K| 9 / 3406 | 0 / 0
-Accuracy            | -        | -        | 0.9996   | 0.99988
-  NOTE: Accuracy NOT representative (see ACCURACY CAVEAT v1).
-Test scope          | full DB  | full DB  | pilot**  | pilot test set
+Test scope          | full DB  | full DB  | pilot**  | pilot
 
-*  Recall 7.9% la THRESHOLD issue, khong phai model yeu.
-   Sweep ngung duoi cho thay ranking that su manh hon nhieu.
-** Pilot test chi chua ngay tan cong 25/09. Full re-run tren
-   test 145 TWs (23-25/09) DANG CHO may thay on dinh (WSL cycle).
+*  Recall thap la THRESHOLD issue, khong phai model yeu.
+** Pilot test chi chua ngay 25/09 (56 TWs).
 
 ================================================================
       THRESHOLD SWEEP (ranking quality at alert budget k)
