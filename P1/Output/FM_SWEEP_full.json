@@ -1,0 +1,42 @@
+{
+  "FLASH": {
+    "active_gt": 37,
+    "sweep": {
+      "10000": {
+        "tp_active": 2,
+        "pct_ceiling": 5.4,
+        "tp_full": 2
+      },
+      "20000": {
+        "tp_active": 12,
+        "pct_ceiling": 32.4,
+        "tp_full": 12
+      },
+      "50000": {
+        "tp_active": 12,
+        "pct_ceiling": 32.4,
+        "tp_full": 12
+      }
+    }
+  },
+  "MAGIC": {
+    "active_gt": 37,
+    "sweep": {
+      "10000": {
+        "tp_active": 1,
+        "pct_ceiling": 2.7,
+        "tp_full": 1
+      },
+      "20000": {
+        "tp_active": 1,
+        "pct_ceiling": 2.7,
+        "tp_full": 1
+      },
+      "50000": {
+        "tp_active": 3,
+        "pct_ceiling": 8.1,
+        "tp_full": 3
+      }
+    }
+  }
+}
