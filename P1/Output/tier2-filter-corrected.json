@@ -1,0 +1,35 @@
+{
+  "note": "Tier2 as FILTER on original ORTHRUS ranking (correct per Note.md RQ1a), vs re-rank. 2250 alerts = global top-2250 by ORTHRUS score. GT=12/114 present in this window. Metrics: OOF TF-IDF 5-fold. Threshold 0.5.",
+  "dataset": "H051 test 23-25/09, top-2250 alerts, GT 12 pos / 2238 neg",
+  "original_ranking": {
+    "k500": {"tp": 1, "fp": 499, "prec": 0.002, "recall_vs_12": 0.083},
+    "k1000": {"tp": 1, "fp": 999, "prec": 0.001, "recall_vs_12": 0.083},
+    "k2000": {"tp": 12, "fp": 1988, "prec": 0.006, "recall_vs_12": 1.0}
+  },
+  "filter_V1_generic_IDS": {
+    "method": "TF-IDF char_wb(2,5) 50k + LogReg balanced, OOF 5-fold, threshold 0.5 applied to original top-k",
+    "k500": {"keep": 5, "tp_after": 0, "fp_after": 5, "prec_after": 0.0, "fp_reduction": 0.99, "recall_after": 0.0},
+    "k1000": {"keep": 5, "tp_after": 0, "fp_after": 5, "prec_after": 0.0, "fp_reduction": 0.995, "recall_after": 0.0},
+    "k2000": {"keep": 23, "tp_after": 4, "fp_after": 19, "prec_after": 0.1739, "fp_reduction": 0.9904, "recall_after": 0.333},
+    "oof_AP": 0.1844,
+    "leakage_AP": 1.0
+  },
+  "filter_V2_msg_enriched": {
+    "method": "same, but texts include real msg from nid2msg_cache.pkl (self_label + parent msg + event src/dst msg)",
+    "k500": {"keep": 4, "tp_after": 0, "fp_after": 4, "prec_after": 0.0, "fp_reduction": 0.992, "recall_after": 0.0},
+    "k1000": {"keep": 4, "tp_after": 0, "fp_after": 4, "prec_after": 0.0, "fp_reduction": 0.996, "recall_after": 0.0},
+    "k2000": {"keep": 57, "tp_after": 6, "fp_after": 51, "prec_after": 0.1053, "fp_reduction": 0.9743, "recall_after": 0.5},
+    "oof_AP": 0.254,
+    "leakage_AP": 0.8544,
+    "holdout_80_20_AP": 0.5196
+  },
+  "rerank_by_TFIDF_OOF": {
+    "note": "Alternative: sort all 2250 by TF-IDF OOF score instead of original score. Shows H0 as primary detector, not just filter.",
+    "V1_top100": {"tp": 8, "prec": 0.08, "recall": 0.667},
+    "V2_top100": {"tp": 6, "prec": 0.06, "recall": 0.5},
+    "V2_top500": {"tp": 11, "prec": 0.022, "recall": 0.917},
+    "V2_top1000": {"tp": 12, "prec": 0.012, "recall": 1.0}
+  },
+  "interpretation": "V2 msg-enriched improves OOF AP 0.184->0.254 and recall after filter 0.333->0.5 at k=2000, but destroys recall at k<=1000 because original top-k contains only 1 GT (low-k is hopeless for any filter). As re-ranker, TF-IDF beats ORTHRUS: top-100 TF-IDF 6-8 TP vs original 1 TP. This is RQ1b gain, but as filter at fixed recall it loses 50% GT. SLM must beat 0.254 AP and 0.5 recall @ 0.97 FP reduction to justify.",
+  "next": "Run SLM tier2 on V2 at k=2000 with same OOF protocol; compare FP reduction at matched recall (0.5). Also measure latency per alert for TF-IDF ~ms vs SLM ~seconds to build Pareto."
+}
