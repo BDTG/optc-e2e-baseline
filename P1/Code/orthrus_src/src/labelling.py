@@ -4,17 +4,14 @@ from config import *
 from provnet_utils import *
 
 def get_ground_truth(cfg):
-    cur, connect = init_database_connection(cfg)
-    uuid2nids, _ = get_uuid2nids(cur)
-
+    # LAPTOP MODE: GT csv column 3 already contains node_id - no DB needed
     ground_truth_nids, ground_truth_paths = [], {}
     uuid_to_node_id = {}
     for file in cfg.dataset.ground_truth_relative_path:
         with open(os.path.join(cfg._ground_truth_dir, file), 'r') as f:
             reader = csv.reader(f)
             for row in reader:
-                node_uuid, node_labels, _ = row[0], row[1], row[2]
-                node_id = uuid2nids[node_uuid]
+                node_uuid, node_labels, node_id = row[0], row[1], row[2]
                 ground_truth_nids.append(int(node_id))
                 ground_truth_paths[int(node_id)] = node_labels
                 uuid_to_node_id[node_uuid] = str(node_id)

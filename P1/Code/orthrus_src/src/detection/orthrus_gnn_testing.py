@@ -79,7 +79,7 @@ def test(
     end = time.perf_counter()
     logs_dir = os.path.join(cfg.detection.gnn_testing._edge_losses_dir, split, model_epoch_file)
     os.makedirs(logs_dir, exist_ok=True)
-    csv_file = os.path.join(logs_dir, time_interval + ".csv")
+    csv_file = os.path.join(logs_dir, time_interval.replace(":", "-") + ".csv")
 
     df = pd.DataFrame(edge_list)
     df.to_csv(csv_file, sep=',', header=True, index=False, encoding='utf-8')
@@ -110,7 +110,7 @@ def main(cfg):
     # allocate the full-size buffers once and copy into them.
     _shapes = []
     for _f in _test_files:
-        _d = _torch.load(os.path.join(_test_dir, _f)).to("cpu")
+        _d = _torch.load(os.path.join(_test_dir, _f), weights_only=False, map_location="cpu").to("cpu")
         _test_total += _d.msg.shape[0]
         _shapes.append(_d.msg.shape[1])
         del _d
@@ -146,7 +146,7 @@ def main(cfg):
     for trained_model in all_trained_models:
         log(f"Evaluation with model {trained_model}...")
         torch.cuda.empty_cache()
-        _first_test = extract_msg_from_data([torch.load(os.path.join(_test_dir, _test_files[0])).to("cpu")], cfg)[0]
+        _first_test = extract_msg_from_data([torch.load(os.path.join(_test_dir, _test_files[0]), weights_only=False, map_location="cpu").to("cpu")], cfg)[0]
         model = build_model(data_sample=_first_test, device=device, cfg=cfg, max_node_num=max_node_num)
         del _first_test
         model = load_model(model, os.path.join(gnn_models_dir, trained_model))
@@ -171,7 +171,7 @@ def main(cfg):
         if cfg._from_weights:
             _wp = os.path.join(cfg._from_weights_path, f"{cfg.dataset.name}.pkl")
             if os.path.exists(_wp):  # OpTC: no pretrained weights for this dataset; use checkpoint trained above
-                model.load_state_dict(torch.load(_wp))
+                model.load_state_dict(torch.load(_wp, weights_only=False, map_location="cpu"))
 
         # TODO: we may want to move the validation set into the training for early stopping
         for split in ["val", "test"]:
@@ -179,7 +179,7 @@ def main(cfg):
             _split_dir = os.path.join(cfg.edge_featurization.embed_edges._edge_embeds_dir, split)
             _split_files = sorted(os.listdir(_split_dir))
             for _f in tqdm(_split_files, desc=f"{split} set with {trained_model}"):
-                g = extract_msg_from_data([torch.load(os.path.join(_split_dir, _f)).to("cpu")], cfg)[0]
+                g = extract_msg_from_data([torch.load(os.path.join(_split_dir, _f), weights_only=False, map_location="cpu").to("cpu")], cfg)[0]
                 g.to(device=device)
                 test(
                     data=g,
