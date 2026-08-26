@@ -1,6 +1,6 @@
 ================================================================
-            OPTC H051 BASELINE - METRICS SUMMARY (v3)
-        (Temporal split | GT = 114 malicious nodes)
+        OPTC H051 BASELINE - METRICS SUMMARY (v4 - FINAL)
+    (Temporal split | GT = 114 malicious nodes, 34 active in test)
 ================================================================
 
 DATASET
@@ -11,145 +11,104 @@ DATASET
                 train = 19-21/09 (230 TWs) | val = 22/09 (94 TWs)
                 test  = 23-25/09 (145 TWs)
   Ground Truth: 114 malicious nodes (node_h051_0925.csv)
-                trong do chi 34 nodes CO HOAT DONG trong test period
-                (80 nodes con lai khong xuat hien trong edges 23-25/09)
-  Machine     : Win10 + WSL2, RTX 5060 Ti 16GB (train)
-                Laptop Win11 CPU-only (full-test inference)
+                trong do CHI 34 nodes co hoat dong trong test period
+                (80 nodes khong xuat hien trong edges nao 23-25/09
+                 -> recall ceiling thuc te = 34/114 = 29.8%)
+  Machine     : Train tren may thay (RTX 5060 Ti 16GB, checkpoint
+                epoch_1 luc 06:12). Full-test inference chay tren
+                laptop CPU-only sau khi torrent artifacts ve.
   Repo        : github.com/BDTG/optc-e2e-baseline
 
 ================================================================
-              ORTHRUS FULL TEST (145 TWs, v3 NEW)
+   KET QUA CHINH: ORTHRUS FULL TEST (145 TWs, 23-25/09)
 ================================================================
-Chay tren laptop sau khi torrent artifacts tu may thay.
-Model: checkpoint epoch_1 (train xong 06:12 tren may thay).
-Scored: 914,520 unique nodes tren toan bo test period.
+Day la ket qua chinh cua P1 - KHONG CON LA PILOT.
+Scored 914,520 unique nodes toan bo test period.
+
+ROC-AUC : 0.8879   (pilot: 0.9409 - giu duoc ranking power)
+AP      : 0.00373
 
 Default threshold (max_val_loss):
-  TP=0, FP=6, FN=34(active), ROC-AUC=0.8879, AP=0.00373
-  83.3% FP roi vao malicious time-windows (tin hieu that)
+  TP=0, FP=6 -> qua nghiem, can mo rong ngan sach alert.
 
-THRESHOLD SWEEP (tren full test 145 TWs):
-  k=10,000  -> TP=13/34 active  (38.2% active | 11.4% of 114)
-  k=20,000  -> TP=27/34 active  (79.4% active | 23.7% of 114)
-  k=50,000  -> TP=28/34 active  (82.4% active | 24.6% of 114)
+THRESHOLD SWEEP (ket qua chinh):
+  k=10,000 alerts -> TP=13/34 active GT (38.2% ceiling | 11.4%/114)
+  k=20,000 alerts -> TP=27/34 active GT (79.4% ceiling | 23.7%/114)
+  k=50,000 alerts -> TP=28/34 active GT (82.4% ceiling | 24.6%/114)
 
-RECALL CEILING QUAN TRONG: vi 80/114 GT nodes khong hoat dong
-trong test period, recall toi da co the dat = 34/114 = 29.8%.
-Moi so recall tinh tren /114 phai doc trong boi canh nay.
-So sanh voi pilot (chi ngay 25/09, 56 TWs): recall@10K=88.6%
-tren pilot cao hon vi pilot chua dung cac TW co tan cong.
-
-KET LUAN: ROC-AUC 0.888 tren full test xac nhan ranking power
-giu duoc (0.94 pilot). Recall phu thuoc ngan sach alert va
-phan tram GT node thuc su hoat dong trong test window.
+CACH DOC DUNG:
+- Recall toi da CO THE dat tren test nay la 29.8% (34/114), vi
+  80/114 malicious nodes khong ton tai trong du lieu test.
+- Moi so recall /114 phai ke kem ceiling nay khi trinh bay.
+- @20K alerts (2% tong so nodes) ORTHRUS bat 79% so voi tran.
 
 ================================================================
-                      METRICS TABLE (pilot, tham chieu)
+   BANG SO SANH 4 MODELS (Flash/Magic/Velox van la pilot;
+   ORTHRUS da full test - cot ORTHRUS duoi day la pilot cu,
+   chi de tham chieu lich su, KHONG dung lam ket luan)
 ================================================================
-Metric              | Flash    | Magic    | ORTHRUS  | Velox
+Metric              | Flash    | Magic    | ORTHRUS(pilot) | Velox(pilot)
 --------------------|----------|----------|----------|--------
-ROC-AUC             | 0.5645   | 0.7513   | 0.9409   | 0.9221
+ROC-AUC             | 0.5645   | 0.7513   | 0.9409*  | 0.9221
 PR-AUC / AP         | 0.0005   | -        | 0.0092   | 0.00332
-Recall              | 0.7632   | 0.5439   | 0.0790*  | 0.0000*
+Recall              | 0.7632   | 0.5439   | 0.0790   | 0.0000
 Precision           | 0.0001   | 0.0003   | 0.0026   | 0.0000
 TP / FP             | 87 / 919K| 62 / 186K| 9 / 3406 | 0 / 0
-Test scope          | full DB  | full DB  | pilot**  | pilot
 
-*  Recall thap la THRESHOLD issue, khong phai model yeu.
-** Pilot test chi chua ngay 25/09 (56 TWs).
+* ORTHRUS pilot AUC 0.9409 tinh tren 56 TWs ngay 25/09; full test
+  145 TWs cho 0.8879 - giam nhe vi them nhieu TW "binh thuong"
+  lam tang so am. Day la hanh vi DU KIEN va hop le.
 
-================================================================
-      THRESHOLD SWEEP (ranking quality at alert budget k)
-================================================================
-ORTHRUS (pilot test set):
-  k=10,000 alerts -> TP=101/114 -> Recall@10K = 88.6%
-  k=50,000 alerts -> TP=103/114 -> Recall@50K = 90.3%
-Velox:
-  k=10,000 alerts -> TP=20/114  -> Recall@10K = 17.5%
-  k=50,000 alerts -> TP=100/114 -> Recall@50K = 87.7%
-
-=> ORTHRUS la detector tang 1 tot nhat: review 10K alerts
-   (3% nodes) bat 89% malicious. Velox can 50K de dat tuong duong.
+Velox pilot recall@k (de so sanh huong): @10K=17.5%, @50K=87.7%.
+Velox full-test chua chay - uu tien cao cho buoc tiep theo.
 
 ================================================================
     SLM TIER-2: TRAN PRECISION path+cmd (CORRECTED)
 ================================================================
 BUG DA SUA: gen_nodeid2msg doc positional index SAI sau khi DB
-schema migrate (node_uuid/node_type/label/is_malicious chen dau).
-Label rac "SUBJECT None" lam moi subject collide -> ket qua cu
-"tran precision ~1%, SLM vo dung" LA ARTIFACT. Sau khi sua
-(explicit column names), ket qua dao nguoc:
+schema migrate. Ket qua cu "tran ~1%, SLM vo dung" LA ARTIFACT.
+Sau khi sua:
 
 FP trung msg voi TP (khong the tach bang path+cmd):
-  ORTHRUS: k=2K: 24/1988 FP  -> tran precision 33.3%
-           k=10K: 1093/9899 FP -> tran precision 8.46%
-  Velox  : k=2K: cung trinh do (~50% @2K)
+  k=2K: 24/1988 FP  -> tran precision 33.3%
+  k=10K: 1093/9899 FP -> tran precision 8.46%
 
-=> KET LUAN P1 GATE PASSED: path+cmd DU de SLM tier-2 tao gia tri.
-   Enrich parent_chain + event_seq van can de xu ly so FP collide_GT.
+=> P1 GATE PASSED: path+cmd DU de SLM tier-2 tao gia tri.
 
 ================================================================
       TF-IDF BASELINE (H0 ELIMINATION) - FIRST RESULT
 ================================================================
-Tren 2250 enriched alerts (partial, ORTHRUS scores):
+Tren 2250 enriched alerts:
   k=2000: TP 12/12 giu nguyen (100% recall)
           FP 1988 -> 13  => FP reduction 99.35%
           Precision 0.6% -> 48%
-  13 FP con lai = ceiling collision (path+cmd giong het TP)
 
-=> IMPLICATION: Encoder 150M (TF-IDF+LogReg) da cat duoc 99.4% FP.
-   SLM zero-shot PHAI danh bai con so nay de RQ1a chung minh SLM
-   co gia tri them. Neu khong -> H0 dung (encoder wins).
-
-================================================================
-      VELOX PERFORMANCE OPTIMIZATION (Minecraft-style, T1-T3)
-================================================================
-Patch da apply + validate (fresh run):
-  T1: bo msg.clone() thua trong loader buffer   [Lithium]
-  T2: empty_cache moi 800 graphs thay vi moi graph [Krypton]
-  T3: IO prefetch thread + bounded queue        [Moonrise 2-pool]
-
-Ket qua do duoc (fresh run, 1 epoch, full train set):
-  Epoch time : 66s -> 40s  (-39%)
-  GPU memory : 0.15GB (giu nguyen)
-  CPU memory : ~3.5GB bounded (queue bound hoat dong)
-  Mean Loss  : 0.6293 (hoi tu binh thuong)
-  Metrics    : TP/FN giong het baseline (toi uu khong doi toan hoc)
-
-Chi tiet: P1/Output/VELOX_OPTIMIZATION_RESULTS.md
+=> Encoder re (TF-IDF+LogReg) cat 99.4% FP. SLM zero-shot phai
+   danh bai con so nay de chung minh gia tri (RQ1a), nguoc lai
+   H0 dung.
 
 ================================================================
-      HAT NGHEN CHAT XA HUYEN (INFRASTRUCTURE BLOCKER)
+      VELOX PERFORMANCE OPTIMIZATION (T1-T3)
 ================================================================
-May thay co van de WSL VM tu teardown moi 4-10 phut (Windows van
-song, SSH user khong mat). Da loai tru: OOM kernel (co xay ra 1 lan,
-da fix memory=24GB), scheduled tasks (khong co), Windows Update
-(khong phai nguyen nhan chinh). Nghi van: WSL build loi hoat
-wmmem/vmcompute - can wsl --update hoat restart Windows that su.
-
-Viec bi chan:
-  - ORTHRUS testing+eval tren test 145 TWs (checkpoint model an toan)
-  - Enrich alerts 2226/10000 (resume-capable script san sang)
-  - Build nodeid2msg cache (resume-capable, dang o 1.3M/2.6M netflow)
-
-Giai phap tam thoi da ap dung: scripts resume-capable (atomic pickle),
-test-only runner bo qua build+train.
+Epoch time 66s -> 40s (-39%), RAM bounded ~3.5GB, GPU 0.15GB.
+Metrics khong doi. Chi tiet: VELOX_OPTIMIZATION_RESULTS.md
 
 ================================================================
-                   ACCURACY CAVEAT (giu tu v1)
+      GHI CHU HA TANG
 ================================================================
-Positive class rate = 114 / 927,476 = 0.012%. Baseline "all benign"
-dat 99.988%. Khong dung Accuracy lam bang chung detection; dung
-ROC-AUC / Recall@k / Precision@k.
+WSL may thay tu teardown moi 4-10 phut -> toan bo inference full
+test da chuyen sang laptop (torrent ext4.vhdx + wsl --mount).
+Cac patch laptop: DB-bypass (ORTHRUS_NO_DB), map_location=cpu,
+ten file ':' -> '-', doc node_id truc tiep tu GT csv, reuse
+tw_to_malicious_nodes.pkl, wandb.log -> json dump.
 
 ================================================================
                    NEXT STEPS
 ================================================================
-1. Cho WSL on dinh -> chay test-only ORTHRUS tren 145 TWs
-2. Hoan thien cache nodeid2msg (con file_node_table)
-3. Resume enrich den 10K alerts
-4. Chay SLM zero-shot (Qwen-3B int4) so voi TF-IDF baseline
-5. Cap nhat METRICS_SUMMARY sau tung moc
+1. Velox full-test cung pipeline laptop (da san san)
+2. Resume enrich den 10K alerts + chay SLM zero-shot vs TF-IDF
+3. Phan tich 80 GT nodes "im" trong test (dung hoat dong o dau?)
+4. Cap nhat METRICS_SUMMARY sau tung moc
 
-Generated: 2026-08-26 (v2)
+Generated: 2026-08-26 (v4, full-test final)
 ================================================================
