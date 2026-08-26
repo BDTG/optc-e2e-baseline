@@ -38,6 +38,21 @@ Chi tiết đầy đủ: [`P1/Output/METRICS_SUMMARY.txt`](P1/Output/METRICS_SUM
 [`P1/Output/FINAL_METRICS_full_test.json`](P1/Output/FINAL_METRICS_full_test.json),
 [`P1/Output/FM_SWEEP_full.json`](P1/Output/FM_SWEEP_full.json).
 
+### Chỉ tiêu mặc định (default threshold) — ĐỌC KÈM SCOPE
+
+| Model | Scope | ROC-AUC | AP / PR-AUC | Recall | Precision | TP | FP |
+|-------|-------|---------|-------------|--------|-----------|-----|-----|
+| Velox | test 23-25/09 | 0.9170 | 0.00268 | 0% | 0% | 0 | 0 |
+| ORTHRUS | test 23-25/09 | 0.8879 | 0.00373 | 0% | 0% | 0 | 6 |
+| Flash | full DB 7 ngày | 0.5645 | 0.0005 | 76.3% | 0.0001 | 87 | 919,526 |
+| Magic | full DB 7 ngày | 0.7513 | - | 54.4% | 0.0003 | 62 | 185,668 |
+
+⚠️ **Không so sánh trực tiếp các dòng**: Flash/Magic đánh giá trên toàn bộ
+7 ngày (gồm cả vùng train/val — recall 76%/54% đếm cả attack ở miền đã
+train nên cao một cách giả tạo); ORTHRUS/Velox chỉ đánh giá trên test
+23-25/09. Default threshold của ORTHRUS/Velox quá nghiêm (TP=0) — hãy
+dùng bảng Recall@k phía trên để so sánh khả năng thật.
+
 ### Phát hiện chính
 - **Velox vượt ORTHRUS trên full test** ở mọi ngưỡng budget — đảo ngược
   kết luận pilot trước đây (ORTHRUS pilot @10K = 88.6% là do test scope
