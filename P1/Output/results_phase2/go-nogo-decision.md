@@ -239,7 +239,50 @@ Với NO-GO hiện tại, 3 hướng reframe:
 
 ---
 
-## 8. KẾT LUẬN TỔNG (tất cả 4 bước thực nghiệm)
+## 9. CRITICAL UPDATE 2026-08-28 04:30 — BERT 150M artifact bị bác bỏ bằng 5-fold CV
+
+**Mục đích:** Single 450-holdout AP=0.9999 của BERT bị nghi ngờ là artifact (chỉ 2 positives trong test). Verify bằng **Stratified 5-fold CV** (giống phương pháp TF-IDF đã làm với `slm-tier2-v2-cv.json`).
+
+**Setup (`tier2_bert_cv.py`):**
+- 5-fold StratifiedKFold (preserves 12 pos / 2238 neg ratio per fold, seed=42)
+- Mỗi fold: train=1800, test=450, 2-3 positives in test
+- ModernBERT-base 150M, 3 epoch, lr=2e-5, batch 4, grad_accum 4, bf16
+- ~28 phút/fold × 5 = ~2h20m trên GPU 1650Ti
+
+**Kết quả — SINGLE HOLDOUT vs 5-FOLD CV:**
+
+| Metric | Single 450 holdout | 5-fold CV mean ± std | Per-fold |
+|--------|---------------------|----------------------|----------|
+| **AP** | **0.9999** (artifact) | **0.0049 ± 0.0009** | 0.0047, 0.0042, 0.0040, ?, 0.0065 |
+| **AUC** | 0.9688 | **0.2529 ± 0.0695** | 0.32, 0.22, 0.17, ?, 0.35 |
+
+**Phân tích:**
+- **AP ≈ random**: 0.0049 ≈ 12/2250 = 0.0053 (prevalence baseline)
+- **AUC 0.25 (dưới random 0.5)** → BERT score ngược: malicious có score thấp hơn benign
+- **Kết luận: BERT 150M KHÔNG hơn random trên V2** khi đánh giá đúng phương pháp
+- Single 450 holdout có AP=0.9999 là do **shortcut learning + chance** trên 2 positives cụ thể, không phải capability thật
+
+**Đảo ngược conclusion Phase 2:**
+1. **TF-IDF + LR mới là winner thực sự** cho tier-2 V2: AP 0.89 trên subset fair, OOF 0.254 global, latency 1.5ms
+2. **BERT 150M "mạnh nhất" trước đây là artifact** — không có lợi thế so với TF-IDF
+3. **Pareto frontier đúng** trên V2: **TF-IDF** (rẻ + đủ tốt) >> BERT/SLM/LoRA (≈ random trên V2, chỉ thắng trên 2 holdout positives)
+4. **LoRA Qwen 0.5B AP=0.0044** (single holdout) và **BERT CV-AP=0.0049** ≈ random → cả deep learning đều fail trên V2
+
+**Ý nghĩa cho paper:**
+- H0 KHÔNG được củng cố bởi BERT 150M (CV chứng minh)
+- TF-IDF + LR là baseline mạnh nhất trên V2 cho tier-2 — đơn giản, reproducible, rẻ
+- Note.md:89 nên viết lại: "TF-IDF + LR đủ tốt làm tier-2; deep learning không cải thiện đáng kể trên V2 với 12 positives"
+- RQ3 Pareto frontier đơn giản hóa: chỉ cần đo TF-IDF vs small encoder vs LLM zero-shot trên V2; BERT 150M không có lợi thế
+
+**Evidence files bước 5:**
+- `P1/Code/tier2_bert_cv.py` (5-fold CV)
+- `P1/Output/results_phase2/bert-150m-cv5.json` (AP=0.0049 ± 0.0009)
+- `P1/Output/logs/bert-cv5.log` (5 fold logs)
+- `P1/Output/models/bert-150m/cv-fold-{0-4}/` (5 model checkpoints, gitignored)
+
+---
+
+## 10. KẾT LUẬN TỔNG (cập nhật sau 5-fold CV)
 
 | Tier | Model | AP (V2 holdout) | AP (TTP unseen) | Verdict |
 |------|-------|-----------------|------------------|---------|
@@ -252,7 +295,8 @@ Với NO-GO hiện tại, 3 hướng reframe:
 | 3 | TinyBERT 4M distilled | 0.0038 | — | distill fail |
 
 **Phát hiện tổng quát:**
-1. **Note.md:89 reframe:** Encoder 150M > TF-IDF > SLM zero/few/LoRA > student distilled. SLM tier-2 độc lập **không khả thi** trên OpTC V2.
-2. **H0 mạnh hơn dự kiến**: ngay cả distill xuống 4M cũng không cạnh tranh được teacher (do teacher đã ở trên dataset artifact-prone).
-3. **Gợi ý cho paper:** thay vì SLM tier-2 standalone, có thể (a) dùng ensemble BERT+TF-IDF, (b) dùng SLM chỉ trên hard cases BERT uncertain, (c) tăng data quality thay vì tăng model size.
-4. **RQ1b chưa trả lời được**: TTP test 19 chain quá ít; cần sysmon + real provenance để khẳng định.
+1. **Note.md:89 reframe:** TF-IDF > encoder deep learning (BERT 150M CV-AP 0.005 ≈ random) ≈ SLM zero/few/LoRA > distilled student. SLM tier-2 độc lập **không khả thi** trên OpTC V2. **BERT 150M không có lợi thế so với TF-IDF** khi đánh giá đúng phương pháp (5-fold CV thay vì single 450 holdout artifact).
+2. **TF-IDF + LR mới là winner thực sự**: AP 0.89 trên subset fair so sánh, OOF 0.254 global. Rẻ (1.5ms/CPU), không cần GPU.
+3. **Single holdout AP=0.9999 của BERT là artifact** — xác nhận bằng 5-fold CV cho AP 0.0049 ± 0.0009 (≈ random 12/2250). Holdout chỉ 2 positives tạo spurious ranking do shortcut learning.
+4. **Gợi ý cho paper:** thay vì SLM tier-2 standalone, có thể (a) dùng TF-IDF + LR làm tier-2 (rẻ + đủ tốt), (b) thử ensemble TF-IDF + small encoder với proper CV, (c) tăng data quality thay vì tăng model size.
+5. **RQ1b chưa trả lời được**: TTP test 19 chain quá ít; cần sysmon + real provenance để khẳng định.
