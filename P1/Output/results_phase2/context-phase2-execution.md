@@ -47,7 +47,7 @@ pip install transformers accelerate bitsandbytes
 ### 2. Chạy SLM 3B int4 trên 2250 alerts đã enrich
 ```
 python slm_tier2.py \
-  --alerts_jsonl P1/Output/alerts_enriched_partial.jsonl \
+  --alerts_jsonl P1/Output/data/alerts-enriched-partial.jsonl \
   --gt_csv D:\orthrus_laptop\optec-l6\orthrus\Ground_Truth\OPTC_H051\node_h051_0925.csv \
   --alert_k 2000 \
   --skip_slm  # chạy baseline TF-IDF trước
@@ -76,7 +76,7 @@ python slm_tier2.py \
 
 ### Priority 1: Chạy RQ1a trên data hiện có
 File: `P1/Code/slm_tier2.py`
-Input: `P1/Output/alerts_enriched_partial.jsonl` (2250 alerts)
+Input: `P1/Output/data/alerts-enriched-partial.jsonl` (2250 alerts)
 Tính:
 1. `run_baseline_tfidf()` trên 2250 alerts → FP reduction @k={500,1000,2000}
 2. Nếu có transformers: `classify_with_slm()` trên top-2000 alerts
@@ -113,7 +113,7 @@ Cần Google Drive access + rclone để tải bundles từ FiveDirections/OpTC-
 ## FILE PATHS
 - Repo: `C:\Users\BDTG\OpTC-data\phase1\gh_repo`
 - SLM code: `P1/Code/slm_tier2.py`
-- Enriched alerts: `P1/Output/alerts_enriched_partial.jsonl` (2250 alerts)
+- Enriched alerts: `P1/Output/data/alerts-enriched-partial.jsonl` (2250 alerts)
 - Laptop ORTHRUS artifacts: `D:\orthrus_laptop\optec-l6\`
 - GT CSV: `D:\orthrus_laptop\optec-l6\orthrus\Ground_Truth\OPTC_H051\node_h051_0925.csv`
 - ORTHRUS results pth: `D:\orthrus_laptop\optec-l6\orthrus\artifacts\detection\evaluation\*\OPTC_H051\precision_recall_dir\result_model_epoch_1.pth`

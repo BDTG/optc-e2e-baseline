@@ -18,7 +18,7 @@
 | V1 generic IDs | 1.00 | 0.184 | 0.516 | 0.990 (TP 4/12) | 0.333 |
 | V2 msg-enriched | 0.854 | **0.254** | **0.520** | 0.973 (TP 6/12) | **0.50** |
 
-- Chi tiết V2 CV: `P1/Output/slm_tier2_v2_cv.json` `ap_oof 0.254 fold [0.27,0.75,0.02,0.52,0.06]` variance cao do pos nhỏ (12).
+- Chi tiết V2 CV: `P1/Output/results_phase2/slm-tier2-v2-cv.json` `ap_oof 0.254 fold [0.27,0.75,0.02,0.52,0.06]` variance cao do pos nhỏ (12).
 - **As FILTER** trên original ORTHRUS ranking (`TIER2_FILTER_CORRECTED.json`): original top-500/1000 chỉ chứa 1 GT (rank 8) nên filter giết recall (0/1). Tại k=2000 (chứa đủ 12 GT) V2 filter keep 57 (6 TP/51 FP) prec 0.105 vs orig 0.006, FP_red 97.4% nhưng mất 50% GT. V1 filter keep 23 (4 TP/19 FP) prec 0.174 FP_red 99% recall 0.333 — V2 giữ recall tốt hơn.
 - **As RE-RANKER** (TF-IDF sort): V2 top-100 6 TP prec 6% recall 0.5 ; top-500 11 TP prec 2.2% recall 0.92 — vượt xa original ranking (top-100 orig 1 TP). Đây là RQ1b gain, nhưng đổi pipeline từ filter → ranker.
 - Kết luận H0: `Note.md:15` yêu cầu SLM hơn encoder 150M. Hiện TF-IDF V2 OOF AP 0.254, SLM zero-shot phải >0.254 và giữ recall ≥0.5 @FP_red ≥97% mới claim RQ1a. Leakage cũ 0.99 là ảo (`tfidf_cv_results.json:12`).
@@ -29,7 +29,7 @@
 ## 2. WS-B: HW Grid Partial (i5-10300H 4C/8T 16GB `hw_grid_benchmark.py:12`)
 
 ### B1. TF-IDF measured
-- p50 1.23ms, p95 3.04ms, p99 ~3.5ms per alert (200 mẫu, `P1/Output/hw_grid_partial.json:12`)
+- p50 1.23ms, p95 3.04ms, p99 ~3.5ms per alert (200 mẫu, `P1/Output/benchmarks/hw-grid-partial.json:12`)
 - Throughput: 70M decisions/day 1 core, tương đương 0.0012s/host/ngày cho 10K alerts — negligible vs SLM.
 
 ### B1. ORTHRUS timing (log `P1/Output/orthrus_run.log:224`)
@@ -37,7 +37,7 @@
 - Graph construction 230 TWs train (19-21/09) ~1.1s/TW, inference per TW ~1s — không phải bottleneck cho tier2 (tier2 chỉ chạy trên 10²–10³ alerts).
 
 ### B1. SLM estimates (GGUF Q4_K_M, chưa đo thật, cần calibrate)
-`P1/Output/hw_grid_partial.csv` — prefill vs decode tách riêng per `Note.md:149`:
+`P1/Output/benchmarks/hw-grid-partial.csv` — prefill vs decode tách riêng per `Note.md:149`:
 
 | size | tok | mode | p50 ms | p95 ms | weight MB | KV MB | dec/day 1c | dec/day 4c contended |
 |------|-----|------|--------|--------|-----------|-------|------------|----------------------|
@@ -69,11 +69,11 @@
 
 ## 4. Files sinh ra
 
-- `P1/Output/alerts_enriched_v2.jsonl` (2250, 1.4MB → ~2.8MB sau enrich)
-- `P1/Output/tfidf_cv_results.json` (leakage vs CV)
+- `P1/Output/data/alerts-enriched-v2.jsonl` (2250, 1.4MB → ~2.8MB sau enrich)
+- `P1/Output/results_phase2/tfidf-cv-results.json` (leakage vs CV)
 - `P1/Output/TIER2_FILTER_CORRECTED.json` (filter vs re-rank)
-- `P1/Output/slm_tier2_v2_cv.json` (verify fix)
-- `P1/Output/hw_grid_partial.json` + `.csv` (TF-IDF measured + SLM estimates)
+- `P1/Output/results_phase2/slm-tier2-v2-cv.json` (verify fix)
+- `P1/Output/benchmarks/hw-grid-partial.json` + `.csv` (TF-IDF measured + SLM estimates)
 - `P1/Code/slm_tier2.py` patched (prompt + CV + gt_json)
 
 ## 5. Next steps (đề xuất)
