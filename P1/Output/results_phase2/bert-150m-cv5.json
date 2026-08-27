@@ -1,0 +1,70 @@
+{
+  "cv_5fold": {
+    "ap_mean": 0.004943419769300165,
+    "ap_std": 0.0009283273392443009,
+    "auc_mean": 0.25288821974539255,
+    "auc_std": 0.06949428749986197,
+    "per_fold": [
+      {
+        "eval_loss": 0.0376378558576107,
+        "eval_val_ap": 0.004729030759811683,
+        "eval_val_auc": 0.3175223214285714,
+        "eval_runtime": 44.0077,
+        "eval_samples_per_second": 10.225,
+        "eval_steps_per_second": 1.295,
+        "epoch": 3.0,
+        "fold": 1,
+        "pos_in_test": 2
+      },
+      {
+        "eval_loss": 0.03868734464049339,
+        "eval_val_ap": 0.004167960641375591,
+        "eval_val_auc": 0.22154017857142858,
+        "eval_runtime": 42.467,
+        "eval_samples_per_second": 10.596,
+        "eval_steps_per_second": 1.342,
+        "epoch": 3.0,
+        "fold": 2,
+        "pos_in_test": 2
+      },
+      {
+        "eval_loss": 0.03738640993833542,
+        "eval_val_ap": 0.003960216998191682,
+        "eval_val_auc": 0.17243303571428573,
+        "eval_runtime": 42.8662,
+        "eval_samples_per_second": 10.498,
+        "eval_steps_per_second": 1.33,
+        "epoch": 3.0,
+        "fold": 3,
+        "pos_in_test": 2
+      },
+      {
+        "eval_loss": 0.056672144681215286,
+        "eval_val_ap": 0.005318182972132007,
+        "eval_val_auc": 0.2009694258016405,
+        "eval_runtime": 42.1241,
+        "eval_samples_per_second": 10.683,
+        "eval_steps_per_second": 1.353,
+        "epoch": 3.0,
+        "fold": 4,
+        "pos_in_test": 3
+      },
+      {
+        "eval_loss": 0.059999916702508926,
+        "eval_val_ap": 0.006541707474989864,
+        "eval_val_auc": 0.3519761372110365,
+        "eval_runtime": 42.5924,
+        "eval_samples_per_second": 10.565,
+        "eval_steps_per_second": 1.338,
+        "epoch": 3.0,
+        "fold": 5,
+        "pos_in_test": 3
+      }
+    ]
+  },
+  "single_holdout_ap": 0.9999,
+  "single_holdout_n_test": 450,
+  "single_holdout_n_pos": 2,
+  "n_total": 2250,
+  "n_pos_total": 12
+}

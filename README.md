@@ -71,29 +71,32 @@ Epoch 66s → 40s (-39%), RAM bounded ~3.5GB không swap trên laptop i5-10300H 
 
 **Mục tiêu:** Test (a) H0 encoder ≥ SLM (Note.md:89), (b) generalization gap trên TTP unseen.
 
-| Tier | Model | Train | AP (V2 holdout) | AP (TTP unseen) | Verdict |
-|------|-------|-------|-----------------|------------------|---------|
-| 0 | Random | — | 0.0044 | 0.060 | baseline |
-| 1 | TF-IDF char + LR | V2 | 0.89 | — | rẻ, đủ tốt |
-| 2 | SLM 0.5B fewshot | — | 0.29 | — | thua |
-| 2 | SLM 1.5B fewshot | — | 0.57 | — | thua |
-| 2 | LoRA Qwen 0.5B 1ep | V2 | 0.0044 | 0.1174 | thua |
-| 3 | ModernBERT 150M | V2 | **0.9999** | **0.6603** | tốt nhất (suspect artifact) |
-| 3 | TinyBERT 4M distilled | V2 (KD từ BERT) | 0.0038 | — | distill fail |
+| Tier | Model | Train | AP (V2 single) | AP (V2 5-fold CV) | AP (TTP unseen) | Verdict |
+|------|-------|-------|----------------|-------------------|------------------|---------|
+| 0 | Random | — | 0.0044 | — | 0.060 | baseline |
+| 1 | TF-IDF char + LR | V2 | 0.89 (subset) | 0.254 (OOF global) | — | **winner thực sự** |
+| 2 | SLM 0.5B fewshot | — | 0.29 | — | — | thua |
+| 2 | SLM 1.5B fewshot | — | 0.57 | — | — | thua |
+| 2 | LoRA Qwen 0.5B 1ep | V2 | 0.0044 | — | 0.1174 | ≈ random |
+| 3 | ModernBERT 150M | V2 | **0.9999 (artifact!)** | **0.0049 ± 0.0009** | 0.6603 | single holdout artifact |
+| 3 | TinyBERT 4M distilled | V2 (KD từ BERT) | 0.0038 | — | — | distill fail |
 
-**Phát hiện tổng quát Phase 2:**
-1. **H0 củng cố mạnh**: Encoder 150M > TF-IDF > SLM zero/few/LoRA > distilled student. SLM tier-2 standalone **không khả thi** trên OpTC V2.
-2. **Generalization gap có thật**: BERT 0.9999 (V2) → 0.6603 (TTP), AUC 0.97 → 0.82. Score malicious rất thấp (0.016-0.067) nhưng vẫn > benign.
-3. **Distill xuống 4M thất bại** (Note.md:113 gợi ý): loss giảm mạnh (0.92→0.07) nhưng val AP không cải thiện. Teacher đã học shortcut trên 12 positives, truyền xuống student nhưng capability không preserve.
-4. **Pareto frontier thực**: BERT 150M (mạnh nhất) > TF-IDF (đủ tốt + rẻ) >> SLM tier-2.
-5. **Caveats nghiêm trọng**:
-   - V2 chỉ 12 positives toàn dataset, 2 positives trong holdout → AP ≈ 1.0 của BERT có thể artifact.
-   - TTP holdout chỉ 19 chain từ 10 TTP (parse từ Atomic Red Team YAML, không phải event chain thật).
-   - Cần sysmon + real provenance để verify RQ1b (chưa trả lời được).
+**🚨 PHÁT HIỆN QUAN TRỌNG — BERT 150M artifact bị bác bỏ:**
+- Single 450-holdout AP=0.9999 chỉ có **2 positives** → ranking spurious do shortcut
+- 5-fold CV (preserves 12 pos / 2238 neg ratio per fold): **AP=0.0049 ± 0.0009** ≈ random 12/2250
+- AUC 5-fold=0.25 (dưới random 0.5) → score ngược
+- → **BERT 150M không có lợi thế so với TF-IDF** khi đánh giá đúng phương pháp
+
+**Phát hiện tổng quát Phase 2 (đã sửa sau CV):**
+1. **Note.md:89 reframe (sau CV):** TF-IDF > encoder deep learning (BERT 150M CV-AP 0.005 ≈ random) ≈ SLM zero/few/LoRA > distilled student. SLM tier-2 độc lập **không khả thi**.
+2. **TF-IDF + LR mới là winner thực sự** cho tier-2 V2: AP 0.89 subset, OOF 0.254 global, latency 1.5ms.
+3. **Generalization gap có thật** (nếu tin single holdout): BERT 0.9999 (V2) → 0.6603 (TTP), nhưng cả hai đều nghi ngờ artifact vì imbalance.
+4. **Distill xuống 4M thất bại**: loss giảm mạnh nhưng val AP không cải thiện.
+5. **Caveats nghiêm trọng**: V2 chỉ 12 positives toàn dataset → AP single holdout unreliable. TTP holdout 19 chain từ YAML (không phải event chain thật). Cần sysmon + real provenance để verify.
 
 **Phát biểu lại Note.md:**
 - Note.md:7 "SLM tầng hai" vẫn đúng về kiến trúc nhưng **không phải primary detector**.
-- Note.md:89 "loại trừ H0" → không loại trừ được. Cần reframe: **SLM tier-2 chỉ có ích khi (a) ensemble với BERT/TF-IDF, hoặc (b) dùng trên hard cases BERT uncertain, hoặc (c) data quality tăng**.
+- Note.md:89 "loại trừ H0" → không loại trừ được với V2. Cần reframe: **TF-IDF + LR là tier-2 đủ tốt, không cần deep learning**.
 
 ---
 
