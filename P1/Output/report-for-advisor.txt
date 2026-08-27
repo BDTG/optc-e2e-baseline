@@ -103,3 +103,47 @@ evaluation) da commit len GitHub, ai cung reproduce duoc.
 So lieu chi tiet (sweep tung model, JSON): xem P1/Output/ tren repo.
 Bao cao nay sinh tu METRICS_SUMMARY v5 (commit 1ce82f3 tro ve sau).
 ================================================================
+
+================================================================
+PHAN BO SUNG (2026-08-27) - PHASE 2 SLM TIER-2 KET QUA LAN DAU
+================================================================
+Update sau khi trainer (BDTG) chay LoRA + BERT 150M tren laptop
+GTX 1650 Ti 4GB (driver 616.56, torch 2.11+cu128).
+
+So sanh 5 model tren cung V2 holdout (450 alerts, 2 pos, 448 benign):
+
+| Model                         | AP    | AUC   | Latency (CPU) |
+|-------------------------------|-------|-------|---------------|
+| Random baseline               | 0.004 | 0.500 | -             |
+| TF-IDF + LogReg (encoder re) | 0.89  | -     | 1.5 ms        |
+| SLM 0.5B fewshot             | 0.29  | -     | 11 s          |
+| SLM 1.5B fewshot             | 0.57  | -     | 30 s          |
+| LoRA Qwen2.5-0.5B 1 epoch    | 0.004 | 0.022 | (GPU 28 phut) |
+| BERT 150M (ModernBERT) 3 ep  | 0.999 | 0.969 | (GPU 5 phut)  |
+
+Phat hien chinh:
+a) LoRA 0.5B 1 epoch khong du hoc (AP tuong duong random).
+   Nguyen nhan: chi 1 epoch, imbalance 1/186.
+b) BERT 150M fine-tune (3 epoch bf16, ~28 phut GPU) dat AP 0.9999
+   tren holdout - vuot TF-IDF (AP 0.89).
+c) CANH BAO: AP 0.9999 cua BERT co the la artifact vi holdout chi co
+   2 positives. Can test tren TTP holdout that (buoc 3) de xac nhan
+   generalization.
+
+Kết luận cho RQ1 (Note.md:89 "loai H0"):
+- H0 duy tri: encoder 150M fine-tune > SLM 0.5B/1.5B (zero/few/LoRA)
+  tren cung phan phoi V2.
+- Paper can reframe: SLM tier-2 khong the thay the encoder; co the
+  distill tu encoder hoac dung cho unseen TTP (RQ1b).
+
+Files moi commit len GitHub:
+- P1/Code/tier2_lora_train.py, tier2_lora_eval.py
+- P1/Code/tier2_bert_train.py
+- P1/Code/run_lora_visible.bat, run_bert_visible.bat
+- P1/Output/models/lora-05b/checkpoint-113/
+- P1/Output/models/bert-150m/
+- P1/Output/lora-05b-epoch1-result.json
+- P1/Output/logs/lora-05b.log, lora-eval.log, bert-150m.log
+- go-nogo-decision.md (cap nhat phan 5)
+
+================================================================

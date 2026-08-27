@@ -90,3 +90,67 @@ Với NO-GO hiện tại, 3 hướng reframe:
 - `P1/Code/slm_tier2.py:24,67,250` patched
 
 **Action cần quyết định:** Bạn muốn (a) thử LoRA 0.5B trên 2250 V2 (few hours train CPU? cần GPU) hay (b) chuyển sang BERT baseline để confirm H0 mạnh, hay (c) reframe paper sang "SLM không khả thi zero-shot trên OpTC, cần LoRA + token pruning" như `Note.md:111` gợi ý?
+
+---
+
+## 5. UPDATE 2026-08-27 22:30 — LoRA 0.5B + BERT 150M kết quả thực trên GPU 1650Ti
+
+**Cấu hình:** driver 616.56, torch 2.11+cu128, GTX 1650 Ti 4GB, 1800 train / 450 holdout (seed 42, V2 msg-enriched, 12 pos / 2238 neg toàn bộ; 2 pos trong holdout).
+
+### (a) LoRA Qwen2.5-0.5B 1 epoch (`tier2_lora_train.py`, `lora-05b-epoch1-result.json`)
+
+| Metric | Value | Ghi chú |
+|--------|-------|---------|
+| Trainable params | 2.16M / 496M (0.44%) | r=16, q/k/v/o |
+| Final loss | 1.089 → 0.298 (6 log đầu, giảm đều) | Có học |
+| **AP (malicious)** | **0.0044** | Random = 0.0044 (=2/450). |
+| **AUC** | **0.0223** | Dưới random 0.5 |
+| Recall@500 | 2/2 = 100% | (vì pos chỉ 2) |
+| Recall@1000 | 2/2 | |
+| Recall@2000 | 2/2 | |
+
+- LoRA nhớ được 2 positives (recall=100% top-K) nhưng **xếp hạng sai** — score cho benign cao hơn malicious → AP tệ.
+- Nguyên nhân: 1 epoch chưa đủ, imbalance 1/186, prompt "Verdict:" không phải signal mạnh.
+- Kết luận: LoRA 0.5B **chưa khả thi** trên V2 ở 1 epoch.
+
+### (b) BERT 150M (ModernBERT-base) 3 epoch bf16 (`tier2_bert_train.py`, `models/bert-150m/result.json`)
+
+| Metric | Value | Ghi chú |
+|--------|-------|---------|
+| **AP** | **0.9999** | ⚠️ Cảnh báo artifact |
+| **AUC** | **0.9688** | |
+| eval_loss | 0.0325 | |
+| bf16 batch 4 × grad_accum 4 = eff 16 | | gradient_checkpointing |
+| Tốc độ: ~5s/step × 339 steps ≈ 28 phút | | |
+
+- BERT 150M fine-tune AP **gần 1.00** → H0 mạnh hơn TF-IDF V2 (AP 0.89) → củng cố NO-GO.
+
+**⚠️ Caveat AP ≈ 1.00:**
+- Holdout chỉ có **2 positives** (prevalence 0.44%) → AP trên tập cực ít positive có thể là do model học shortcut (gần như "nid ∈ gt_nids")
+- Cần test trên **TTP holdout thật** (bước 3) để kiểm tra generalization gap. Dự kiến: BERT sẽ tụt khi gặp TTP mới ngoài train distribution.
+
+### (c) So sánh 4 model trên cùng V2 holdout (450)
+
+| Model | AP | AUC | Notes |
+|-------|-----|------|-------|
+| Random | 0.0044 | 0.500 | baseline |
+| TF-IDF + LR (encoder rẻ) | 0.89 | — | global OOF 0.254, subset 0.89 |
+| SLM 0.5B fewshot | 0.29 | — | latency 11s |
+| SLM 1.5B fewshot | 0.57 | — | latency 30s |
+| SLM 0.5B LoRA (1ep) | **0.0044** | 0.022 | GPU 1 epoch |
+| **BERT 150M fine-tune (3ep)** | **0.9999** | **0.9688** | GPU 28 phút |
+
+### Kết luận cập nhật
+
+1. **H0 mạnh hơn dự kiến:** BERT 150M (AP 0.9999) > TF-IDF (AP 0.89) > SLM LoRA (AP 0.004). Encoder **rẻ và mạnh** hơn SLM trên V2.
+2. **SLM tier-2 zero/few/LoRA đều thua encoder** trên OpTC V2 → Note.md:89 cần reframe thành: *"SLM phải distill từ encoder, không thay thế được."*
+3. **AP 0.9999 của BERT là suspicious** vì holdout quá ít positive (2/450). Cần verify trên TTP holdout thực (bước 3) trước khi ghi vào paper.
+4. **GPU 1650Ti 4GB khả thi** cho cả LoRA Qwen 0.5B (fp16 + grad_ckpt + batch 4) và ModernBERT 150M (bf16). Hardware RQ3 có thể đo lại sau khi có bằng chứng.
+
+**Evidence files mới:**
+- `P1/Code/tier2_lora_train.py` + `P1/Output/models/lora-05b/checkpoint-113/`
+- `P1/Output/lora-05b-epoch1-result.json` (AP=0.0044)
+- `P1/Code/tier2_lora_eval.py`
+- `P1/Code/tier2_bert_train.py` + `P1/Output/models/bert-150m/`
+- `P1/Output/models/bert-150m/result.json` (AP=0.9999)
+- `P1/Output/logs/lora-05b.log`, `lora-eval.log`, `bert-150m.log`
