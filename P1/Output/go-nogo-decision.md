@@ -154,3 +154,41 @@ Với NO-GO hiện tại, 3 hướng reframe:
 - `P1/Code/tier2_bert_train.py` + `P1/Output/models/bert-150m/`
 - `P1/Output/models/bert-150m/result.json` (AP=0.9999)
 - `P1/Output/logs/lora-05b.log`, `lora-eval.log`, `bert-150m.log`
+
+---
+
+## 6. UPDATE 2026-08-28 02:00 — TTP Unseen Holdout (RQ1b)
+
+**Mục tiêu:** Test generalization gap khi shift từ OpTC V2 → TTP chưa thấy (T1218.001 LOLBin proxy exec, T1059.001 PowerShell, T1027 obfuscation, T1003.001 LSASS dump, T1490 vssadmin, T1053.005 scheduled task, T1082/T1087.001 discovery). Nếu BERT AP tụt mạnh → H0 yếu đi trên unseen; nếu BERT vẫn cao → H0 củng cố mạnh hơn.
+
+**Setup (`tier3_ttp_build.py`, `tier3_bert_test.py`, `tier3_lora_test.py`):**
+- Source: `data/atomic-red-team/art-repo/atomics/` (clone từ redcanaryco/atomic-red-team, depth 1)
+- 19 malicious chains từ 10 TTP YAML, 300 benign templates
+- 319 alerts total, model chỉ thấy OpTC V2 train (không train thêm)
+- Source code (atomic + parse): `tier3_ttp_build.py:30-50` parse YAML → command lines → CAR-like chains
+
+**Kết quả so sánh:**
+
+| Model | AP (TTP unseen) | AUC | Top-1 hit (per TTP) |
+|-------|-----------------|-----|---------------------|
+| **BERT 150M** | **0.6603** | **0.8165** | 100% (10/10 TTP) |
+| LoRA Qwen 0.5B 1ep | 0.1174 | 0.6898 | 100% |
+| (so sánh V2 holdout) | BERT 0.9999 / LoRA 0.0044 | | |
+
+**Phân tích:**
+1. **Generalization gap CÓ THẬT**: BERT AP 0.9999 (V2) → 0.6603 (TTP). Score trung bình cho malicious rất thấp (0.016-0.067) nhưng vẫn > benign nên ranking OK.
+2. **BERT vẫn hơn SLM LoRA** trên TTP unseen (0.66 vs 0.12) → H0 củng cố.
+3. **Cả hai top-1 hit 100%** trong từng TTP cặp (do per-TTP chỉ 2 chain, just need > benign).
+4. **Caveat nghiêm trọng**: chỉ 19 malicious / 10 TTP là quá ít cho AP có ý nghĩa thống kê; 300 benign là template không phải real benign provenance. Kết quả này chỉ là "smoke test" khẳng định hướng, không phải evidence cuối cùng.
+
+**Kết luận RQ1b (Note.md:38,42):**
+- Không có bằng chứng SLM hơn encoder trên TTP unseen (với setup hạn chế này).
+- Để khẳng định RQ1b cần: (a) chạy atomic thật với sysmon → provenance chain thật, (b) tăng N malicious per TTP ≥ 20, (c) benign provenance từ cùng host/period.
+
+**Evidence files bước 3:**
+- `P1/Code/tier3_ttp_build.py` (parse atomic YAML → chain)
+- `P1/Code/tier3_bert_test.py` + `P1/Output/bert-ttp-result.json` (AP=0.6603)
+- `P1/Code/tier3_lora_test.py` + `P1/Output/lora-ttp-result.json` (AP=0.1174)
+- `P1/Output/ttp_holdout.jsonl` (319 alerts)
+- `P1/Output/logs/bert-ttp.log`, `lora-ttp.log`
+- `data/atomic-red-team/art-repo/` (clone redcanaryco/atomic-red-team)
