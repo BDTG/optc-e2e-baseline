@@ -192,3 +192,67 @@ Với NO-GO hiện tại, 3 hướng reframe:
 - `P1/Output/ttp_holdout.jsonl` (319 alerts)
 - `P1/Output/logs/bert-ttp.log`, `lora-ttp.log`
 - `data/atomic-red-team/art-repo/` (clone redcanaryco/atomic-red-team)
+
+---
+
+## 7. UPDATE 2026-08-28 03:00 — Distill BERT 150M → TinyBERT 4M (Note.md:113)
+
+**Mục tiêu:** Trả lời Note.md:113 "distill SLM thành encoder nhỏ chuyên biệt". Nếu TinyBERT 4M (37× nhỏ hơn teacher) đạt AP gần teacher với latency <5ms → có thể thay thế teacher.
+
+**Setup (`tier2_distill.py`):**
+- Teacher: ModernBERT 150M đã train V2 (AP=0.9999 trên V2 holdout)
+- Student: `huawei-noah/TinyBERT_General_4L_312D` (4M params, 4 layer, 312 hidden)
+- KD: alpha=0.7 KL(T=2) + 0.3 CE hard label, 3 epoch, lr=2e-5, batch 8, fp32
+- Custom loop (không Trainer vì Trainer strip custom keys)
+
+**Kết quả:**
+
+| Metric | Teacher (ModernBERT) | Student (TinyBERT 4M) |
+|--------|---------------------|------------------------|
+| Params | 150M | **4M** (37× nhỏ hơn) |
+| Epoch 1 loss | — | 0.92, val AP 0.0041 |
+| Epoch 2 loss | — | 0.13, val AP 0.0040 |
+| Epoch 3 loss | — | 0.07, val AP **0.0038** |
+| **Final AP** | 0.9999 | **0.0038** (≈ random 2/450) |
+| **Final AUC** | 0.9688 | **0.1401** (dưới random 0.5) |
+
+**Phân tích — Distill thất bại:**
+1. Loss giảm mạnh 0.92→0.07 → student học được teacher logits trên train
+2. Nhưng val_AP không cải thiện (gần random) → student không generalize
+3. AUC 0.14 (dưới random) → student score ngược: malicious có score rất thấp
+4. Nguyên nhân khả dĩ:
+   - Teacher đã học "shortcut" trên 12 positives toàn V2 (gần như ghi nhớ nid ∈ gt_nids)
+   - Truyền shortcut xuống student 4M nhưng khả năng represent kém hơn → fail
+   - 1800 train + 12 positives imbalance quá tệ để distill có ý nghĩa
+
+**Ý nghĩa cho paper:**
+- Note.md:113 "distill SLM thành encoder nhỏ" **không phải lúc nào cũng work** với data imbalance cao
+- Pareto frontier thực sự trên V2: **BERT 150M (AP 0.9999, ~5s/step CPU) > TF-IDF (AP 0.89, 1.5ms CPU) > TinyBERT 4M distilled (AP 0.0038, fail)**
+- Teacher > TF-IDF → TF-IDF không cần phải bị distill (đã đủ tốt + rẻ)
+- Student nhỏ không có lợi thế nào ở đây vì teacher chỉ AP=0.9999 trên tập rất artifact
+
+**Evidence files bước 4:**
+- `P1/Code/tier2_distill.py` (custom loop KD)
+- `P1/Output/models/tinybert-4m-distilled/` (student + tokenizer)
+- `P1/Output/models/tinybert-4m-distilled/result.json` (AP=0.0038)
+- `P1/Output/logs/distill-4m.log`
+
+---
+
+## 8. KẾT LUẬN TỔNG (tất cả 4 bước thực nghiệm)
+
+| Tier | Model | AP (V2 holdout) | AP (TTP unseen) | Verdict |
+|------|-------|-----------------|------------------|---------|
+| 0 | Random | 0.0044 | 0.060 | baseline |
+| 1 | TF-IDF char + LR | 0.89 | — | rẻ, đủ tốt |
+| 2 | SLM 0.5B fewshot | 0.29 | — | thua |
+| 2 | SLM 1.5B fewshot | 0.57 | — | thua |
+| 2 | LoRA Qwen 0.5B 1ep | 0.0044 | 0.1174 | thua |
+| 3 | ModernBERT 150M | **0.9999** | **0.6603** | tốt nhất nhưng suspect artifact |
+| 3 | TinyBERT 4M distilled | 0.0038 | — | distill fail |
+
+**Phát hiện tổng quát:**
+1. **Note.md:89 reframe:** Encoder 150M > TF-IDF > SLM zero/few/LoRA > student distilled. SLM tier-2 độc lập **không khả thi** trên OpTC V2.
+2. **H0 mạnh hơn dự kiến**: ngay cả distill xuống 4M cũng không cạnh tranh được teacher (do teacher đã ở trên dataset artifact-prone).
+3. **Gợi ý cho paper:** thay vì SLM tier-2 standalone, có thể (a) dùng ensemble BERT+TF-IDF, (b) dùng SLM chỉ trên hard cases BERT uncertain, (c) tăng data quality thay vì tăng model size.
+4. **RQ1b chưa trả lời được**: TTP test 19 chain quá ít; cần sysmon + real provenance để khẳng định.
