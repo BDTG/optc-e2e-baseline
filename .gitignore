@@ -8,6 +8,13 @@ Note.md
 *.pkl
 *.pth
 
+# === Trained model weights (commit code only, weights large) ===
+P1/Output/models/*/model.safetensors
+P1/Output/models/*/checkpoint-*/adapter_model.safetensors
+P1/Output/models/*/checkpoint-*/optimizer.pt
+P1/Output/models/*/checkpoint-*/scaler.pt
+P1/Output/models/*/checkpoint-*/scheduler.pt
+
 # === Logs & temp ===
 *.log
 logs/
