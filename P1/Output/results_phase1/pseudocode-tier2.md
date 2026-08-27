@@ -92,7 +92,7 @@ ENRICH-ALERT(v, G):
 ```
 Thực tế: 2250/10000 alerts đã enrich (bị chặn bởi WSL; script
 resume-capable). Code: nằm ở máy thay (`enrich_alerts.py`), bản partial
-`P1/Output/alerts_enriched_partial.jsonl`.
+`P1/Output/data/alerts-enriched-partial.jsonl`.
 
 ---
 

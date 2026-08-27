@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-27 **Gate:** `Note.md:81-89` Phase 0 go/no-go: SLM phải hơn encoder 150M (TF-IDF) trên RQ1. Nếu không → dừng reframe.
 
-**Baseline H0 (encoder 150M):** `P1/Output/slm_tier2_v2_cv.json:5` và `P1/Code/tfidf_cv_v2.py:40`
+**Baseline H0 (encoder 150M):** `P1/Output/results_phase2/slm-tier2-v2-cv.json:5` và `P1/Code/tfidf_cv_v2.py:40`
 - V2 msg-enriched, 2250 alerts (12 pos / 2238 neg, prevalence 0.53%)
 - TF-IDF char_wb(2,5) 50k + LogReg balanced, **5-fold OOF (không leakage)**
 - **Global AP 0.254**, holdout 0.52, fold AP mean 0.32±0.27
@@ -82,11 +82,11 @@ Với NO-GO hiện tại, 3 hướng reframe:
 
 ## 4. Evidence files
 
-- `P1/Output/alerts_enriched_v2.jsonl` (V2)
-- `P1/Output/slm_tier2_v2_cv.json` (TF-IDF OOF 0.254)
-- `P1/Output/slm_fewshot_40.log` (0.5B 0.29, 1.5B 0.57, lat 10s/30s)
+- `P1/Output/data/alerts-enriched-v2.jsonl` (V2)
+- `P1/Output/results_phase2/slm-tier2-v2-cv.json` (TF-IDF OOF 0.254)
+- `P1/Output/logs/slm-fewshot-40.log` (0.5B 0.29, 1.5B 0.57, lat 10s/30s)
 - `C:\Users\BDTG\AppData\Local\Temp\opencode\tfidf_subset_ap.py` (fair 0.89 vs 0.57)
-- `P1/Output/hw_grid_partial.json` (estimate) + real latencies trên
+- `P1/Output/benchmarks/hw-grid-partial.json` (estimate) + real latencies trên
 - `P1/Code/slm_tier2.py:24,67,250` patched
 
 **Action cần quyết định:** Bạn muốn (a) thử LoRA 0.5B trên 2250 V2 (few hours train CPU? cần GPU) hay (b) chuyển sang BERT baseline để confirm H0 mạnh, hay (c) reframe paper sang "SLM không khả thi zero-shot trên OpTC, cần LoRA + token pruning" như `Note.md:111` gợi ý?
@@ -189,7 +189,7 @@ Với NO-GO hiện tại, 3 hướng reframe:
 - `P1/Code/tier3_ttp_build.py` (parse atomic YAML → chain)
 - `P1/Code/tier3_bert_test.py` + `P1/Output/bert-ttp-result.json` (AP=0.6603)
 - `P1/Code/tier3_lora_test.py` + `P1/Output/lora-ttp-result.json` (AP=0.1174)
-- `P1/Output/ttp_holdout.jsonl` (319 alerts)
+- `P1/Output/data/ttp_holdout.jsonl` (319 alerts)
 - `P1/Output/logs/bert-ttp.log`, `lora-ttp.log`
 - `data/atomic-red-team/art-repo/` (clone redcanaryco/atomic-red-team)
 
