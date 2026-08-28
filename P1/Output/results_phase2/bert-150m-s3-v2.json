@@ -1,0 +1,61 @@
+{
+  "S3_v2": {
+    "ap_mean": 0.005074810436480223,
+    "ap_std": 0.0012108263895903935,
+    "auc_mean": 0.2533310695642911,
+    "auc_std": 0.09578689707043468,
+    "per_fold": [
+      {
+        "eval_loss": 0.035138603299856186,
+        "eval_val_ap": 0.004124911428282215,
+        "eval_val_auc": 0.21037946428571427,
+        "eval_runtime": 28.9098,
+        "eval_samples_per_second": 15.566,
+        "eval_steps_per_second": 1.972,
+        "epoch": 3.0,
+        "fold": 1
+      },
+      {
+        "eval_loss": 0.036513715982437134,
+        "eval_val_ap": 0.003760594568454275,
+        "eval_val_auc": 0.1216517857142857,
+        "eval_runtime": 27.4198,
+        "eval_samples_per_second": 16.411,
+        "eval_steps_per_second": 2.079,
+        "epoch": 3.0,
+        "fold": 2
+      },
+      {
+        "eval_loss": 0.04040323570370674,
+        "eval_val_ap": 0.004777460187831768,
+        "eval_val_auc": 0.30636160714285715,
+        "eval_runtime": 27.8859,
+        "eval_samples_per_second": 16.137,
+        "eval_steps_per_second": 2.044,
+        "epoch": 3.0,
+        "fold": 3
+      },
+      {
+        "eval_loss": 0.057394176721572876,
+        "eval_val_ap": 0.00553943568619473,
+        "eval_val_auc": 0.22334079045488442,
+        "eval_runtime": 27.6742,
+        "eval_samples_per_second": 16.261,
+        "eval_steps_per_second": 2.06,
+        "epoch": 3.0,
+        "fold": 4
+      },
+      {
+        "eval_loss": 0.06423331797122955,
+        "eval_val_ap": 0.007171650311638127,
+        "eval_val_auc": 0.40492170022371365,
+        "eval_runtime": 27.8786,
+        "eval_samples_per_second": 16.141,
+        "eval_steps_per_second": 2.045,
+        "epoch": 3.0,
+        "fold": 5
+      }
+    ],
+    "note": "rerun S3 with python -u + save_strategy=no after previous hang"
+  }
+}

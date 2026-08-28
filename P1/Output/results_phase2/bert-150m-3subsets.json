@@ -1,0 +1,43 @@
+{
+  "subsets": [
+    {
+      "name": "S1_all3",
+      "n": 474,
+      "pos": 9,
+      "ap_mean": 0.0199,
+      "ap_std": 0.0058,
+      "auc_mean": 0.2349,
+      "auc_std": 0.1664,
+      "note": "5-fold CV, signal-rich subset (cmd+chain+events)"
+    },
+    {
+      "name": "S2_ge2",
+      "n": 1017,
+      "pos": 12,
+      "ap_mean": 0.0119,
+      "ap_std": 0.0048,
+      "auc_mean": 0.2644,
+      "auc_std": 0.143,
+      "note": "5-fold CV, partial signal subset"
+    },
+    {
+      "name": "S3_all",
+      "n": 2250,
+      "pos": 12,
+      "ap_mean": 0.0051,
+      "ap_std": 0.0012,
+      "auc_mean": 0.2533,
+      "auc_std": 0.0958,
+      "note": "5-fold CV v2 (rerun with python -u, reproducible within std=0.0012)"
+    }
+  ],
+  "interpretation": [
+    "S1 AP=0.020 cao gap 4x random (0.0053)",
+    "S1 > S2 > S3 = filter signal density giup BERT 4x",
+    "AUC < 0.3 tat ca: score nguoc, can threshold cao",
+    "AP van thua TF-IDF subset fair 0.89 rat xa"
+  ],
+  "timestamp": "2026-08-28",
+  "random_baseline": 0.0053,
+  "tfidf_subset_fair_ap": 0.89
+}
