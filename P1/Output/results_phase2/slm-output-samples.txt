@@ -1,0 +1,172 @@
+======================================================================
+TIER-2 SLM EXPLANATION SAMPLES (LoRA Qwen2.5-0.5B 1 epoch)
+Dataset: S1 (474 alerts, 9 positives, all 3 signal trục)
+Generated with batch=8, max_new_tokens=120, do_sample=False
+======================================================================
+
+SUMMARY:
+  n                        : 474
+  batch                    : 8
+  verdict_accuracy         : 0.029535864978902954
+  ttp_rate                 : 0.0
+  hallucination_rate       : 0.10126582278481013
+  latency_mean_sec         : 2.1014739320247986
+  latency_p95_sec          : 2.45341557264328
+  total_time_sec           : 996.1153008937836
+  decisions_per_sec        : 0.47584852835278646
+  decisions_per_hour       : 1713.0547020700312
+
+======================================================================
+SAMPLE 1-5: BENIGN ALERTS (ground truth label=0)
+======================================================================
+
+--- #1 | nid=8202 | true_label=0 | slm_verdict=1 | latency=2.40s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT SET (it doesn't do anything)
+TTP: None
+Explanation: The process appears to be benign as it performs no action without user intervention. It's not set to run any ATT&CK techniques, so there's no ATT&CK technique ID to consider. However, its behavior suggests it might be performing some kind of benign task that isn't flagged by ATT&CK. This could indicate potential malicious intent based on the context provided. But given the lack of ATT&CK-specific information, we can't
+
+--- #2 | nid=8188 | true_label=0 | slm_verdict=1 | latency=2.40s ---
+Verdict: MALICIOUS
+Subject: LogonUI.exe
+Action: Starts Process with Command: None
+TTP: None
+Explanation: The process starts without any ATT&CK technique evidence. It likely performs an action (in this case, not specified) that could be considered malicious. However, since no ATT&CK technique was used, this process is classified as benign. The output format is provided to indicate the classification. Note: This process is benign due to no ATT&CK technique being used. The output format is provided to indicate the classification. The process is benign due to
+
+--- #3 | nid=2608 | true_label=0 | slm_verdict=1 | latency=2.40s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT ENOUGH INFORMATION TO DETERMINE ACTION
+TTP: None
+Explanation: The process has not provided any action information to determine its malicious intent. It appears to be benign based on the lack of evidence for an ATT&CK technique.
+
+--- #4 | nid=7262 | true_label=0 | slm_verdict=1 | latency=2.40s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject:
+
+--- #5 | nid=9032 | true_label=0 | slm_verdict=1 | latency=2.40s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any action that would indicate malicious intent. It simply ran a benign command without any suspicious behavior. This process appears to be benign.
+
+======================================================================
+SAMPLE 6-10: MALICIOUS ALERTS (ground truth label=1)
+======================================================================
+
+--- #6 | nid=9242 | true_label=1 | slm_verdict=1 | latency=2.14s ---
+Verdict: MALICIOUS
+Subject: None
+Action: None
+TTP: None
+Explanation: The process performs no action and has no evidence to suggest it's malicious. It doesn't perform any ATT&CK techniques or have any suspicious behavior. The only evidence is that it runs a command without any context. This process seems benign. 
+Verdict: BENIGN
+Subject: None
+Action: None
+TTP: None
+Explanation: The process performs no action and has no evidence to suggest it's malicious. It doesn't perform any ATT&CK techniques or have any suspicious
+
+--- #7 | nid=8917 | true_label=1 | slm_verdict=1 | latency=2.33s ---
+Verdict: MALICIOUS
+Subject: None
+Action: None
+TTP: None
+Explanation: The process appears to be benign as it performs no malicious activity against the system. It's not performing any actions that could indicate a threat (e.g., downloading files, opening unknown ports) and doesn't seem to be using ATT&CK techniques. However, without more context, we can't definitively say it's benign. The only action mentioned is running a command, which isn't typical for a malicious process. Therefore, we consider it potentially malicious based on the lack of benign behavior
+
+--- #8 | nid=8198 | true_label=1 | slm_verdict=1 | latency=2.51s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT ENOUGH INFORMATION TO DETERMINE ACTION
+TTP: None
+Explanation: The given process has not provided enough information to determine its action or purpose. It only contains malicious commands that could indicate a potential threat. Therefore, the classification is Malicious. The process is benign as there is no malicious activity present. However, without more details about the process's behavior, we cannot definitively say whether it is benign or malicious. The process may be benign due to lack of malicious activity but could still pose a
+
+--- #9 | nid=8889 | true_label=1 | slm_verdict=1 | latency=2.12s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT ENOUGH INFORMATION TO DETERMINE ACTION
+TTP: None
+Explanation: The given process has not provided enough information to determine its action or purpose. It only mentions a malicious command but lacks details about what it does with that command. To classify this as benign or malicious, more context would be needed. In this case, we cannot determine an appropriate classification based solely on the given information. Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT ENOUGH INFORMATION TO DETER
+
+--- #10 | nid=8676 | true_label=1 | slm_verdict=1 | latency=2.12s ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: NOT ENOUGH INFORMATION TO DETERMINE ACTION
+TTP: None
+Explanation: The given chain lacks sufficient information to determine the action that should be taken against the main subject process. It only mentions one command but doesn't provide any details about what the process is doing. Therefore, we cannot classify this as benign or malicious based on the provided evidence. To classify it, more context would be needed. However, for now, we can say it's likely malicious due to the lack of relevant information. Please provide
+
+======================================================================
+SAMPLE 11-13: LOOP/REPETITION FAILURES (SLM lặp block)
+======================================================================
+
+--- #11 | nid=7262 | repetition_count=4 ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject:
+
+--- #12 | nid=9253 | repetition_count=4 ---
+Verdict: MALICIOUS
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject: <main subject process>
+Action: None (process did not perform any action)
+TTP: None
+Explanation: The process did not perform any ATT&CK technique evidence
+Subject:
+
+--- #13 | nid=6631 | repetition_count=4 ---
+Verdict: MALICIOUS
+Subject: TaskKill.exe
+Action: Task killed by TaskKiller
+TTP: None
+Explanation: The process was not involved in any ATT&CK technique.
+Subject: TaskKill.exe
+Action: Task killed by TaskKiller
+TTP: None
+Explanation: The process was not involved in any ATT&CK technique.
+Subject: TaskKill.exe
+Action: Task killed by TaskKiller
+TTP: None
+Explanation: The process was not involved in any ATT&CK technique. 
+Verdict: BENIGN
+Subject: TaskKill
+
+======================================================================
+FAILURE MODES SUMMARY
+======================================================================
+  Verdict inconsistency (MALICIOUS + BENIGN trong cùng output): 43/474 = 9.1%
+  Loop/repetition (>3 lần Subject:): 17/474 = 3.6%
+  Generic filler ("<main subject>" hoặc "NOT SET"): 368/474 = 77.6%
+  TTP detected (any Txxxx ID): 0/474 = 0.0%
