@@ -1,0 +1,715 @@
+{
+  "system": {
+    "platform": true,
+    "cpu_count_physical": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq_mhz": 2496.0,
+    "ram_total_gb": 15.835010528564453,
+    "gpu_name": "NVIDIA GeForce GTX 1650 Ti",
+    "python": "3.11.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.16.1"
+  },
+  "runs": [
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "lora": true,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.62,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 2.024365165233612,
+        "latency_p95_sec": 2.2124096751213074,
+        "latency_min_sec": 1.8556441068649292,
+        "latency_max_sec": 3.184632658958435,
+        "total_time_sec": 202.44055080413818,
+        "decisions_per_sec": 0.49397217900651874,
+        "decisions_per_hour": 1778.2998444234674,
+        "system_metrics": {
+          "duration_sec": 201.98969221115112,
+          "n_samples": 402,
+          "cpu_pct": {
+            "mean": 26.107960199004975,
+            "max": 65.2,
+            "min": 5.5
+          },
+          "ram_pct": {
+            "mean": 71.61492537313433,
+            "max": 72.5,
+            "min": 70.7
+          },
+          "gpu_pct": {
+            "mean": 88.38308457711443,
+            "max": 100.0,
+            "min": 22.0
+          },
+          "vram_used_gb": {
+            "mean": 1.6090015297505393,
+            "max": 1.7065582275390625,
+            "min": 1.5807952880859375
+          },
+          "gpu_temp_c": {
+            "mean": 63.41542288557214,
+            "max": 64.0,
+            "min": 59.0
+          },
+          "proc_cpu_pct": {
+            "mean": 85.4268656716418,
+            "max": 115.6,
+            "min": 0.0
+          },
+          "proc_rss_gb": {
+            "mean": 1.6234154013258901,
+            "max": 1.6366500854492188,
+            "min": 1.5487518310546875
+          }
+        }
+      },
+      "samples": [
+        {
+          "nid": "8202",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSuspicious Activity, subject /Device/HarddiskVolume1/Windows/system32/svchost.exe | cmd: C:/ncr/srvstart/srvstart.exe svc nodemanager -c C:/ncr/distributor/nodemanager/nodemanager.ini, subject /Device/HarddiskVolume1/Windows/system32/wbem/wmiprvse.exe | cmd: None -> subject /Device/HarddiskVolume1/Windows/system32/svchost.exe | cmd: C:/ncr/srvstart/srvstart.exe"
+        },
+        {
+          "nid": "8188",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSubject, LogonUI.exe, cmd: wininit.exe, File, The process LogonUI.exe is running as an administrator and has no apparent effect on the system. It's likely being used for administrative tasks or to log in remotely.\nVerdict, LogonUI.exe, cmd: wininit.exe, File, The process LogonUI.exe is running with elevated privileges and is using the Windows System Tools (Wininit) utility to start another process. This could indicate a potential security risk if not handled properly.\nClassification, Process\nSubject, /Device/Hard"
+        },
+        {
+          "nid": "2608",
+          "is_mal": 0,
+          "gen": ": Security - Process - Windows Defender Firewall - Filter - Windows Defender Firewall with Advanced Security (V1) - Filter Enabled | Classification: Low - This process appears to be performing basic network traffic analysis using Windows Defender Firewall with Advanced Security filters. It's not performing any critical tasks but is still useful for monitoring network activity. The classification here is low due to the presence of other security tools like Windows Defender Firewall.\nProcess: Windows Defender Firewall with Advanced Security (V1)\nAction: Filter Enabled\nTTP: Not applicable in this case as there are no TTPs mentioned.\nExplanation: Security -"
+        },
+        {
+          "nid": "7262",
+          "is_mal": 0,
+          "gen": "Classification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject, Action, TTP, Explanation\nClassification: Suspicious Process\nVerdict, Subject,"
+        },
+        {
+          "nid": "9032",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSubject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: None | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1 -> Subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1 | subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0"
+        },
+        {
+          "nid": "2562",
+          "is_mal": 0,
+          "gen": "Classification, Process\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action, TTP, Explanation\nVerdict, Subject, Action,"
+        },
+        {
+          "nid": "7626",
+          "is_mal": 0,
+          "gen": ": Security - Process: None | Process: None | TTP: None | Classification: Not Applicable (None) - This process appears to be performing a benign task without any malicious intent, as it does not open any files or perform any actions that could pose a risk to the system. It also does not interact with other processes in a way that would indicate a potential security threat. The only action taken by this process is to run a batch file, which is generally considered harmless. However, since no malicious activity was detected, this classification can be considered appropriate for this process. The Verdict"
+        },
+        {
+          "nid": "6937",
+          "is_mal": 0,
+          "gen": "Classification]|\nOutput: Verdict, Subject, Action, TTP, Explanation\nClassification]|\nSubject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1 -> Subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1 | Verdict, Subject, Action, TTP, Explanation\nClassification]|\nVerdict, Subject, Action"
+        },
+        {
+          "nid": "6484",
+          "is_mal": 0,
+          "gen": ": Security Risk - Malware Execution; Process Name: Google Update; Command: fontdrvhost.exe; Tool: Not Applicable; Classification: High\nVerdict, Subject, Action, TTP, Explanation: Security Risk - Malware Execution; Process Name: Google Update; Command: fontdrvhost.exe; Tool: Not Applicable; Classification: Medium\nVerdict, Subject, Action, TTP, Explanation: Security Risk - Malware Execution; Process Name: Google Update; Command: fontdrvhost.exe; Tool: Not Applicable; Classification: Low\nVerdict, Subject,"
+        },
+        {
+          "nid": "9330",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSuspicious Activity, subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1, Output: Verdict, subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1, Output: Verdict, subject /Device/HarddiskVolume1/Windows/system32/conhost.exe | cmd: /??/C"
+        },
+        {
+          "nid": "6679",
+          "is_mal": 0,
+          "gen": ": Security Analysis | Process: Windows Defender Antivirus (V1) | Process: Windows Defender Antivirus (V1) | Process: Windows Defender Antivirus (V1) | Output: None | Verdict, Subject, Action, TTP, Explanation: Security Analysis | Process: Windows Defender Antivirus (V1) | Process: Windows Defender Antivirus (V1) | Process: Windows Defender Antivirus (V1) | Output: None\nSubject: Notepad++ | Command: Notepad++ | Output: None | Verdict, Subject, Action, TTP, Explanation"
+        },
+        {
+          "nid": "6809",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSuspicious Activity, System File Security (SFS), Taskkill, Windows Defender, Malware scan required, Suspicious Activity, System File Security (SFS), Taskkill, Windows Defender, Malware scan required, Suspicious Activity, System File Security (SFS), Taskkill, Windows Defender, Malware scan required, Suspicious Activity, System File Security (SFS), Taskkill, Windows Defender, Malware scan required, Suspicious Activity, System File Security (SFS), Taskkill, Windows Defender, Malware scan required\nVerdict, Subject,"
+        },
+        {
+          "nid": "7694",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSuspicious Activity, subject /Device/HarddiskVolume1/Windows/SysWOW64/OneDriveSetup.exe | cmd: C:/Windows/SysWOW64/OneDriveSetup.exe /uninstall  /peruser  /childprocess | subject /Device/HarddiskVolume1/Windows/SysWOW64/OneDriveSetup.exe | cmd: C:/Windows/SysWOW64/OneDriveSetup.exe /uninstall  /peruser  /childprocess -> subject /Device/HarddiskVolume1/Windows/S"
+        },
+        {
+          "nid": "9116",
+          "is_mal": 0,
+          "gen": "Classification, Process\nSubject /Device/HarddiskVolume1/Windows/system32/svchost.exe | cmd: /??/C:/Windows/system32/conhost.exe 0x4 | TTP, File System, Command, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System, File System,"
+        },
+        {
+          "nid": "7301",
+          "is_mal": 0,
+          "gen": ": Security - Process Malware Detection - Google Update 1.0 | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe | File - fontdrvhost.exe |"
+        },
+        {
+          "nid": "7272",
+          "is_mal": 0,
+          "gen": ": Security - Process DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity -> Process DeleteArchiveSecurity (Verdict) - Task DeleteArchiveSecurity ->"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.84,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 1.822032525539398,
+        "latency_p95_sec": 2.061339884996414,
+        "latency_min_sec": 1.6845626533031464,
+        "latency_max_sec": 2.6032326221466064,
+        "total_time_sec": 182.20575523376465,
+        "decisions_per_sec": 0.54883008427315,
+        "decisions_per_hour": 1975.7883033833402,
+        "system_metrics": {
+          "duration_sec": 181.9423053264618,
+          "n_samples": 362,
+          "cpu_pct": {
+            "mean": 28.19226519337016,
+            "max": 77.3,
+            "min": 8.8
+          },
+          "ram_pct": {
+            "mean": 71.5317679558011,
+            "max": 73.0,
+            "min": 70.7
+          },
+          "gpu_pct": {
+            "mean": 95.4475138121547,
+            "max": 100.0,
+            "min": 40.0
+          },
+          "vram_used_gb": {
+            "mean": 1.5879478876103355,
+            "max": 1.7095184326171875,
+            "min": 1.5398406982421875
+          },
+          "gpu_temp_c": {
+            "mean": 64.86740331491713,
+            "max": 66.0,
+            "min": 62.0
+          },
+          "proc_cpu_pct": {
+            "mean": 94.81298342541436,
+            "max": 106.2,
+            "min": 0.0
+          },
+          "proc_rss_gb": {
+            "mean": 1.6343498124602092,
+            "max": 1.6345367431640625,
+            "min": 1.6339950561523438
+          }
+        }
+      },
+      "samples": [
+        {
+          "nid": "8202",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of steps to start multiple services on the hard disk volume 1.\n\nSubject: \n- Device: HarddiskVolume1\n- Volume Type: Windows system32\n- Operating System: Windows Server 2012 R2\n- File System: NTFS\n- Service Name: svchost.exe\n- Process ID: 12345\n- Command Line: None\n\nAction:\n- Start Services: svchost.exe\n- Start Services: svchost.exe\n- Start Services: svchost.exe"
+        },
+        {
+          "nid": "8188",
+          "is_mal": 0,
+          "gen": "Subject: WinlogonUI.exe\nAction: logon\nTTP: None\nExplanation: The process 'WinlogonUI.exe' performs a logon operation by executing the 'wininit.exe' command to start the Windows logon utility.\n\nSubject: cmd: wininit.exe\nAction: logon\nTTP: None\nExplanation: This process logs in using the 'wininit.exe' command.\n\nSubject: file /Device/HarddiskVolume1/WINDOWS/SYSTEM32/SERVICES.EXE\nAction: logon\nTTP: None\nExplanation:"
+        },
+        {
+          "nid": "2608",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing network traffic analysis on Windows systems.\n\nSubject: This process is analyzing network traffic between different devices connected to the system.\n\nAction: It is using various commands to gather information about network connections and processes running on the system.\n\nTTP: The process employs various methods such as `netflow`, which is used for network flow monitoring, to analyze the network traffic.\n\nExplanation: The process is utilizing tools like `netflow` to monitor and analyze network traffic patterns across multiple devices connected to the system. By sending packets from one device to another through the network, the process"
+        },
+        {
+          "nid": "7262",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to forcefully shut down the system by using the Windows Command Prompt (cmd.exe) in a loop.\n\nSubject: The process starts with the command \"cmd: None\" which indicates that no specific action was taken yet.\n\nAction: The process then proceeds to execute multiple commands sequentially:\n\n1. \"cmd: None\" followed by \"/??/C:/Windows/system32/conhost.exe 0xffffffff -ForceV1\"\n   This command attempts to force shutdown of the system by executing a command on the specified directory.\n\n2. \"subject /"
+        },
+        {
+          "nid": "9032",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to forcefully terminate the Windows system services.\n\nSubject: ConHost.exe (conhost.exe)\nAction: Terminate processes with PID 0xffffffff\nTTP: Using the /??/C:/Windows/system32/conhost.exe command for each process identified in the output sequence.\n\nExplanation: This process is terminating all processes associated with the \"ConHost\" service on the hard disk volume named \"HarddiskVolume1\". It does so by using the /??/C:/Windows/system32/conhost.exe command for each identified process,"
+        },
+        {
+          "nid": "2562",
+          "is_mal": 0,
+          "gen": "Verdict: The process appears to be performing a network scan or monitoring activity on multiple systems across different IP addresses.\n\nSubject: The process seems to be scanning for vulnerabilities in various systems using services like DWM (Distributed Window Manager), which could indicate potential security issues.\n\nAction: The process is attempting to capture traffic from one system to another, likely to gather information about the target system's status or behavior.\n\nTTP: This process employs TCP SYN packets to establish connections with other systems, then captures data streams between them using NetFlow protocols.\n\nExplanation: The process uses TCP SYN packets to initiate"
+        },
+        {
+          "nid": "7626",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to delete an archive file named \"DeleteArchiveSecurity.bat\".\nSubject: /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: /c \"C:/ncr/DeleteArchiveSecurity.bat\"\nTTP: None\nExplanation: This process is executing a batch script (cmd) that deletes the specified archive file using the ConHost service.\n\nClassification: Command-line execution with batch scripting. The process is utilizing the ConHost service for file deletion. However, there's no indication of any user interaction or command substitution within"
+        },
+        {
+          "nid": "6937",
+          "is_mal": 0,
+          "gen": "Verdict: The process appears to be performing a series of commands on multiple hard disk volumes in a Windows environment.\n\nSubject: Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: Running a command with the path \"/c 'C:/ncr/DeleteArchiveSecurity.bat'\"\nTTP: Command execution through a batch file\n\nSubject: Device/HarddiskVolume1/Windows/system32/svchost.exe\nAction: Not specified\nTTP: No specific action taken for this process\n\nSubject: Device/HarddiskVolume1/Program Files (x8"
+        },
+        {
+          "nid": "6484",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to update Google's Update service on the Windows system.\n\nSubject: /Device/HarddiskVolume1/Windows/system32/cmd.exe\nAction: Running command: None\nTTP: None\n\nExplanation:\nThe process is executing multiple commands sequentially without any specific action or intent. It starts with running the 'cmd' command in the specified directory (/Device/HarddiskVolume1/Windows/system32/cmd.exe), then continues with various other commands like 'lsass.exe', 'svchost.exe', and 'fontdrvhost.exe"
+        },
+        {
+          "nid": "9330",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to delete an archive file from the system.\n\nSubject: /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: /c \"C:/ncr/DeleteArchiveSecurity.bat\"\nTTP: Command execution with a batch script\n\nExplanation: This process involves executing a batch script named \"DeleteArchiveSecurity.bat\" in the Windows System directory. It then performs various actions on the hard disk volume, including deleting an archive file using the command line utility \"cmd\". Additionally, there's a sub-process that runs another batch"
+        },
+        {
+          "nid": "6679",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to delete an archive file named \"DeleteArchiveSecurity.bat\".\nSubject: /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: /c \"C:/ncr/DeleteArchiveSecurity.bat\"\nTTP: Command execution\nExplanation: This process uses the Windows command line interface (cmd) to execute a batch script named \"DeleteArchiveSecurity.bat\". It then performs various actions on the system files, including renaming directories, deleting files, and executing other commands.\n\nThis process appears to be part of a larger security analysis"
+        },
+        {
+          "nid": "6809",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to remove the OneDrive executable file from the system.\n\nSubject: /Device/HarddiskVolume1/Windows/system32/svchost.exe\nAction: taskkill /f /im OneDrive.exe\nTTP: Running svchost.exe with the command-line option -f to forcefully terminate the specified process (OneDrive.exe).\n\nExplanation: This process is attempting to remove the OneDrive executable file by terminating it using the Task Manager's kill process command. It is executing multiple steps in sequence:\n\n1. First, it runs"
+        },
+        {
+          "nid": "7694",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing an uninstallation operation on multiple files in the OneDriveSetup directory.\n\nSubject: /Device/HarddiskVolume1/Windows/SysWOW64/OneDriveSetup.exe\nAction: /uninstall\nTTP: C:/Windows/SysWOW64/OneDriveSetup.exe /uninstall  /peruser  /childprocess\nExplanation: This process is attempting to uninstall the OneDriveSetup file from the OneDriveSetup directory using the Windows PowerShell command-line interface (cmd.exe). It performs an uninstallation operation by executing the /"
+        },
+        {
+          "nid": "9116",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a service activation on multiple Windows services.\n\nSubject: The process is running as an administrator with elevated privileges.\n\nAction: It is executing the following commands in sequence:\n1. Running \"cmd: None\" to check if any other processes are using the same resources.\n2. Executing \"subject %SystemRoot%/system32/csrss.exe\" which is a system service that manages the Windows resource scheduler.\n3. Executing \"subject /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\" which"
+        },
+        {
+          "nid": "7301",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing an update to Google's Update software on the hard disk volume named 'HarddiskVolume1' located in the 'Program Files (x86)' directory within the 'Google' folder.\n\nSubject: This process involves updating the Google Update software on the specified hard drive.\n\nAction: It uses the 'cmd' command to execute two commands sequentially:\n\n1. First, it runs the 'googleupdate.exe' file from the 'C:\\Program Files (x86)\\Google\\Update' directory using the 'cmd' command with the following arguments:\n   -"
+        },
+        {
+          "nid": "7272",
+          "is_mal": 0,
+          "gen": "Verdict: The process is performing a series of commands to delete an archive file named \"DeleteArchiveSecurity.bat\".\nSubject: Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: Running the command \"cmd: C:/Windows/SYSTEM32/cmd.exe /c 'C:/ncr/DeleteArchiveSecurity.bat'\"\nTTP: Command execution\nExplanation: This process is executing a batch script (cmd) located at C:\\ncnr\\DeleteArchiveSecurity.bat which deletes the specified archive file.\n\nThis process appears to be part of a larger system that performs various tasks"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.77,
+        "loop_rate": 0.01,
+        "latency_mean_sec": 2.09146719455719,
+        "latency_p95_sec": 2.2901782393455505,
+        "latency_min_sec": 1.874237984418869,
+        "latency_max_sec": 2.480406880378723,
+        "total_time_sec": 209.14971780776978,
+        "decisions_per_sec": 0.4781263921757253,
+        "decisions_per_hour": 1721.255011832611,
+        "system_metrics": {
+          "duration_sec": 209.03574347496033,
+          "n_samples": 416,
+          "cpu_pct": {
+            "mean": 30.36274038461539,
+            "max": 75.8,
+            "min": 5.0
+          },
+          "ram_pct": {
+            "mean": 71.5076923076923,
+            "max": 74.9,
+            "min": 68.0
+          },
+          "gpu_pct": {
+            "mean": 95.51923076923077,
+            "max": 100.0,
+            "min": 43.0
+          },
+          "vram_used_gb": {
+            "mean": 1.4519206102077777,
+            "max": 1.6141510009765625,
+            "min": 1.3603248596191406
+          },
+          "gpu_temp_c": {
+            "mean": 64.05528846153847,
+            "max": 66.0,
+            "min": 56.0
+          },
+          "proc_cpu_pct": {
+            "mean": 87.65697115384616,
+            "max": 106.2,
+            "min": 0.0
+          },
+          "proc_rss_gb": {
+            "mean": 1.6129290599089403,
+            "max": 1.6130409240722656,
+            "min": 1.6126861572265625
+          }
+        }
+      },
+      "samples": [
+        {
+          "nid": "8202",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1. Classify the process as:\n1"
+        },
+        {
+          "nid": "8188",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. Network Service Restricted\n2. Local Service Restricted\n3. Classify as Class 1\nAction: Classify the process as:\n1. Classify as Class 1\nTTP: Classify the process as:\n1. Classify as Class 1\n\nQuestion: What is the provenance chain of the process \"C:\\lwabeat\\lwabeat.exe\"?"
+        },
+        {
+          "nid": "2608",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. Process: System32/WMI/WMI.exe\n2. Action: Execute\n3. TTP: None\n\nQuestion: What is the provenance chain of the process System32/WMI/WMI.exe?"
+        },
+        {
+          "nid": "7262",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. System\n2. System\n3. System\n4. System\n5. System\n6. System\n7. System\n8. System\n9. System\n10. System\n11. System\n12. System\n13. System\n14. System\n15. System\n16. System\n17. System\n18. System\n19. System\n20. System\n21. System\n22. System\n23. System\n24."
+        },
+        {
+          "nid": "9032",
+          "is_mal": 0,
+          "gen": "Verdict: Classifier, Subject, Action, TTP, Explanation\nSubject: Windows/system32/conhost.exe\nAction: Running\nTTP: Running\nExplanation: The subject is running the process \"Windows/system32/conhost.exe\" on the device \"Device/HarddiskVolume1\"."
+        },
+        {
+          "nid": "2562",
+          "is_mal": 0,
+          "gen": "Verdict: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as: Classify as:"
+        },
+        {
+          "nid": "7626",
+          "is_mal": 0,
+          "gen": "Verdict: Classifier, Subject, Action, TTP, Explanation\nSubject: /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe\nAction: C:/Windows/SYSTEM32/cmd.exe /c \"C:/ncr/DeleteArchiveSecurity.bat\"\nTTP: C:/Windows/SYSTEM32/cmd.exe /c \"C:/ncr/DeleteArchiveSecurity.bat\"\nExplanation: The subject is deleting an archive file named \"C:/ncr/DeleteArchiveSecurity.bat"
+        },
+        {
+          "nid": "6937",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. DeleteArchiveSecurity.bat\n2. C:/ncr/DeleteArchiveSecurity.bat\n3. C:/Windows/system32/cmd.exe\n4. C:/Windows/system32/cmd.exe\n5. C:/Windows/system32/svchost.exe\n6. C:/Windows/system32/svchost.exe\n7. C:/Windows/system32/conhost.exe\n8. C:/Windows/system32/con"
+        },
+        {
+          "nid": "6484",
+          "is_mal": 0,
+          "gen": "Verdict: Classifier, Subject, Action, TTP, Explanation\nSubject: Subject is a process that is running in the Windows operating system. It is a Windows service.\nAction: The process is running a Windows service.\nTTP: The process is running a Windows service.\nExplanation: The subject is a Windows service running a Windows service."
+        },
+        {
+          "nid": "9330",
+          "is_mal": 0,
+          "gen": "1. Subject: Windows/System32/cmd.exe\n2. Action: DeleteArchiveSecurity.bat\n3. TTP: C:\\ncr\\DeleteArchiveSecurity.bat\n4. Explanation: DeleteArchiveSecurity.bat is a command that deletes an archive file.\n\nQuestion: What is the provenance chain of a process?"
+        },
+        {
+          "nid": "6679",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. DeleteArchiveSecurity.bat\n2. DeleteArchiveSecurity.bat\n3. DeleteArchiveSecurity.bat\n4. DeleteArchiveSecurity.bat\n5. DeleteArchiveSecurity.bat\n6. DeleteArchiveSecurity.bat\n7. DeleteArchiveSecurity.bat\n8. DeleteArchiveSecurity.bat\n9. DeleteArchiveSecurity.bat\n10. DeleteArchiveSecurity.bat\n11. DeleteArchiveSecurity.bat\n12. DeleteArchiveSecurity."
+        },
+        {
+          "nid": "6809",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. System\n2. System\n3. System\n4. System\n5. System\n6. System\n7. System\n8. System\n9. System\n10. System\n11. System\n12. System\n13. System\n14. System\n15. System\n16. System\n17. System\n18. System\n19. System\n20. System\n21. System\n22. System\n23. System\n24."
+        },
+        {
+          "nid": "7694",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. System32/OneDriveSetup.exe\n2. KickoffAutoLoginRandom\n3. C:\\Windows\\SysWOW64\\OneDriveSetup.exe\n4. C:\\Windows\\SysWOW64\\OneDriveSetup.exe\n5. C:\\Windows\\SysWOW64\\OneDriveSetup.exe\n6. C:\\Windows\\SysWOW64\\OneDriveSetup.exe\n7. C:\\Windows\\SysWOW64\\"
+        },
+        {
+          "nid": "9116",
+          "is_mal": 0,
+          "gen": "Verdict: Classify the process as:\n1. System32/csrss.exe\n2. cmd: None\n3. subject %SystemRoot%/system32/csrss.exe\n4. subject /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\n5. subject /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\n6. subject /Device/HarddiskVolume1/Program Files (x86)/Google"
+        },
+        {
+          "nid": "7301",
+          "is_mal": 0,
+          "gen": "Chain: subject /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe | cmd: \"C:/Program Files (x86)/Google/Update/GoogleUpdate.exe\" /ua /installsource core | subject /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe | cmd: \"fontdrvhost.exe\" | subject /Device/HarddiskVolume1/Windows/SYSTEM32/cmd.exe | cmd: None | subject /"
+        },
+        {
+          "nid": "7272",
+          "is_mal": 0,
+          "gen": "1. Subject: /Device/HarddiskVolume1/Windows/system32/conhost.exe\n2. Action: DeleteArchiveSecurity.bat\n3. TTP: DeleteArchiveSecurity.bat\n4. Explanation: DeleteArchiveSecurity.bat is a command that deletes an archive file.\n\nQuestion: What is the provenance chain of a process?"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen3-0.6B",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.75,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 2.3583448219299314,
+        "latency_p95_sec": 2.6520039439201355,
+        "latency_min_sec": 2.203762710094452,
+        "latency_max_sec": 3.086505115032196,
+        "total_time_sec": 235.84180760383606,
+        "decisions_per_sec": 0.4240130323626873,
+        "decisions_per_hour": 1526.4469165056742,
+        "system_metrics": {
+          "duration_sec": 235.66260075569153,
+          "n_samples": 469,
+          "cpu_pct": {
+            "mean": 20.110234541577828,
+            "max": 94.7,
+            "min": 3.9
+          },
+          "ram_pct": {
+            "mean": 67.3865671641791,
+            "max": 70.5,
+            "min": 64.7
+          },
+          "gpu_pct": {
+            "mean": 96.92537313432835,
+            "max": 100.0,
+            "min": 22.0
+          },
+          "vram_used_gb": {
+            "mean": 2.18912762314526,
+            "max": 2.2055397033691406,
+            "min": 1.9653053283691406
+          },
+          "gpu_temp_c": {
+            "mean": 61.57142857142857,
+            "max": 64.0,
+            "min": 53.0
+          },
+          "proc_cpu_pct": {
+            "mean": 86.18891257995735,
+            "max": 106.2,
+            "min": 0.0
+          },
+          "proc_rss_gb": {
+            "mean": 1.6451989277593617,
+            "max": 1.6953811645507812,
+            "min": 1.5454673767089844
+          }
+        }
+      },
+      "samples": [
+        {
+          "nid": "8202",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a system service that is being managed and controlled by a third-party application. The action is to manage and control the system services. The TTP is a type of threat that involves the management of system services. The explanation is that the process is a system service that is being managed and controlled by a third-party application.\nAnswer:\n\nVerdict: The process is a system service that is being managed and controlled by a third-party application. The action is to manage and control the system services. The TTP is a type of threat that involves the management of"
+        },
+        {
+          "nid": "8188",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: Invalid\nSubject: LogonUI.exe\nAction: Invalid\nTTP: Invalid\nExplanation: The process is invalid. The subject is LogonUI.exe, but the action is invalid. The TTP is invalid. The explanation is that the process is invalid due to the lack of a valid action command and the TTP is invalid. The subject is LogonUI.exe, but the action is invalid. The TTP is invalid. The explanation is that the process is invalid due to the lack of a valid action command and the TTP is invalid.\n\nThe"
+        },
+        {
+          "nid": "2608",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a system service that is being monitored for potential security threats. Subject: /Device/HarddiskVolume1/Windows/system32/services.exe, Action: Monitoring, TTP: System Service Monitoring, Explanation: The process is a system service that is being monitored for potential security threats. The network flow data indicates that the service is being used to monitor system resources, which could be a sign of potential security issues.\n\n**Answer:**\nVerdict: The process is a system service that is being monitored for potential security threats. Subject: /Device/Hard"
+        },
+        {
+          "nid": "7262",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a malicious process that is attempting to execute a command-line interface (cmd.exe) within a system32 directory. The process is classified as a TTP (Technical Threat Type) and is an example of a malicious activity that involves exploiting a system component to gain unauthorized access.\nAnswer:\n\nVerdict: The process is a malicious process that is attempting to execute a command-line interface (cmd.exe) within a system32 directory. The process is classified as a TTP (Technical Threat Type) and is an example of a malicious activity that involves exploiting a"
+        },
+        {
+          "nid": "9032",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a malicious process that is attempting to execute arbitrary code. The subject is /Device/HarddiskVolume1/Windows/system32/conhost.exe. The action is to execute arbitrary code. The TTP is \"Malicious Code Execution\". The explanation is that the process is a malicious process that is attempting to execute arbitrary code.\nAnswer:\n\nVerdict: The process is a malicious process that is attempting to execute arbitrary code. The subject is /Device/HarddiskVolume1/Windows/system32/conhost.exe. The action is to execute arbitrary code"
+        },
+        {
+          "nid": "2562",
+          "is_mal": 0,
+          "gen": "Answer:\nVerdict: Process is a system process that is running on a Windows system. The subject is the system, and the action is to execute the \"dwm.exe\" command. The TTP is \"system process execution\". The explanation is that the process is a system process that is running on a Windows system, and it is executing the \"dwm.exe\" command.\nAnswer:\nVerdict: Process is a system process that is running on a Windows system. The subject is the system, and the action is to execute the \"dwm.exe\" command. The TTP is"
+        },
+        {
+          "nid": "7626",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Windows/system32/conhost.exe\nAction: Update\nTTP: Update\nExplanation: The process is an automated update of the system, specifically updating the Windows operating system. The action involves executing a batch file named DeleteArchiveSecurity.bat, which is part of the Windows service, to perform an update. The TTP is the technical threat type, and the explanation details the process and its purpose.\nAnswer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Windows/system32"
+        },
+        {
+          "nid": "6937",
+          "is_mal": 0,
+          "gen": "The output should be in the format: [Verdict] [Subject] [Action] [TTP] [Explanation]\nAnswer:\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Windows/system32/conhost.exe\nAction: Execution of a command\nTTP: Command and Control\nExplanation: The process is successfully executed by executing the command to delete the archive security file, which is part of the Windows system services. The command is executed using the svchost.exe process, which is a system service responsible for managing system services. The action involves running a"
+        },
+        {
+          "nid": "6484",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\nAction: Execution of a command\nTTP: Automated Login\nExplanation: The process is executing an automated login script to update Google's Update program. The script uses the command-line interface (cmd.exe) to run the necessary commands, which is part of the Windows security update process. The TTP is related to automated login, and the action is the execution of the update program.\nAnswer:\n\nVerdict: Success\nSubject: /"
+        },
+        {
+          "nid": "9330",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file. The subject is the system32 directory, and the action is to delete the file. The TTP is a type of malicious activity, and the explanation is that the process is designed to delete the archive file.\nAnswer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file. The subject is the system32 directory, and the action is to delete the file. The TTP is a type of malicious activity, and the explanation is that the process is"
+        },
+        {
+          "nid": "6679",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file. The subject is a malicious process that is attempting to delete an archive file. The action is to delete the archive file. The TTP is a type of attack that involves deleting files. The explanation is that the process is a malicious process that is attempting to delete an archive file.\nAnswer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file. The subject is a malicious process that is attempting to delete an archive file. The action is to delete the archive file"
+        },
+        {
+          "nid": "6809",
+          "is_mal": 0,
+          "gen": "Answer:\nVerdict: The process is a system cleanup and maintenance routine.\nSubject: /Device/HarddiskVolume1/Windows/system32/svchost.exe\nAction: System cleanup and maintenance\nTTP: System Cleanup and Maintenance\nExplanation: The process is a system cleanup and maintenance routine, which involves running system services and updating the system to ensure optimal performance and security.\nAnswer:\nVerdict: The process is a system cleanup and maintenance routine.\nSubject: /Device/HarddiskVolume1/Windows/system32/svchost.exe\nAction: System cleanup and maintenance"
+        },
+        {
+          "nid": "7694",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Windows/SysWOW64/OneDriveSetup.exe\nAction: Uninstall\nTTP: Disruption of System Services\nExplanation: The process is uninstalling a system component from the Windows SysWOW64 directory, which is a common practice to remove unnecessary software. The uninstall command is executed using the specified parameters, and the process is successful.\nAnswer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Windows/SysWOW64/OneDriveSetup.exe"
+        },
+        {
+          "nid": "9116",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a system update process. Subject: /Device/HarddiskVolume1/Windows/system32/svchost.exe, Action: System Update, TTP: System Update, Explanation: The process is a system update process that involves executing the Google Update service, which is part of the Windows Update functionality.\n\n**Answer:**\nVerdict: The process is a system update process. Subject: /Device/HarddiskVolume1/Windows/system32/svchost.exe, Action: System Update, TTP: System Update, Explanation: The"
+        },
+        {
+          "nid": "7301",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\nAction: Install\nTTP: Install\nExplanation: The process is installing the Google Update software on the system. The installation is successful.\nAnswer:\n\nVerdict: Success\nSubject: /Device/HarddiskVolume1/Program Files (x86)/Google/Update/GoogleUpdate.exe\nAction: Install\nTTP: Install\nExplanation: The process is installing the Google Update software on the system. The installation is successful"
+        },
+        {
+          "nid": "7272",
+          "is_mal": 0,
+          "gen": "Answer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file from a system. The subject is a malicious process that is attempting to delete an archive file from a system. The action is to delete the archive file. The TTP is a type of attack that involves deleting files. The explanation is that the process is a malicious process that is attempting to delete an archive file from a system.\nAnswer:\n\nVerdict: The process is a malicious process that is attempting to delete an archive file from a system. The subject is a malicious process that is attempting to delete"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.8,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 5.202858924865723,
+        "latency_p95_sec": 5.78252375125885,
+        "latency_min_sec": 4.874746799468994,
+        "latency_max_sec": 7.438224256038666,
+        "total_time_sec": 520.2898941040039,
+        "decisions_per_sec": 0.19220054268440276,
+        "decisions_per_hour": 691.9219536638499,
+        "system_metrics": {
+          "duration_sec": 519.8338823318481,
+          "n_samples": 1035,
+          "cpu_pct": {
+            "mean": 18.13304347826087,
+            "max": 42.1,
+            "min": 3.5
+          },
+          "ram_pct": {
+            "mean": 65.08376811594204,
+            "max": 65.5,
+            "min": 64.5
+          },
+          "gpu_pct": {
+            "mean": 95.00869565217391,
+            "max": 100.0,
+            "min": 27.0
+          },
+          "vram_used_gb": {
+            "mean": 3.3188773298033194,
+            "max": 3.4762916564941406,
+            "min": 3.2126197814941406
+          },
+          "gpu_temp_c": {
+            "mean": 62.571014492753626,
+            "max": 63.0,
+            "min": 59.0
+          },
+          "proc_cpu_pct": {
+            "mean": 92.49478260869566,
+            "max": 106.2,
+            "min": 0.0
+          },
+          "proc_rss_gb": {
+            "mean": 1.6984432681171215,
+            "max": 1.6985435485839844,
+            "min": 1.6982269287109375
+          }
+        }
+      },
+      "samples": [
+        {
+          "nid": "8202",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious Activity\n\nSubject: The subject refers to the hard disk volume 1.\n\nAction: The action involves running executable files on the system.\n\nTTP: This appears to be related to Google Update software updates for Windows systems. It seems like there's an attempt to run multiple instances of GoogleUpdate.exe in parallel, which could indicate malicious activity or unauthorized access attempts.\n\nExplanation: The sequence of actions shows that the system is attempting to start multiple instances of GoogleUpdate.exe using svchost.exe as the host process. This behavior is suspicious because it suggests potential malware infection or unauthorized"
+        },
+        {
+          "nid": "8188",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\nSubject: The subject is a Windows system with multiple processes running.\nAction: The actions include logging in to the system, starting services, and executing commands.\nTTP: This behavior is consistent with an attempt to exploit or manipulate the system's services and processes for malicious purposes.\n\nExplanation:\nThe provided chain shows a series of actions that occur on a Windows system. It starts by logging into the system using `LogonUI.exe`, which is followed by various service-related operations such as starting `SERVICES.EXE` and `WBEM/WMIAPSRV.EX"
+        },
+        {
+          "nid": "2608",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious activity detected.\n\nSubject: The subject appears to be a network traffic flow originating from various IP addresses targeting a Windows system on Harddisk Volume 1.\n\nAction: NetFlow data is being sent between different hosts with no specific command or payload observed in the CMD commands associated with each process.\n\nTTP: This behavior could indicate malicious intent as it involves sending large volumes of data over the network without any discernible purpose or response. It also suggests that multiple processes are involved in this activity, which may be part of a larger attack strategy aimed at gathering information about the target system"
+        },
+        {
+          "nid": "7262",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious Activity\nSubject: The subject in the provided chain refers to the command prompt (cmd.exe) or another executable like conhost.exe or csrss.exe running on Windows systems.\nAction: The actions listed involve multiple instances of these executables being executed with various parameters such as \"None\", \"/??\", and \"-ForceV1\".\nTTP: This behavior could be indicative of an attempt to execute unauthorized commands or processes that may compromise system integrity or confidentiality. It involves executing multiple instances of the same executable with different arguments, which can lead to potential vulnerabilities if not properly secured"
+        },
+        {
+          "nid": "9032",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious Activity\n\nSubject: The subject in the provided chain refers to the executable file `conhost.exe` located at `/Device/HarddiskVolume1/Windows/system32/conhost.exe`.\n\nAction: The action involves executing commands on the system.\n\nTTP (Threat-Technique Profile): This appears to be related to a command injection attack or malicious activity that attempts to execute arbitrary code through an untrusted input.\n\nExplanation: The sequence of actions shows multiple instances where `conhost.exe` is executed with various parameters including `/??`, which suggests searching for files or"
+        },
+        {
+          "nid": "2562",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious Activity\n\nSubject: Windows system32 services.exe\n\nAction: Executing command 'dwm.exe'\n\nTTP: Fileless Malware\n\nExplanation: The provided proof-of-work chain indicates that the process `services.exe` in the Windows system directory is executing the command `dwm.exe`. This action suggests potential malicious activity as `dwm.exe` typically refers to Display Driver Manager, which is not commonly associated with legitimate software execution. Additionally, the presence of multiple network flow entries from different IP addresses pointing towards the same target IP address (`142.2"
+        },
+        {
+          "nid": "7626",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject in the provided chain refers to the system itself.\n\nAction: The action involves executing commands on the system.\n\nTTP (Threat-Technique Profile): This appears to be related to file deletion or modification through batch scripts executed by Windows processes.\n\nExplanation: The sequence of actions shows that the system is repeatedly running a command (`cmd: C:/ncr/DeleteArchiveSecurity.bat`) which deletes archive security from various locations such as `C:/Windows`, `C:/ncr`, etc. The use of multiple instances of `conhost.exe`"
+        },
+        {
+          "nid": "6937",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject refers to the hard disk volume where the processes are running.\n\nAction: The action involves executing commands on the system.\n\nTTP: This appears to be an attempt to delete or modify archive security settings for files in the Google Update directory located at `C:\\Program Files (x86)\\Google\\Update`.\n\nExplanation:\nThe provided chain shows multiple instances of the same command being executed by different subjects. Specifically:\n\n1. `cmd: C:/Windows/SYSTEM32/cmd.exe /c \"C:/ncr/DeleteArchiveSecurity.bat\"` -"
+        },
+        {
+          "nid": "6484",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject in the provided chain refers to the hard disk volume 1.\n\nAction: The action involves executing Python scripts on the system.\n\nTTP: This appears to be an attempt to execute malicious code through various command-line interfaces, including Windows' built-in commands like `cmd` and third-party tools such as `fontdrvhost.exe`.\n\nExplanation: The sequence starts with running Python scripts (`C:/ncr/kickoff/kickoff.py`) which could potentially contain malicious payloads or unauthorized access requests. It then proceeds to launch processes that may further escalate"
+        },
+        {
+          "nid": "9330",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject refers to the hard disk volume where the processes are running.\n\nAction: The action involves executing commands on the system.\n\nTTP: This appears to be an attempt to delete or modify archive security settings for files in the Google Update directory using batch scripts.\n\nExplanation: The sequence of actions shows that there's an attempt to execute a command (`cmd`) on multiple subjects within the specified path hierarchy. The first `cmd` executes a batch script located at `C:/ncr/DeleteArchiveSecurity.bat`, which likely contains instructions to remove or alter file permissions"
+        },
+        {
+          "nid": "6679",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject appears to be a command execution process.\n\nAction: The action involves executing commands on the system.\n\nTTP (Tooling & Tactics): This sequence of actions suggests that the attacker may be attempting to delete or modify file permissions in an attempt to gain unauthorized access to files or directories on the target system.\n\nExplanation: The provided chain shows multiple instances where the `cmd` command is executed with various arguments. These commands appear to be related to deleting archive security, which could indicate malicious intent by removing restricted access controls on files or directories. Additionally, there"
+        },
+        {
+          "nid": "6809",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious Activity\nSubject: The subject in the provided chain refers to the hard disk volume where the processes are running.\nAction: The actions performed by these commands include executing system-level tasks such as killing processes (OneDrive.exe) and updating Group Policy (gpupdate.exe).\nTTP: This behavior suggests that the attacker may be attempting to perform malicious activities on the target system, possibly related to file management or system updates.\n\nThe sequence of commands executed indicates an attempt to execute a batch script located at `C:/ncr/murder_onedrive.bat`, which could potentially"
+        },
+        {
+          "nid": "7694",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: OneDriveSetup.exe\n\nAction: Uninstallation\n\nTTP: Fileless Malware (FME)\n\nExplanation: The provided proof-of-concept demonstrates a fileless malware attack where the attacker uses PowerShell to execute commands on the system without creating any files or leaving traces behind. In this case, the command executed by OneDriveSetup.exe is `C:/Windows/SysWOW64/OneDriveSetup.exe /uninstall /peruser /childprocess`, which indicates that the attacker has used PowerShell to uninstall OneDrive setup in a stealthy manner"
+        },
+        {
+          "nid": "9116",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious - The process appears to be related to system updates or maintenance.\n\nSubject: Various subjects in the chain refer to different files on the hard disk volume, such as Google Update executable file, CSRSS.exe, etc.\n\nAction: The actions performed by these processes include running commands like 'cmd', 'C:/Program Files (x86)/Google/Update/GoogleUpdate.exe' with '/svc' parameter, and executing DLLs using 'dllhost.exe'.\n\nTTP: This behavior could indicate that the system is attempting to perform an update or maintenance operation through various means"
+        },
+        {
+          "nid": "7301",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: Google Update Process\n\nAction: Execute\n\nTTP: Fileless Malware\n\nExplanation: The provided proof-of-concept demonstrates a fileless malware attack where the attacker uses PowerShell to execute malicious code without creating any files on disk. This technique allows for stealthier execution as there's no trace left behind in the system. In this case, the process appears to be part of an ongoing update or installation routine for Google services, but its true nature remains suspicious due to the lack of traditional file-based indicators of compromise. The use of PowerShell scripts within the context"
+        },
+        {
+          "nid": "7272",
+          "is_mal": 0,
+          "gen": "Verdict: Suspicious\n\nSubject: The subject in the provided chain refers to the hard disk volume 1 on Windows operating system.\n\nAction: The action involves executing commands through various processes such as cmd.exe, conhost.exe, and csrss.exe.\n\nTTP (Threat-Technique Profile): This appears to be related to file deletion or archive security modification. The command executed by cmd.exe is `C:/ncr/DeleteArchiveSecurity.bat`, which suggests that there might be an attempt to delete files from a specific directory or modify their security settings.\n\nExplanation: The sequence of actions shows"
+        }
+      ]
+    }
+  ]
+}
