@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "dim": 1024,
+      "ap": 0.5,
+      "auc": 0.978021978021978,
+      "encode_time": 5.772739410400391
+    },
+    {
+      "model": "ibm-granite/granite-embedding-small-english-r2",
+      "dim": 384,
+      "ap": 0.45088566827697263,
+      "auc": 0.9010989010989011,
+      "encode_time": 2.08758282661438
+    },
+    {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "dim": 384,
+      "ap": 0.4083333333333333,
+      "auc": 0.8571428571428571,
+      "encode_time": 0.8771002292633057
+    }
+  ]
+}
