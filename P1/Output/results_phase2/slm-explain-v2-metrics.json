@@ -1,0 +1,152 @@
+{
+  "system": {
+    "platform": "linux",
+    "cpu_count_physical": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq_mhz": 2112.0,
+    "ram_total_gb": 23.47,
+    "gpu_name": "NVIDIA GeForce RTX 5060 Ti",
+    "python": "3.9.25",
+    "torch": "2.7.1+cu128",
+    "transformers": "4.57.6",
+    "dataset": "v2"
+  },
+  "runs": [
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "lora": true,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.85,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.3212973976135254,
+        "latency_p95_sec": 0.43309643864631653,
+        "total_time_sec": 32.13469839096069,
+        "decisions_per_sec": 3.111900998209755,
+        "decisions_per_hour": 11202.84
+      }
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.85,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.3149872279167175,
+        "latency_p95_sec": 0.31236904859542847,
+        "total_time_sec": 31.502495050430298,
+        "decisions_per_sec": 3.1743517407086803,
+        "decisions_per_hour": 11427.66
+      }
+    },
+    {
+      "summary": {
+        "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.77,
+        "loop_rate": 0.01,
+        "latency_mean_sec": 0.372292537689209,
+        "latency_p95_sec": 0.3623913526535034,
+        "total_time_sec": 37.232166051864624,
+        "decisions_per_sec": 2.685849645725672,
+        "decisions_per_hour": 9669.05
+      }
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen3-0.6B",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.76,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.48153888463974,
+        "latency_p95_sec": 0.5252851247787476,
+        "total_time_sec": 48.158119678497314,
+        "decisions_per_sec": 2.0764930331083957,
+        "decisions_per_hour": 7475.37
+      }
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.78,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.4872707653045654,
+        "latency_p95_sec": 0.51237753033638,
+        "total_time_sec": 48.731330156326294,
+        "decisions_per_sec": 2.052067934103334,
+        "decisions_per_hour": 7387.44
+      }
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.96,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.4876805114746094,
+        "latency_p95_sec": 0.5088393092155457,
+        "total_time_sec": 48.77140665054321,
+        "decisions_per_sec": 2.0503817065708154,
+        "decisions_per_hour": 7381.37
+      }
+    },
+    {
+      "summary": {
+        "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.02,
+        "hallucination_rate": 0.95,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 5.423140580654144,
+        "latency_p95_sec": 5.397350430488586,
+        "total_time_sec": 542.3192307949066,
+        "decisions_per_sec": 0.18439323985141481,
+        "decisions_per_hour": 663.81
+      }
+    },
+    {
+      "summary": {
+        "model": "Nguuma/security-slm-unsloth-1.5b",
+        "lora": false,
+        "n": 100,
+        "batch": 8,
+        "verdict_accuracy": 0.99,
+        "ttp_rate": 0.0,
+        "hallucination_rate": 0.84,
+        "loop_rate": 0.0,
+        "latency_mean_sec": 0.7369097304344178,
+        "latency_p95_sec": 0.7891836166381836,
+        "total_time_sec": 73.69697713851929,
+        "decisions_per_sec": 1.3569077577231168,
+        "decisions_per_hour": 4884.86
+      }
+    }
+  ]
+}

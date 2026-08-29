@@ -24,6 +24,9 @@ MODELS = [
     ("HuggingFaceTB/SmolLM2-360M-Instruct", None, False),
     ("Qwen/Qwen3-0.6B",                    None, False),
     ("Qwen/Qwen2.5-1.5B-Instruct",         None, False),
+    ("Qwen/Qwen2.5-Coder-1.5B-Instruct",   None, False),
+    ("Qwen/Qwen2.5-Coder-7B-Instruct",     None, False),
+    ("Nguuma/security-slm-unsloth-1.5b",  None, False),
 ]
 SAMPLE_SIZE = 100
 MAX_NEW = 120
@@ -196,13 +199,43 @@ def main():
 
     for model_name, ckpt, use_lora in MODELS:
         print(f"\n=== Loading {model_name} (lora={use_lora}) ===", flush=True)
-        tok = AutoTokenizer.from_pretrained(model_name, padding_side="left")
+        # Special case: Nguuma security model has broken tokenizer, use base Qwen2.5-1.5B tokenizer
+        tok_model = model_name
+        if model_name == "Nguuma/security-slm-unsloth-1.5b":
+            tok_model = "Qwen/Qwen2.5-1.5B-Instruct"
+        try:
+            tok = AutoTokenizer.from_pretrained(tok_model, padding_side="left", trust_remote_code=True)
+        except Exception as e:
+            print(f"  Tokenizer fail {e}, trying without trust_remote_code", flush=True)
+            tok = AutoTokenizer.from_pretrained(tok_model, padding_side="left")
         if tok.pad_token is None:
             tok.pad_token = tok.eos_token
-        base = AutoModelForCausalLM.from_pretrained(
-            model_name, dtype=torch.float16, device_map="auto"
-        )
-        if use_lora and ckpt and os.path.isdir(ckpt):
+        if model_name == "Nguuma/security-slm-unsloth-1.5b":
+            print(f"  Loading base Qwen2.5-1.5B for adapter", flush=True)
+            try:
+                base_full = AutoModelForCausalLM.from_pretrained(
+                    "Qwen/Qwen2.5-1.5B-Instruct", dtype=torch.float16, device_map="auto", trust_remote_code=True
+                )
+            except:
+                base_full = AutoModelForCausalLM.from_pretrained(
+                    "Qwen/Qwen2.5-1.5B-Instruct", dtype=torch.float16, device_map="auto"
+                )
+            from peft import PeftModel as PeftModel2
+            model = PeftModel2.from_pretrained(base_full, model_name)
+            base = model
+            print(f"  Adapter loaded", flush=True)
+        else:
+            try:
+                base = AutoModelForCausalLM.from_pretrained(
+                    model_name, dtype=torch.float16, device_map="auto", trust_remote_code=True
+                )
+            except Exception as e:
+                print(f"  Model load fail {e}, trying without trust_remote_code", flush=True)
+                base = AutoModelForCausalLM.from_pretrained(
+                    model_name, dtype=torch.float16, device_map="auto"
+                )
+            model = None  # will be set below
+        if model is None and use_lora and ckpt and os.path.isdir(ckpt):
             try:
                 model = PeftModel.from_pretrained(base, ckpt)
                 print("  LoRA loaded", flush=True)
