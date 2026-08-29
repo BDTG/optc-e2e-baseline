@@ -1,0 +1,462 @@
+{
+  "summary": {
+    "label": "constrained",
+    "n": 50,
+    "verdict_accuracy": 0.76,
+    "parse_ok_rate": 1.0,
+    "ttp_rate": 0.02,
+    "avg_latency_sec": 14.238663358688354
+  },
+  "per_alert": [
+    {
+      "nid": "2992_2824",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.638421297073364,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3076_1409",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.50534987449646,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3188_5506",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.272397756576538,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5572_5012",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.5825412273407,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "8572_4657",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.74064612388611,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "9116_3286",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.54417586326599,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "7504_2679",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 16.63360595703125,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "8920_9935",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.259625911712646,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "2920_2424",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "T1059.001 or T1218.001 or T1003 or T1027 or none",
+      "lat": 13.901842832565308,
+      "gen": "{\"verdict\": \"HIGH\", \"technique_id\": \"T1059.001 or T1218.001 or T1003 or T1027 or none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "840_7912",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.882015705108643,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6552_1520",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.924941778182983,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1576_1488",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.792627334594727,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1680_2535",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.148553609848022,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3184_4582",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.800758123397827,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "2576_4811",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.89942979812622,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "700_9279",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.911263704299927,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6020_1434",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.757733821868896,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "2948_4257",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.804796695709229,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3896_9928",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.96977424621582,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6720_7873",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.982346773147583,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3756_4611",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.660226345062256,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "108_8359",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.747602224349976,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "7156_5557",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.732110500335693,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5696_1106",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.991700410842896,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5116_3615",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.790041208267212,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3224_7924",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.702987909317017,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "776_6574",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.724921941757202,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6756_5552",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.781273365020752,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3164_3547",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.815064430236816,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "404_4527",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.007491827011108,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5816_6514",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.844543933868408,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6156_2674",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.773841857910156,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3000_2519",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.11258316040039,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1176_7224",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.080629825592041,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"cmdline or parent_chain or event_seq or none\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1296_2584",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.697144985198975,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "2040_6881",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.718631267547607,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "4860_6635",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.707000970840454,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5708_5333",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.629954099655151,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6552_1711",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.799341201782227,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "4564_8527",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.613446950912476,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "6020_9785",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.67198371887207,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1976_3045",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.871085405349731,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "2604_7201",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.771928787231445,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "4092_2291",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.577814102172852,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5056_5803",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.925036668777466,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "5256_6925",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.751895427703857,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "3512_4150",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.904455661773682,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "1652_2139",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.824696779251099,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "4632_1750",
+      "is_mal": 0,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 13.673740148544312,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    },
+    {
+      "nid": "4288_4733",
+      "is_mal": 1,
+      "verdict": 0,
+      "ttp": "none",
+      "lat": 14.077144384384155,
+      "gen": "{\"verdict\": \"BENIGN\", \"technique_id\": \"none\", \"evidence_field\": \"event_seq\", \"confidence\": \"high\"}",
+      "parse_ok": true
+    }
+  ]
+}
