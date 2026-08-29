@@ -1,0 +1,50 @@
+{
+  "system": {
+    "gpu_name": "NVIDIA GeForce RTX 5060 Ti",
+    "ram_gb": 25.201065984
+  },
+  "runs": [
+    {
+      "model": "protectai/deberta-v3-base-prompt-injection-v2",
+      "n": 100,
+      "batch": 16,
+      "verdict_accuracy": 0.01,
+      "pred_malicious_rate": 1.0,
+      "true_malicious_rate": 0.01,
+      "latency_mean_sec": 0.011041407585144042,
+      "latency_p95_sec": 0.026397615671157837,
+      "total_time_sec": 1.1041991710662842,
+      "decisions_per_sec": 90.56337173612773,
+      "decisions_per_hour": 326028.13825005986,
+      "vram_gb": 2.209185792
+    },
+    {
+      "model": "jackaduma/SecBERT",
+      "n": 100,
+      "batch": 16,
+      "verdict_accuracy": 0.49,
+      "pred_malicious_rate": 0.52,
+      "true_malicious_rate": 0.01,
+      "latency_mean_sec": 0.0015512609481811524,
+      "latency_p95_sec": 0.0021688342094421387,
+      "total_time_sec": 0.15517377853393555,
+      "decisions_per_sec": 644.4387766076768,
+      "decisions_per_hour": 2319979.5957876365,
+      "vram_gb": 1.801498624
+    },
+    {
+      "model": "AungMoonLord/bert-log-anomaly-detection",
+      "n": 100,
+      "batch": 16,
+      "verdict_accuracy": 0.1,
+      "pred_malicious_rate": 0.91,
+      "true_malicious_rate": 0.01,
+      "latency_mean_sec": 0.004145190715789795,
+      "latency_p95_sec": 0.0042813122272491455,
+      "total_time_sec": 0.41457486152648926,
+      "decisions_per_sec": 241.21095917826293,
+      "decisions_per_hour": 868359.4530417465,
+      "vram_gb": 1.803595776
+    }
+  ]
+}
