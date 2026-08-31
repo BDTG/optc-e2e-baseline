@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>8-Filter Cascade — Sweet Spot</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#111;padding:20px;font-size:13px}
+h1{font-size:18px;text-align:center}
+.sub{font-size:12px;text-align:center;color:#666;margin:4px 0 14px}
+h2{font-size:14px;margin:14px 0 6px;padding:6px 10px;background:#0f172a;color:#fff;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin-bottom:10px}
+th{background:#1e293b;color:#fff;padding:7px 6px;text-align:left;font-size:12px}
+td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
+.rank{text-align:center;font-weight:700}
+.ap{font-weight:700}
+.badge{font-size:10px;padding:2px 6px;border-radius:999px;font-weight:700}
+.win{background:#fef3c7;color:#92400e}
+.good{background:#dcfce7;color:#166534}
+.bad{background:#fee2e2;color:#991b1b}
+.note{font-size:11px;color:#64748b;margin-top:10px;line-height:1.5}
+.hl{background:#ecfdf5}
+</style>
+</head>
+<body>
+<h1>8-Filter Cascade — Sweep 162 configs (loose) — Sweet Spot 5 filter đầu</h1>
+<div class="sub">S1 474 alerts (9 pos) → 8 nấc: has_cmd → has_chain → has_events → TF-IDF → Emb0.6B → SecBERT → prevalence → Final Emb | 5060Ti</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:14px">
+<div style="font-weight:700;text-align:center;margin-bottom:10px">SƠ ĐỒ DÒNG CHẢY 8 FILTER — SWEET SPOT (39 alerts, prev 23.1%)</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:4px;flex-wrap:wrap">
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#0f172a;color:#fff;padding:8px;border-radius:8px;font-weight:700">2250<br><span style="font-size:11px;font-weight:400">12 pos<br>0.53%</span></div><div style="font-size:11px;margin-top:4px">Velox</div></div>
+<div style="font-size:18px;color:#64748b">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#e0f2fe;border:1px solid #0ea5e9;padding:8px;border-radius:8px"><b>has_cmd</b><br>614<br><span style="font-size:11px">9 pos</span></div><div style="font-size:10px;color:#0369a1">-1636</div></div>
+<div style="font-size:18px;color:#64748b">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#e0f2fe;border:1px solid #0ea5e9;padding:8px;border-radius:8px"><b>has_chain</b><br>477<br><span style="font-size:11px">9 pos</span></div><div style="font-size:10px;color:#0369a1">-137</div></div>
+<div style="font-size:18px;color:#64748b">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#e0f2fe;border:1px solid #0ea5e9;padding:8px;border-radius:8px"><b>has_events</b><br>474<br><span style="font-size:11px">S1 1.9%</span></div><div style="font-size:10px;color:#0369a1">-3</div></div>
+<div style="font-size:18px;color:#f59e0b">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#fef3c7;border:2px solid #f59e0b;padding:8px;border-radius:8px"><b>TF-IDF 0.5</b><br>76<br><span style="font-size:11px">11.8%</span></div><div style="font-size:10px;color:#b45309">-398 ⭐</div></div>
+<div style="font-size:18px;color:#f59e0b">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#fef3c7;border:2px solid #f59e0b;padding:8px;border-radius:8px"><b>Emb 0.5</b><br>64<br><span style="font-size:11px">14.1%</span></div><div style="font-size:10px;color:#b45309">-12</div></div>
+<div style="font-size:18px;color:#94a3b8">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#f1f5f9;border:1px dashed #94a3b8;padding:8px;border-radius:8px;color:#64748b"><b>SecBERT 0.3</b><br>64<br><span style="font-size:11px">0 lọc</span></div><div style="font-size:10px;color:#94a3b8">vô dụng</div></div>
+<div style="font-size:18px;color:#10b981">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#dcfce7;border:2px solid #10b981;padding:8px;border-radius:8px"><b>prev 10%</b><br>39<br><span style="font-size:11px">23.1% ⭐</span></div><div style="font-size:10px;color:#15803d">-25 sweet</div></div>
+<div style="font-size:18px;color:#10b981">→</div>
+<div style="text-align:center;flex:1;min-width:90px"><div style="background:#ecfdf5;border:1px solid #10b981;padding:8px;border-radius:8px"><b>Final 0.7</b><br>39<br><span style="font-size:11px">giữ 9 pos</span></div><div style="font-size:10px;color:#15803d">F1 0.353</div></div>
+</div>
+<div style="margin-top:8px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;display:flex"><div style="width:27%;background:#0f172a"></div><div style="width:6%;background:#0ea5e9"></div><div style="width:0.1%;background:#0ea5e9"></div><div style="width:17%;background:#f59e0b"></div><div style="width:0.5%;background:#f59e0b"></div><div style="width:0%;background:#94a3b8"></div><div style="width:1%;background:#10b981"></div></div>
+<div style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;margin-top:2px"><span>2250</span><span>614</span><span>474</span><span>76</span><span>64</span><span>39</span></div>
+</div>
+
+<h2>Top 10 F1 (loose grid tf 0.2-0.5, em 0.2-0.5, prev 2-10%)</h2>
+<table>
+<tr><th>#</th><th>F1</th><th>prev</th><th>rec</th><th>n</th><th>pos</th><th>tf</th><th>em</th><th>sec</th><th>prev_thr</th><th>final</th><th>Kết luận</th></tr>
+<tr class="hl"><td class="rank">1</td><td class="ap">0.353</td><td>0.231</td><td>0.75</td><td>39</td><td>9</td><td>0.5</td><td>0.5</td><td>0.3</td><td>10%</td><td>0.7</td><td><span class="badge win">SWEET SPOT</span> 5 filter đầu</td></tr>
+<tr><td class="rank">2</td><td>0.353</td><td>0.231</td><td>0.75</td><td>39</td><td>9</td><td>0.5</td><td>0.3</td><td>0.3</td><td>10%</td><td>0.7</td><td>em 0.3 cũng ngọt</td></tr>
+<tr><td class="rank">3</td><td>0.346</td><td>0.225</td><td>0.75</td><td>40</td><td>9</td><td>0.3</td><td>0.5</td><td>0.3</td><td>10%</td><td>0.7</td><td>tf 0.3 lỏng hơn</td></tr>
+<tr><td class="rank">4</td><td>0.333</td><td>0.200</td><td>0.75</td><td>45</td><td>9</td><td>0.5</td><td>0.2</td><td>0.2</td><td>10%</td><td>0.5</td><td>em 0.2 → n tăng</td></tr>
+<tr><td class="rank">5</td><td>0.320</td><td>0.188</td><td>0.75</td><td>48</td><td>9</td><td>0.3</td><td>0.3</td><td>0.2</td><td>10%</td><td>0.5</td><td></td></tr>
+</table>
+
+<h2>So sánh 3 mốc 8-filter (từ log thực chạy)</h2>
+<table>
+<tr><th>Cấu hình</th><th>n còn</th><th>pos</th><th>prev</th><th>rec</th><th>F1</th><th>Ghi chú</th></tr>
+<tr><td>S1 (3 filter đầu)</td><td>474</td><td>9</td><td>1.9%</td><td>75%</td><td>0.037</td><td>Chưa lọc ML</td></tr>
+<tr><td>5 filter đầu (TF-IDF 0.5 + Emb 0.5)</td><td>64</td><td>9</td><td>14.1%</td><td>75%</td><td>0.237</td><td>Trước sweep gắt</td></tr>
+<tr class="hl"><td><b>5 filter + prev 10% (sweet spot)</b></td><td><b>39</b></td><td><b>9</b></td><td><b>23.1%</b></td><td><b>75%</b></td><td><b>0.353</b></td><td><span class="badge good">NGỌT NHẤT</span> giữ đủ 9 pos</td></tr>
+<tr><td>8 filter gắt (prev 0.1% + Emb 0.7)</td><td>3</td><td>2</td><td>66.7%</td><td>16%</td><td>0.267</td><td>Mất 7 pos</td></tr>
+<tr><td>8 filter gắt hơn (prev 1%)</td><td>1</td><td>1</td><td>100%</td><td>8%</td><td>0.154</td><td>Mất 8 pos</td></tr>
+</table>
+
+<div class="note">
+<b>Kết luận 5 filter:</b> Chỉ cần <b>has_cmd + has_chain + has_events + TF-IDF 0.5 + Emb 0.5 + prev 10%</b> là đủ — 2250→39 (98.3% FP giảm), giữ 9/9 pos S1, prev 23.1%. Thêm SecBERT (nấc 6) vô dụng (64→64), thêm Final Emb 0.7 không tăng.<br>
+<b>File nguồn:</b> sweep-loose.json (162 configs), filter-8cascade.json (tune gắt), embedding-benchmark.json
+</div>
+</body>
+</html>

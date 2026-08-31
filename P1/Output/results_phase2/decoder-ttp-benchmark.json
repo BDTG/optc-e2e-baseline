@@ -1,0 +1,33 @@
+{
+  "dataset": "ttp_holdout",
+  "total": 319,
+  "sample": 60,
+  "suspicious": 3,
+  "date": "2026-08-31",
+  "device": "RTX 5060 Ti 16GB",
+  "note": "constrained JSON {verdict, technique_id, evidence} do_sample=False",
+  "results": [
+    {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "valid": 54,
+      "total": 60,
+      "valid_rate": 0.90,
+      "ttp_hit": 1,
+      "ttp_total": 3,
+      "halluc": 6,
+      "halluc_rate": 0.10,
+      "warning": "temperature/top_p/top_k ignored (do_sample=False) - cosmetic"
+    },
+    {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "valid": 1,
+      "total": 60,
+      "valid_rate": 0.02,
+      "ttp_hit": 3,
+      "halluc": 59,
+      "halluc_rate": 0.98,
+      "note": "halluc intrinsic, not fixable via temp"
+    }
+  ],
+  "conclusion": "0.5B sweet spot decoder (90% valid) wins over 1.5B (2%); decoder wins encoder at TTP (encoder 0%)"
+}
