@@ -1,0 +1,14 @@
+{
+  "eval_loss": 0.2805095911026001,
+  "eval_ap": 0.14931805319206895,
+  "eval_ap_epoch1_best": 0.14931805319206895,
+  "eval_ap_epoch3": 0.11082183399256569,
+  "eval_auc": 0.7475095785440613,
+  "eval_auc_epoch3": 0.6536398467432951,
+  "eval_runtime": 152.6794,
+  "combined_n": 942,
+  "pos": 74,
+  "train_n": 753,
+  "test_n": 189,
+  "note": "best AP at epoch1 0.149, degraded to 0.11 at epoch3"
+}
