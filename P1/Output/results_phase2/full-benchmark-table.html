@@ -20,13 +20,139 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 .bad{background:#fee2e2;color:#991b1b}
 .mid{background:#e0e7ff;color:#3730a3}
 .note{font-size:11px;color:#64748b;margin-top:10px;line-height:1.5}
-</style>
+.bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;display:inline-block;width:60px;vertical-align:middle;margin-left:6px}.fill{height:100%;background:#0ea5e9;border-radius:3px}.fill.gold{background:#f59e0b}.fill.green{background:#10b981}.hl-1{background:#fef3c7}.hl-2{background:#ecfdf5}</style>
 </head>
 <body>
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
 <div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 16 lần chạy</div>
 
-<h2>1) TF-IDF Baseline (sparse — vua S1)</h2>
+<h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
+<thead>
+<tr>
+  <th style="width:36px">#</th>
+  <th>Model</th>
+  <th>Dạng</th>
+  <th style="width:110px">AP ↑</th>
+  <th>AUC</th>
+  <th>Latency / alert</th>
+  <th>VRAM</th>
+  <th>Halluc.</th>
+  <th>Kết luận</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hl-1">
+  <td class="rank">1</td>
+  <td><b>TF-IDF char 2-5 + LR</b></td>
+  <td>Sparse</td>
+  <td class="ap">0.89 <span class="bar"><span class="fill gold" style="width:100%"></span></span></td>
+  <td>0.99</td>
+  <td><b>0.001s</b></td>
+  <td>0 GB</td>
+  <td>0%</td>
+  <td><span class="badge b-win">VUA S1</span></td>
+</tr>
+<tr class="hl-2">
+  <td class="rank">2</td>
+  <td><b>Qwen3-Embedding-0.6B</b></td>
+  <td>Embedding</td>
+  <td class="ap">0.50 <span class="bar"><span class="fill green" style="width:56%"></span></span></td>
+  <td>0.978</td>
+  <td>12 ms</td>
+  <td>1.8 GB</td>
+  <td>0%</td>
+  <td><span class="badge b-good">NGỌT NHẤT</span></td>
+</tr>
+<tr>
+  <td class="rank">3</td>
+  <td>granite-embedding-small</td>
+  <td>Embedding</td>
+  <td class="ap">0.45 <span class="bar"><span class="fill green" style="width:50%"></span></span></td>
+  <td>0.901</td>
+  <td>4 ms</td>
+  <td>0.2 GB</td>
+  <td>0%</td>
+  <td>Nhẹ nhất</td>
+</tr>
+<tr>
+  <td class="rank">4</td>
+  <td>all-MiniLM-L6-v2</td>
+  <td>Embedding</td>
+  <td class="ap">0.408 <span class="bar"><span class="fill" style="width:45%"></span></span></td>
+  <td>0.857</td>
+  <td>1.8 ms</td>
+  <td>0.2 GB</td>
+  <td>0%</td>
+  <td>Nhanh nhất</td>
+</tr>
+<tr>
+  <td class="rank">5</td>
+  <td>SecBERT fine-tuned 110M</td>
+  <td>Classifier</td>
+  <td>0.045 <span class="bar"><span class="fill" style="width:5%"></span></span></td>
+  <td>0.42</td>
+  <td>1.5 ms</td>
+  <td>1.8 GB</td>
+  <td>0%</td>
+  <td>Thua 10×</td>
+</tr>
+<tr>
+  <td class="rank">6</td>
+  <td>DeBERTa-v3 86M</td>
+  <td>Classifier</td>
+  <td>0.025 <span class="bar"><span class="fill" style="width:2%"></span></span></td>
+  <td>0.20</td>
+  <td>11 ms</td>
+  <td>2.2 GB</td>
+  <td>0%</td>
+  <td>Thua 20×</td>
+</tr>
+<tr>
+  <td class="rank">7</td>
+  <td>Qwen2.5-0.5B base</td>
+  <td>Generative</td>
+  <td>~0.02 <span class="bar"><span class="fill" style="width:2%"></span></span></td>
+  <td>0.23</td>
+  <td>0.31 s</td>
+  <td>2.7 GB</td>
+  <td>85%</td>
+  <td><span class="badge b-bad">Bịa</span></td>
+</tr>
+<tr>
+  <td class="rank">8</td>
+  <td>SmolLM2-360M</td>
+  <td>Generative</td>
+  <td>~0.02</td>
+  <td>—</td>
+  <td>0.37 s</td>
+  <td>2.5 GB</td>
+  <td>77%</td>
+  <td><span class="badge b-bad">Bịa</span></td>
+</tr>
+<tr>
+  <td class="rank">9</td>
+  <td>Qwen3-0.6B</td>
+  <td>Generative</td>
+  <td>~0.02</td>
+  <td>—</td>
+  <td>0.48 s</td>
+  <td>3.3 GB</td>
+  <td>76%</td>
+  <td><span class="badge b-bad">Bịa</span></td>
+</tr>
+<tr style="background:#fef2f2">
+  <td class="rank">10</td>
+  <td>Qwen-Coder-7B Q4</td>
+  <td>Generative</td>
+  <td>~0.02</td>
+  <td>—</td>
+  <td><b>5.42 s</b></td>
+  <td><b>15 GB</b></td>
+  <td>95%</td>
+  <td><span class="badge b-bad">OOM</span></td>
+</tr>
+</tbody>
+</table><h2>1) TF-IDF Baseline (sparse — vua S1)</h2>
 <table>
 <tr><th>Model</th><th>AP (5-fold OOF)</th><th>AP holdout</th><th>AP S1 (rich)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
 <tr><td><b>TF-IDF char 2-5 (50k) + LogReg balanced</b></td><td>0.254</td><td>0.519</td><td class="ap">0.89</td><td>0.001s</td><td>0 GB</td><td><span class="badge win">VUA</span> count ký tự thắng</td></tr>
@@ -77,9 +203,9 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 18 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 5 + Generative 8 — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
-<b>Pareto hiện tại:</b> TF-IDF (0.89, 0.001s, 0GB, 0% halluc) &gt; Embedding 0.6B (0.50, 12ms, 1.8GB, 0%) &gt; jina 0.447 ≈ 4B 0.44 &gt;&gt; Classifier FT (0.045) &gt;&gt; Generative (0.02, 0.3-5s, 77-96% halluc). 7B Q4 sát trần 16GB, loại. <b>4B/8B không ngọt hơn 0.6B.</b><br>
-<b>Đề xuất bench tiếp:</b> Coder-14B → Qwen3-1.7B → MoE (~10 phút). File nguồn: slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
+<b>Tổng đã bench 19 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 5 + Generative 8 + <b>8-Filter Sweep 162 configs</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto hiện tại:</b> TF-IDF (0.89) &gt; Embedding 0.6B (0.50) &gt; <b>8-Filter Sweet Spot 39 alerts, 9 pos, prev 23.1%, rec 75%, F1 0.353 (tf0.5 em0.5 prev&lt;10% final&gt;0.7)</b> &gt; jina 0.447 ≈ 4B 0.44 &gt;&gt; Classifier FT (0.045). <b>8 filter giữ đủ 9 pos, giảm 2250→39 (98.3% FP).</b><br>
+<b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
 </div>
 </body>
 </html>
