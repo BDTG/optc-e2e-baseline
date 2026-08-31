@@ -1,0 +1,15 @@
+{
+  "eval_ap": 0.7535003999494079,
+  "eval_ap_epoch1_best": 0.7535003999494079,
+  "eval_ap_epoch3": 0.7377023433231698,
+  "eval_auc": 0.7454102697719165,
+  "eval_auc_epoch3": 0.7416222391469917,
+  "eval_loss": 0.5394333600997925,
+  "combined_n": 2242,
+  "pos": 977,
+  "train_n": 1793,
+  "test_n": 449,
+  "train_bal_n": 2568,
+  "train_runtime": 521.05,
+  "note": "S1 474 + EVTX 468 + SD 500 + benign 800, bf16 lr1e-5, best ep1 0.753"
+}
