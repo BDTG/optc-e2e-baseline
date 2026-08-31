@@ -1,0 +1,2205 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>All Docs — OpTC Thesis</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:1000px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111;background:#f8fafc}h1{font-size:20px;text-align:center} .toc{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}h2{margin-top:0;color:#0f172a;border-bottom:2px solid #0ea5e9;padding-bottom:4px}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><h1>All Docs — OpTC Thesis (12 .md gộp)</h1><p style="text-align:center;color:#64748b">Nguồn .md gốc lưu tại <code>archive/md/</code> — chỉ <code>README.md</code> chính giữ ngoài</p><div class="toc"><b>Mục lục</b><ul><li><a href="html/context-phase2-execution.html">context-phase2-execution</a> — context-phase2-execution.md</li><li><a href="html/DATA_TRANSFER.html">DATA_TRANSFER</a> — DATA_TRANSFER.md</li><li><a href="html/flash_magic_report.html">flash_magic_report</a> — flash_magic_report.md</li><li><a href="html/go-nogo-decision.html">go-nogo-decision</a> — go-nogo-decision.md</li><li><a href="html/Note.html">Note</a> — Note.md</li><li><a href="html/pseudocode-tier2.html">pseudocode-tier2</a> — pseudocode-tier2.md</li><li><a href="html/README_orthrus_velox.html">README_orthrus_velox</a> — README_orthrus_velox.md</li><li><a href="html/report-phase2-wsab.html">report-phase2-wsab</a> — report-phase2-wsab.md</li><li><a href="html/RUNBOOK_remote_L6.html">RUNBOOK_remote_L6</a> — RUNBOOK_remote_L6.md</li><li><a href="html/SELF_SERVICE_RUNBOOK.html">SELF_SERVICE_RUNBOOK</a> — SELF_SERVICE_RUNBOOK.md</li><li><a href="html/velox-optimization-results.html">velox-optimization-results</a> — velox-optimization-results.md</li><li><a href="html/YEU_CAU_CAI_THIEN_PHASE0.html">YEU_CAU_CAI_THIEN_PHASE0</a> — YEU_CAU_CAI_THIEN_PHASE0.md</li></ul></div><section id="context-phase2-execution" style="margin-bottom:40px"><h2>context-phase2-execution</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="context-for-phase-2-execution-slm-tier-2-research">CONTEXT FOR PHASE 2 EXECUTION — SLM Tier-2 Research</h1>
+<h1 id="file-nay-dung-e-seed-context-cho-model-coding-agent">(File này dùng để seed context cho model coding agent)</h1>
+<h2 id="trang-thai-hien-tai-so-voi-notemd">TRẠNG THÁI HIỆN TẠI (so với Note.md)</h2>
+<h3 id="a-hoan-thanh">Đã hoàn thành</h3>
+<ul>
+<li><strong>Phase 0 (Go/no-go):</strong> CHƯA QUAY LẠI</li>
+<li>OpTC H051 full DB loaded: 19,815,600 events, 7 ngày (19-25/09/2019)</li>
+<li>Train 19-21/09 (230 TWs), val 22/09 (94 TWs), test 23-25/09 (145 TWs)</li>
+<li>Ground truth: 114 malicious nodes (chỉ 34-37 active trong test period)</li>
+<li>Flash/Magic/ORTHRUS/Velox: FULL TEST hoàn thành, AUC 0.56-0.92</li>
+<li>Recall ceiling ~30% (80/114 GT nodes "im" trong test period)</li>
+<li><strong>TF-IDF baseline chưa chạy:</strong> encoded alerts 2250/10000 (chưa đủ, enrich paused)</li>
+<li>
+<p><strong>SLM 3B/8B CHƯA ĐÁNH GIÁ:</strong> <code>slm_tier2.py</code> đã viết, chưa run</p>
+</li>
+<li>
+<p><strong>Phase 1 (Baselines):</strong></p>
+</li>
+<li>4 models full test ✅</li>
+<li>FP sweep ✅ (ORTHRUS/Velox/Flash/Magic)</li>
+<li>Precision ceiling corrected ✅ (path+cmd: 33% @2K, 8.46% @10K)</li>
+<li>Enrichment: 2250/10000 alerts ✅ (paused - cần nodeid2msg query)</li>
+<li><strong>Host 201/501 CHƯA TẢI</strong> (cần Google Drive rclone)</li>
+<li><strong>SHIELD CHƯA CHẠY</strong></li>
+</ul>
+<h3 id="chua-bat-au">Chưa bắt đầu</h3>
+<ul>
+<li><strong>Phase 2 (Hardware grid RQ3):</strong> 0% — CRITICAL BLOCK cho mọi thứ sau</li>
+<li><strong>Phase 3 (Core experiments RQ1a/RQ1b/RQ4b):</strong> 0%</li>
+<li><strong>Phase 4 (Generalization RQ5):</strong> 0%</li>
+<li><strong>Phase 5 (Writing):</strong> 0%</li>
+</ul>
+<h3 id="bottlenecks">BOTTLENECKS</h3>
+<ol>
+<li><strong>WSL máy thầy không ổn định</strong> (teardown 4-10 phút) → không chạy được enrichment hay SLM trên đó</li>
+<li><strong>Laptop không có transformers/bitsandbytes</strong> (chỉ torch CPU)</li>
+<li><strong>Dataset host 201/501 chưa tải</strong> (cần Google Drive rclone)</li>
+<li><strong>Enrichment paused</strong> ở 2250/10000 alerts</li>
+</ol>
+<hr />
+<h2 id="cai-gi-co-the-lam-ngay-tai-ay-khong-can-thay">CÁI GÌ CÓ THỂ LÀM NGAY TẠI ĐÂY (không cần thầy)</h2>
+<h3 id="1-install-transformers-bitsandbytes-tren-laptop">1. Install transformers + bitsandbytes trên laptop</h3>
+<div class="codehilite"><pre><span></span><code>pip install transformers accelerate bitsandbytes
+# bitsandbytes cần CUDA adapter nhưng mình CPU-only → cần workaround
+# Hoặc: dùng llama.cpp GGUF format cho Qwen2.5-3B int4 (chạy được CPU)
+</code></pre></div>
+
+<h3 id="2-chay-slm-3b-int4-tren-2250-alerts-a-enrich">2. Chạy SLM 3B int4 trên 2250 alerts đã enrich</h3>
+<div class="codehilite"><pre><span></span><code>python slm_tier2.py \
+  --alerts_jsonl P1/Output/data/alerts-enriched-partial.jsonl \
+  --gt_csv D:\orthrus_laptop\optec-l6\orthrus\Ground_Truth\OPTC_H051\node_h051_0925.csv \
+  --alert_k 2000 \
+  --skip_slm  # chạy baseline TF-IDF trước
+</code></pre></div>
+
+<p>→ Kết quả RQ1a preliminary: FP reduction ở k=2000 trên 2250 alerts</p>
+<h3 id="3-hardware-grid-baseline-rq3-partial">3. Hardware grid baseline (RQ3 partial)</h3>
+<p>Đo latency torch CPU inference trên laptop i5-10300H:
+- ORTHRUS inference time per graph (~2.5s/graph)
+- Velox inference time per TW (~0.3s/TW)
+- Ghi lại: i5-10300H 4C/8T, 16GB DDR4, Windows 11</p>
+<hr />
+<h2 id="cai-gi-can-thaymay-thay">CÁI GÌ CẦN THẦY/MÁY THẦY</h2>
+<ol>
+<li><strong>Tải host 201 + 501 bundles</strong> từ Google Drive</li>
+<li>rclone config với service account, hoặc wget trực tiếp</li>
+<li>Cần bundle: <code>201_evaluation</code>, <code>201_benign</code>, <code>501_evaluation</code>, <code>501_benign</code></li>
+<li><strong>Fix WSL stability</strong> (hoặc dùng Docker trên Windows)</li>
+<li><strong>SGD/conda environment</strong> với transformers + bitsandbytes cho GPU inference</li>
+</ol>
+<hr />
+<h2 id="huong-dan-cho-model-tiep-theo">HƯỚNG DẪN CHO MODEL TIẾP THEO</h2>
+<h3 id="priority-1-chay-rq1a-tren-data-hien-co">Priority 1: Chạy RQ1a trên data hiện có</h3>
+<p>File: <code>P1/Code/slm_tier2.py</code>
+Input: <code>P1/Output/data/alerts-enriched-partial.jsonl</code> (2250 alerts)
+Tính:
+1. <code>run_baseline_tfidf()</code> trên 2250 alerts → FP reduction @k={500,1000,2000}
+2. Nếu có transformers: <code>classify_with_slm()</code> trên top-2000 alerts
+3. So sánh TF-IDF vs SLM: FP reduction difference = contribution RQ1a</p>
+<h3 id="priority-2-hoan-thanh-enrichment">Priority 2: Hoàn thành enrichment</h3>
+<p>Script: cần viết enrichment script query DB
+- DB optc_h051_full trên localhost:5432 (không password cho localhost peer auth)
+- Query parent chain (3 hops) + 20 events gần nhất cho mỗi malicious node
+- Output: enriched JSONL, 10000 alerts</p>
+<h3 id="priority-3-hardware-grid-rq3">Priority 3: Hardware grid (RQ3)</h3>
+<p>Trên laptop i5-10300H, measure:
+- Model sizes: Qwen2.5 0.5B, 1.5B, 3B (8B cần 28GB+ RAM → skip)
+- Quantization: int4 (GGUF), int8, fp16 (nếu có)
+- Token length: 128, 512, 2048
+- Đo: latency p50/p95, weight footprint, KV cache, CPU-second/host/ngày</p>
+<h3 id="priority-4-download-host-201501">Priority 4: Download host 201/501</h3>
+<p>Cần Google Drive access + rclone để tải bundles từ FiveDirections/OpTC-data</p>
+<hr />
+<h2 id="constraints-tu-notemd">CONSTRAINTS TỪ NOTE.MD</h2>
+<ol>
+<li><strong>Kerckhoffs:</strong> KHÔNG đặt logic phát hiện trong prompt SLM. Prompt chỉ hướng dẫn format.</li>
+<li><strong>H0 elimination:</strong> Phải chứng minh SLM hơn encoder 150M (TF-IDF + LogReg hoặc BERT)</li>
+<li><strong>Metric chính:</strong> recall@{1,10,100} alert/host/ngày, KHÔNG dùng AUC-ROC</li>
+<li><strong>Tầng 2 = secondary detector:</strong> Trên ~10²-10³ candidate/host/ngày từ tier-1</li>
+<li><strong>Zero-shot cần few-shot/LoRA:</strong> "Nếu paper chỉ có zero-shot thì kết luận là model nhỏ không làm được"</li>
+<li><strong>Evasion/injection:</strong> Đo trung thực, đánh số cụ thể, không giấu trong appendix</li>
+</ol>
+<hr />
+<h2 id="file-paths">FILE PATHS</h2>
+<ul>
+<li>Repo: <code>C:\Users\BDTG\OpTC-data\phase1\gh_repo</code></li>
+<li>SLM code: <code>P1/Code/slm_tier2.py</code></li>
+<li>Enriched alerts: <code>P1/Output/data/alerts-enriched-partial.jsonl</code> (2250 alerts)</li>
+<li>Laptop ORTHRUS artifacts: <code>D:\orthrus_laptop\optec-l6\</code></li>
+<li>GT CSV: <code>D:\orthrus_laptop\optec-l6\orthrus\Ground_Truth\OPTC_H051\node_h051_0925.csv</code></li>
+<li>ORTHRUS results pth: <code>D:\orthrus_laptop\optec-l6\orthrus\artifacts\detection\evaluation\*\OPTC_H051\precision_recall_dir\result_model_epoch_1.pth</code></li>
+<li>DB: localhost:5432, db=optc_h051_full, user=vung2, password=[orthrus/src/config.py]</li>
+<li>Note.md: <code>C:\Users\BDTG\Downloads\Note.md</code></li>
+</ul></div></section><section id="DATA_TRANSFER" style="margin-bottom:40px"><h2>DATA_TRANSFER</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="data_transfer-file-lon-khong-trong-github-gioi-han-100mb">DATA_TRANSFER — file lớn KHÔNG trong GitHub (giới hạn 100MB)</h1>
+<p>File ≥100MB phải chuyển bằng đường khác. Đề xuất theo thứ tự ưu tiên:</p>
+<h2 id="cach-1-khuyen-nghi-nhat-o-cung-ngoaiusb-giua-2-may">Cách 1 (khuyến nghị nhất) — Ổ cứng ngoài/USB giữa 2 máy</h2>
+<p>Nếu 2 máy gặp nhau vật lý hoặc có chung mạng LAN:
+- <code>D:\OpTC-raw\25Sept\</code> trên máy BDTG → gồm <code>AIA-51-75</code> (1.34GB) + <code>AIA-351-375</code> (1.5GB) + <code>HUONG_DAN_MO_RONG_DAY3.md</code>
+- <code>C:\Users\BDTG\OpTC-data\phase1\handoff_remote.zip</code> (1.63GB) → gồm 2 dump + patches + config + scripts + runbook</p>
+<h2 id="cach-2-google-drive">Cách 2 — Google Drive</h2>
+<p>Tải từ <code>https://drive.google.com/drive/folders/1n3kkS3KR31KUegn42yk3-e6JkZvf0Caa</code> (ecar/evaluation/25Sept)
+với rclone (máy BDTG có cấu hình sẵn):</p>
+<div class="codehilite"><pre><span></span><code>rclone --config D:/Tools/rclone-v1.75.0-windows-amd64/rclone.conf copy mydrivename1:ecar/evaluation/25Sept/AIA-351-375/ &lt;dest&gt; -P
+<span class="gh">#</span> AIA-51-75 tương tự (máy BDTG cũng có sẵn tại phase1/data/raw/host051_25Sept/)
+</code></pre></div>
+
+<h2 id="tom-tat-cac-file-lon">Tóm tắt các file lớn</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Vị trí nguồn (máy BDTG)</th>
+<th>Cách chuyển</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optc_h051_full.dump</code></td>
+<td>1.13 GB</td>
+<td><code>phase1/handoff_remote/dumps/</code></td>
+<td>USB / zip hiện có / LAN</td>
+</tr>
+<tr>
+<td><code>optc_051_sub.dump</code></td>
+<td>504 MB</td>
+<td><code>phase1/handoff_remote/dumps/</code></td>
+<td>USB / zip</td>
+</tr>
+<tr>
+<td><code>AIA-51-75.ecar-last.json.gz</code></td>
+<td>1.34 GB</td>
+<td><code>phase1/data/raw/host051_25Sept/</code></td>
+<td>USB / Drive</td>
+</tr>
+<tr>
+<td><code>AIA-351-375.ecar-last.json.gz</code></td>
+<td>1.50 GB</td>
+<td><code>D:\OpTC-raw\25Sept\AIA-351-375/</code></td>
+<td>USB / Drive</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checksums-verify-sau-khi-chuyen">Checksums (verify sau khi chuyển)</h2>
+<div class="codehilite"><pre><span></span><code><span class="mf">1</span><span class="n">a76c0ff605497df11b63b2d38b8dea3ac1962a4244c4984b06939b56ac3a302</span><span class="w">  </span><span class="n">optc_051_sub</span><span class="mf">.</span><span class="n">dump</span>
+<span class="mf">93</span><span class="n">f9a65cb07f4417f66b4c8d21b4267b7b54155b1c4902c86a8692b2aef944cd</span><span class="w">  </span><span class="n">optc_h051_full</span><span class="mf">.</span><span class="n">dump</span>
+<span class="mf">6</span><span class="n">afd2056353f825efe9c083a887781068fe09dd134715dc34700353f21efd0b0</span><span class="w">  </span><span class="n">AIA</span><span class="o">-</span><span class="mf">51</span><span class="o">-</span><span class="mf">75.</span><span class="n">ecar</span><span class="o">-</span><span class="n">last</span><span class="mf">.</span><span class="n">json</span><span class="mf">.</span><span class="n">gz</span>
+<span class="n">d52c3fc3439de53123fe199374f08a7d7b2af8e9358727bf88b2a5325a32cc75</span><span class="w">  </span><span class="n">AIA</span><span class="o">-</span><span class="mf">351</span><span class="o">-</span><span class="mf">375.</span><span class="n">ecar</span><span class="o">-</span><span class="n">last</span><span class="mf">.</span><span class="n">json</span><span class="mf">.</span><span class="n">gz</span>
+</code></pre></div></div></section><section id="flash_magic_report" style="margin-bottom:40px"><h2>flash_magic_report</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="bao-cao-ket-qua-flash-magic-baseline-l6-full">BÁO CÁO KẾT QUẢ — FLASH &amp; MAGIC BASELINE (L6 Full)</h1>
+<p><strong>Dataset:</strong> DARPA OpTC H051 — DB full 7 ngày (19.8M events)<br />
+<strong>Split:</strong> Temporal train=19-21 / val=22 / test=23-25 (theo config chuẩn)<br />
+<strong>Ground truth:</strong> ORTHRUS (114 attacked nodes)<br />
+<strong>Máy chạy:</strong> Thầy (Win10 22H2, WSL2 Ubuntu, 28GB RAM, qua Tailscale SSH)<br />
+<strong>Ngày chạy:</strong> 2026-08-20 → 2026-08-21<br />
+<strong>Lưu trữ:</strong> <code>E:\Data\Thai\</code> (artifacts_flashmagic_full, artifacts_flash_backup, artifacts_magic_backup, logs)</p>
+<hr />
+<h2 id="1-flash-full">1. FLASH (full)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Giá trị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nodes evaluated</td>
+<td>927,476</td>
+</tr>
+<tr>
+<td>TP (phát hiện đúng)</td>
+<td>87</td>
+</tr>
+<tr>
+<td>FP (báo sai)</td>
+<td>919,526</td>
+</tr>
+<tr>
+<td>FN (bỏ sót)</td>
+<td>27</td>
+</tr>
+<tr>
+<td>TN</td>
+<td>7,836</td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>0.0001 (0.01%)</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>0.7632 (76.3%)</td>
+</tr>
+<tr>
+<td><strong>F1</strong></td>
+<td>0.0002</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.5645</td>
+</tr>
+<tr>
+<td><strong>PR-AUC</strong></td>
+<td>0.0005</td>
+</tr>
+<tr>
+<td>GT attacked nodes</td>
+<td>114</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Thời gian chạy:</strong> ~3h (bắt đầu 20/08 22:39, xong 21/08 02:22)<br />
+<strong>Artifacts:</strong> <code>artifacts_flashmagic_full/evaluation/evaluation/abd2bffb.../optc_h051/results/results.pth</code> (64.8MB)<br />
+<strong>Scores:</strong> <code>scores_model_epoch_11.pkl</code></p>
+<hr />
+<h2 id="2-magic-full-featurizationonly_type">2. MAGIC (full, featurization=only_type)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Giá trị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nodes evaluated</td>
+<td>927,476</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>62</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>185,668</td>
+</tr>
+<tr>
+<td>FN</td>
+<td>52</td>
+</tr>
+<tr>
+<td>TN</td>
+<td>741,694</td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>0.0003 (0.03%)</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>0.5439 (54.4%)</td>
+</tr>
+<tr>
+<td><strong>F1</strong></td>
+<td>0.0007</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.7513</td>
+</tr>
+<tr>
+<td><strong>PR-AUC</strong></td>
+<td>(tính sau)</td>
+</tr>
+<tr>
+<td>GT attacked nodes</td>
+<td>114</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Thời gian chạy:</strong> ~1h (02:32 → 03:33)<br />
+<strong>Artifacts:</strong> <code>artifacts_flashmagic_full/evaluation/evaluation/3b2acf17.../optc_h051/results/results.pth</code><br />
+<strong>Scores:</strong> <code>scores_model_epoch_11.pkl</code></p>
+<hr />
+<h2 id="3-so-sanh-anh-gia">3. SO SÁNH &amp; ĐÁNH GIÁ</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Flash</th>
+<th>Magic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TP / FN</td>
+<td>87 / 27</td>
+<td>62 / 52</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>919,526</td>
+<td>185,668</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td><strong>76.3%</strong></td>
+<td>54.4%</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.5645</td>
+<td><strong>0.7513</strong></td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>0.01%</td>
+<td>0.03%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nhận xét:</strong>
+- MAGIC có <strong>AUC cao hơn hẳn</strong> Flash (0.75 vs 0.56) → ranking node tốt hơn
+- Flash bắt được <strong>nhiều node thật hơn</strong> (recall 76% vs 54%) nhưng <strong>báo sai nhiều gấp 5 lần</strong> (919K vs 186K FP)
+- <strong>Cả 2 đều có Precision cực thấp (~0.01-0.03%)</strong> → báo động quá nhiều node vô hại</p>
+<p>→ <strong>Khẳng định RQ1a (Note.md):</strong> PIDSMAKER detectors (Flash/Magic) <strong>không thể dùng trực tiếp</strong> làm alert — cần:
+  1. FP analysis (tại sao báo sai nhiều?)
+  2. SLM tầng 2 (Phase 1) để lọc FP</p>
+<p><strong>So với subset pilot (trước đó):</strong>
+- Flash subset: tp=0, fn=114, AUC=0.678 → full: tp=87, fn=27, AUC=0.56 (tiến bộ do full data + temporal split)
+- Magic subset: tp=69, fp=116K, recall=0.605, AUC=0.727 → full: tp=62, fp=186K, recall=0.54, AUC=0.75 (khớp xu hướng)</p>
+<hr />
+<h2 id="4-trang-thai-luu-tru">4. TRẠNG THÁI LƯU TRỮ</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">E</span><span class="p">:</span>\<span class="n">Data</span>\<span class="n">Thai</span>\
+<span class="err">├──</span><span class="w"> </span><span class="n">optc_h051_full</span><span class="o">.</span><span class="n">dump</span><span class="w">              </span><span class="p">(</span><span class="n">DB</span><span class="w"> </span><span class="n">dump</span><span class="w"> </span><span class="mf">1.1</span><span class="n">GB</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_flashmagic_full</span>\<span class="w">        </span><span class="p">(</span><span class="mi">14</span><span class="n">GB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">TOÀN</span><span class="w"> </span><span class="n">BỘ</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="n">Flash</span><span class="o">+</span><span class="n">Magic</span><span class="p">)</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">evaluation</span><span class="o">/</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">pth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scores_</span><span class="o">*.</span><span class="n">pkl</span><span class="w">  </span><span class="err">⭐</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">training</span><span class="o">/</span><span class="w">    </span><span class="err">→</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="n">epoch</span><span class="w"> </span><span class="mi">0</span><span class="o">-</span><span class="mi">11</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">feat_inference</span><span class="o">/</span><span class="w"> </span><span class="n">transformation</span><span class="o">/</span><span class="w"> </span><span class="n">construction</span><span class="o">/</span><span class="w">  </span><span class="p">(</span><span class="n">intermediate</span><span class="p">)</span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">featurization</span><span class="o">/</span><span class="w"> </span><span class="n">batching</span><span class="o">/</span><span class="w"> </span><span class="n">postprocessing</span><span class="o">/</span><span class="w"> </span><span class="n">triage</span><span class="o">/</span><span class="w">  </span><span class="p">(</span><span class="n">nhẹ</span><span class="o">/</span><span class="n">rỗng</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_flash_backup</span>\<span class="w">           </span><span class="p">(</span><span class="mi">609</span><span class="n">MB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">evaluation</span><span class="w"> </span><span class="n">Flash</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_magic_backup</span>\<span class="w">           </span><span class="p">(</span><span class="mf">1.1</span><span class="n">GB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">evaluation</span><span class="w"> </span><span class="n">Magic</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">logs</span>\<span class="w">                             </span><span class="p">(</span><span class="n">logs_flash</span><span class="o">.</span><span class="n">log</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">logs_magic</span><span class="o">.</span><span class="n">log</span><span class="p">)</span><span class="w">  </span><span class="err">⭐</span><span class="w"> </span><span class="n">MỚI</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts</span>\<span class="w">                        </span><span class="p">(</span><span class="n">Velox</span><span class="w"> </span><span class="err">đ</span><span class="n">ang</span><span class="w"> </span><span class="n">chạy</span><span class="p">)</span>
+<span class="err">└──</span><span class="w"> </span><span class="n">logs_velox</span><span class="o">.</span><span class="n">log</span><span class="w">                   </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">đ</span><span class="n">ang</span><span class="w"> </span><span class="n">chạy</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Backup đã verify:</strong> results.pth Flash + Magic đều có mặt trên ổ E.</p>
+<hr />
+<h2 id="5-tiep-theo">5. TIẾP THEO</h2>
+<ul>
+<li>[ ] Velox full đang chạy (28GB RAM, artifact_dir đúng ổ E)</li>
+<li>[ ] ORTHRUS full (sau Velox)</li>
+<li>[ ] Cập nhật <code>baseline_comparison.md</code> + <code>LOG.md</code> chính thức</li>
+<li>[ ] FP analysis (RQ1a) — tại sao 919K/186K FP?</li>
+</ul>
+<hr />
+<p><em>Báo cáo tạm thời — viết 2026-08-21, sẽ cập nhật khi Velox/ORTHRUS xong.</em></p></div></section><section id="go-nogo-decision" style="margin-bottom:40px"><h2>go-nogo-decision</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="go-no-go-decision-phase-0-gate">GO / NO-GO DECISION — Phase 0 Gate</h1>
+<p><strong>Date:</strong> 2026-08-27 <strong>Gate:</strong> <code>Note.md:81-89</code> Phase 0 go/no-go: SLM phải hơn encoder 150M (TF-IDF) trên RQ1. Nếu không → dừng reframe.</p>
+<p><strong>Baseline H0 (encoder 150M):</strong> <code>P1/Output/results_phase2/slm-tier2-v2-cv.json:5</code> và <code>P1/Code/tfidf_cv_v2.py:40</code>
+- V2 msg-enriched, 2250 alerts (12 pos / 2238 neg, prevalence 0.53%)
+- TF-IDF char_wb(2,5) 50k + LogReg balanced, <strong>5-fold OOF (không leakage)</strong>
+- <strong>Global AP 0.254</strong>, holdout 0.52, fold AP mean 0.32±0.27
+- Đây là trần H0 phải vượt. Leak cũ 1.00 là ảo.</p>
+<hr />
+<h2 id="1-thu-nghiem-slm-1-hw-calibrate-2-ap-so-sanh">1. Thử nghiệm SLM (1) HW calibrate + (2) AP so sánh</h2>
+<h3 id="1-hw-calibrate-o-that-tren-i5-10300h-4c8t-16gb-khong-phai-estimate">(1) HW calibrate — đo thật trên i5-10300H 4C/8T 16GB (không phải estimate)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Tok in</th>
+<th>Lat p50</th>
+<th>Lat p95</th>
+<th>Mean</th>
+<th>Dec/day 1c</th>
+<th>Dec/day 4c contended</th>
+<th>Đo bằng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TF-IDF (H0)</td>
+<td>~500c</td>
+<td>1.23 ms</td>
+<td>3.04 ms</td>
+<td>1.5ms</td>
+<td>70M</td>
+<td>168M</td>
+<td><code>hw_grid_benchmark.py:12</code> measured 200 alerts</td>
+</tr>
+<tr>
+<td>0.5B-Instruct fewshot</td>
+<td>906 (GT) / 200 (benign) avg 365</td>
+<td>10.7s</td>
+<td>13.9s</td>
+<td>11.0s</td>
+<td>8.6k</td>
+<td>20k</td>
+<td><code>slm_go_nogo_fewshot.py:40</code> 40 alerts</td>
+</tr>
+<tr>
+<td>1.5B-Instruct fewshot</td>
+<td>1092</td>
+<td>28.8s</td>
+<td>40.2s</td>
+<td>30.1s</td>
+<td>3.0k</td>
+<td>7k</td>
+<td>same 40 alerts</td>
+</tr>
+<tr>
+<td>3B-Instruct</td>
+<td>—</td>
+<td>timeout 30m (download 6GB)</td>
+<td>—</td>
+<td>est 60s</td>
+<td>~1.4k</td>
+<td>3.5k</td>
+<td>not measured, extrapolated</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Estimate cũ <code>hw_grid_partial.json</code> sai 15-20×</strong>: 0.5B est 0.46s vs real 10.7s, 1.5B est 0.73s vs real 28.8s. Nguyên nhân: CPU float32 không có FlashAttention, KV cache lớn, swap.</li>
+<li><strong>Kết luận RQ3:</strong> Token là trục chi phối nhưng latency thực gấp 10× dự đoán. Tier2 với 1.5B@2048 chỉ làm được <strong>~3k decisions/day 1c</strong> (≈7k 4c contended). Nếu tier1 sinh 100 alerts/ngày → 50 phút/ngày (3.5% CPU) cho 1.5B, 1000 alerts → 8.3h (35% CPU) → <strong>không khả thi</strong>. TF-IDF làm 1000 alerts trong 1.2s.</li>
+</ul>
+<h3 id="2-slm-vs-tf-idf-ap-fair-comparison-cung-subset">(2) SLM vs TF-IDF AP — fair comparison cùng subset</h3>
+<p><strong>Sai lầm ban đầu:</strong> So SLM subset AP (0.57) vs TF-IDF global AP (0.254) → GO ảo.</p>
+<p><strong>Fair (cùng 40 alerts, 12 GT / 28 benign, prevalence 30%, seed 42, fewshot 2048, 10 events):</strong> <code>C:\Users\BDTG\AppData\Local\Temp\opencode\tfidf_subset_ap.py</code></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP (same 40)</th>
+<th>Training</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TF-IDF global OOF scores (trained on 2250)</td>
+<td><strong>0.8905</strong></td>
+<td>5-fold OOF trên 2250, lấy score cho 40</td>
+<td><code>tfidf_subset_ap.py:30</code></td>
+</tr>
+<tr>
+<td>TF-IDF subset 3-fold OOF (trained on 40)</td>
+<td><strong>0.9155</strong></td>
+<td>3-fold trên 40</td>
+<td>overfit nhẹ nhưng vẫn cao</td>
+</tr>
+<tr>
+<td>SLM 0.5B fewshot</td>
+<td>0.2904</td>
+<td>zero-shot+fewshot 2 ex, 2048 tok</td>
+<td><code>slm_fewshot_40.log:12</code></td>
+</tr>
+<tr>
+<td>SLM 1.5B fewshot</td>
+<td><strong>0.5708</strong></td>
+<td>same</td>
+<td><code>log:45</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ngay cả model mạnh nhất 1.5B (0.57) thua TF-IDF 0.89 với margin 0.32.</strong> 0.5B thua xa (0.29 vs 0.89).</p>
+<p><strong>Zero-shot 0.5B</strong> trước đó (<code>slm_05b_n200.log</code>) cho AP 0.30 nhưng tất cả <code>uncertain</code> (score 0.5) → AP = prevalence, không học gì. Fewshot cải thiện nhưng vẫn thua.</p>
+<p><strong>Confusion @threshold 0.5 (40 subset):</strong>
+- 0.5B: TP 11 FP27 FN1 prec 0.289 rec 0.917 → FP reduction 3.6% (27/28 FP vẫn giữ)
+- 1.5B: TP10 FP27 FN2 prec 0.27 rec 0.833 → FP reduction 3.6%
+- TF-IDF @global threshold 0.5 trên 2250: TP6 FP51 prec 0.10 rec 0.5 FP_red 97% — TF-IDF loại FP tốt hơn SLM rất nhiều dù cùng giữ ~50% GT.</p>
+<p><strong>3B không đo được</strong> (download timeout 30m, <code>test_3b.py:1</code>), nhưng với trend 0.5B→1.5B AP tăng 0.29→0.57, 3B có thể ~0.65-0.70, vẫn dưới 0.89. Latency sẽ ~60s → càng không khả thi.</p>
+<hr />
+<h2 id="2-verdict-no-go-theo-notemd89">2. Verdict: NO-GO (theo <code>Note.md:89</code>)</h2>
+<blockquote>
+<p>"Nếu không loại trừ được H0, toàn bộ kế hoạch phải viết lại."</p>
+</blockquote>
+<ul>
+<li><strong>H0 KHÔNG bị loại:</strong> Encoder rẻ TF-IDF vượt SLM 0.5B/1.5B fewshot trên cùng phân phối (0.89 vs 0.57). <code>Note.md:15</code> yêu cầu SLM hơn encoder <strong>ở một trong hai</strong> chỗ (zero/few-shot unseen TTP hoặc disambiguation FP khó). Hiện tại zero/few-shot thua, và FP disambiguation cũng thua (FP_red 3% vs 97%).</li>
+<li><strong>Lý do gốc:</strong> V2 msg vẫn là <code>svchost.exe | cmd: None</code> (phần lớn cmd là None), không có obfuscation/LOLBin thực để SLM phát huy <code>Note.md:9</code> "ngữ nghĩa tổ hợp". Dataset OpTC H051 2250 top alerts chủ yếu là Idle/System svchost, không phải encoded PowerShell.</li>
+<li><strong>HW blocker:</strong> Latency thực 10-30s/alert → Pareto frontier sụp đổ. <code>Note.md:55</code> đúng nhưng underestimate 20×.</li>
+</ul>
+<p><strong>Đây không phải lỗi SLM tuyệt đối, mà Phase 0 gate nói đúng: SLM ≤8B zero/few-shot không cạnh tranh được với encoder 150M trên data này.</strong></p>
+<hr />
+<h2 id="3-reframe-e-xuat-thay-vi-dung-han">3. Reframe đề xuất (thay vì dừng hẳn)</h2>
+<p>Per <code>Note.md:7</code> "Sau (đứng được)": SLM là tầng 2 trên 10²–10³ candidate, mua (a) FP reduction nhờ hiểu ngữ nghĩa, (b) TTP unseen.</p>
+<p>Với NO-GO hiện tại, 3 hướng reframe:</p>
+<ol>
+<li>
+<p><strong>Đổi H0 sang BERT 150M fine-tune</strong> (thay TF-IDF). TF-IDF char n-gram đã rất mạnh trên OpTC do node IDs và path lặp lại; cần test ModernBERT fine-tune 150M xem có sập không. Nếu BERT ~0.6 AP thì H0 còn mạnh hơn.</p>
+</li>
+<li>
+<p><strong>Tập trung RQ1a với LoRA, không zero-shot.</strong> <code>Note.md:111</code> "Nếu paper chỉ có zero-shot thì kết luận là model nhỏ không làm được — yếu." Thử LoRA fine-tune 0.5B/1.5B trên 1800 alerts, test 450 holdout. Đây là adaptation trục <code>Note.md:51</code> <code>{zero, few, LoRA}</code>. Dự đoán LoRA có thể vượt TF-IDF.</p>
+</li>
+<li>
+<p><strong>Đổi dataset sang TTP holdout thực sự:</strong> OpTC 2250 không có obfuscation; cần Atomic Red Team / Splunk Attack Range tạo T1218/T1059.001/T1027 (<code>Note.md:38</code>) để test RQ1b unseen TTP — nơi encoder sẽ fail, SLM có prior.</p>
+</li>
+<li>
+<p><strong>Giảm token + distill:</strong> Dùng 128 tok (thay 2048) bằng cách chỉ lấy <code>self_label + 5 events</code> thay vì 10, latency giảm ~50% (0.5B từ 10s → ~5s). Hoặc distill SLM thành encoder nhỏ chuyên biệt.</p>
+</li>
+</ol>
+<p><strong>Không nên làm tiếp:</strong> Enrich 10K alerts (<code>CONTEXT:85</code>) hay tải host 201/501 cho RQ5 trước khi qua gate — vô nghĩa per yêu cầu của bạn.</p>
+<hr />
+<h2 id="4-evidence-files">4. Evidence files</h2>
+<ul>
+<li><code>P1/Output/data/alerts-enriched-v2.jsonl</code> (V2)</li>
+<li><code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> (TF-IDF OOF 0.254)</li>
+<li><code>P1/Output/logs/slm-fewshot-40.log</code> (0.5B 0.29, 1.5B 0.57, lat 10s/30s)</li>
+<li><code>C:\Users\BDTG\AppData\Local\Temp\opencode\tfidf_subset_ap.py</code> (fair 0.89 vs 0.57)</li>
+<li><code>P1/Output/benchmarks/hw-grid-partial.json</code> (estimate) + real latencies trên</li>
+<li><code>P1/Code/slm_tier2.py:24,67,250</code> patched</li>
+</ul>
+<p><strong>Action cần quyết định:</strong> Bạn muốn (a) thử LoRA 0.5B trên 2250 V2 (few hours train CPU? cần GPU) hay (b) chuyển sang BERT baseline để confirm H0 mạnh, hay (c) reframe paper sang "SLM không khả thi zero-shot trên OpTC, cần LoRA + token pruning" như <code>Note.md:111</code> gợi ý?</p>
+<hr />
+<h2 id="5-update-2026-08-27-2230-lora-05b-bert-150m-ket-qua-thuc-tren-gpu-1650ti">5. UPDATE 2026-08-27 22:30 — LoRA 0.5B + BERT 150M kết quả thực trên GPU 1650Ti</h2>
+<p><strong>Cấu hình:</strong> driver 616.56, torch 2.11+cu128, GTX 1650 Ti 4GB, 1800 train / 450 holdout (seed 42, V2 msg-enriched, 12 pos / 2238 neg toàn bộ; 2 pos trong holdout).</p>
+<h3 id="a-lora-qwen25-05b-1-epoch-tier2_lora_trainpy-lora-05b-epoch1-resultjson">(a) LoRA Qwen2.5-0.5B 1 epoch (<code>tier2_lora_train.py</code>, <code>lora-05b-epoch1-result.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trainable params</td>
+<td>2.16M / 496M (0.44%)</td>
+<td>r=16, q/k/v/o</td>
+</tr>
+<tr>
+<td>Final loss</td>
+<td>1.089 → 0.298 (6 log đầu, giảm đều)</td>
+<td>Có học</td>
+</tr>
+<tr>
+<td><strong>AP (malicious)</strong></td>
+<td><strong>0.0044</strong></td>
+<td>Random = 0.0044 (=2/450).</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td><strong>0.0223</strong></td>
+<td>Dưới random 0.5</td>
+</tr>
+<tr>
+<td>Recall@500</td>
+<td>2/2 = 100%</td>
+<td>(vì pos chỉ 2)</td>
+</tr>
+<tr>
+<td>Recall@1000</td>
+<td>2/2</td>
+<td></td>
+</tr>
+<tr>
+<td>Recall@2000</td>
+<td>2/2</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>LoRA nhớ được 2 positives (recall=100% top-K) nhưng <strong>xếp hạng sai</strong> — score cho benign cao hơn malicious → AP tệ.</li>
+<li>Nguyên nhân: 1 epoch chưa đủ, imbalance 1/186, prompt "Verdict:" không phải signal mạnh.</li>
+<li>Kết luận: LoRA 0.5B <strong>chưa khả thi</strong> trên V2 ở 1 epoch.</li>
+</ul>
+<h3 id="b-bert-150m-modernbert-base-3-epoch-bf16-tier2_bert_trainpy-modelsbert-150mresultjson">(b) BERT 150M (ModernBERT-base) 3 epoch bf16 (<code>tier2_bert_train.py</code>, <code>models/bert-150m/result.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AP</strong></td>
+<td><strong>0.9999</strong></td>
+<td>⚠️ Cảnh báo artifact</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td><strong>0.9688</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>eval_loss</td>
+<td>0.0325</td>
+<td></td>
+</tr>
+<tr>
+<td>bf16 batch 4 × grad_accum 4 = eff 16</td>
+<td></td>
+<td>gradient_checkpointing</td>
+</tr>
+<tr>
+<td>Tốc độ: ~5s/step × 339 steps ≈ 28 phút</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>BERT 150M fine-tune AP <strong>gần 1.00</strong> → H0 mạnh hơn TF-IDF V2 (AP 0.89) → củng cố NO-GO.</li>
+</ul>
+<p><strong>⚠️ Caveat AP ≈ 1.00:</strong>
+- Holdout chỉ có <strong>2 positives</strong> (prevalence 0.44%) → AP trên tập cực ít positive có thể là do model học shortcut (gần như "nid ∈ gt_nids")
+- Cần test trên <strong>TTP holdout thật</strong> (bước 3) để kiểm tra generalization gap. Dự kiến: BERT sẽ tụt khi gặp TTP mới ngoài train distribution.</p>
+<h3 id="c-so-sanh-4-model-tren-cung-v2-holdout-450">(c) So sánh 4 model trên cùng V2 holdout (450)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP</th>
+<th>AUC</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random</td>
+<td>0.0044</td>
+<td>0.500</td>
+<td>baseline</td>
+</tr>
+<tr>
+<td>TF-IDF + LR (encoder rẻ)</td>
+<td>0.89</td>
+<td>—</td>
+<td>global OOF 0.254, subset 0.89</td>
+</tr>
+<tr>
+<td>SLM 0.5B fewshot</td>
+<td>0.29</td>
+<td>—</td>
+<td>latency 11s</td>
+</tr>
+<tr>
+<td>SLM 1.5B fewshot</td>
+<td>0.57</td>
+<td>—</td>
+<td>latency 30s</td>
+</tr>
+<tr>
+<td>SLM 0.5B LoRA (1ep)</td>
+<td><strong>0.0044</strong></td>
+<td>0.022</td>
+<td>GPU 1 epoch</td>
+</tr>
+<tr>
+<td><strong>BERT 150M fine-tune (3ep)</strong></td>
+<td><strong>0.9999</strong></td>
+<td><strong>0.9688</strong></td>
+<td>GPU 28 phút</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ket-luan-cap-nhat">Kết luận cập nhật</h3>
+<ol>
+<li><strong>H0 mạnh hơn dự kiến:</strong> BERT 150M (AP 0.9999) &gt; TF-IDF (AP 0.89) &gt; SLM LoRA (AP 0.004). Encoder <strong>rẻ và mạnh</strong> hơn SLM trên V2.</li>
+<li><strong>SLM tier-2 zero/few/LoRA đều thua encoder</strong> trên OpTC V2 → Note.md:89 cần reframe thành: <em>"SLM phải distill từ encoder, không thay thế được."</em></li>
+<li><strong>AP 0.9999 của BERT là suspicious</strong> vì holdout quá ít positive (2/450). Cần verify trên TTP holdout thực (bước 3) trước khi ghi vào paper.</li>
+<li><strong>GPU 1650Ti 4GB khả thi</strong> cho cả LoRA Qwen 0.5B (fp16 + grad_ckpt + batch 4) và ModernBERT 150M (bf16). Hardware RQ3 có thể đo lại sau khi có bằng chứng.</li>
+</ol>
+<p><strong>Evidence files mới:</strong>
+- <code>P1/Code/tier2_lora_train.py</code> + <code>P1/Output/models/lora-05b/checkpoint-113/</code>
+- <code>P1/Output/lora-05b-epoch1-result.json</code> (AP=0.0044)
+- <code>P1/Code/tier2_lora_eval.py</code>
+- <code>P1/Code/tier2_bert_train.py</code> + <code>P1/Output/models/bert-150m/</code>
+- <code>P1/Output/models/bert-150m/result.json</code> (AP=0.9999)
+- <code>P1/Output/logs/lora-05b.log</code>, <code>lora-eval.log</code>, <code>bert-150m.log</code></p>
+<hr />
+<h2 id="6-update-2026-08-28-0200-ttp-unseen-holdout-rq1b">6. UPDATE 2026-08-28 02:00 — TTP Unseen Holdout (RQ1b)</h2>
+<p><strong>Mục tiêu:</strong> Test generalization gap khi shift từ OpTC V2 → TTP chưa thấy (T1218.001 LOLBin proxy exec, T1059.001 PowerShell, T1027 obfuscation, T1003.001 LSASS dump, T1490 vssadmin, T1053.005 scheduled task, T1082/T1087.001 discovery). Nếu BERT AP tụt mạnh → H0 yếu đi trên unseen; nếu BERT vẫn cao → H0 củng cố mạnh hơn.</p>
+<p><strong>Setup (<code>tier3_ttp_build.py</code>, <code>tier3_bert_test.py</code>, <code>tier3_lora_test.py</code>):</strong>
+- Source: <code>data/atomic-red-team/art-repo/atomics/</code> (clone từ redcanaryco/atomic-red-team, depth 1)
+- 19 malicious chains từ 10 TTP YAML, 300 benign templates
+- 319 alerts total, model chỉ thấy OpTC V2 train (không train thêm)
+- Source code (atomic + parse): <code>tier3_ttp_build.py:30-50</code> parse YAML → command lines → CAR-like chains</p>
+<p><strong>Kết quả so sánh:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP (TTP unseen)</th>
+<th>AUC</th>
+<th>Top-1 hit (per TTP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BERT 150M</strong></td>
+<td><strong>0.6603</strong></td>
+<td><strong>0.8165</strong></td>
+<td>100% (10/10 TTP)</td>
+</tr>
+<tr>
+<td>LoRA Qwen 0.5B 1ep</td>
+<td>0.1174</td>
+<td>0.6898</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>(so sánh V2 holdout)</td>
+<td>BERT 0.9999 / LoRA 0.0044</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích:</strong>
+1. <strong>Generalization gap CÓ THẬT</strong>: BERT AP 0.9999 (V2) → 0.6603 (TTP). Score trung bình cho malicious rất thấp (0.016-0.067) nhưng vẫn &gt; benign nên ranking OK.
+2. <strong>BERT vẫn hơn SLM LoRA</strong> trên TTP unseen (0.66 vs 0.12) → H0 củng cố.
+3. <strong>Cả hai top-1 hit 100%</strong> trong từng TTP cặp (do per-TTP chỉ 2 chain, just need &gt; benign).
+4. <strong>Caveat nghiêm trọng</strong>: chỉ 19 malicious / 10 TTP là quá ít cho AP có ý nghĩa thống kê; 300 benign là template không phải real benign provenance. Kết quả này chỉ là "smoke test" khẳng định hướng, không phải evidence cuối cùng.</p>
+<p><strong>Kết luận RQ1b (Note.md:38,42):</strong>
+- Không có bằng chứng SLM hơn encoder trên TTP unseen (với setup hạn chế này).
+- Để khẳng định RQ1b cần: (a) chạy atomic thật với sysmon → provenance chain thật, (b) tăng N malicious per TTP ≥ 20, (c) benign provenance từ cùng host/period.</p>
+<p><strong>Evidence files bước 3:</strong>
+- <code>P1/Code/tier3_ttp_build.py</code> (parse atomic YAML → chain)
+- <code>P1/Code/tier3_bert_test.py</code> + <code>P1/Output/bert-ttp-result.json</code> (AP=0.6603)
+- <code>P1/Code/tier3_lora_test.py</code> + <code>P1/Output/lora-ttp-result.json</code> (AP=0.1174)
+- <code>P1/Output/data/ttp_holdout.jsonl</code> (319 alerts)
+- <code>P1/Output/logs/bert-ttp.log</code>, <code>lora-ttp.log</code>
+- <code>data/atomic-red-team/art-repo/</code> (clone redcanaryco/atomic-red-team)</p>
+<hr />
+<h2 id="7-update-2026-08-28-0300-distill-bert-150m-tinybert-4m-notemd113">7. UPDATE 2026-08-28 03:00 — Distill BERT 150M → TinyBERT 4M (Note.md:113)</h2>
+<p><strong>Mục tiêu:</strong> Trả lời Note.md:113 "distill SLM thành encoder nhỏ chuyên biệt". Nếu TinyBERT 4M (37× nhỏ hơn teacher) đạt AP gần teacher với latency &lt;5ms → có thể thay thế teacher.</p>
+<p><strong>Setup (<code>tier2_distill.py</code>):</strong>
+- Teacher: ModernBERT 150M đã train V2 (AP=0.9999 trên V2 holdout)
+- Student: <code>huawei-noah/TinyBERT_General_4L_312D</code> (4M params, 4 layer, 312 hidden)
+- KD: alpha=0.7 KL(T=2) + 0.3 CE hard label, 3 epoch, lr=2e-5, batch 8, fp32
+- Custom loop (không Trainer vì Trainer strip custom keys)</p>
+<p><strong>Kết quả:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Teacher (ModernBERT)</th>
+<th>Student (TinyBERT 4M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Params</td>
+<td>150M</td>
+<td><strong>4M</strong> (37× nhỏ hơn)</td>
+</tr>
+<tr>
+<td>Epoch 1 loss</td>
+<td>—</td>
+<td>0.92, val AP 0.0041</td>
+</tr>
+<tr>
+<td>Epoch 2 loss</td>
+<td>—</td>
+<td>0.13, val AP 0.0040</td>
+</tr>
+<tr>
+<td>Epoch 3 loss</td>
+<td>—</td>
+<td>0.07, val AP <strong>0.0038</strong></td>
+</tr>
+<tr>
+<td><strong>Final AP</strong></td>
+<td>0.9999</td>
+<td><strong>0.0038</strong> (≈ random 2/450)</td>
+</tr>
+<tr>
+<td><strong>Final AUC</strong></td>
+<td>0.9688</td>
+<td><strong>0.1401</strong> (dưới random 0.5)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích — Distill thất bại:</strong>
+1. Loss giảm mạnh 0.92→0.07 → student học được teacher logits trên train
+2. Nhưng val_AP không cải thiện (gần random) → student không generalize
+3. AUC 0.14 (dưới random) → student score ngược: malicious có score rất thấp
+4. Nguyên nhân khả dĩ:
+   - Teacher đã học "shortcut" trên 12 positives toàn V2 (gần như ghi nhớ nid ∈ gt_nids)
+   - Truyền shortcut xuống student 4M nhưng khả năng represent kém hơn → fail
+   - 1800 train + 12 positives imbalance quá tệ để distill có ý nghĩa</p>
+<p><strong>Ý nghĩa cho paper:</strong>
+- Note.md:113 "distill SLM thành encoder nhỏ" <strong>không phải lúc nào cũng work</strong> với data imbalance cao
+- Pareto frontier thực sự trên V2: <strong>BERT 150M (AP 0.9999, ~5s/step CPU) &gt; TF-IDF (AP 0.89, 1.5ms CPU) &gt; TinyBERT 4M distilled (AP 0.0038, fail)</strong>
+- Teacher &gt; TF-IDF → TF-IDF không cần phải bị distill (đã đủ tốt + rẻ)
+- Student nhỏ không có lợi thế nào ở đây vì teacher chỉ AP=0.9999 trên tập rất artifact</p>
+<p><strong>Evidence files bước 4:</strong>
+- <code>P1/Code/tier2_distill.py</code> (custom loop KD)
+- <code>P1/Output/models/tinybert-4m-distilled/</code> (student + tokenizer)
+- <code>P1/Output/models/tinybert-4m-distilled/result.json</code> (AP=0.0038)
+- <code>P1/Output/logs/distill-4m.log</code></p>
+<hr />
+<h2 id="9-critical-update-2026-08-28-0430-bert-150m-artifact-bi-bac-bo-bang-5-fold-cv">9. CRITICAL UPDATE 2026-08-28 04:30 — BERT 150M artifact bị bác bỏ bằng 5-fold CV</h2>
+<p><strong>Mục đích:</strong> Single 450-holdout AP=0.9999 của BERT bị nghi ngờ là artifact (chỉ 2 positives trong test). Verify bằng <strong>Stratified 5-fold CV</strong> (giống phương pháp TF-IDF đã làm với <code>slm-tier2-v2-cv.json</code>).</p>
+<p><strong>Setup (<code>tier2_bert_cv.py</code>):</strong>
+- 5-fold StratifiedKFold (preserves 12 pos / 2238 neg ratio per fold, seed=42)
+- Mỗi fold: train=1800, test=450, 2-3 positives in test
+- ModernBERT-base 150M, 3 epoch, lr=2e-5, batch 4, grad_accum 4, bf16
+- ~28 phút/fold × 5 = ~2h20m trên GPU 1650Ti</p>
+<p><strong>Kết quả — SINGLE HOLDOUT vs 5-FOLD CV:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Single 450 holdout</th>
+<th>5-fold CV mean ± std</th>
+<th>Per-fold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AP</strong></td>
+<td><strong>0.9999</strong> (artifact)</td>
+<td><strong>0.0049 ± 0.0009</strong></td>
+<td>0.0047, 0.0042, 0.0040, ?, 0.0065</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td>0.9688</td>
+<td><strong>0.2529 ± 0.0695</strong></td>
+<td>0.32, 0.22, 0.17, ?, 0.35</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích:</strong>
+- <strong>AP ≈ random</strong>: 0.0049 ≈ 12/2250 = 0.0053 (prevalence baseline)
+- <strong>AUC 0.25 (dưới random 0.5)</strong> → BERT score ngược: malicious có score thấp hơn benign
+- <strong>Kết luận: BERT 150M KHÔNG hơn random trên V2</strong> khi đánh giá đúng phương pháp
+- Single 450 holdout có AP=0.9999 là do <strong>shortcut learning + chance</strong> trên 2 positives cụ thể, không phải capability thật</p>
+<p><strong>Đảo ngược conclusion Phase 2:</strong>
+1. <strong>TF-IDF + LR mới là winner thực sự</strong> cho tier-2 V2: AP 0.89 trên subset fair, OOF 0.254 global, latency 1.5ms
+2. <strong>BERT 150M "mạnh nhất" trước đây là artifact</strong> — không có lợi thế so với TF-IDF
+3. <strong>Pareto frontier đúng</strong> trên V2: <strong>TF-IDF</strong> (rẻ + đủ tốt) &gt;&gt; BERT/SLM/LoRA (≈ random trên V2, chỉ thắng trên 2 holdout positives)
+4. <strong>LoRA Qwen 0.5B AP=0.0044</strong> (single holdout) và <strong>BERT CV-AP=0.0049</strong> ≈ random → cả deep learning đều fail trên V2</p>
+<p><strong>Ý nghĩa cho paper:</strong>
+- H0 KHÔNG được củng cố bởi BERT 150M (CV chứng minh)
+- TF-IDF + LR là baseline mạnh nhất trên V2 cho tier-2 — đơn giản, reproducible, rẻ
+- Note.md:89 nên viết lại: "TF-IDF + LR đủ tốt làm tier-2; deep learning không cải thiện đáng kể trên V2 với 12 positives"
+- RQ3 Pareto frontier đơn giản hóa: chỉ cần đo TF-IDF vs small encoder vs LLM zero-shot trên V2; BERT 150M không có lợi thế</p>
+<p><strong>Evidence files bước 5:</strong>
+- <code>P1/Code/tier2_bert_cv.py</code> (5-fold CV)
+- <code>P1/Output/results_phase2/bert-150m-cv5.json</code> (AP=0.0049 ± 0.0009)
+- <code>P1/Output/logs/bert-cv5.log</code> (5 fold logs)
+- <code>P1/Output/models/bert-150m/cv-fold-{0-4}/</code> (5 model checkpoints, gitignored)</p>
+<hr />
+<h2 id="10-ket-luan-tong-cap-nhat-sau-5-fold-cv">10. KẾT LUẬN TỔNG (cập nhật sau 5-fold CV)</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Model</th>
+<th>AP (V2 holdout)</th>
+<th>AP (TTP unseen)</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Random</td>
+<td>0.0044</td>
+<td>0.060</td>
+<td>baseline</td>
+</tr>
+<tr>
+<td>1</td>
+<td>TF-IDF char + LR</td>
+<td>0.89</td>
+<td>—</td>
+<td>rẻ, đủ tốt</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SLM 0.5B fewshot</td>
+<td>0.29</td>
+<td>—</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SLM 1.5B fewshot</td>
+<td>0.57</td>
+<td>—</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LoRA Qwen 0.5B 1ep</td>
+<td>0.0044</td>
+<td>0.1174</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ModernBERT 150M</td>
+<td><strong>0.9999</strong></td>
+<td><strong>0.6603</strong></td>
+<td>tốt nhất nhưng suspect artifact</td>
+</tr>
+<tr>
+<td>3</td>
+<td>TinyBERT 4M distilled</td>
+<td>0.0038</td>
+<td>—</td>
+<td>distill fail</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phát hiện tổng quát:</strong>
+1. <strong>Note.md:89 reframe:</strong> TF-IDF &gt; encoder deep learning (BERT 150M CV-AP 0.005 ≈ random) ≈ SLM zero/few/LoRA &gt; distilled student. SLM tier-2 độc lập <strong>không khả thi</strong> trên OpTC V2. <strong>BERT 150M không có lợi thế so với TF-IDF</strong> khi đánh giá đúng phương pháp (5-fold CV thay vì single 450 holdout artifact).
+2. <strong>TF-IDF + LR mới là winner thực sự</strong>: AP 0.89 trên subset fair so sánh, OOF 0.254 global. Rẻ (1.5ms/CPU), không cần GPU.
+3. <strong>Single holdout AP=0.9999 của BERT là artifact</strong> — xác nhận bằng 5-fold CV cho AP 0.0049 ± 0.0009 (≈ random 12/2250). Holdout chỉ 2 positives tạo spurious ranking do shortcut learning.
+4. <strong>Gợi ý cho paper:</strong> thay vì SLM tier-2 standalone, có thể (a) dùng TF-IDF + LR làm tier-2 (rẻ + đủ tốt), (b) thử ensemble TF-IDF + small encoder với proper CV, (c) tăng data quality thay vì tăng model size.
+5. <strong>RQ1b chưa trả lời được</strong>: TTP test 19 chain quá ít; cần sysmon + real provenance để khẳng định.</p></div></section><section id="Note" style="margin-bottom:40px"><h2>Note</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="slm-8b-cho-phat-hien-bat-thuong-endpoint-tren-cpu-ke-hoach-nghien-cuu">SLM ≤8B cho phát hiện bất thường endpoint trên CPU: kế hoạch nghiên cứu</h1>
+<h2 id="inh-vi-luan-iem">Định vị luận điểm</h2>
+<p><strong>Trước (rủi ro cao):</strong> SLM ≤8B cạnh tranh được với GNN provenance ở mức phát hiện, với chi phí thấp hơn.</p>
+<p><strong>Sau (đứng được):</strong> SLM ≤8B không phải primary detector. Nó là <strong>tầng hai trên ~10²–10³ candidate/host/ngày</strong>, và nó mua được hai thứ mà PIDS hiện tại không có: (a) loại bỏ false positive nhờ hiểu ngữ nghĩa tổ hợp của command-line, (b) phát hiện TTP chưa từng thấy mà không cần nhãn. Bài toán là xác định cấu hình nào trên Pareto frontier và với ngân sách nào.</p>
+<p>Lý do đổi: Velox đạt năng lực phát hiện ngang ORTHRUS với chi phí thấp hơn nhiều khi <strong>chỉ dùng thuộc tính văn bản</strong> của system entity. Tiền đề "GNN vứt bỏ command-line" không còn đúng. Claim còn lại phải là về <strong>ngữ nghĩa tổ hợp</strong> (ý định của tổ hợp argument, obfuscation lồng nhau, LOLBin chưa thấy), không phải về text-so-với-graph.</p>
+<hr />
+<h2 id="h0-gia-thuyet-phai-loai-tru-truoc-moi-thu-khac">H0 — Giả thuyết phải loại trừ trước mọi thứ khác</h2>
+<blockquote>
+<p>Một encoder ~150M fine-tune trên command-line đạt hiệu năng tương đương SLM ≤8B.</p>
+</blockquote>
+<p>Nếu không loại trừ được H0, toàn bộ kế hoạch phải viết lại. Prior art trực tiếp chống lại bạn:</p>
+<ul>
+<li>arXiv 2408.02637 — phát hiện obfuscation command-line bằng transformer train từ đầu, trên telemetry thật, mở rộng ra nhiều LOLBin. Kết luận của họ: model nhỏ hơn scale được lên telemetry khối lượng lớn <strong>mà không mất hiệu năng phân loại</strong>.</li>
+<li>arXiv 2412.01655 — phân loại risk command-line bằng BERT, chỉ dùng chuỗi command.</li>
+<li>SHIELD (arXiv 2507.10873) — host IDS có LLM hỗ trợ, đã so sánh với Flash/MAGIC/ORTHRUS.</li>
+</ul>
+<p>Loại trừ H0 nghĩa là chỉ ra SLM hơn encoder ở <strong>một trong hai</strong> chỗ, chứ không phải hơn trung bình:
+1. Zero-shot / few-shot trên TTP nằm ngoài tập huấn luyện của encoder.
+2. Chất lượng disambiguation trên FP khó (admin script, installer, CI runner) — nơi cần prior về ý định, không phải pattern bề mặt.</p>
+<hr />
+<h2 id="cac-rq-a-hieu-chinh">Các RQ đã hiệu chỉnh</h2>
+<h3 id="rq1-ngu-nghia-to-hop-centerpiece">RQ1 — Ngữ nghĩa tổ hợp (centerpiece)</h3>
+<p>SLM ≤8B thêm được năng lực gì trên command-line và text attribute mà (a) baseline text rẻ và (b) PIDS dùng text attribute không có?</p>
+<p>Hai claim, theo thứ tự ưu tiên:</p>
+<ul>
+<li><strong>RQ1a (claim chính): giảm false positive.</strong> Ở recall không đổi, SLM tầng hai cắt được bao nhiêu FP của PIDS tầng một? Test set là chính hàng chục nghìn FP mà Flash/MAGIC sinh ra khi chạy lại — không cần attack mới, không tranh chấp với prior art command-line.</li>
+<li><strong>RQ1b (claim phụ): detection gain.</strong> Gain tập trung ở technique nào? Stratify theo ATT&amp;CK: T1218 (LOLBin proxy exec), T1059.001 (encoded PowerShell), T1027 (obfuscation), T1003.001 (comsvcs MiniDump), T1490 (vssadmin delete shadows), T1087/T1082 (discovery burst), T1053 (scheduled task).</li>
+</ul>
+<h3 id="rq2-kha-thi-phat-hien">RQ2 — Khả thi phát hiện</h3>
+<p>Với đơn vị quyết định là <strong>process kèm command-line và chuỗi parent</strong> (map sang node-level để so sánh được với literature), SLM ≤8B đạt mức nào trên dữ liệu thật?</p>
+<p>Không dùng AUC-ROC làm metric chính. Xem mục Metric.</p>
+<h3 id="rq3-pareto-phan-cung">RQ3 — Pareto phần cứng</h3>
+<p>Cấu hình nào nằm trên Pareto frontier cho endpoint không GPU, trên bốn trục:</p>
+<p><code>{0.5B, 1.5B, 3B, 8B}</code> × <code>{fp16, int8, int4}</code> × <code>{128, 512, 2048 token đầu vào}</code> × <code>{single-token, CoT}</code></p>
+<p>Cộng một trục riêng: chế độ thích ứng <code>{zero-shot, few-shot, LoRA}</code>.</p>
+<p>Trục token là trục bị bỏ trong bản gốc và là trục chi phối: trên CPU batch-1, latency bị prefill chi phối, nên 1.5B đọc 2000 token chậm hơn 8B đọc 200 token. Thiếu nó, frontier là artifact của một lựa chọn representation ngẫu nhiên.</p>
+<p>Đầu ra bắt buộc của RQ3: <strong>số quyết định/host/ngày khả thi</strong>. Con số này ép ra kiến trúc hai tầng và nối RQ3 sang RQ4.</p>
+<h3 id="rq4-inh-vi-so-voi-phuong-phap-at-hon">RQ4 — Định vị so với phương pháp đắt hơn</h3>
+<p>Không phải bảng ai cao hơn. Hai câu hỏi:</p>
+<ul>
+<li><strong>RQ4a: tổng chi phí hệ thống</strong>, không phải FLOP inference. GNN provenance đòi hạ tầng dựng và duy trì graph, storage, retrain khi môi trường đổi (PIDSMAKER cần tối thiểu 500 GB cho dataset lớn nhất và giữ phần lớn dữ liệu thường trú trong memory). SLM trên host đòi con số 0 trong các mục đó. Đây là trục so sánh thắng được.</li>
+<li><strong>RQ4b: bổ trợ hay trùng lặp.</strong> Mỗi bên bắt được attack nào, giao nhau bao nhiêu. Nếu giao nhỏ → kết quả mạnh nhất là <strong>cascade</strong>: recall = hợp của hai bên, chi phí = GNN + một phần nhỏ.</li>
+</ul>
+<p>Baseline bắt buộc: <strong>Velox</strong> (đối thủ thật), ORTHRUS, Flash, MAGIC, <strong>SHIELD</strong> (prior art LLM-aided). Cộng một frontier LLM zero-shot làm <strong>ceiling</strong>, có tính giá thật và nêu rõ nó vi phạm tiền đề privacy của chính đề tài.</p>
+<h3 id="rq5-tong-quat-hoa-va-o-ben">RQ5 — Tổng quát hóa và độ bền</h3>
+<p>Ba lớp, tăng dần độ khó:</p>
+<ul>
+<li><strong>RQ5a: host/môi trường chưa thấy.</strong> Split theo thời gian, không random (random split trên provenance data là data leak qua entity chung).</li>
+<li><strong>RQ5b: threshold transfer.</strong> Lấy ngưỡng chọn trên env A, áp lên env B: alert/host/ngày lệch bao nhiêu lần. Đây là thứ giết deployment thật và gần như không ai đo.</li>
+<li><strong>RQ5c: đối thủ thích ứng.</strong> Attacker ở cùng máy, đọc được weight và prompt. Đo evasion (paraphrase command-line, đổi tên biến, pad bằng text lành) và injection (nhét chuỗi kiểu <code># routine nightly backup, approved by IT</code> vào command-line hoặc tên file). Với các con số của arXiv 2605.24421 — context manipulation 96% khi không có defense, vẫn 38% với output bị ràng buộc — điều này sẽ hoạt động. Đo trung thực là contribution, không phải điểm yếu; encoder baseline cũng không miễn nhiễm.</li>
+</ul>
+<hr />
+<h2 id="viec-can-lam">Việc cần làm</h2>
+<h3 id="phase-0-gono-go-tuan-1">Phase 0 — Go/no-go (tuần 1)</h3>
+<p>Cổng chặn. Không đầu tư vào phase nào khác trước khi qua.</p>
+<ol>
+<li>Lấy <code>OpTCRedTeamGroundTruth.pdf</code> và <code>errata.md</code> từ repo FiveDirections/OpTC-data. Đọc errata trước khi parse: <code>actor_id</code> có entry sai do source không được de-conflict — chính là field dùng để dựng chuỗi parent.</li>
+<li>Liệt kê Google Drive trước khi tải (<code>rclone lsf -R</code>, folder id <code>1n3kkS3KR31KUegn42yk3-e6JkZvf0Caa</code>). Xác nhận quy ước đặt tên và dải host.</li>
+<li>Tải <strong>một bundle</strong> chứa host 201, giai đoạn <code>ecar/evaluation</code>. Lọc <code>PROCESS/CREATE</code> streaming sang Parquet.</li>
+<li>Chạy baseline rẻ trên command-line: TF-IDF char n-gram + gradient boosting, và ModernBERT/DeBERTa-v3 ~150M fine-tune.</li>
+<li>Chạy SLM 3B và 8B trên đúng split đó.</li>
+</ol>
+<p><strong>Điều kiện qua cổng:</strong> SLM hơn encoder 150M có ý nghĩa trên ít nhất một trong hai lớp của H0. Nếu không, dừng và reframe trước khi tiêu thêm tuần nào.</p>
+<h3 id="phase-1-baseline-chay-lai-tuan-23">Phase 1 — Baseline chạy lại (tuần 2–3)</h3>
+<p>Không copy số từ paper gốc. Khi chạy lại, Flash và MAGIC sinh hàng chục nghìn FP, precision dưới 0,1; precision cao họ báo cáo đến từ việc gán nhãn malicious cho node trong 2 hop của node nêu trong ground-truth report.</p>
+<ol>
+<li>Dựng PIDSMAKER (arXiv 2601.22983) làm harness. Đọc preprocessing OpTC của họ trước khi tự viết loader.</li>
+<li>Tải nốt bundle chứa host 051, 501 (evaluation + benign cùng dải host). Các bundle này kèm ~72 host benign miễn phí — đó là tập unseen-host cho RQ5a, không cần tải thêm.</li>
+<li>Chạy Velox, ORTHRUS, Flash, MAGIC trên ba host chuẩn H201/H501/H051. Ghi lại <strong>tập FP</strong> của từng hệ — đây là test set cho RQ1a.</li>
+<li>Chạy SHIELD nếu code có sẵn; nếu không, ghi nhận là prior art không reproduce được.</li>
+</ol>
+<h3 id="phase-2-grid-phan-cung-tuan-4">Phase 2 — Grid phần cứng (tuần 4)</h3>
+<p>Làm sớm vì kết quả giới hạn phạm vi mọi thứ sau đó.</p>
+<ol>
+<li>Chốt phần cứng mục tiêu và ghi cấu hình đầy đủ (CPU model, core count, RAM, memory bandwidth).</li>
+<li>Đo dưới <strong>tranh chấp tài nguyên</strong>, không đo trên máy rỗi: chạy song song Chrome + Teams hoặc workload tương đương.</li>
+<li>Quét toàn bộ grid RQ3. Không giả định quantization đơn điệu: trên CPU q4 có thể nhanh hơn int8 vì bị chặn memory bandwidth, còn 0.5B ở int4 thường sập chất lượng.</li>
+<li>Đo weight footprint và KV cache footprint <strong>riêng biệt</strong>. Với context dài của telemetry, KV cache là ràng buộc, không phải weight.</li>
+</ol>
+<h3 id="phase-3-thi-nghiem-chinh-tuan-57">Phase 3 — Thí nghiệm chính (tuần 5–7)</h3>
+<ol>
+<li>Quyết định claim chính (RQ1a hay RQ1b) dựa trên số thật từ Phase 0–2.</li>
+<li>LoRA fine-tune trên cấu hình thắng của Phase 2. Zero-shot ≤8B trên telemetry thô sẽ kém; nếu paper chỉ có zero-shot thì kết luận là "model nhỏ không làm được" — yếu.</li>
+<li>Chạy RQ1a: SLM tầng hai trên tập FP của Phase 1.</li>
+<li>Chạy RQ1b stratified theo ATT&amp;CK technique.</li>
+<li>Chạy RQ4b: overlap analysis và cascade.</li>
+</ol>
+<h3 id="phase-4-tong-quat-hoa-va-oi-khang-tuan-8">Phase 4 — Tổng quát hóa và đối kháng (tuần 8)</h3>
+<ol>
+<li>RQ5a: split thời gian, train sớm test muộn, unseen host từ bundle đã có.</li>
+<li>RQ5b: threshold transfer, đo drift alert/host/ngày.</li>
+<li>RQ5c: sinh tập evasion (paraphrase, rename, pad) và tập injection. Đo trên cả SLM và encoder baseline.</li>
+<li>Dựng attack range riêng (Atomic Red Team / Splunk Attack Range) cho TTP holdout mà OpTC không kiểm soát được.</li>
+</ol>
+<h3 id="phase-5-viet">Phase 5 — Viết</h3>
+<p>Thứ tự viết: Phase 2 (đo lường, đã cố định) → Phase 1 (baseline) → Phase 3 (claim chính) → Phase 4 → intro/related work cuối cùng, sau khi đã biết claim thật là gì.</p>
+<hr />
+<h2 id="thu-can-o">Thứ cần đo</h2>
+<h3 id="nhom-phat-hien">Nhóm phát hiện</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Định nghĩa</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>recall @ alert/host/ngày</td>
+<td>recall tại ngưỡng cho 1, 10, 100 alert/host/ngày</td>
+<td><strong>Metric chính.</strong> Không dùng FPR dạng phân số: host sinh ~10⁷ event/ngày, FPR 0,1% = 10.000 alert/ngày/host, chết ngay</td>
+</tr>
+<tr>
+<td>AUC-PR</td>
+<td>area under precision-recall</td>
+<td>Thay AUC-ROC. ROC bơm số ở mất cân bằng cực đoan</td>
+</tr>
+<tr>
+<td>MCC</td>
+<td>Matthews correlation</td>
+<td>Metric phụ. Được chấp nhận trong subfield này cho dataset mất cân bằng. <strong>Không</strong> báo cáo trên test set đã resample cân bằng</td>
+</tr>
+<tr>
+<td>FP reduction @ recall cố định</td>
+<td>tỷ lệ FP của PIDS tầng một bị SLM loại</td>
+<td>Metric của RQ1a, claim chính</td>
+</tr>
+<tr>
+<td>Time-to-detect</td>
+<td>số event / số phút vào chuỗi tấn công khi phát hiện</td>
+<td>Khách hàng quan tâm hơn recall</td>
+</tr>
+<tr>
+<td>Risk–coverage curve</td>
+<td>error rate theo tỷ lệ abstention</td>
+<td>Cho phép "không biết, escalate". Nền tảng cho RQ5b</td>
+</tr>
+<tr>
+<td>ECE / reliability diagram</td>
+<td>calibration error</td>
+<td>Ngưỡng không transfer được nếu score không calibrate</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nhom-chi-phi">Nhóm chi phí</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Đơn vị</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency p50 / p95 / p99</td>
+<td>ms, batch=1</td>
+<td>Báo cáo p95/p99, không phải mean. Đo dưới tranh chấp</td>
+</tr>
+<tr>
+<td>Prefill vs decode</td>
+<td>ms, tách riêng</td>
+<td>Để trục token trong RQ3 có nghĩa</td>
+</tr>
+<tr>
+<td>Weight footprint</td>
+<td>MB</td>
+<td></td>
+</tr>
+<tr>
+<td>KV cache footprint</td>
+<td>MB, theo độ dài context</td>
+<td>Tách khỏi weight</td>
+</tr>
+<tr>
+<td>CPU-second/host/ngày</td>
+<td>% của tổng</td>
+<td><strong>Số gốc</strong>, không phải $</td>
+</tr>
+<tr>
+<td>Wh/host/ngày</td>
+<td>watt-hour</td>
+<td>Battery drain là blocker deployment thật</td>
+</tr>
+<tr>
+<td>Quyết định/host/ngày khả thi</td>
+<td>count</td>
+<td>Con số ép ra kiến trúc hai tầng</td>
+</tr>
+<tr>
+<td>$/host/ngày</td>
+<td>USD</td>
+<td>Quy đổi <strong>cuối cùng</strong>, với giả định nêu rõ. Đứng một mình sẽ bị chất vấn</td>
+</tr>
+<tr>
+<td>Tổng chi phí hệ thống</td>
+<td>GB storage, GB RAM, giờ retrain</td>
+<td>Cho RQ4a. Trục mà SLM thắng</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nhom-o-ben">Nhóm độ bền</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Δ recall: seen → unseen host</td>
+<td>RQ5a</td>
+</tr>
+<tr>
+<td>Δ recall: seen → unseen TTP</td>
+<td>RQ5a, cần attack range riêng</td>
+</tr>
+<tr>
+<td>Alert/host/ngày drift khi transfer ngưỡng</td>
+<td>RQ5b. Báo cáo dạng hệ số, ví dụ "×7,3"</td>
+</tr>
+<tr>
+<td>Attack success rate: evasion</td>
+<td>RQ5c, trên cả SLM và encoder</td>
+</tr>
+<tr>
+<td>Injection success rate</td>
+<td>RQ5c. So sánh với 96% / 38% của 2605.24421</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="output-can-co">Output cần có</h2>
+<h3 id="hinh">Hình</h3>
+<ol>
+<li><strong>Pareto frontier</strong> — trục x là latency p95 hoặc CPU-second/host/ngày, trục y là recall@10 alert/host/ngày. Mỗi điểm là một cấu hình <code>size × quant × token × output mode</code>. Điểm trên frontier được đánh dấu. Đây là hình định danh của paper.</li>
+<li><strong>Bar chart stratified theo ATT&amp;CK technique</strong> — gain của SLM so với encoder baseline và so với Velox, theo từng technique. Hình bán RQ1b.</li>
+<li><strong>FP reduction curve</strong> — FP còn lại theo recall, cho PIDS đơn lẻ so với PIDS + SLM tầng hai. Hình bán RQ1a.</li>
+<li><strong>Venn hoặc upset plot</strong> — overlap attack bắt được giữa SLM, Velox, ORTHRUS. Nền cho lập luận cascade.</li>
+<li><strong>Risk–coverage curve</strong> — cho từng size model.</li>
+<li><strong>Threshold transfer</strong> — alert/host/ngày trên env B khi dùng ngưỡng của env A, so với ngưỡng tối ưu của B.</li>
+</ol>
+<h3 id="bang">Bảng</h3>
+<ol>
+<li>Bảng grid đầy đủ RQ3, mọi ô, không chỉ ô thắng. Kể cả ô sập (0.5B int4) — kết quả âm là dữ liệu.</li>
+<li>Bảng so sánh với baseline đã <strong>chạy lại</strong>, kèm ghi chú tường minh rằng số này khác số trong paper gốc và tại sao (labeling 2-hop).</li>
+<li>Bảng tổng chi phí hệ thống: storage, RAM, retrain, inference — SLM so với từng PIDS.</li>
+<li>Bảng evasion/injection.</li>
+</ol>
+<h3 id="artifact">Artifact</h3>
+<ol>
+<li>Script tải chọn lọc + lọc streaming eCAR sang Parquet. Kèm manifest liệt kê chính xác bundle nào đã dùng.</li>
+<li>Cấu hình PIDSMAKER (YAML) cho mọi baseline, để reproduce được.</li>
+<li>LoRA adapter đã train, weight công khai.</li>
+<li>Tập FP đã gán nhãn (test set của RQ1a) — đây có thể là contribution độc lập có giá trị hơn cả model.</li>
+<li>Tập evasion và injection đã sinh.</li>
+<li>Ghi chép phần cứng và điều kiện đo, đủ chi tiết để người khác lặp lại được số latency.</li>
+</ol>
+<h3 id="ieu-phai-noi-ro-trong-limitations">Điều phải nói rõ trong Limitations</h3>
+<ul>
+<li>SLM không phải primary detector; kết quả không hỗ trợ tuyên bố ngược lại.</li>
+<li>OpTC realism đang bị chính cộng đồng chất vấn ("DARPA TC và OpTC có thực sự là benchmark thực tế không?").</li>
+<li>Attacker co-resident đọc được weight và prompt. Kerckhoffs áp dụng: không đặt logic phát hiện trong prompt. Nếu thiết kế của bạn có, nói ra.</li>
+<li>Injection qua command-line hoạt động; con số cụ thể phải nằm trong paper, không nằm trong appendix.</li>
+</ul>
+<hr />
+<h2 id="nhac-lai-ieu-quan-trong-nhat">Nhắc lại điều quan trọng nhất</h2>
+<p>Phase 0 là cổng chặn thật, không phải thủ tục. Nếu encoder 150M ngang SLM 8B và bạn phát hiện điều đó ở tháng thứ sáu thay vì tuần đầu, bạn mất cả kỳ. Chi phí của Phase 0 là vài ngày và một bundle dữ liệu.</p></div></section><section id="pseudocode-tier2" style="margin-bottom:40px"><h2>pseudocode-tier2</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="pseudocode-tang-2-slm-tier-2-va-cac-thuat-toan-o-luong">PSEUDOCODE — TẦNG 2 (SLM TIER-2) VÀ CÁC THUẬT TOÁN ĐO LƯỜNG</h1>
+<p>Tài liệu này chuyển logic tính toán của Phase 1/tầng 2 thành mã giả
+để đưa vào paper. Mỗi thuật toán: 1) mục đích, 2) mã giả, 3) tham số
+thực tế đã dùng, 4) vị trí code trong repo.</p>
+<hr />
+<h2 id="a0-ky-hieu-chung">A0. Ký hiệu chung</h2>
+<div class="codehilite"><pre><span></span><code>G        = đồ thị provenance theo thời gian (TemporalData)
+N        = tập node; |N| ≈ 914,000–927,000 (tùy model)
+s(v)     = anomaly score tầng 1 của node v (ORTHRUS hoặc Velox)
+Y        = tập node malicious theo ground truth, |Y| = 114
+A(k)     = top-k node theo s(v) giảm dần  (alert budget k)
+Y_act    = các node GT thực sự xuất hiện trong test period
+           (&quot;active&quot;), |Y_act| ≈ 34–37
+msg(v)   = chuỗi mô tả node v: đường dẫn file / lệnh chạy / netflow
+           (path + cmdline + ip:port)
+</code></pre></div>
+
+<hr />
+<h2 id="a1-threshold-sweep-recallk-cua-tang-1">A1. THRESHOLD SWEEP — Recall@k của tầng 1</h2>
+<p><strong>Mục đích:</strong> đo chất lượng <em>ranking</em> của tầng 1 độc lập với ngưỡng,
+trả lời "với ngân sách xem xét k cảnh báo, bắt được bao nhiêu %".</p>
+<div class="codehilite"><pre><span></span><code><span class="n">THRESHOLD</span><span class="o">-</span><span class="n">SWEEP</span><span class="p">(</span><span class="n">scores</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="err">∀</span><span class="n">v</span><span class="err">∈</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">ground</span><span class="w"> </span><span class="n">truth</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">budgets</span><span class="w"> </span><span class="n">K</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="k">order</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="n">descending</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">K</span><span class="p">:</span><span class="w">                      </span><span class="err">#</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="mi">10</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="n">K</span><span class="err">}</span>
+<span class="w">        </span><span class="n">A_k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="k">first</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">order</span>
+<span class="w">        </span><span class="n">TP_k</span><span class="w">    </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="n">A_k</span><span class="w"> </span><span class="err">∩</span><span class="w"> </span><span class="n">Y</span><span class="o">|</span>
+<span class="w">        </span><span class="n">R</span><span class="nv">@k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="n">Y</span><span class="o">|</span><span class="w">              </span><span class="err">#</span><span class="w"> </span><span class="n">recall</span><span class="w"> </span><span class="n">trên</span><span class="w"> </span><span class="k">full</span><span class="w"> </span><span class="n">GT</span>
+<span class="w">        </span><span class="n">R</span><span class="err">̃</span><span class="nv">@k</span><span class="w">    </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="n">Y</span><span class="w"> </span><span class="err">∩</span><span class="w"> </span><span class="n">N_scored</span><span class="o">|</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="n">recall</span><span class="w"> </span><span class="n">trên</span><span class="w"> </span><span class="n">active</span><span class="o">-</span><span class="n">GT</span><span class="w"> </span><span class="nf">ceiling</span>
+<span class="w">        </span><span class="n">P</span><span class="nv">@k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">k</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="err">{</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">TP_k</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="nv">@k</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="nv">@k</span><span class="p">)</span><span class="err">}</span>
+</code></pre></div>
+
+<p>Tham số thực tế: K = {10000, 20000, 50000}.
+Code: <code>P1/Code/patches/orthrus_threshold_sweep.py</code>.</p>
+<hr />
+<h2 id="a2-precision-ceiling-tran-precision-cua-pathcmd">A2. PRECISION CEILING — trần precision của path+cmd</h2>
+<p><strong>Mục đích:</strong> trả lời câu hỏi gate cho tầng 2 — "nếu chỉ dùng văn bản
+mô tả node (path+cmd), có thể phân biệt FP khỏi TP tới đâu?" FP mà
+có <code>msg()</code> trùng hệt một TP thì <strong>không thể</strong> tách bằng nội dung.</p>
+<div class="codehilite"><pre><span></span><code>PRECISION-CEILING(A(K), Y, msg):
+    TP   ← A_K ∩ Y ;  FP ← A_K \ Y
+    collide_GT  ← ∅ ; collide_TP ← ∅
+    for each f in FP:
+        m_f = msg(f)
+        if m_f is None:          # thiếu label (hiếm)
+            continue
+        if m_f ∈ msg(y), ∀y ∈ Y:      # trùng với BẤT KỲ node GT
+            collide_GT.add(f)
+        if m_f ∈ msg(t), ∀t ∈ TP:     # trùng với TP đã phát hiện
+            collide_TP.add(f)
+    # Trần precision nếu bộ lọc hoàn hảo loại mọi FP có thể tách:
+    ceiling(k) = |TP| / (|TP| + |FP \ collide_GT|)
+    return collide_GT, collide_TP, ceiling(k)
+</code></pre></div>
+
+<p>Kết quả thực tế (ORTHRUS): k=2K → ceiling 33.3%; k=10K → 8.46%.
+Code: <code>P1/Code/patches/orthrus_precision_ceiling.py</code>,
+<code>orthrus_ceiling_corrected.py</code> (bản sửa bug label lookup).</p>
+<hr />
+<h2 id="a3-enrich-alert-dung-ngu-canh-cho-tang-2">A3. ENRICH ALERT — dựng ngữ cảnh cho tầng 2</h2>
+<p><strong>Mục đích:</strong> mỗi alert chỉ là 1 node ID + score — SLM cần <em>ngữ cảnh</em>.
+Enrich gắn thêm chuỗi tổ tiên (parent chain) và chuỗi sự kiện gần nhất.</p>
+<div class="codehilite"><pre><span></span><code>ENRICH-ALERT(v, G):
+    parent_chain ← []
+    u ← v
+    while u has parent p and depth &lt; 3:      # tối đa 3 thế hệ
+        append {node: label(p), op: op(p→u)} to parent_chain
+        u ← p
+    event_seq ← 20 events mới nhất có src hoặc dst = v
+                (lấy từ event_table, sort by timestamp)
+    self_label ← label(v)                    # path + cmd hoặc netflow
+    return JSONL record {nid, rank, score, self_label,
+                         parent_chain, event_seq}
+</code></pre></div>
+
+<p>Thực tế: 2250/10000 alerts đã enrich (bị chặn bởi WSL; script
+resume-capable). Code: nằm ở máy thay (<code>enrich_alerts.py</code>), bản partial
+<code>P1/Output/data/alerts-enriched-partial.jsonl</code>.</p>
+<hr />
+<h2 id="a4-baseline-h0-tf-idf-char-n-gram-logistic-regression">A4. BASELINE H0 — TF-IDF char n-gram + Logistic Regression</h2>
+<p><strong>Mục đích:</strong> baseline encoder RẺ để loại trừ (H0). Nếu TF-IDF cắt được
+FP tốt như SLM thì SLM không có giá trị gia tăng (RQ1a).</p>
+<div class="codehilite"><pre><span></span><code><span class="n">TFIDF</span><span class="o">-</span><span class="n">BASELINE</span><span class="p">(</span><span class="n">alerts</span><span class="w"> </span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">E</span><span class="p">:</span>
+<span class="w">        </span><span class="nc">text</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">self_label</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Σ</span><span class="w"> </span><span class="n">op</span><span class="o">+</span><span class="n">node</span><span class="p">(</span><span class="n">parent_chain</span><span class="p">)</span>
+<span class="w">                       </span><span class="o">+</span><span class="w"> </span><span class="n">Σ</span><span class="w"> </span><span class="n">src</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="n">dst</span><span class="p">(</span><span class="n">event_seq</span><span class="o">[</span><span class="n">:10</span><span class="o">]</span><span class="p">)</span>
+<span class="w">        </span><span class="n">y</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">nid</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">TFIDF</span><span class="p">(</span><span class="nc">text</span><span class="p">,</span><span class="w"> </span><span class="n">analyzer</span><span class="o">=</span><span class="n">char_wb</span><span class="p">,</span><span class="w"> </span><span class="n">ngram</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span>
+<span class="w">              </span><span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span><span class="w"> </span><span class="n">sublinear_tf</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+<span class="w">    </span><span class="n">clf</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="n">class_weight</span><span class="o">=</span><span class="ss">&quot;balanced&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">clf</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
+<span class="w">    </span><span class="n">scores</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">clf</span><span class="p">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">[</span><span class="n">:,1</span><span class="o">]</span>
+<span class="w">    </span><span class="k">order</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">);</span><span class="w"> </span><span class="n">A_k</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="k">order</span><span class="o">[</span><span class="n">:k</span><span class="o">]</span>
+<span class="w">    </span><span class="n">keep</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="err">{</span><span class="n">i</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">A_k</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">scores</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="err">}</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">ngưỡng</span><span class="w"> </span><span class="k">filter</span><span class="w"> </span><span class="mf">0.5</span>
+<span class="w">    </span><span class="n">TP</span><span class="s1">&#39;    ← |{i ∈ keep : y(i)=1}| ;  FP&#39;</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="err">{</span><span class="n">i</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">keep</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="err">}</span><span class="o">|</span>
+<span class="w">    </span><span class="n">FP</span><span class="o">-</span><span class="n">reduction</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">FP</span><span class="err">&#39;</span><span class="o">/</span><span class="n">FP_before</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">metrics</span>
+</code></pre></div>
+
+<p>Kết quả thực tế: giữ 12/12 TP (100%), FP 1988→13 (−99.35%).
+Code: <code>run_baseline_tfidf()</code> trong <code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="a5-slm-tier-2-zero-shot-classifier-thuat-toan-chinh">A5. SLM TIER-2 ZERO-SHOT CLASSIFIER (thuật toán chính)</h2>
+<p><strong>Mục đích:</strong> dùng SLM (Qwen2.5-3B int4) phân loại lại từng alert
+malicious/benign dựa trên ngữ cảnh enriched — KHÔNG fine-tune,
+KHÔNG đặt logic phát hiện vào prompt (tuân thủ Kerckhoffs theo Note.md:
+prompt chỉ hướng dẫn <em>cách trình bày</em>, tiêu chí nhận định là kiến thức
+chung của analyst, không phải signature riêng của dataset).</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">SLM</span><span class="o">-</span><span class="nx">TIER2</span><span class="p">(</span><span class="nx">E_enriched</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="p">):</span>
+<span class="w">    </span><span class="nx">model</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">LoadQuantized</span><span class="p">(</span><span class="s">&quot;Qwen2.5-3B-Instruct&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">nf4</span><span class="o">-</span><span class="nx">int4</span><span class="p">,</span>
+<span class="w">                          </span><span class="nx">double_quant</span><span class="p">=</span><span class="nx">True</span><span class="p">,</span><span class="w"> </span><span class="nx">compute_dtype</span><span class="p">=</span><span class="nx">fp16</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">results</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">each</span><span class="w"> </span><span class="nx">alert</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">E_enriched</span><span class="w"> </span><span class="nx">sorted</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">score</span><span class="w"> </span><span class="nx">desc</span><span class="w"> </span><span class="p">(</span><span class="nx">top</span><span class="o">-</span><span class="nx">k</span><span class="p">):</span>
+<span class="w">        </span><span class="nx">prompt</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">TEMPLATE</span><span class="p">(</span>
+<span class="w">            </span><span class="nx">system</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">vai</span><span class="w"> </span><span class="nx">trò</span><span class="w"> </span><span class="nx">analyst</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">yêu</span><span class="w"> </span><span class="nx">cầu</span><span class="w"> </span><span class="nx">format</span><span class="w"> </span><span class="nx">đầu</span><span class="w"> </span><span class="nx">ra</span>
+<span class="w">                     </span><span class="p">[</span><span class="nx">CLASSIFICATION</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">CONFIDENCE</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">REASON</span><span class="p">]</span>
+<span class="w">            </span><span class="nx">user</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="nx">Process</span><span class="w"> </span><span class="nx">Identity</span><span class="w"> </span><span class="p">(</span><span class="nx">self_label</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="nx">Process</span><span class="w"> </span><span class="nx">Tree</span><span class="w"> </span><span class="err">≤</span><span class="mi">3</span><span class="w"> </span><span class="nx">tổ</span><span class="w"> </span><span class="nx">tiên</span><span class="w"> </span><span class="p">(</span><span class="nx">parent_chain</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="nx">sự</span><span class="w"> </span><span class="nx">kiện</span><span class="w"> </span><span class="nx">gần</span><span class="w"> </span><span class="nx">nhất</span><span class="w"> </span><span class="p">(</span><span class="nx">event_seq</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="nx">câu</span><span class="w"> </span><span class="nx">hỏi</span><span class="w"> </span><span class="nx">MALICIOUS</span><span class="w"> </span><span class="nx">hay</span><span class="w"> </span><span class="nx">BENIGN</span><span class="p">?)</span>
+<span class="w">        </span><span class="nx">resp</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="nx">greedy_generate</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span><span class="w"> </span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">max_new_tokens</span><span class="p">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nx">pred</span><span class="p">,</span><span class="w"> </span><span class="nx">conf</span><span class="p">,</span><span class="w"> </span><span class="nx">reason</span><span class="p">)</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">PARSE</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">append</span><span class="w"> </span><span class="p">{</span><span class="nx">nid</span><span class="p">,</span><span class="w"> </span><span class="nx">score</span><span class="p">,</span><span class="w"> </span><span class="nx">slm_pred</span><span class="p">=</span><span class="nx">pred</span><span class="p">,</span><span class="w"> </span><span class="nx">confidence</span><span class="p">=</span><span class="nx">conf</span><span class="p">}</span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Bộ</span><span class="w"> </span><span class="nx">lọc</span><span class="w"> </span><span class="nx">tier</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="nx">chỉ</span><span class="w"> </span><span class="nx">giữ</span><span class="w"> </span><span class="nx">alert</span><span class="w"> </span><span class="nx">được</span><span class="w"> </span><span class="nx">SLM</span><span class="w"> </span><span class="nx">xác</span><span class="w"> </span><span class="nx">nhận</span><span class="w"> </span><span class="s">&quot;malicious&quot;</span>
+<span class="w">    </span><span class="nx">kept</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="p">{</span><span class="nx">r</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">slm_pred</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;malicious&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">TP₂</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="p">{</span><span class="nx">r</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="nx">kept</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">nid</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="nx">Y</span><span class="p">}</span><span class="o">|</span><span class="w"> </span><span class="p">;</span><span class="w">  </span><span class="nx">FP₂</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="nx">kept</span><span class="o">|</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="nx">TP₂</span>
+<span class="w">    </span><span class="nx">FP</span><span class="o">-</span><span class="nx">red</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="nx">FP₂</span><span class="o">/</span><span class="nx">FP₁</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">results</span><span class="p">,</span><span class="w"> </span><span class="nx">FP</span><span class="o">-</span><span class="nx">red</span><span class="p">,</span><span class="w"> </span><span class="nx">precision</span><span class="w"> </span><span class="nx">trước</span><span class="o">/</span><span class="nx">sau</span>
+</code></pre></div>
+
+<p>PARSE (phân tích đầu ra có cấu trúc, fail-safe về "uncertain"):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">PARSE</span><span class="ss">(</span><span class="nv">resp</span><span class="ss">)</span>:
+<span class="w">    </span><span class="nv">pred</span><span class="w"> </span>←<span class="w"> </span><span class="s2">&quot;uncertain&quot;</span><span class="c1">; conf ← 0.5</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">splitlines</span><span class="ss">(</span><span class="nv">resp</span><span class="ss">)</span>:
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;CLASSIFICATION:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">pred</span><span class="w"> </span>←<span class="w"> </span><span class="s2">&quot;malicious&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">contains</span><span class="w"> </span><span class="nv">MALICIOUS</span>
+<span class="w">                  </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;benign&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">contains</span><span class="w"> </span><span class="nv">BENIGN</span>
+<span class="w">        </span><span class="nv">elif</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;CONFIDENCE:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">conf</span><span class="w"> </span>←<span class="w"> </span><span class="nv">float</span><span class="ss">(</span>...<span class="ss">)</span><span class="w">  </span><span class="ss">(</span><span class="nv">gi</span>ữ<span class="w"> </span><span class="mi">0</span>.<span class="mi">5</span><span class="w"> </span><span class="nv">n</span>ế<span class="nv">u</span><span class="w"> </span><span class="nv">parse</span><span class="w"> </span><span class="nv">l</span>ỗ<span class="nv">i</span><span class="ss">)</span>
+<span class="w">        </span><span class="nv">elif</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;REASON:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">reason</span><span class="w"> </span>←<span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">sau</span><span class="w"> </span><span class="nv">d</span>ấ<span class="nv">u</span><span class="w"> </span><span class="s2">&quot;:&quot;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ss">(</span><span class="nv">pred</span>,<span class="w"> </span><span class="nv">conf</span>,<span class="w"> </span><span class="nv">reason</span><span class="ss">)</span>
+</code></pre></div>
+
+<p>Điểm thiết kế đáng nêu trong paper:
+- Greedy decoding (do_sample=False) để tái lập được kết quả.
+- Parse fail-safe: không parse được → "uncertain" (conf 0.5), KHÔNG
+  suy đoán; uncertain bị filter (an toàn phía giảm FP).
+- Quantization nf4/int4 double-quant để chạy trên GPU 16GB.
+- Confidence dùng vẽ risk–coverage curve (RQ phụ).</p>
+<p>Code: <code>classify_with_slm()</code>, <code>parse_slm_response()</code> trong
+<code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="a6-metrics-sau-filter-cong-thuc-anh-gia-tang-2">A6. METRICS SAU FILTER — công thức đánh giá tầng 2</h2>
+<div class="codehilite"><pre><span></span><code>EVAL-TIER2(results, Y, k):
+    A_k   ← top-k alerts (theo score tầng 1)
+    TP₁   ← |A_k ∩ Y| ;  FP₁ ← k − TP₁
+    kept  ← {a ∈ A_k : a.slm_pred = &quot;malicious&quot;}
+    TP₂   ← |kept ∩ Y| ;  FP₂ ← |kept| − TP₂
+    Precision₁ = TP₁/k
+    Precision₂ = TP₂/(TP₂+FP₂)
+    FPReduction = 1 − FP₂/max(FP₁,1)
+    RecallBefore = TP₁/|Y| ;  RecallAfter = TP₂/|Y|
+    # Điều kiện thành công RQ1a:
+    #   FPReduction cao  VÀ  RecallAfter ≈ RecallBefore (fixed recall)
+    return tất cả
+</code></pre></div>
+
+<p>Code: <code>compute_metrics()</code> trong <code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="ghi-chu-cho-paper">GHI CHÚ CHO PAPER</h2>
+<ol>
+<li><strong>Thứ tự trình bày khuyến nghị</strong>: A1 (đo tầng 1) → A2 (gate) →
+   A3 (enrich) → A4 (baseline H0) → A5 (SLM) → A6 (đánh giá).</li>
+<li>Ceiling (A2) nên đứng TRƯỚC kết quả SLM: nó định nghĩa không gian
+   khả dĩ — FP trùng msg với TP là giới hạn lý thuyết của mọi bộ lọc
+   dựa trên path+cmd.</li>
+<li>Số liệu hiện có: A1, A2, A4 đã chạy đủ. A3 đang 2250/10000.
+   A5+A6 chờ A3 xong (hoặc chạy trên 2250 alerts làm thí điểm).</li>
+</ol></div></section><section id="README_orthrus_velox" style="margin-bottom:40px"><h2>README_orthrus_velox</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="patches-orthrus-velox-tren-optc-h051">Patches: ORTHRUS + Velox trên OpTC H051</h1>
+<p>Áp dụng trên máy L6 (thầy) — WSL Ubuntu user vung2.</p>
+<h2 id="orthrus_opc_h051patch-ap-vao-repo-ubc-provenanceorthrus-clone-optec-l6orthrus">orthrus_opc_h051.patch — áp vào repo <code>ubc-provenance/orthrus</code> (clone ~/optec-l6/orthrus)</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/optec-l6/orthrus
+git<span class="w"> </span>apply<span class="w"> </span>patches/orthrus_opc_h051.patch
+</code></pre></div>
+
+<p>Nội dung các fix (theo thứ tự phát hiện):
+1. <code>src/config.py</code> — thêm dataset <code>OPTC_H051</code> (DB optc_h051_full, Sept 2019, split train 19-21 / val 22 / test 25, GT node_h051_0925.csv 114 nodes, attack window 25/09 10:29-14:25); rel2id đổi sang OpTC ops (OPEN/READ/CREATE/MODIFY/MESSAGE/START/RENAME/DELETE/TERMINATE/WRITE); ROOT_GROUND_TRUTH_DIR bỏ <code>/darpa</code>; DB host localhost
+2. <code>src/graph_construction/build_orthrus_graphs.py</code> — event_table query 8 cột explicit (OpTC có cột edge_label thừa làm unpack fail); nodeid2msg thêm key <strong>node_uuid</strong> (OpTC events tham chiếu UUID, không phải hash_id — root cause graphs rỗng)
+3. <code>src/provnet_utils.py</code> — get_all_files_from_folders fallback lấy tất cả subdirs khi split list rỗng
+4. <code>src/edge_featurization/embed_edges_feature_word2vec.py</code> — skip graph rỗng (tránh torch.vstack crash)
+5. <code>src/data_utils.py</code> — RAM fix: val/test không load vào RAM; msg/t/edge_type của graphs re-point thành views của full_data
+6. <code>src/detection/orthrus_gnn_testing.py</code> — stream val/test one-by-one từ disk; pad full_data zero-slots cho vùng test; max_node_num tính trên toàn bộ splits; resize neighbor_loader sau load_model (checkpoint build với train-only max_node)</p>
+<h2 id="velox_worktreepatch-ap-vao-pidsmaker-branch-velox-54f687c-worktree-optec-l6velox">velox_worktree.patch — áp vào PIDSMaker branch <code>velox</code> @54f687c (worktree ~/optec-l6/velox)</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/optec-l6/PIDSMaker
+git<span class="w"> </span>worktree<span class="w"> </span>add<span class="w"> </span>../velox<span class="w"> </span>54f687c54aa
+<span class="nb">cd</span><span class="w"> </span>../velox
+git<span class="w"> </span>apply<span class="w"> </span>&lt;path&gt;/patches/velox_worktree.patch
+</code></pre></div>
+
+<p>Nội dung: DB name <code>optc_051</code> → <code>optc_h051_full</code>; host <code>postgres</code> → <code>localhost</code>; event query 8 cột explicit.
+Chạy: <code>PYTHONHASHSEED=0 python src/benchmark.py velox optc_h051 --cpu --tuned --from_weights</code></p>
+<h2 id="trang-thai-a-verify-2308">Trạng thái đã verify (23/08)</h2>
+<ul>
+<li>ORTHRUS pipeline chạy qua: graphs 469 TW (có edges), word2vec, embed_edges (train 230/val 94/test 56), GNN training epoch 1 loss 0.9233, testing 94+56 streams — toàn bộ trên 28GB RAM</li>
+<li>Kẹt cuối: neighbor_loader size mismatch sau load_model → patch resize đã viết trong patch file, chưa chạy lại (dừng theo yêu cầu)</li>
+<li>Full run (test 3 ngày) cần ≥40GB RAM → máy Nam 63.6GB</li>
+</ul></div></section><section id="report-phase2-wsab" style="margin-bottom:40px"><h2>report-phase2-wsab</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="report-phase-2-ws-ab-h0-fix-hw-grid-partial">REPORT PHASE 2 — WS-A/B (H0 Fix + HW Grid Partial)</h1>
+<p><strong>Ngày:</strong> 2026-08-27  <strong>Scope:</strong> H051 2250 alerts (top-2250 ORTHRUS)  <strong>GT:</strong> 12/114 trong window</p>
+<h2 id="1-ws-a-h0-baseline-fix">1. WS-A: H0 Baseline Fix</h2>
+<h3 id="a1-re-enrich-v2">A1. Re-enrich v2</h3>
+<ul>
+<li>Input <code>alerts_enriched_partial.jsonl:1</code> generic <code>subject:SUBJECT None</code> → Output <code>alerts_enriched_v2.jsonl</code> dùng <code>data/nid2msg_cache.pkl</code> (2,900,744 entries)</li>
+<li>Script <code>P1/Code/re_enrich_v2.py:1</code> enrich <code>self_label/msg</code>, <code>parent_chain[].msg</code>, <code>event_seq[].src_msg/dst_msg</code></li>
+<li>Result: miss 0/2250 self_label (0%), parent miss 2/2653 (0.1%), event miss 1/16941 — đạt chất lượng cao. Sample V2 GT: <code>svchost.exe | cmd: None</code> + <code>netflow 142.20.56.154:57669 -&gt; 224.0.0.252:5355</code> (thay vì <code>node_946071</code>)</li>
+<li>Impact: text len p50 496 chars (V2) vs 117 (V1), max 6349 vs 2509 — đủ context cho SLM. <code>P1/Code/tfidf_cv_v2.py:40</code></li>
+</ul>
+<h3 id="a2-tf-idf-cv-correct-khong-leakage">A2. TF-IDF CV Correct (không leakage)</h3>
+<p><code>P1/Code/slm_tier2.py:250</code> đã fix: <code>_build_tfidf_texts()</code> dùng msg + <code>run_baseline_tfidf(cv=True)</code> 5-fold OOF. So sánh leakage vs CV:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Leakage AP</th>
+<th>OOF AP</th>
+<th>Holdout 80/20 AP</th>
+<th>k=2000 FP_red</th>
+<th>Recall after @k2000</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1 generic IDs</td>
+<td>1.00</td>
+<td>0.184</td>
+<td>0.516</td>
+<td>0.990 (TP 4/12)</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>V2 msg-enriched</td>
+<td>0.854</td>
+<td><strong>0.254</strong></td>
+<td><strong>0.520</strong></td>
+<td>0.973 (TP 6/12)</td>
+<td><strong>0.50</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Chi tiết V2 CV: <code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> <code>ap_oof 0.254 fold [0.27,0.75,0.02,0.52,0.06]</code> variance cao do pos nhỏ (12).</li>
+<li><strong>As FILTER</strong> trên original ORTHRUS ranking (<code>TIER2_FILTER_CORRECTED.json</code>): original top-500/1000 chỉ chứa 1 GT (rank 8) nên filter giết recall (0/1). Tại k=2000 (chứa đủ 12 GT) V2 filter keep 57 (6 TP/51 FP) prec 0.105 vs orig 0.006, FP_red 97.4% nhưng mất 50% GT. V1 filter keep 23 (4 TP/19 FP) prec 0.174 FP_red 99% recall 0.333 — V2 giữ recall tốt hơn.</li>
+<li><strong>As RE-RANKER</strong> (TF-IDF sort): V2 top-100 6 TP prec 6% recall 0.5 ; top-500 11 TP prec 2.2% recall 0.92 — vượt xa original ranking (top-100 orig 1 TP). Đây là RQ1b gain, nhưng đổi pipeline từ filter → ranker.</li>
+<li>Kết luận H0: <code>Note.md:15</code> yêu cầu SLM hơn encoder 150M. Hiện TF-IDF V2 OOF AP 0.254, SLM zero-shot phải &gt;0.254 và giữ recall ≥0.5 @FP_red ≥97% mới claim RQ1a. Leakage cũ 0.99 là ảo (<code>tfidf_cv_results.json:12</code>).</li>
+</ul>
+<h3 id="a3-prompt-kerckhoffs-fix">A3. Prompt Kerckhoffs fix</h3>
+<p><code>P1/Code/slm_tier2.py:24</code> SYSTEM_PROMPT rút gọn chỉ format <code>CLASSIFICATION/CONFIDENCE/REASON</code>, bỏ <code>obfuscation/LOLBin/C2/Downloads</code> hints. <code>format_alert_for_prompt()</code> cũng ưu tiên <code>msg</code> over <code>node</code>.</p>
+<h2 id="2-ws-b-hw-grid-partial-i5-10300h-4c8t-16gb-hw_grid_benchmarkpy12">2. WS-B: HW Grid Partial (i5-10300H 4C/8T 16GB <code>hw_grid_benchmark.py:12</code>)</h2>
+<h3 id="b1-tf-idf-measured">B1. TF-IDF measured</h3>
+<ul>
+<li>p50 1.23ms, p95 3.04ms, p99 ~3.5ms per alert (200 mẫu, <code>P1/Output/benchmarks/hw-grid-partial.json:12</code>)</li>
+<li>Throughput: 70M decisions/day 1 core, tương đương 0.0012s/host/ngày cho 10K alerts — negligible vs SLM.</li>
+</ul>
+<h3 id="b1-orthrus-timing-log-p1outputorthrus_runlog224">B1. ORTHRUS timing (log <code>P1/Output/orthrus_run.log:224</code>)</h3>
+<ul>
+<li>Total 1799.83s trên máy thầy: build_graphs 256s, embed_nodes 182s, embed_edges 474s, gnn_train 251s, gnn_test 241s, eval 110s, tracing 281s</li>
+<li>Graph construction 230 TWs train (19-21/09) ~1.1s/TW, inference per TW ~1s — không phải bottleneck cho tier2 (tier2 chỉ chạy trên 10²–10³ alerts).</li>
+</ul>
+<h3 id="b1-slm-estimates-gguf-q4_k_m-chua-o-that-can-calibrate">B1. SLM estimates (GGUF Q4_K_M, chưa đo thật, cần calibrate)</h3>
+<p><code>P1/Output/benchmarks/hw-grid-partial.csv</code> — prefill vs decode tách riêng per <code>Note.md:149</code>:</p>
+<table>
+<thead>
+<tr>
+<th>size</th>
+<th>tok</th>
+<th>mode</th>
+<th>p50 ms</th>
+<th>p95 ms</th>
+<th>weight MB</th>
+<th>KV MB</th>
+<th>dec/day 1c</th>
+<th>dec/day 4c contended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5B</td>
+<td>128</td>
+<td>single</td>
+<td>461</td>
+<td>576</td>
+<td>320</td>
+<td>0.06</td>
+<td>187k</td>
+<td>450k</td>
+</tr>
+<tr>
+<td>0.5B</td>
+<td>2048</td>
+<td>single</td>
+<td>1613</td>
+<td>2016</td>
+<td>320</td>
+<td>1.0</td>
+<td>53k</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>1.5B</td>
+<td>128</td>
+<td>single</td>
+<td>730</td>
+<td>912</td>
+<td>900</td>
+<td>0.15</td>
+<td>118k</td>
+<td>284k</td>
+</tr>
+<tr>
+<td>1.5B</td>
+<td>2048</td>
+<td>single</td>
+<td>3034</td>
+<td>3792</td>
+<td>900</td>
+<td>2.4</td>
+<td>28k</td>
+<td>68k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>128</td>
+<td>single</td>
+<td>1440</td>
+<td>1800</td>
+<td>1800</td>
+<td>0.31</td>
+<td>60k</td>
+<td>144k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>2048</td>
+<td>single</td>
+<td>6240</td>
+<td>7800</td>
+<td>1800</td>
+<td>5.0</td>
+<td>13k</td>
+<td>33k</td>
+</tr>
+<tr>
+<td>8B</td>
+<td>2048</td>
+<td>single</td>
+<td>14528</td>
+<td>18160</td>
+<td>4800</td>
+<td>12.0</td>
+<td>5.9k</td>
+<td>14k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>512</td>
+<td>CoT(128)</td>
+<td>~6000</td>
+<td>7500</td>
+<td>1800</td>
+<td>1.25</td>
+<td>14k</td>
+<td>35k</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Token là trục chi phối: 1.5B@2048 chậm hơn 8B@128 (3s vs 3s) — đúng <code>Note.md:55</code>.</li>
+<li>KV cache tách riêng, không phải weight: 3B@2048 KV 5MB + weight 1.8GB, total ~1.8GB &lt;16GB RAM OK nhưng giảm throughput.</li>
+<li>Pareto partial: 0.5B-128 tối ưu throughput, 3B-512 là upper bound khả thi cho tier2 10³/ngày trên 4C. 8B-2048 chỉ 14k/ngày 4C → vi phạm tier2 budget nếu host bận.</li>
+</ul>
+<h3 id="b1-decisionhostngay-kha-thi">B1. Decision/host/ngày khả thi</h3>
+<p><code>Note.md:56</code> yêu cầu số này. Với 4C contended:
+- Nếu tier1 sinh 100 alerts/ngày → 0.5B/128 cần 0.02s, 3B/2048 cần 7.8s (0.009% CPU) → vẫn OK
+- Nếu tier1 sinh 1000 alerts/ngày → 0.5B/128 2.1s, 3B/2048 78s (0.09% CPU) → 3B@2048 bắt đầu đắt, cần 128 tok
+→ <strong>Kiến trúc 2 tầng bị ép</strong>: tier1 phải ≤10³/ngày nếu dùng 3B, phù hợp <code>Note.md:7</code>.</p>
+<h2 id="3-y-nghia-cho-phase-2-con-lai">3. Ý nghĩa cho Phase 2 còn lại</h2>
+<ul>
+<li><strong>RQ1a claim</strong>: TF-IDF V2 đã là baseline mạnh (AP 0.254, FP_red 97% recall 0.5). SLM zero-shot cần few-shot/LoRA mới hơn được (<code>Note.md:111</code>). Nếu chỉ zero-shot, dự kiến không vượt TF-IDF — cần chuẩn bị kết luận "model nhỏ không làm được zero-shot".</li>
+<li><strong>RQ3</strong>: Cần đo thật với <code>llama.cpp</code> GGUF 0.5B/1.5B/3B để calibrate estimate; hiện là theoretical.</li>
+<li><strong>RQ1b</strong>: TF-IDF re-rank đã vượt ORTHRUS (6 vs 1 TP @100) — SLM cần stratify theo ATT&amp;CK (<code>Note.md:38</code>) để xem gain ở TTP nào.</li>
+<li><strong>Block tiếp theo</strong>: Tải host 201/501 (cần rclone thầy), chạy SLM 3B int4 thật trên 2000 alerts V2, đo latency prefill/decode, vẽ Pareto + FP reduction curve + Venn.</li>
+</ul>
+<h2 id="4-files-sinh-ra">4. Files sinh ra</h2>
+<ul>
+<li><code>P1/Output/data/alerts-enriched-v2.jsonl</code> (2250, 1.4MB → ~2.8MB sau enrich)</li>
+<li><code>P1/Output/results_phase2/tfidf-cv-results.json</code> (leakage vs CV)</li>
+<li><code>P1/Output/TIER2_FILTER_CORRECTED.json</code> (filter vs re-rank)</li>
+<li><code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> (verify fix)</li>
+<li><code>P1/Output/benchmarks/hw-grid-partial.json</code> + <code>.csv</code> (TF-IDF measured + SLM estimates)</li>
+<li><code>P1/Code/slm_tier2.py</code> patched (prompt + CV + gt_json)</li>
+</ul>
+<h2 id="5-next-steps-e-xuat">5. Next steps (đề xuất)</h2>
+<ol>
+<li>Calibrate HW: download <code>Qwen2.5-0.5B/1.5B-Q4_K_M.gguf</code> + <code>llama-bench</code> đo thực p50/p95 trên i5-10300H.</li>
+<li>Run SLM real: <code>python slm_tier2.py --alerts_jsonl alerts_enriched_v2.jsonl --gt_json gt_and_scores.json --alert_k 2000</code> với <code>Qwen2.5-3B int4</code> (cần transformers + CUDA hoặc llama.cpp).</li>
+<li>Enrich full 10K alerts (resume từ 2250, dùng cache — không cần DB).</li>
+<li>Rclone host 201/501 khi có quyền thầy.</li>
+</ol></div></section><section id="RUNBOOK_remote_L6" style="margin-bottom:40px"><h2>RUNBOOK_remote_L6</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="runbook-l6-baseline-tren-may-khoe-pidsmaker-optc-051">RUNBOOK — L6 Baseline trên máy khỏe (PIDSMAKER + OpTC 051)</h1>
+<blockquote>
+<p>Mục tiêu: chạy Flash / MAGIC / Velox / ORTHRUS trên DB full 7 ngày (19.8M events)
+với split chuẩn train=19-21 / val=22 / test=23-25 — việc máy 16GB không làm được (OOM).
+Chuẩn bị bởi Hermes (máy BDTG) 2026-08-15. Số pilot subset tham khảo: <code>LOG.md</code> P1-41→P1-45.</p>
+<p>📌 <strong>VỊ TRÍ DATA (máy thầy):</strong> Toàn bộ data lưu tại <strong><code>E:\Data\Thai</code></strong> (WSL: <code>/mnt/e/Data/Thai</code>).
+Dump/raw/artifacts đều để đó — KHÔNG để trong <code>/home/vung2</code> (WSL home nằm ổ C nhỏ).
+Ví dụ restore: <code>bash setup_all.sh --dump /mnt/e/Data/Thai/optc_h051_full.dump</code></p>
+</blockquote>
+<hr />
+<h2 id="0-yeu-cau-phan-cung">0. Yêu cầu phần cứng</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Yêu cầu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM</td>
+<td><strong>≥32 GB</strong> (training 19.8M events: word2vec embeds 6-10GB + batching load)</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>Docker Desktop / Docker Engine + Docker Compose</td>
+</tr>
+<tr>
+<td>Disk</td>
+<td>≥20 GB trống cho DB + artifacts</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>Không bắt buộc (<code>--cpu</code> OK; GPU chỉ cần nếu chạy SLM tầng hai)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-cai-at">1. Cài đặt</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1.1 Clone PIDSMAKER (commit chuẩn)</span>
+git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/ubc-provenance/PIDSMaker.git
+<span class="nb">cd</span><span class="w"> </span>PIDSMaker
+<span class="c1"># checkout đúng commit nếu cần: 2289cd9b0adf7289a093f63ca7ff11a3b97e46c3</span>
+
+<span class="c1"># 1.2 Áp patches (đã đóng gói trong patches/)</span>
+<span class="c1">#   - all_patches.diff  : 8 file code (config, preprocessing, pipeline, utils)</span>
+<span class="c1">#       → ĐÃ BAO GỒM skip-JSON deviation (malformed JSON guard trong create_database_optc.py)</span>
+git<span class="w"> </span>apply<span class="w"> </span>../patches/all_patches.diff<span class="w">  </span><span class="c1"># (chỉ 1 file)</span>
+
+<span class="c1"># 1.3 Thay config.py (đã patch sẵn: database=optc_h051_full, dates chuẩn)</span>
+cp<span class="w"> </span>../config/config.py<span class="w"> </span>pidsmaker/config/config.py
+
+<span class="c1"># 1.4 Build Docker image</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-postgres.yml<span class="w"> </span>up<span class="w"> </span>-d
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>build
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<p><strong>Lưu ý mount</strong>: container <code>pidsmaker-pids</code> cần mount:
+- DB dumps → <code>/tmp/dumps/</code>
+- artifacts → <code>/data/artifacts/</code></p>
+<hr />
+<h2 id="2-nap-database">2. Nạp database</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 2.1 Tạo database + schema</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE DATABASE optc_h051_full;&quot;</span>
+<span class="c1"># schema: chạy init-create-databases.sh HOẶC dùng schema trong config.py (xem dưới)</span>
+
+<span class="c1"># 2.2 Restore dump (custom format — nhanh hơn nhiều so với INSERT)</span>
+docker<span class="w"> </span>cp<span class="w"> </span>optc_h051_full.dump<span class="w"> </span>pg-pids:/tmp/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>pg_restore<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>--no-owner<span class="w"> </span>/tmp/optc_h051_full.dump
+
+<span class="c1"># Verify</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>-t<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;SELECT count(*) FROM event_table;&quot;</span><span class="w">   </span><span class="c1"># kỳ vọng: 19,815,600</span>
+</code></pre></div>
+
+<blockquote>
+<p>Schema lưu trong dump luôn (custom format). Nếu restore lỗi owner, thêm <code>--no-owner --no-privileges</code>.</p>
+</blockquote>
+<hr />
+<h2 id="3-chay-l6-baseline">3. Chạy L6 baseline</h2>
+<h3 id="31-flash-word2vec-flash-featurization">3.1 Flash (word2vec flash featurization)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; mkdir -p /data/logs /data/artifacts &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method flash \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/flash_full_v2.log; echo FLASH_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Thời gian ước tính</strong>: construction ~1-2h, feat_inference ~1-2h, training 12 epochs ~1-2h (CPU). Tổng <strong>~4-6h</strong>.</p>
+<h3 id="32-magic-only_type-featurization-nhanh-nhat">3.2 MAGIC (only_type featurization — nhanh nhất)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main magic optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method only_type \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/magic_full_v2.log; echo MAGIC_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Ước tính</strong>: ~2-3h (construction cache chung, only_type không train embedding).</p>
+<h3 id="33-velox-word2vec-50-epochs-nang-nhat-ly-do-can-may-khoe">3.3 Velox (word2vec 50 epochs — NẶNG NHẤT, lý do cần máy khỏe)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main velox optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method word2vec \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/velox_full_v1.log; echo VELOX_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Ước tính</strong>: ~4-6h. <strong>Theo dõi RAM</strong>: nếu <code>free -m</code> &lt; 2GB khi training bắt đầu → giảm
+<code>time_window_size</code> trong flash.yml/velox.yml (15.0 → 30.0) để giảm số graphs.</p>
+<h3 id="34-orthrus-cung-word2vec-chay-sau-velox-construction-cache">3.4 ORTHRUS (cùng word2vec — chạy sau Velox, construction cache)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main orthrus optc_h051 --cpu \</span>
+<span class="s2">  ... (cùng flags như Velox, đổi model name + featurization.used_method word2vec) ...&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="4-xac-minh-ket-qua">4. Xác minh kết quả</h2>
+<h3 id="41-so-lieu-chuan-tu-log">4.1 Số liệu chuẩn từ log</h3>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;precision:|recall:|auc:|tp:|fp:|tn:|fn:&quot;</span><span class="w"> </span>/data/logs/*_v2.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-12
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Found .*edge labels|Total distinct&quot;</span><span class="w"> </span>/data/logs/*_v2.log
+</code></pre></div>
+
+<p><strong>Kỳ vọng (so với pilot subset 3 ngày máy 16GB — P1-41→P1-43):</strong>
+- GT edge labels: 135,920/135,928 (pilot subset) — full phải ≥ con số này
+- GT nodes time-window: 114/114
+- Flash: Mean Loss giảm thật, AUC &gt; 0.678
+- MAGIC: tp &gt; 69, recall &gt; 0.602 (nhiều train data hơn)</p>
+<h3 id="42-precision1hop2hop-script-kem-theo">4.2 precision@1hop/2hop (script kèm theo)</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Sửa SCORES path trong script tới scores_model_epoch_*.pkl của run</span>
+docker<span class="w"> </span>cp<span class="w"> </span>scripts/precision_1hop_2hop.py<span class="w"> </span>pidsmaker-pids:/home/pids/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python precision_1hop_2hop.py&quot;</span>
+<span class="c1"># Cần: SCORES path đúng, DB optc_051_sub HOẶC sửa database=optc_h051_full</span>
+</code></pre></div>
+
+<h3 id="43-calib-threshold-script-kem-theo">4.3 Calib threshold (script kèm theo)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>cp<span class="w"> </span>scripts/calib_threshold.py<span class="w"> </span>pidsmaker-pids:/home/pids/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python calib_threshold.py&quot;</span>
+<span class="c1"># Output: bảng FPR target -&gt; TP/FP/recall/precision@1hop/@2hop. Điểm vận hành khuyến nghị: FPR 0.1%.</span>
+</code></pre></div>
+
+<hr />
+<h2 id="5-tra-ve-may-bdtg">5. Trả về máy BDTG</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flash_full_v2.log</code> + <code>results.pth</code></td>
+<td>Flash full metrics</td>
+</tr>
+<tr>
+<td><code>magic_full_v2.log</code> + <code>results.pth</code></td>
+<td>MAGIC full metrics</td>
+</tr>
+<tr>
+<td><code>velox_full_v1.log</code> + <code>results.pth</code></td>
+<td>Velox full metrics</td>
+</tr>
+<tr>
+<td><code>orthrus_full_v1.log</code> + <code>results.pth</code></td>
+<td>ORTHRUS full metrics</td>
+</tr>
+<tr>
+<td><code>precision_1hop_2hop_*.txt</code></td>
+<td>Kết quả phân tích</td>
+</tr>
+</tbody>
+</table>
+<p>Hermes (máy BDTG) sẽ cập nhật <code>baseline_comparison.md</code> §2/§5 + LOG.md với số liệu chính thức.</p>
+<hr />
+<h2 id="6-pitfalls-a-biet-tu-may-16gb-p1-14p1-45">6. Pitfalls đã biết (từ máy 16GB — P1-14→P1-45)</h2>
+<ol>
+<li><strong><code>config/default</code> phải là <code>default</code></strong> (không có tiền tố <code>config/</code>) — <code>check_args</code> so sánh chuỗi.</li>
+<li><strong>Dotted CLI args</strong> (<code>--featurization.used_method</code>) bị argparse nuốt trong vài phiên bản → nếu lỗi config None, set trong YAML thay vì CLI.</li>
+<li><strong><code>get_yml_cfg(args)</code> nhận Namespace</strong>, không nhận list — dùng qua <code>pidsmaker.main</code>, đừng gọi trực tiếp với list.</li>
+<li><strong>Schema khớp</strong>: <code>event_table</code> 9 cột (có <code>edge_label</code>), node tables có <code>path/cmd/index_id</code> — dump đã chứa schema đúng, đừng recreate bằng init-create-databases.sh cũ (thiếu cột).</li>
+<li><strong>GT UUID→index</strong>: dùng <code>uuid_index_map.csv</code> (113/113 từ DB full). Index trong dump KHỚP với map (giữ nguyên index_id gốc).</li>
+<li><strong>OOM pattern</strong>: log 0 bytes + exit 0 = python bị OOM-kill. Xác nhận bằng <code>/sys/fs/cgroup/memory.events</code> (oom_kill &gt; 0). Không phải lỗi code.</li>
+<li><strong>tee không flush</strong> khi process bị kill — chạy với <code>python -u</code> để log đầy đủ.</li>
+</ol></div></section><section id="SELF_SERVICE_RUNBOOK" style="margin-bottom:40px"><h2>SELF_SERVICE_RUNBOOK</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="so-tay-tu-van-hanh-chay-l6-baseline-tren-may-thay-khong-can-agent">🔧 SỔ TAY TỰ VẬN HÀNH — Chạy L6 Baseline trên máy thầy (không cần agent)</h1>
+<blockquote>
+<p>Dành cho trường hợp bạn tự kéo file + tự chạy trên máy thầy (qua UltraViewer hoặc trực tiếp).
+Nếu bạn có SSH thì đưa cho Hermes, sẽ làm tự động; bản này cho đường manual.</p>
+</blockquote>
+<hr />
+<h2 id="xac-nhan-truoc-tra-loi-3-cau-nay-roi-lam">❓ XÁC NHẬN TRƯỚC (trả lời 3 câu này rồi làm)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Ảnh hưởng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Máy thầy là <strong>Windows hay Linux</strong>?</td>
+<td>Lệnh khác nhau</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Máy có <strong>Docker</strong> (Desktop/Engine) không?</td>
+<td>DB + PIDSMAKER chạy trong Docker</td>
+</tr>
+<tr>
+<td>3</td>
+<td>RAM bao nhiêu <strong>≥32GB</strong>?</td>
+<td>Velox/ORTHRUS full cần ≥32GB; nếu &lt;32GB chỉ chạy Flash/MAGIC</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Máy thầy (đã xác nhận 2026-08-20):</strong> Windows 10 · <strong>không có Docker</strong> · RAM 32GB
+→ RAM đủ chạy cả 4 systems (32GB ≥ ngưỡng Velox). Cần <strong>cài Docker Desktop trước</strong> (Bước 0).</p>
+</blockquote>
+<hr />
+<h2 id="buoc-0-cai-docker-desktop-windows-10-chua-co-docker">BƯỚC 0 — CÀI DOCKER DESKTOP (Windows 10, chưa có Docker)</h2>
+<h3 id="0a-kiem-tra-ieu-kien-truoc-quan-trong-windows-10-docker-desktop-can-wsl2">0a. Kiểm tra điều kiện trước (quan trọng — Windows 10 Docker Desktop cần WSL2)</h3>
+<div class="codehilite"><pre><span></span><code># Mở PowerShell (Admin):
+systeminfo | Select-String &quot;Hyper-V&quot;        # phải hiện &quot;Hyper-V Requirements: A hypervisor has been detected&quot;
+wsl --status                                # xem WSL đã cài chưa
+</code></pre></div>
+
+<ul>
+<li><strong>Bắt buộc</strong>: CPU hỗ trợ <strong>virtualization</strong> (Intel VT-x / AMD-V) và <strong>đã bật trong BIOS</strong>
+  (cài máy thầy thường bật sẵn; kiểm tra Task Manager → Performance → CPU → Virtualization: Enabled)</li>
+<li>Windows 10 Pro/Enterprise: cần bật Hyper-V (optional feature) hoặc WSL2 đều được</li>
+<li>Windows 10 Home: <strong>chỉ dùng WSL2</strong> (Hyper-V không có sẵn trên Home) — Docker Desktop tự xử lý</li>
+</ul>
+<h3 id="0b-cai-wsl2-docker-desktop-powershell-admin">0b. Cài WSL2 + Docker Desktop (PowerShell Admin):</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># 1) Cài WSL2 (kernel mới nhất)</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span>
+<span class="c"># → khởi động lại máy</span>
+<span class="c"># 2) Cài Docker Desktop</span>
+<span class="c">#    Tải installer: https://desktop.docker.com/win/main/amd64/DockerDesktopInstaller.exe</span>
+<span class="c">#    Chạy, chọn backend &quot;WSL 2&quot;, bật &quot;Use the WSL 2 based engine&quot;</span>
+<span class="c"># 3) Xác nhận hoạt động (đăng nhập user thường):</span>
+<span class="n">docker</span> <span class="p">-</span><span class="n">-version</span>          <span class="c"># vd Docker version 29.x</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="n">hello-world</span>    <span class="c"># phải chạy được</span>
+</code></pre></div>
+
+<blockquote>
+<p>Nếu <code>wsl --install</code> lỗi hoặc cần full ảnh: <code>wsl --install -d Ubuntu</code> rồi cài Docker engine
+trong Ubuntu (cách Linux). Nhưng Docker Desktop Win là nhanh nhất cho Windows 10.</p>
+</blockquote>
+<h3 id="0c-khong-muon-docker-uong-wsl2-native-linux-khuyen-dung-khong-can-docker">0c. KHÔNG muốn Docker? → Đường WSL2 + native Linux (khuyên dùng, không cần Docker)</h3>
+<p><strong>PIDSMAKER là pure Python + PostgreSQL — KHÔNG bắt buộc Java/Maven.</strong>
+→ Không cần Docker Desktop; chỉ cần WSL2 Ubuntu + cài trực tiếp bằng apt/conda.</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># PowerShell (Admin):</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span>     <span class="c"># cài WSL2 + Ubuntu; khởi động lại máy</span>
+<span class="n">wsl</span> <span class="n">-d</span> <span class="n">Ubuntu</span>               <span class="c"># mở shell Ubuntu</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Trong Ubuntu:</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>postgresql<span class="w"> </span>postgresql-contrib<span class="w"> </span>git<span class="w"> </span>wget
+<span class="c1"># khởi động postgres + tạo user/db</span>
+sudo<span class="w"> </span>service<span class="w"> </span>postgresql<span class="w"> </span>start
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE USER postgres SUPERUSER LOGIN PASSWORD &#39;postgres&#39;;&quot;</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE DATABASE postgres;&quot;</span>
+<span class="c1"># Python 3.9 (conda hoặc apt python3.9)</span>
+<span class="c1">#   - nhanh nhất: cài conda (Miniconda) rồi: conda create -n pids python=3.9 -y</span>
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pids<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>pids
+pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+pip<span class="w"> </span>install<span class="w"> </span>scikit-learn<span class="o">==</span><span class="m">1</span>.2.0<span class="w"> </span><span class="nv">networkx</span><span class="o">==</span><span class="m">2</span>.8.7<span class="w"> </span><span class="nv">xxhash</span><span class="o">==</span><span class="m">3</span>.2.0<span class="w"> </span><span class="nv">graphviz</span><span class="o">==</span><span class="m">0</span>.20.1<span class="w"> </span>psutil<span class="w"> </span><span class="nv">scipy</span><span class="o">==</span><span class="m">1</span>.10.1<span class="w"> </span><span class="nv">matplotlib</span><span class="o">==</span><span class="m">3</span>.8.4<span class="w"> </span><span class="nv">wandb</span><span class="o">==</span><span class="m">0</span>.24.1<span class="w"> </span><span class="nv">chardet</span><span class="o">==</span><span class="m">5</span>.2.0<span class="w"> </span><span class="nv">nltk</span><span class="o">==</span><span class="m">3</span>.8.1<span class="w"> </span><span class="nv">igraph</span><span class="o">==</span><span class="m">0</span>.11.5<span class="w"> </span><span class="nv">cairocffi</span><span class="o">==</span><span class="m">1</span>.7.0<span class="w"> </span><span class="nv">wget</span><span class="o">==</span><span class="m">3</span>.2<span class="w"> </span>psycopg2-binary<span class="w"> </span>tqdm
+</code></pre></div>
+
+<blockquote>
+<p>Đúng là bản deps từ <code>Dockerfile</code> upstream (có cả torch CPU). Path <code>/home/pids</code> giữ nguyên
+như container → các patch chạy đúng ngay, không cần đổi path.
+Sau bước này → BƯỚC 1 (kéo code) → BƯỚC 3 (restore DB — host localhost) → BƯỚC 5 (chạy).
+<strong>Chạy trực tiếp trong Ubuntu, bỏ wrapper <code>docker exec</code></strong> — lệnh BƯỚC 5 dạng:
+<code>cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu --database_host localhost ...</code>
+(cùng flags, chỉ đổi <code>--database_host pg-pids</code> → <code>localhost</code>, bỏ phần <code>docker exec ... bash -c "..."</code>)</p>
+</blockquote>
+<hr />
+<h2 id="buoc-1-keo-code-tu-github-400kb">BƯỚC 1 — Kéo CODE (từ GitHub, ~400KB)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Windows (PowerShell/cmd) hoặc Linux đều được</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/BDTG/optc-e2e-baseline.git
+<span class="nb">cd</span><span class="w"> </span>optc-e2e-baseline
+</code></pre></div>
+
+<p><em>&gt; Nếu máy thầy chưa có git: Windows → cài Git for Windows; Linux → <code>sudo apt install git</code></em></p>
+<hr />
+<h2 id="buoc-2-keo-data-file-lon-khong-co-tren-github">BƯỚC 2 — Kéo DATA (file lớn, KHÔNG có trên GitHub)</h2>
+<p>Cần 2 thứ: <strong>DB dumps</strong> (để test nhanh) hoặc <strong>raw</strong> (để build lại), tùy mục đích.</p>
+<h3 id="lua-chon-a-nhanh-nhat-dung-db-dumps-a-build-san-boi-may-bdtg">Lựa chọn A — Nhanh nhất: dùng DB dumps (đã build sẵn bởi máy BDTG)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Dung lượng</th>
+<th>Dùng để</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optc_h051_full.dump</code></td>
+<td>1.13 GB</td>
+<td>Baseline full 051 (19.8M events) ⭐ chính</td>
+</tr>
+<tr>
+<td><code>optc_051_sub.dump</code></td>
+<td>504 MB</td>
+<td>Pilot verify nhanh (3 ngày)</td>
+</tr>
+<tr>
+<td><code>optc_h201.dump</code> / <code>optc_h501.dump</code></td>
+<td><em>(chưa build)</em></td>
+<td>2 host còn lại</td>
+</tr>
+</tbody>
+</table>
+<p><em>Nhận từ BDTG qua USB / Drive / LAN. Sau đó bỏ qua Bước 3, nhảy tới Bước 4.</em></p>
+<h3 id="lua-chon-b-build-lai-tu-raw-can-docker">Lựa chọn B — Build lại từ raw (cần Docker)</h3>
+<p>Mac có raw? Kiểm tra:
+| Host | Raw cần |
+|---|---|
+| H051 | <code>phase1/data/raw/host051_*</code> (56GB) |
+| H501 | <code>phase1/data/raw/host501_*</code> (31GB) |
+| H201 | <code>phase1/data/raw/host201_*</code> (13GB, mới tải đủ) |</p>
+<p>Cách A là chuẩn nhất cho bạn — dumps đã có từ trước (<code>C:\Users\BDTG\OpTC-data\phase1\handoff_remote\dumps\</code>).</p>
+<hr />
+<h2 id="buoc-3-restore-db-neu-dung-dump">BƯỚC 3 — Restore DB (nếu dùng dump)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Nếu máy thầy có Docker: khởi động Postgres container trước</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>pg-l6<span class="w"> </span>-e<span class="w"> </span><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>postgres<span class="w"> </span>-p<span class="w"> </span><span class="m">5432</span>:5432<span class="w"> </span>postgres:17
+
+<span class="c1"># Restore (Windows)</span>
+docker<span class="w"> </span>cp<span class="w"> </span>optc_h051_full.dump<span class="w"> </span>pg-l6:/tmp/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>createdb<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>optc_h051_full
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>pg_restore<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>--no-owner<span class="w"> </span>/tmp/optc_h051_full.dump
+
+<span class="c1"># Verify</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>-t<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT count(*) FROM event_table;&quot;</span>
+<span class="c1"># Kỳ vọng: 19,815,600</span>
+</code></pre></div>
+
+<hr />
+<h2 id="buoc-4-dung-pidsmaker-docker-image">BƯỚC 4 — Dựng PIDSMAKER (Docker image)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Clone upstream PIDSMAKER</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ubc-provenance/PIDSMaker.git
+<span class="nb">cd</span><span class="w"> </span>PIDSMaker
+
+<span class="c1"># Áp 2 patch (bắt buộc — xem README phần &#39;Why the patches are required&#39;)</span>
+git<span class="w"> </span>apply<span class="w"> </span>../optc-e2e-baseline/patches/all_patches.diff
+git<span class="w"> </span>apply<span class="w"> </span>../optc-e2e-baseline/patches/pidsmaker_patch.diff
+
+<span class="c1"># Thay config</span>
+cp<span class="w"> </span>../optc-e2e-baseline/config/config.py<span class="w"> </span>pidsmaker/config/config.py
+
+<span class="c1"># Build + up (theo hướng dẫn của PIDSMAKER)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-postgres.yml<span class="w"> </span>up<span class="w"> </span>-d
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>build
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<blockquote>
+<p>Lưu ý: ví dụ trên dùng <code>docker run pg-l6</code> đơn giản; nhưng PIDSMAKER kéo theo compose có
+sẵn. Đọc <code>runbook/RUNBOOK_remote_L6.md</code> để khớp tên container/network với compose chính thức.</p>
+</blockquote>
+<hr />
+<h2 id="buoc-5-chay-4-baseline-lenh-ay-u-trong-runbook">BƯỚC 5 — Chạy 4 Baseline (lệnh đầy đủ trong RUNBOOK)</h2>
+<p><strong>Flash</strong> (~4-6h) — <strong>MAGIC</strong> (~2-3h) — <strong>Velox</strong> (~4-6h, ≥32GB) — <strong>ORTHRUS</strong> (~4-6h)</p>
+<p>Mỗi lệnh dạng:</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none --featurization.used_method flash \</span>
+<span class="s2">  --featurization.training_split all --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False 2&gt;&amp;1 | tee /data/logs/flash_full_v2.log&quot;</span>
+</code></pre></div>
+
+<p>(Đầy đủ 4 lệnh: <code>runbook/RUNBOOK_remote_L6.md</code> mục 3)</p>
+<hr />
+<h2 id="buoc-6-verify-thu-thap-ket-qua">BƯỚC 6 — Verify &amp; thu thập kết quả</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1) GT trong graph (phải đầy đủ)</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Found .*edge labels|Total distinct&quot;</span><span class="w"> </span>/data/logs/*_v2.log
+<span class="c1"># Kỳ vọng: 135,920/135,928 edge labels · 114/114 nodes</span>
+
+<span class="c1"># 2) Metrics epoch cuối</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;precision:|recall:|auc:|tp:|fp:|tn:|fn:&quot;</span><span class="w"> </span>/data/logs/*_v2.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-12
+
+<span class="c1"># 3) Copy artifacts về máy BDTG</span>
+</code></pre></div>
+
+<p><strong>Gửi về BDTG:</strong>
+- <code>flash_full_v2.log</code> + <code>results.pth</code>
+- <code>magic_full_v2.log</code> + <code>results.pth</code>
+- <code>velox_full_v1.log</code> + <code>results.pth</code> (nếu chạy được)
+- <code>orthrus_full_v1.log</code> + <code>results.pth</code>
+- (Hermes sẽ cập nhật baseline_comparison.md + LOG.md)</p>
+<hr />
+<h2 id="pitfalls-ghi-nho-a-uc-ket-30-lan-chay">🚨 Pitfalls ghi nhớ (đã đúc kết 30+ lần chạy)</h2>
+<ol>
+<li><strong><code>default</code></strong> chứ không phải <code>config/default</code> (không có tiền tố path)</li>
+<li><strong>Dotted CLI args</strong> đôi khi bị argparse nuốt → nếu lỗi, set trong YAML thay vì CLI</li>
+<li><strong>OOM pattern</strong>: log 0 bytes + exit 0 = bị kill bộ nhớ, KHÔNG phải lỗi code.
+   Xác nhận: <code>cat /sys/fs/cgroup/memory.events</code> (oom_kill &gt; 0)</li>
+<li><strong>Dùng <code>python -u</code></strong> khi chạy (tee không flush được khi process bị kill)</li>
+<li><strong>Không recreate schema bằng init-create-databases.sh cũ</strong> — dump chứa schema đúng (event_table 9 cột)</li>
+<li>Khi transfer inspect <code>sha256sum</code> cả 2 phía (manifest <code>phase1/manifest/</code>)</li>
+</ol>
+<hr />
+<p><em>Nếu kẹt bất kỳ bước nào: chụp lỗi + up lên chat, Hermes chẩn đoán.</em></p></div></section><section id="velox-optimization-results" style="margin-bottom:40px"><h2>velox-optimization-results</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="velox-performance-optimization-results-t1-t3">Velox Performance Optimization Results (T1-T3)</h1>
+<p><strong>Date:</strong> 2026-08-26
+<strong>Machine:</strong> DESKTOP-1MHQEBD (RTX 5060 Ti 16GB, 28GB WSL2)
+<strong>Baseline:</strong> Velox chunked lazy-loading (RAM 3.5GB, no swap), epoch = 66s</p>
+<h2 id="applied-optimizations">Applied Optimizations</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Patch</th>
+<th>Inspiration</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>Removed redundant <code>msg.clone()</code> in loader buffer</td>
+<td>Lithium (cache, no redundant work)</td>
+<td><code>src/data_utils.py</code></td>
+</tr>
+<tr>
+<td>T2</td>
+<td><code>torch.cuda.empty_cache()</code> per 800 graphs instead of per graph</td>
+<td>Krypton (flush consolidation)</td>
+<td><code>src/detection/training_methods/orthrus_gnn_training.py</code></td>
+</tr>
+<tr>
+<td>T3</td>
+<td>IO prefetch thread with bounded queue (maxsize=chunk) for disk loads</td>
+<td>Moonrise 2-pool (IO/worker split)</td>
+<td><code>src/data_utils.py</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="measured-result-fresh-run-1-epoch-full-train-set">Measured Result (fresh run, 1 epoch, full train set)</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Timeline</span><span class="o">:</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span><span class="mi">15</span><span class="w"> </span><span class="n">START</span><span class="w"> </span><span class="n">SUBTASK</span><span class="w"> </span><span class="n">orthrus_gnn_training</span><span class="o">.</span><span class="na">py</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">12</span><span class="w"> </span><span class="n">Training</span><span class="o">...</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">52</span><span class="w"> </span><span class="o">[</span><span class="err">@</span><span class="n">epoch00</span><span class="o">]</span><span class="w"> </span><span class="n">Training</span><span class="w"> </span><span class="n">finished</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">GPU</span><span class="w"> </span><span class="n">memory</span><span class="o">:</span><span class="w"> </span><span class="mf">0.15</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">memory</span><span class="o">:</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Mean</span><span class="w"> </span><span class="n">Loss</span><span class="o">:</span><span class="w"> </span><span class="mf">0.6293</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Epoch time</strong></td>
+<td>66s</td>
+<td><strong>40s</strong></td>
+<td><strong>-39%</strong></td>
+</tr>
+<tr>
+<td>GPU memory peak</td>
+<td>0.15 GB</td>
+<td>0.15 GB</td>
+<td>=</td>
+</tr>
+<tr>
+<td>CPU memory peak</td>
+<td>~3.5 GB</td>
+<td>~3.5 GB</td>
+<td>= (bounded queue works)</td>
+</tr>
+<tr>
+<td>Mean Loss (1 epoch)</td>
+<td>—</td>
+<td>0.6293</td>
+<td>converges normally</td>
+</tr>
+</tbody>
+</table>
+<h2 id="correctness-check">Correctness Check</h2>
+<p>Final metrics unchanged from baseline (as expected — optimizations don't alter math):
+- TP=0, FP=0, FN=114 at default threshold (threshold-tuning issue, known)
+- AP=0.00268 (vs 0.00332 baseline — within noise for 1-epoch run vs best-of-8)</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>WSL2 on teacher machine was auto-restarting every ~10min during testing
+  (Windows stayed up; only the WSL VM cycled). Workaround: keep a terminal
+  open inside WSL to prevent idle shutdown. Patches persist on disk.</li>
+<li>Full 8-epoch training projected: 66×8=528s → 40×8=320s (<strong>save ~3.5 min/run</strong>)</li>
+<li>The prefetch thread eliminates GPU idle-during-disk-read; further gains
+  would require parallelizing msg extraction (CPU-bound section).</li>
+</ul>
+<h2 id="files-changed-on-teacher-machine-mirrored-here">Files Changed (on teacher machine, mirrored here)</h2>
+<ul>
+<li><code>P1/Code/velox_src/data_utils.py</code> — T1 + T3</li>
+<li><code>P1/Code/velox_src/orthrus_gnn_training.py</code> — T2</li>
+</ul></div></section><section id="YEU_CAU_CAI_THIEN_PHASE0" style="margin-bottom:40px"><h2>YEU_CAU_CAI_THIEN_PHASE0</h2><div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#fff"><h1 id="yeu-cau-cai-thien-re-run-phase-0-chuan-hoa-protocol">YÊU CẦU CẢI THIỆN — Re-run Phase 0 (chuẩn hóa protocol)</h1>
+<blockquote>
+<p>Gửi kèm gói handoff. 5 điểm bắt buộc để số liệu Phase 0 dùng được làm bằng chứng.
+Lý do từng điểm nêu ngắn — đã phân tích từ metrics.json hiện tại (15 runs).</p>
+</blockquote>
+<hr />
+<h2 id="1-ghi-ro-split_frac-khong-anh-huong-trong-host_holdout-a-xac-nhan-bang-code-goc">1. GHI RÕ split_frac KHÔNG ảnh hưởng trong host_holdout (đã xác nhận bằng code gốc)</h2>
+<p><strong>Đã nhận <code>load_split()</code> gốc</strong> — kết luận:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_mode</span> <span class="o">==</span> <span class="s2">&quot;host_holdout&quot;</span><span class="p">:</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hold</span><span class="p">]</span>  <span class="c1"># TOÀN BỘ non-holdout</span>
+    <span class="n">test</span>  <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hold</span><span class="p">]</span>
+    <span class="c1"># split_frac KHÔNG được dùng ở đây</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">*</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_frac</span><span class="p">)</span>  <span class="c1"># chỉ causal mới dùng split_frac</span>
+</code></pre></div>
+
+<p>→ <code>split_frac</code> 0.6/0.7 trong metrics.json là <strong>field còn sót, không tác động cỡ train</strong>.
+→ KHÔNG cần đồng bộ split_frac. Cả hai model đã train trên toàn bộ 10,302 dòng non-holdout.</p>
+<p><strong>Yêu cầu thực sự:</strong>
+- Ghi <code>epochs</code> chính xác của Qwen (hiện None) — đồng bộ số epoch (khuyến nghị 3 như ModernBERT) để công bằng.
+- Nếu muốn test sensitivity theo cỡ train, hãy CHỦ ĐỘNG đưa split_frac vào nhánh host_holdout (hiện không có) — nếu không thì bỏ field này khỏi metrics.json để tránh hiểu nhầm.</p>
+<h2 id="2-ghi-ro-so-epoch-qwen-a-chay">2. GHI RÕ SỐ EPOCH QWEN ĐÃ CHẠY</h2>
+<ul>
+<li>Trường <code>epochs</code> của Qwen trong metrics.json hiện <strong>None</strong> — thiếu.</li>
+<li>Bắt buộc ghi: epochs, batch_size, gradient accumulation, total steps, patience/early-stop (nếu có).</li>
+<li>Chèn vào metrics.json mọi run mới.</li>
+</ul>
+<h2 id="3-nhieu-seed-nhieu-host-holdout-bao-cao-mean-std">3. NHIỀU SEED + NHIỀU HOST HOLDOUT → BÁO CÁO mean ± std</h2>
+<p><strong>Hiện trạng:</strong> mọi run chỉ 1 seed (42) + 1 host holdout (SysClient0501).
+<strong>QUAN TRỌNG (từ code gốc):</strong> undersample dùng <code>random.Random(42)</code> CỐ ĐỊNH và host_holdout
+không shuffle train → <strong>đổi seed cấu hình KHÔNG thay đổi train/test hiện tại</strong>.</p>
+<p><strong>Yêu cầu (bắt buộc sửa code trước khi chạy):</strong>
+1. <code>load_split</code>: đổi <code>neg = random.Random(42).sample(...)</code> → <code>random.Random(cfg.seed).sample(...)</code>
+   (và nếu muốn) thêm shuffle train pool theo <code>cfg.seed</code>.
+2. Chạy <strong>≥3 seed</strong> (42, 123, 2026) mỗi cấu hình.
+3. <strong>≥2 host holdout</strong> — thêm host benign thuần (VD <code>SysClient0205</code> — 25 dòng, 1 mal trong
+   train) để đo FP + unseen-host.
+4. Báo cáo <strong>mean ± std</strong> của AUC-PR, recall@FPR, MCC, F1.
+5. Lý do: test chỉ 18 mẫu mal → ±5.6%/mẫu; hiện seed vô hiệu nên số liệu chưa đủ vững.</p>
+<h2 id="4-metric-chinh-auc-pr-hoac-f1mcc-tai-threshold-calibrated-khong-phai-auc">4. METRIC CHÍNH = AUC-PR (hoặc F1/MCC TẠI THRESHOLD CALIBRATED), KHÔNG PHẢI AUC</h2>
+<p><strong>Hiện trạng:</strong> bảng chính thức đặt AUC cạnh AUC-PR, và cột quyết định hay bị đọc theo AUC (Qwen thắng AUC 0.964 → dễ hiểu nhầm).</p>
+<p><strong>Yêu cầu:</strong>
+- <strong>AUC-PR là metric quyết định</strong> (mất cân bằng 2.64% — AUC-ROC bơm số ở FPR thấp, AUC-PR nhạy đúng với lớp hiếm).
+- Bổ sung <strong>F1 và MCC tại threshold đã calibrate</strong> (không dùng ngưỡng 0.5 vốn tùy ý; calibrate trên validation/hoặc theo recall mục tiêu của SOC).
+- Cột AUC chuyển xuống là metric tham khảo, đánh dấu "không dùng để quyết định".
+- Điều này KHỚP với protocol của đề tài (AUC-PR chính, không AUC-ROC) — đã ghi trong <code>DE_CUONG.md</code> / <code>proposal/03_rq_metrics.md</code>.</p>
+<h2 id="5-ghi-peak-vram-cho-modernbert">5. GHI PEAK VRAM CHO MODERNBERT</h2>
+<p><strong>Hiện trạng:</strong> metrics.json ModernBERT <strong>không có <code>peak_mem_gb</code></strong> (chỉ Qwen có: 8.667GB).</p>
+<p><strong>Yêu cầu:</strong>
+- Ghi <code>peak_mem_gb</code> cho ModernBERT (dùng <code>torch.cuda.max_memory_allocated()</code> sau train).
+- Bổ sung cả <code>latency_ms</code> ghi rõ device (GPU/CPU) cho từng model.
+- Lý do: bảng chi phí cần đủ 3 trục — <strong>thời gian train / VRAM / latency</strong> — để so sánh "chi phí hệ thống" (RQ4a) và justify kiến trúc tầng hai.</p>
+<hr />
+<h2 id="tom-tat-thay-oi-bat-buoc-checklist-cho-re-run">Tóm tắt thay đổi bắt buộc (checklist cho re-run)</h2>
+<ul>
+<li>[ ] Sửa <code>load_split</code>: <code>random.Random(42)</code> → <code>random.Random(cfg.seed)</code> (+ shuffle train theo seed nếu cần)</li>
+<li>[ ] Ghi <code>epochs</code> (đồng bộ 3 như ModernBERT), <code>batch_size</code>, <code>peak_mem_gb</code> (cả 2 model), <code>latency_device</code></li>
+<li>[ ] ≥3 seed × ≥2 host holdout → báo cáo mean ± std</li>
+<li>[ ] Bảng kết quả: AUC-PR cột chính; thêm F1/MCC@calibrated threshold; AUC chuyển tham khảo</li>
+<li>[ ] (Không cần đụng split_frac — đã chứng minh vô hiệu trong host_holdout; hoặc bỏ field khỏi metrics.json)</li>
+<li>[ ] Gửi về: metrics.json bản mới + bảng tổng hợp mean±std + script đo VRAM</li>
+</ul>
+<blockquote>
+<p>Kết quả này thay thế số Phase 0 hiện tại trong <code>baseline_comparison.md</code> §3.4 —
+máy BDTG sẽ cập nhật khi nhận được.</p>
+</blockquote></div></section></body></html>

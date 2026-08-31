@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>SELF_SERVICE_RUNBOOK</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>SELF_SERVICE_RUNBOOK</h1><hr><h1 id="so-tay-tu-van-hanh-chay-l6-baseline-tren-may-thay-khong-can-agent">🔧 SỔ TAY TỰ VẬN HÀNH — Chạy L6 Baseline trên máy thầy (không cần agent)</h1>
+<blockquote>
+<p>Dành cho trường hợp bạn tự kéo file + tự chạy trên máy thầy (qua UltraViewer hoặc trực tiếp).
+Nếu bạn có SSH thì đưa cho Hermes, sẽ làm tự động; bản này cho đường manual.</p>
+</blockquote>
+<hr />
+<h2 id="xac-nhan-truoc-tra-loi-3-cau-nay-roi-lam">❓ XÁC NHẬN TRƯỚC (trả lời 3 câu này rồi làm)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Ảnh hưởng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Máy thầy là <strong>Windows hay Linux</strong>?</td>
+<td>Lệnh khác nhau</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Máy có <strong>Docker</strong> (Desktop/Engine) không?</td>
+<td>DB + PIDSMAKER chạy trong Docker</td>
+</tr>
+<tr>
+<td>3</td>
+<td>RAM bao nhiêu <strong>≥32GB</strong>?</td>
+<td>Velox/ORTHRUS full cần ≥32GB; nếu &lt;32GB chỉ chạy Flash/MAGIC</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Máy thầy (đã xác nhận 2026-08-20):</strong> Windows 10 · <strong>không có Docker</strong> · RAM 32GB
+→ RAM đủ chạy cả 4 systems (32GB ≥ ngưỡng Velox). Cần <strong>cài Docker Desktop trước</strong> (Bước 0).</p>
+</blockquote>
+<hr />
+<h2 id="buoc-0-cai-docker-desktop-windows-10-chua-co-docker">BƯỚC 0 — CÀI DOCKER DESKTOP (Windows 10, chưa có Docker)</h2>
+<h3 id="0a-kiem-tra-ieu-kien-truoc-quan-trong-windows-10-docker-desktop-can-wsl2">0a. Kiểm tra điều kiện trước (quan trọng — Windows 10 Docker Desktop cần WSL2)</h3>
+<div class="codehilite"><pre><span></span><code># Mở PowerShell (Admin):
+systeminfo | Select-String &quot;Hyper-V&quot;        # phải hiện &quot;Hyper-V Requirements: A hypervisor has been detected&quot;
+wsl --status                                # xem WSL đã cài chưa
+</code></pre></div>
+
+<ul>
+<li><strong>Bắt buộc</strong>: CPU hỗ trợ <strong>virtualization</strong> (Intel VT-x / AMD-V) và <strong>đã bật trong BIOS</strong>
+  (cài máy thầy thường bật sẵn; kiểm tra Task Manager → Performance → CPU → Virtualization: Enabled)</li>
+<li>Windows 10 Pro/Enterprise: cần bật Hyper-V (optional feature) hoặc WSL2 đều được</li>
+<li>Windows 10 Home: <strong>chỉ dùng WSL2</strong> (Hyper-V không có sẵn trên Home) — Docker Desktop tự xử lý</li>
+</ul>
+<h3 id="0b-cai-wsl2-docker-desktop-powershell-admin">0b. Cài WSL2 + Docker Desktop (PowerShell Admin):</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># 1) Cài WSL2 (kernel mới nhất)</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span>
+<span class="c"># → khởi động lại máy</span>
+<span class="c"># 2) Cài Docker Desktop</span>
+<span class="c">#    Tải installer: https://desktop.docker.com/win/main/amd64/DockerDesktopInstaller.exe</span>
+<span class="c">#    Chạy, chọn backend &quot;WSL 2&quot;, bật &quot;Use the WSL 2 based engine&quot;</span>
+<span class="c"># 3) Xác nhận hoạt động (đăng nhập user thường):</span>
+<span class="n">docker</span> <span class="p">-</span><span class="n">-version</span>          <span class="c"># vd Docker version 29.x</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="n">hello-world</span>    <span class="c"># phải chạy được</span>
+</code></pre></div>
+
+<blockquote>
+<p>Nếu <code>wsl --install</code> lỗi hoặc cần full ảnh: <code>wsl --install -d Ubuntu</code> rồi cài Docker engine
+trong Ubuntu (cách Linux). Nhưng Docker Desktop Win là nhanh nhất cho Windows 10.</p>
+</blockquote>
+<h3 id="0c-khong-muon-docker-uong-wsl2-native-linux-khuyen-dung-khong-can-docker">0c. KHÔNG muốn Docker? → Đường WSL2 + native Linux (khuyên dùng, không cần Docker)</h3>
+<p><strong>PIDSMAKER là pure Python + PostgreSQL — KHÔNG bắt buộc Java/Maven.</strong>
+→ Không cần Docker Desktop; chỉ cần WSL2 Ubuntu + cài trực tiếp bằng apt/conda.</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># PowerShell (Admin):</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span>     <span class="c"># cài WSL2 + Ubuntu; khởi động lại máy</span>
+<span class="n">wsl</span> <span class="n">-d</span> <span class="n">Ubuntu</span>               <span class="c"># mở shell Ubuntu</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Trong Ubuntu:</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>postgresql<span class="w"> </span>postgresql-contrib<span class="w"> </span>git<span class="w"> </span>wget
+<span class="c1"># khởi động postgres + tạo user/db</span>
+sudo<span class="w"> </span>service<span class="w"> </span>postgresql<span class="w"> </span>start
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE USER postgres SUPERUSER LOGIN PASSWORD &#39;postgres&#39;;&quot;</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE DATABASE postgres;&quot;</span>
+<span class="c1"># Python 3.9 (conda hoặc apt python3.9)</span>
+<span class="c1">#   - nhanh nhất: cài conda (Miniconda) rồi: conda create -n pids python=3.9 -y</span>
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pids<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>pids
+pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+pip<span class="w"> </span>install<span class="w"> </span>scikit-learn<span class="o">==</span><span class="m">1</span>.2.0<span class="w"> </span><span class="nv">networkx</span><span class="o">==</span><span class="m">2</span>.8.7<span class="w"> </span><span class="nv">xxhash</span><span class="o">==</span><span class="m">3</span>.2.0<span class="w"> </span><span class="nv">graphviz</span><span class="o">==</span><span class="m">0</span>.20.1<span class="w"> </span>psutil<span class="w"> </span><span class="nv">scipy</span><span class="o">==</span><span class="m">1</span>.10.1<span class="w"> </span><span class="nv">matplotlib</span><span class="o">==</span><span class="m">3</span>.8.4<span class="w"> </span><span class="nv">wandb</span><span class="o">==</span><span class="m">0</span>.24.1<span class="w"> </span><span class="nv">chardet</span><span class="o">==</span><span class="m">5</span>.2.0<span class="w"> </span><span class="nv">nltk</span><span class="o">==</span><span class="m">3</span>.8.1<span class="w"> </span><span class="nv">igraph</span><span class="o">==</span><span class="m">0</span>.11.5<span class="w"> </span><span class="nv">cairocffi</span><span class="o">==</span><span class="m">1</span>.7.0<span class="w"> </span><span class="nv">wget</span><span class="o">==</span><span class="m">3</span>.2<span class="w"> </span>psycopg2-binary<span class="w"> </span>tqdm
+</code></pre></div>
+
+<blockquote>
+<p>Đúng là bản deps từ <code>Dockerfile</code> upstream (có cả torch CPU). Path <code>/home/pids</code> giữ nguyên
+như container → các patch chạy đúng ngay, không cần đổi path.
+Sau bước này → BƯỚC 1 (kéo code) → BƯỚC 3 (restore DB — host localhost) → BƯỚC 5 (chạy).
+<strong>Chạy trực tiếp trong Ubuntu, bỏ wrapper <code>docker exec</code></strong> — lệnh BƯỚC 5 dạng:
+<code>cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu --database_host localhost ...</code>
+(cùng flags, chỉ đổi <code>--database_host pg-pids</code> → <code>localhost</code>, bỏ phần <code>docker exec ... bash -c "..."</code>)</p>
+</blockquote>
+<hr />
+<h2 id="buoc-1-keo-code-tu-github-400kb">BƯỚC 1 — Kéo CODE (từ GitHub, ~400KB)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Windows (PowerShell/cmd) hoặc Linux đều được</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/BDTG/optc-e2e-baseline.git
+<span class="nb">cd</span><span class="w"> </span>optc-e2e-baseline
+</code></pre></div>
+
+<p><em>&gt; Nếu máy thầy chưa có git: Windows → cài Git for Windows; Linux → <code>sudo apt install git</code></em></p>
+<hr />
+<h2 id="buoc-2-keo-data-file-lon-khong-co-tren-github">BƯỚC 2 — Kéo DATA (file lớn, KHÔNG có trên GitHub)</h2>
+<p>Cần 2 thứ: <strong>DB dumps</strong> (để test nhanh) hoặc <strong>raw</strong> (để build lại), tùy mục đích.</p>
+<h3 id="lua-chon-a-nhanh-nhat-dung-db-dumps-a-build-san-boi-may-bdtg">Lựa chọn A — Nhanh nhất: dùng DB dumps (đã build sẵn bởi máy BDTG)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Dung lượng</th>
+<th>Dùng để</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optc_h051_full.dump</code></td>
+<td>1.13 GB</td>
+<td>Baseline full 051 (19.8M events) ⭐ chính</td>
+</tr>
+<tr>
+<td><code>optc_051_sub.dump</code></td>
+<td>504 MB</td>
+<td>Pilot verify nhanh (3 ngày)</td>
+</tr>
+<tr>
+<td><code>optc_h201.dump</code> / <code>optc_h501.dump</code></td>
+<td><em>(chưa build)</em></td>
+<td>2 host còn lại</td>
+</tr>
+</tbody>
+</table>
+<p><em>Nhận từ BDTG qua USB / Drive / LAN. Sau đó bỏ qua Bước 3, nhảy tới Bước 4.</em></p>
+<h3 id="lua-chon-b-build-lai-tu-raw-can-docker">Lựa chọn B — Build lại từ raw (cần Docker)</h3>
+<p>Mac có raw? Kiểm tra:
+| Host | Raw cần |
+|---|---|
+| H051 | <code>phase1/data/raw/host051_*</code> (56GB) |
+| H501 | <code>phase1/data/raw/host501_*</code> (31GB) |
+| H201 | <code>phase1/data/raw/host201_*</code> (13GB, mới tải đủ) |</p>
+<p>Cách A là chuẩn nhất cho bạn — dumps đã có từ trước (<code>C:\Users\BDTG\OpTC-data\phase1\handoff_remote\dumps\</code>).</p>
+<hr />
+<h2 id="buoc-3-restore-db-neu-dung-dump">BƯỚC 3 — Restore DB (nếu dùng dump)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Nếu máy thầy có Docker: khởi động Postgres container trước</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>pg-l6<span class="w"> </span>-e<span class="w"> </span><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>postgres<span class="w"> </span>-p<span class="w"> </span><span class="m">5432</span>:5432<span class="w"> </span>postgres:17
+
+<span class="c1"># Restore (Windows)</span>
+docker<span class="w"> </span>cp<span class="w"> </span>optc_h051_full.dump<span class="w"> </span>pg-l6:/tmp/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>createdb<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>optc_h051_full
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>pg_restore<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>--no-owner<span class="w"> </span>/tmp/optc_h051_full.dump
+
+<span class="c1"># Verify</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-l6<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>-t<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT count(*) FROM event_table;&quot;</span>
+<span class="c1"># Kỳ vọng: 19,815,600</span>
+</code></pre></div>
+
+<hr />
+<h2 id="buoc-4-dung-pidsmaker-docker-image">BƯỚC 4 — Dựng PIDSMAKER (Docker image)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Clone upstream PIDSMAKER</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ubc-provenance/PIDSMaker.git
+<span class="nb">cd</span><span class="w"> </span>PIDSMaker
+
+<span class="c1"># Áp 2 patch (bắt buộc — xem README phần &#39;Why the patches are required&#39;)</span>
+git<span class="w"> </span>apply<span class="w"> </span>../optc-e2e-baseline/patches/all_patches.diff
+git<span class="w"> </span>apply<span class="w"> </span>../optc-e2e-baseline/patches/pidsmaker_patch.diff
+
+<span class="c1"># Thay config</span>
+cp<span class="w"> </span>../optc-e2e-baseline/config/config.py<span class="w"> </span>pidsmaker/config/config.py
+
+<span class="c1"># Build + up (theo hướng dẫn của PIDSMAKER)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-postgres.yml<span class="w"> </span>up<span class="w"> </span>-d
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>build
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<blockquote>
+<p>Lưu ý: ví dụ trên dùng <code>docker run pg-l6</code> đơn giản; nhưng PIDSMAKER kéo theo compose có
+sẵn. Đọc <code>runbook/RUNBOOK_remote_L6.md</code> để khớp tên container/network với compose chính thức.</p>
+</blockquote>
+<hr />
+<h2 id="buoc-5-chay-4-baseline-lenh-ay-u-trong-runbook">BƯỚC 5 — Chạy 4 Baseline (lệnh đầy đủ trong RUNBOOK)</h2>
+<p><strong>Flash</strong> (~4-6h) — <strong>MAGIC</strong> (~2-3h) — <strong>Velox</strong> (~4-6h, ≥32GB) — <strong>ORTHRUS</strong> (~4-6h)</p>
+<p>Mỗi lệnh dạng:</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none --featurization.used_method flash \</span>
+<span class="s2">  --featurization.training_split all --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False 2&gt;&amp;1 | tee /data/logs/flash_full_v2.log&quot;</span>
+</code></pre></div>
+
+<p>(Đầy đủ 4 lệnh: <code>runbook/RUNBOOK_remote_L6.md</code> mục 3)</p>
+<hr />
+<h2 id="buoc-6-verify-thu-thap-ket-qua">BƯỚC 6 — Verify &amp; thu thập kết quả</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1) GT trong graph (phải đầy đủ)</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Found .*edge labels|Total distinct&quot;</span><span class="w"> </span>/data/logs/*_v2.log
+<span class="c1"># Kỳ vọng: 135,920/135,928 edge labels · 114/114 nodes</span>
+
+<span class="c1"># 2) Metrics epoch cuối</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;precision:|recall:|auc:|tp:|fp:|tn:|fn:&quot;</span><span class="w"> </span>/data/logs/*_v2.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-12
+
+<span class="c1"># 3) Copy artifacts về máy BDTG</span>
+</code></pre></div>
+
+<p><strong>Gửi về BDTG:</strong>
+- <code>flash_full_v2.log</code> + <code>results.pth</code>
+- <code>magic_full_v2.log</code> + <code>results.pth</code>
+- <code>velox_full_v1.log</code> + <code>results.pth</code> (nếu chạy được)
+- <code>orthrus_full_v1.log</code> + <code>results.pth</code>
+- (Hermes sẽ cập nhật baseline_comparison.md + LOG.md)</p>
+<hr />
+<h2 id="pitfalls-ghi-nho-a-uc-ket-30-lan-chay">🚨 Pitfalls ghi nhớ (đã đúc kết 30+ lần chạy)</h2>
+<ol>
+<li><strong><code>default</code></strong> chứ không phải <code>config/default</code> (không có tiền tố path)</li>
+<li><strong>Dotted CLI args</strong> đôi khi bị argparse nuốt → nếu lỗi, set trong YAML thay vì CLI</li>
+<li><strong>OOM pattern</strong>: log 0 bytes + exit 0 = bị kill bộ nhớ, KHÔNG phải lỗi code.
+   Xác nhận: <code>cat /sys/fs/cgroup/memory.events</code> (oom_kill &gt; 0)</li>
+<li><strong>Dùng <code>python -u</code></strong> khi chạy (tee không flush được khi process bị kill)</li>
+<li><strong>Không recreate schema bằng init-create-databases.sh cũ</strong> — dump chứa schema đúng (event_table 9 cột)</li>
+<li>Khi transfer inspect <code>sha256sum</code> cả 2 phía (manifest <code>phase1/manifest/</code>)</li>
+</ol>
+<hr />
+<p><em>Nếu kẹt bất kỳ bước nào: chụp lỗi + up lên chat, Hermes chẩn đoán.</em></p></body></html>

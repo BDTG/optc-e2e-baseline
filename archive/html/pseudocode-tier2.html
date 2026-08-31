@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>pseudocode-tier2</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>pseudocode-tier2</h1><hr><h1 id="pseudocode-tang-2-slm-tier-2-va-cac-thuat-toan-o-luong">PSEUDOCODE — TẦNG 2 (SLM TIER-2) VÀ CÁC THUẬT TOÁN ĐO LƯỜNG</h1>
+<p>Tài liệu này chuyển logic tính toán của Phase 1/tầng 2 thành mã giả
+để đưa vào paper. Mỗi thuật toán: 1) mục đích, 2) mã giả, 3) tham số
+thực tế đã dùng, 4) vị trí code trong repo.</p>
+<hr />
+<h2 id="a0-ky-hieu-chung">A0. Ký hiệu chung</h2>
+<div class="codehilite"><pre><span></span><code>G        = đồ thị provenance theo thời gian (TemporalData)
+N        = tập node; |N| ≈ 914,000–927,000 (tùy model)
+s(v)     = anomaly score tầng 1 của node v (ORTHRUS hoặc Velox)
+Y        = tập node malicious theo ground truth, |Y| = 114
+A(k)     = top-k node theo s(v) giảm dần  (alert budget k)
+Y_act    = các node GT thực sự xuất hiện trong test period
+           (&quot;active&quot;), |Y_act| ≈ 34–37
+msg(v)   = chuỗi mô tả node v: đường dẫn file / lệnh chạy / netflow
+           (path + cmdline + ip:port)
+</code></pre></div>
+
+<hr />
+<h2 id="a1-threshold-sweep-recallk-cua-tang-1">A1. THRESHOLD SWEEP — Recall@k của tầng 1</h2>
+<p><strong>Mục đích:</strong> đo chất lượng <em>ranking</em> của tầng 1 độc lập với ngưỡng,
+trả lời "với ngân sách xem xét k cảnh báo, bắt được bao nhiêu %".</p>
+<div class="codehilite"><pre><span></span><code><span class="n">THRESHOLD</span><span class="o">-</span><span class="n">SWEEP</span><span class="p">(</span><span class="n">scores</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="err">∀</span><span class="n">v</span><span class="err">∈</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">ground</span><span class="w"> </span><span class="n">truth</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">budgets</span><span class="w"> </span><span class="n">K</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="k">order</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="n">descending</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">K</span><span class="p">:</span><span class="w">                      </span><span class="err">#</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="mi">10</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="n">K</span><span class="err">}</span>
+<span class="w">        </span><span class="n">A_k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="k">first</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">order</span>
+<span class="w">        </span><span class="n">TP_k</span><span class="w">    </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="n">A_k</span><span class="w"> </span><span class="err">∩</span><span class="w"> </span><span class="n">Y</span><span class="o">|</span>
+<span class="w">        </span><span class="n">R</span><span class="nv">@k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="n">Y</span><span class="o">|</span><span class="w">              </span><span class="err">#</span><span class="w"> </span><span class="n">recall</span><span class="w"> </span><span class="n">trên</span><span class="w"> </span><span class="k">full</span><span class="w"> </span><span class="n">GT</span>
+<span class="w">        </span><span class="n">R</span><span class="err">̃</span><span class="nv">@k</span><span class="w">    </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="n">Y</span><span class="w"> </span><span class="err">∩</span><span class="w"> </span><span class="n">N_scored</span><span class="o">|</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="n">recall</span><span class="w"> </span><span class="n">trên</span><span class="w"> </span><span class="n">active</span><span class="o">-</span><span class="n">GT</span><span class="w"> </span><span class="nf">ceiling</span>
+<span class="w">        </span><span class="n">P</span><span class="nv">@k</span><span class="w">     </span><span class="err">←</span><span class="w"> </span><span class="n">TP_k</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">k</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="err">{</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">TP_k</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="nv">@k</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="nv">@k</span><span class="p">)</span><span class="err">}</span>
+</code></pre></div>
+
+<p>Tham số thực tế: K = {10000, 20000, 50000}.
+Code: <code>P1/Code/patches/orthrus_threshold_sweep.py</code>.</p>
+<hr />
+<h2 id="a2-precision-ceiling-tran-precision-cua-pathcmd">A2. PRECISION CEILING — trần precision của path+cmd</h2>
+<p><strong>Mục đích:</strong> trả lời câu hỏi gate cho tầng 2 — "nếu chỉ dùng văn bản
+mô tả node (path+cmd), có thể phân biệt FP khỏi TP tới đâu?" FP mà
+có <code>msg()</code> trùng hệt một TP thì <strong>không thể</strong> tách bằng nội dung.</p>
+<div class="codehilite"><pre><span></span><code>PRECISION-CEILING(A(K), Y, msg):
+    TP   ← A_K ∩ Y ;  FP ← A_K \ Y
+    collide_GT  ← ∅ ; collide_TP ← ∅
+    for each f in FP:
+        m_f = msg(f)
+        if m_f is None:          # thiếu label (hiếm)
+            continue
+        if m_f ∈ msg(y), ∀y ∈ Y:      # trùng với BẤT KỲ node GT
+            collide_GT.add(f)
+        if m_f ∈ msg(t), ∀t ∈ TP:     # trùng với TP đã phát hiện
+            collide_TP.add(f)
+    # Trần precision nếu bộ lọc hoàn hảo loại mọi FP có thể tách:
+    ceiling(k) = |TP| / (|TP| + |FP \ collide_GT|)
+    return collide_GT, collide_TP, ceiling(k)
+</code></pre></div>
+
+<p>Kết quả thực tế (ORTHRUS): k=2K → ceiling 33.3%; k=10K → 8.46%.
+Code: <code>P1/Code/patches/orthrus_precision_ceiling.py</code>,
+<code>orthrus_ceiling_corrected.py</code> (bản sửa bug label lookup).</p>
+<hr />
+<h2 id="a3-enrich-alert-dung-ngu-canh-cho-tang-2">A3. ENRICH ALERT — dựng ngữ cảnh cho tầng 2</h2>
+<p><strong>Mục đích:</strong> mỗi alert chỉ là 1 node ID + score — SLM cần <em>ngữ cảnh</em>.
+Enrich gắn thêm chuỗi tổ tiên (parent chain) và chuỗi sự kiện gần nhất.</p>
+<div class="codehilite"><pre><span></span><code>ENRICH-ALERT(v, G):
+    parent_chain ← []
+    u ← v
+    while u has parent p and depth &lt; 3:      # tối đa 3 thế hệ
+        append {node: label(p), op: op(p→u)} to parent_chain
+        u ← p
+    event_seq ← 20 events mới nhất có src hoặc dst = v
+                (lấy từ event_table, sort by timestamp)
+    self_label ← label(v)                    # path + cmd hoặc netflow
+    return JSONL record {nid, rank, score, self_label,
+                         parent_chain, event_seq}
+</code></pre></div>
+
+<p>Thực tế: 2250/10000 alerts đã enrich (bị chặn bởi WSL; script
+resume-capable). Code: nằm ở máy thay (<code>enrich_alerts.py</code>), bản partial
+<code>P1/Output/data/alerts-enriched-partial.jsonl</code>.</p>
+<hr />
+<h2 id="a4-baseline-h0-tf-idf-char-n-gram-logistic-regression">A4. BASELINE H0 — TF-IDF char n-gram + Logistic Regression</h2>
+<p><strong>Mục đích:</strong> baseline encoder RẺ để loại trừ (H0). Nếu TF-IDF cắt được
+FP tốt như SLM thì SLM không có giá trị gia tăng (RQ1a).</p>
+<div class="codehilite"><pre><span></span><code><span class="n">TFIDF</span><span class="o">-</span><span class="n">BASELINE</span><span class="p">(</span><span class="n">alerts</span><span class="w"> </span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">E</span><span class="p">:</span>
+<span class="w">        </span><span class="nc">text</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">self_label</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Σ</span><span class="w"> </span><span class="n">op</span><span class="o">+</span><span class="n">node</span><span class="p">(</span><span class="n">parent_chain</span><span class="p">)</span>
+<span class="w">                       </span><span class="o">+</span><span class="w"> </span><span class="n">Σ</span><span class="w"> </span><span class="n">src</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="n">dst</span><span class="p">(</span><span class="n">event_seq</span><span class="o">[</span><span class="n">:10</span><span class="o">]</span><span class="p">)</span>
+<span class="w">        </span><span class="n">y</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">nid</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">TFIDF</span><span class="p">(</span><span class="nc">text</span><span class="p">,</span><span class="w"> </span><span class="n">analyzer</span><span class="o">=</span><span class="n">char_wb</span><span class="p">,</span><span class="w"> </span><span class="n">ngram</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span>
+<span class="w">              </span><span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span><span class="w"> </span><span class="n">sublinear_tf</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+<span class="w">    </span><span class="n">clf</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="n">class_weight</span><span class="o">=</span><span class="ss">&quot;balanced&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">clf</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
+<span class="w">    </span><span class="n">scores</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">clf</span><span class="p">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">[</span><span class="n">:,1</span><span class="o">]</span>
+<span class="w">    </span><span class="k">order</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">);</span><span class="w"> </span><span class="n">A_k</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="k">order</span><span class="o">[</span><span class="n">:k</span><span class="o">]</span>
+<span class="w">    </span><span class="n">keep</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="err">{</span><span class="n">i</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">A_k</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">scores</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="err">}</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">ngưỡng</span><span class="w"> </span><span class="k">filter</span><span class="w"> </span><span class="mf">0.5</span>
+<span class="w">    </span><span class="n">TP</span><span class="s1">&#39;    ← |{i ∈ keep : y(i)=1}| ;  FP&#39;</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="err">{</span><span class="n">i</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="n">keep</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="err">}</span><span class="o">|</span>
+<span class="w">    </span><span class="n">FP</span><span class="o">-</span><span class="n">reduction</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">FP</span><span class="err">&#39;</span><span class="o">/</span><span class="n">FP_before</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">metrics</span>
+</code></pre></div>
+
+<p>Kết quả thực tế: giữ 12/12 TP (100%), FP 1988→13 (−99.35%).
+Code: <code>run_baseline_tfidf()</code> trong <code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="a5-slm-tier-2-zero-shot-classifier-thuat-toan-chinh">A5. SLM TIER-2 ZERO-SHOT CLASSIFIER (thuật toán chính)</h2>
+<p><strong>Mục đích:</strong> dùng SLM (Qwen2.5-3B int4) phân loại lại từng alert
+malicious/benign dựa trên ngữ cảnh enriched — KHÔNG fine-tune,
+KHÔNG đặt logic phát hiện vào prompt (tuân thủ Kerckhoffs theo Note.md:
+prompt chỉ hướng dẫn <em>cách trình bày</em>, tiêu chí nhận định là kiến thức
+chung của analyst, không phải signature riêng của dataset).</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">SLM</span><span class="o">-</span><span class="nx">TIER2</span><span class="p">(</span><span class="nx">E_enriched</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="p">):</span>
+<span class="w">    </span><span class="nx">model</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">LoadQuantized</span><span class="p">(</span><span class="s">&quot;Qwen2.5-3B-Instruct&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">nf4</span><span class="o">-</span><span class="nx">int4</span><span class="p">,</span>
+<span class="w">                          </span><span class="nx">double_quant</span><span class="p">=</span><span class="nx">True</span><span class="p">,</span><span class="w"> </span><span class="nx">compute_dtype</span><span class="p">=</span><span class="nx">fp16</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">results</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">each</span><span class="w"> </span><span class="nx">alert</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">E_enriched</span><span class="w"> </span><span class="nx">sorted</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">score</span><span class="w"> </span><span class="nx">desc</span><span class="w"> </span><span class="p">(</span><span class="nx">top</span><span class="o">-</span><span class="nx">k</span><span class="p">):</span>
+<span class="w">        </span><span class="nx">prompt</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">TEMPLATE</span><span class="p">(</span>
+<span class="w">            </span><span class="nx">system</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">vai</span><span class="w"> </span><span class="nx">trò</span><span class="w"> </span><span class="nx">analyst</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">yêu</span><span class="w"> </span><span class="nx">cầu</span><span class="w"> </span><span class="nx">format</span><span class="w"> </span><span class="nx">đầu</span><span class="w"> </span><span class="nx">ra</span>
+<span class="w">                     </span><span class="p">[</span><span class="nx">CLASSIFICATION</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">CONFIDENCE</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">REASON</span><span class="p">]</span>
+<span class="w">            </span><span class="nx">user</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="nx">Process</span><span class="w"> </span><span class="nx">Identity</span><span class="w"> </span><span class="p">(</span><span class="nx">self_label</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="nx">Process</span><span class="w"> </span><span class="nx">Tree</span><span class="w"> </span><span class="err">≤</span><span class="mi">3</span><span class="w"> </span><span class="nx">tổ</span><span class="w"> </span><span class="nx">tiên</span><span class="w"> </span><span class="p">(</span><span class="nx">parent_chain</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="nx">sự</span><span class="w"> </span><span class="nx">kiện</span><span class="w"> </span><span class="nx">gần</span><span class="w"> </span><span class="nx">nhất</span><span class="w"> </span><span class="p">(</span><span class="nx">event_seq</span><span class="p">)</span>
+<span class="w">                   </span><span class="o">+</span><span class="w"> </span><span class="nx">câu</span><span class="w"> </span><span class="nx">hỏi</span><span class="w"> </span><span class="nx">MALICIOUS</span><span class="w"> </span><span class="nx">hay</span><span class="w"> </span><span class="nx">BENIGN</span><span class="p">?)</span>
+<span class="w">        </span><span class="nx">resp</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="nx">greedy_generate</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span><span class="w"> </span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">max_new_tokens</span><span class="p">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nx">pred</span><span class="p">,</span><span class="w"> </span><span class="nx">conf</span><span class="p">,</span><span class="w"> </span><span class="nx">reason</span><span class="p">)</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="nx">PARSE</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">append</span><span class="w"> </span><span class="p">{</span><span class="nx">nid</span><span class="p">,</span><span class="w"> </span><span class="nx">score</span><span class="p">,</span><span class="w"> </span><span class="nx">slm_pred</span><span class="p">=</span><span class="nx">pred</span><span class="p">,</span><span class="w"> </span><span class="nx">confidence</span><span class="p">=</span><span class="nx">conf</span><span class="p">}</span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Bộ</span><span class="w"> </span><span class="nx">lọc</span><span class="w"> </span><span class="nx">tier</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="nx">chỉ</span><span class="w"> </span><span class="nx">giữ</span><span class="w"> </span><span class="nx">alert</span><span class="w"> </span><span class="nx">được</span><span class="w"> </span><span class="nx">SLM</span><span class="w"> </span><span class="nx">xác</span><span class="w"> </span><span class="nx">nhận</span><span class="w"> </span><span class="s">&quot;malicious&quot;</span>
+<span class="w">    </span><span class="nx">kept</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="p">{</span><span class="nx">r</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">slm_pred</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;malicious&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">TP₂</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="p">{</span><span class="nx">r</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="nx">kept</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">nid</span><span class="w"> </span><span class="err">∈</span><span class="w"> </span><span class="nx">Y</span><span class="p">}</span><span class="o">|</span><span class="w"> </span><span class="p">;</span><span class="w">  </span><span class="nx">FP₂</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="o">|</span><span class="nx">kept</span><span class="o">|</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="nx">TP₂</span>
+<span class="w">    </span><span class="nx">FP</span><span class="o">-</span><span class="nx">red</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="nx">FP₂</span><span class="o">/</span><span class="nx">FP₁</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">results</span><span class="p">,</span><span class="w"> </span><span class="nx">FP</span><span class="o">-</span><span class="nx">red</span><span class="p">,</span><span class="w"> </span><span class="nx">precision</span><span class="w"> </span><span class="nx">trước</span><span class="o">/</span><span class="nx">sau</span>
+</code></pre></div>
+
+<p>PARSE (phân tích đầu ra có cấu trúc, fail-safe về "uncertain"):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">PARSE</span><span class="ss">(</span><span class="nv">resp</span><span class="ss">)</span>:
+<span class="w">    </span><span class="nv">pred</span><span class="w"> </span>←<span class="w"> </span><span class="s2">&quot;uncertain&quot;</span><span class="c1">; conf ← 0.5</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">splitlines</span><span class="ss">(</span><span class="nv">resp</span><span class="ss">)</span>:
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;CLASSIFICATION:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">pred</span><span class="w"> </span>←<span class="w"> </span><span class="s2">&quot;malicious&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">contains</span><span class="w"> </span><span class="nv">MALICIOUS</span>
+<span class="w">                  </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;benign&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">contains</span><span class="w"> </span><span class="nv">BENIGN</span>
+<span class="w">        </span><span class="nv">elif</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;CONFIDENCE:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">conf</span><span class="w"> </span>←<span class="w"> </span><span class="nv">float</span><span class="ss">(</span>...<span class="ss">)</span><span class="w">  </span><span class="ss">(</span><span class="nv">gi</span>ữ<span class="w"> </span><span class="mi">0</span>.<span class="mi">5</span><span class="w"> </span><span class="nv">n</span>ế<span class="nv">u</span><span class="w"> </span><span class="nv">parse</span><span class="w"> </span><span class="nv">l</span>ỗ<span class="nv">i</span><span class="ss">)</span>
+<span class="w">        </span><span class="nv">elif</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="s2">&quot;REASON:&quot;</span><span class="w"> </span>:
+<span class="w">            </span><span class="nv">reason</span><span class="w"> </span>←<span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">sau</span><span class="w"> </span><span class="nv">d</span>ấ<span class="nv">u</span><span class="w"> </span><span class="s2">&quot;:&quot;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ss">(</span><span class="nv">pred</span>,<span class="w"> </span><span class="nv">conf</span>,<span class="w"> </span><span class="nv">reason</span><span class="ss">)</span>
+</code></pre></div>
+
+<p>Điểm thiết kế đáng nêu trong paper:
+- Greedy decoding (do_sample=False) để tái lập được kết quả.
+- Parse fail-safe: không parse được → "uncertain" (conf 0.5), KHÔNG
+  suy đoán; uncertain bị filter (an toàn phía giảm FP).
+- Quantization nf4/int4 double-quant để chạy trên GPU 16GB.
+- Confidence dùng vẽ risk–coverage curve (RQ phụ).</p>
+<p>Code: <code>classify_with_slm()</code>, <code>parse_slm_response()</code> trong
+<code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="a6-metrics-sau-filter-cong-thuc-anh-gia-tang-2">A6. METRICS SAU FILTER — công thức đánh giá tầng 2</h2>
+<div class="codehilite"><pre><span></span><code>EVAL-TIER2(results, Y, k):
+    A_k   ← top-k alerts (theo score tầng 1)
+    TP₁   ← |A_k ∩ Y| ;  FP₁ ← k − TP₁
+    kept  ← {a ∈ A_k : a.slm_pred = &quot;malicious&quot;}
+    TP₂   ← |kept ∩ Y| ;  FP₂ ← |kept| − TP₂
+    Precision₁ = TP₁/k
+    Precision₂ = TP₂/(TP₂+FP₂)
+    FPReduction = 1 − FP₂/max(FP₁,1)
+    RecallBefore = TP₁/|Y| ;  RecallAfter = TP₂/|Y|
+    # Điều kiện thành công RQ1a:
+    #   FPReduction cao  VÀ  RecallAfter ≈ RecallBefore (fixed recall)
+    return tất cả
+</code></pre></div>
+
+<p>Code: <code>compute_metrics()</code> trong <code>P1/Code/slm_tier2.py</code>.</p>
+<hr />
+<h2 id="ghi-chu-cho-paper">GHI CHÚ CHO PAPER</h2>
+<ol>
+<li><strong>Thứ tự trình bày khuyến nghị</strong>: A1 (đo tầng 1) → A2 (gate) →
+   A3 (enrich) → A4 (baseline H0) → A5 (SLM) → A6 (đánh giá).</li>
+<li>Ceiling (A2) nên đứng TRƯỚC kết quả SLM: nó định nghĩa không gian
+   khả dĩ — FP trùng msg với TP là giới hạn lý thuyết của mọi bộ lọc
+   dựa trên path+cmd.</li>
+<li>Số liệu hiện có: A1, A2, A4 đã chạy đủ. A3 đang 2250/10000.
+   A5+A6 chờ A3 xong (hoặc chạy trên 2250 alerts làm thí điểm).</li>
+</ol></body></html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Full Benchmark - All Specialists</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#111;padding:20px;font-size:13px}
+h1{font-size:18px;text-align:center}
+.sub{font-size:12px;text-align:center;color:#666;margin:4px 0 14px}
+h2{font-size:14px;margin:14px 0 6px;padding:6px 10px;background:#0f172a;color:#fff;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin-bottom:10px}
+th{background:#1e293b;color:#fff;padding:7px 6px;text-align:left;font-size:12px}
+td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
+.rank{text-align:center;font-weight:700}
+.ap{font-weight:700}
+.badge{font-size:10px;padding:2px 6px;border-radius:999px;font-weight:700}
+.win{background:#fef3c7;color:#92400e}
+.good{background:#dcfce7;color:#166534}
+.bad{background:#fee2e2;color:#991b1b}
+.mid{background:#e0e7ff;color:#3730a3}
+.note{font-size:11px;color:#64748b;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
+<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 16 lần chạy</div>
+
+<h2>1) TF-IDF Baseline (sparse — vua S1)</h2>
+<table>
+<tr><th>Model</th><th>AP (5-fold OOF)</th><th>AP holdout</th><th>AP S1 (rich)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
+<tr><td><b>TF-IDF char 2-5 (50k) + LogReg balanced</b></td><td>0.254</td><td>0.519</td><td class="ap">0.89</td><td>0.001s</td><td>0 GB</td><td><span class="badge win">VUA</span> count ký tự thắng</td></tr>
+</table>
+
+<h2>2) Embedding Specialist — thay TF-IDF (dense, không bịa) — 5 model đã bench</h2>
+<table>
+<tr><th>#</th><th>Model</th><th>dim</th><th>AP ↑</th><th>AUC</th><th>Encode 474</th><th>/alert</th><th>VRAM</th><th>Kết luận</th></tr>
+<tr><td class="rank">1</td><td><b>Qwen/Qwen3-Embedding-0.6B</b></td><td>1024</td><td class="ap">0.5000</td><td>0.978</td><td>5.77s</td><td>12 ms</td><td>1.8 GB</td><td><span class="badge good">NGỌT NHẤT</span></td></tr>
+<tr><td class="rank">2</td><td>ibm-granite/granite-embedding-small-r2</td><td>384</td><td class="ap">0.4509</td><td>0.901</td><td>2.08s</td><td>4 ms</td><td>0.2 GB</td><td>Nhẹ nhất</td></tr>
+<tr><td class="rank">3</td><td>jinaai/jina-embeddings-v3</td><td>1024</td><td class="ap">0.4471</td><td>0.912</td><td>2.45s</td><td>5 ms</td><td>1.8 GB</td><td>Fix cache xong</td></tr>
+<tr><td class="rank">4</td><td>Qwen/Qwen3-Embedding-4B</td><td>2560</td><td class="ap">0.4403</td><td>0.904</td><td>11.86s</td><td>25 ms</td><td>8.2 GB fp16</td><td>4B thua 0.6B!</td></tr>
+<tr><td class="rank">5</td><td>sentence-transformers/all-MiniLM-L6-v2</td><td>384</td><td class="ap">0.4083</td><td>0.857</td><td>0.88s</td><td>1.8 ms</td><td>0.2 GB</td><td>Nhanh nhất</td></tr>
+</table>
+
+<h2>3) Security Classifier — Zero-shot vs Fine-tuned (S1 380 train / 94 test, 3 epoch)</h2>
+<table>
+<tr><th>Model</th><th>Chế độ</th><th>AP</th><th>AUC</th><th>Acc (ZS)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
+<tr><td><b>jackaduma/SecBERT (110M)</b></td><td>Fine-tuned</td><td class="ap">0.0452</td><td>0.421</td><td>-</td><td>1.5 ms</td><td>1.8 GB</td><td>Gấp 10× thua emb</td></tr>
+<tr><td><b>protectai/deberta-v3-base-prompt-injection-v2 (86M)</b></td><td>Fine-tuned</td><td class="ap">0.0257</td><td>0.205</td><td>-</td><td>11 ms</td><td>2.2 GB</td><td>Thua 20×</td></tr>
+<tr><td>jackaduma/SecBERT</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.49</td><td>1.5 ms</td><td>1.8 GB</td><td>Random</td></tr>
+<tr><td>AungMoonLord/bert-log-anomaly</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.10</td><td>4.1 ms</td><td>1.8 GB</td><td>Pred 91% mal</td></tr>
+<tr><td>protectai/deberta-v3-base-prompt-injection-v2</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.01</td><td>11 ms</td><td>2.2 GB</td><td>Pred 100% mal</td></tr>
+</table>
+
+<h2>4) Generative Specialist — sinh giải thích (100 alerts S1, batch 8, n=100, susp=1)</h2>
+<table>
+<tr><th>#</th><th>Model</th><th>Latency mean</th><th>p95</th><th>VRAM</th><th>Halluc.</th><th>TTP rate</th><th>Decisions/h</th><th>Kết luận</th></tr>
+<tr><td class="rank">1</td><td>Qwen2.5-0.5B-Instruct (base)</td><td>0.314s</td><td>0.312s</td><td>2.7 GB</td><td>85%</td><td>0%</td><td>11,427</td><td><span class="badge mid">NHANH NHẤT GEN</span></td></tr>
+<tr><td class="rank">2</td><td>Qwen2.5-0.5B-Instruct + LoRA 0.5B</td><td>0.321s</td><td>0.433s</td><td>2.7 GB</td><td>85%</td><td>0%</td><td>11,202</td><td>LoRA không cải thiện</td></tr>
+<tr><td class="rank">3</td><td>HuggingFaceTB/SmolLM2-360M-Instruct</td><td>0.372s</td><td>0.362s</td><td>2.5 GB</td><td>77%</td><td>0%</td><td>9,669</td><td>Nhỏ nhưng vẫn bịa</td></tr>
+<tr><td class="rank">4</td><td>Qwen/Qwen3-0.6B</td><td>0.481s</td><td>0.525s</td><td>3.3 GB</td><td>76%</td><td>0%</td><td>7,475</td><td>-</td></tr>
+<tr><td class="rank">5</td><td>Qwen2.5-1.5B-Instruct</td><td>0.487s</td><td>0.512s</td><td>4.8 GB</td><td>78%</td><td>0%</td><td>7,387</td><td>-</td></tr>
+<tr><td class="rank">6</td><td>Qwen2.5-Coder-1.5B-Instruct</td><td>0.487s</td><td>0.508s</td><td>4.8 GB</td><td>96%</td><td>0%</td><td>7,381</td><td><span class="badge bad">BỊA 96%</span></td></tr>
+<tr><td class="rank">7</td><td>Nguuma/security-slm-unsloth-1.5b</td><td>0.736s</td><td>0.789s</td><td>4.8 GB</td><td>84%</td><td>0%</td><td>4,884</td><td>Security SLM vẫn bịa</td></tr>
+<tr style="background:#fef2f2"><td class="rank">8</td><td><b>Qwen2.5-Coder-7B-Instruct</b></td><td><b>5.423s</b></td><td>5.39s</td><td><b>15.0 GB</b></td><td>95%</td><td>2%</td><td>663</td><td><span class="badge bad">OOM SÁT TRẦN + CHẬM 17×</span></td></tr>
+</table>
+
+<h2>5) Ứng viên chưa bench — Top downloads fit 5060Ti 16GB (đề xuất bench tiếp)</h2>
+<table>
+<tr><th>#</th><th>Model</th><th>Nhóm</th><th>VRAM Q4</th><th>Downloads</th><th>Trạng thái</th><th>Lý do bench</th></tr>
+<tr><td class="rank">3</td><td>Qwen/Qwen3-Embedding-8B</td><td>Embedding</td><td>5.98 GB</td><td>2,385,310</td><td><span class="badge win">CHƯA BENCH</span></td><td>8B lớn nhất, bỏ qua vì 4B đã thua</td></tr>
+<tr><td class="rank">4</td><td>Qwen/Qwen2.5-Coder-14B-Instruct</td><td>Code</td><td>9.34 GB</td><td>2,042,392</td><td><span class="badge win">CHƯA BENCH</span></td><td>14B 2M dl, test sweet spot 14B</td></tr>
+<tr><td class="rank">5</td><td>Qwen/Qwen3-1.7B</td><td>Edge-Small</td><td>2.45 GB</td><td>3,878,472</td><td><span class="badge win">CHƯA BENCH</span></td><td>3.8M dl, 1.7B</td></tr>
+<tr><td class="rank">6</td><td>Qwen/Qwen3.5-2B</td><td>Edge-Small</td><td>2.62 GB</td><td>2,868,560</td><td><span class="badge win">CHƯA BENCH</span></td><td>2B mới</td></tr>
+<tr><td class="rank">7</td><td>protectai/deberta-v3-base-prompt-injection</td><td>Security</td><td>5.42 GB</td><td>66,925</td><td><span class="badge win">CHƯA BENCH</span></td><td>Bản không-v2 của deberta</td></tr>
+<tr><td class="rank">8</td><td>DavidAU/Mistral-MOE-4X7B-24B-gguf</td><td>MoE-Split</td><td>5.42 GB</td><td>11,500</td><td><span class="badge win">CHƯA BENCH</span></td><td>MoE 24B Q4 fit 5.4GB</td></tr>
+</table>
+
+<div class="note">
+<b>Tổng đã bench 18 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 5 + Generative 8 — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto hiện tại:</b> TF-IDF (0.89, 0.001s, 0GB, 0% halluc) &gt; Embedding 0.6B (0.50, 12ms, 1.8GB, 0%) &gt; jina 0.447 ≈ 4B 0.44 &gt;&gt; Classifier FT (0.045) &gt;&gt; Generative (0.02, 0.3-5s, 77-96% halluc). 7B Q4 sát trần 16GB, loại. <b>4B/8B không ngọt hơn 0.6B.</b><br>
+<b>Đề xuất bench tiếp:</b> Coder-14B → Qwen3-1.7B → MoE (~10 phút). File nguồn: slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
+</div>
+</body>
+</html>

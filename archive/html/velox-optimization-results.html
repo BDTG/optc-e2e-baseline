@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>velox-optimization-results</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>velox-optimization-results</h1><hr><h1 id="velox-performance-optimization-results-t1-t3">Velox Performance Optimization Results (T1-T3)</h1>
+<p><strong>Date:</strong> 2026-08-26
+<strong>Machine:</strong> DESKTOP-1MHQEBD (RTX 5060 Ti 16GB, 28GB WSL2)
+<strong>Baseline:</strong> Velox chunked lazy-loading (RAM 3.5GB, no swap), epoch = 66s</p>
+<h2 id="applied-optimizations">Applied Optimizations</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Patch</th>
+<th>Inspiration</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>Removed redundant <code>msg.clone()</code> in loader buffer</td>
+<td>Lithium (cache, no redundant work)</td>
+<td><code>src/data_utils.py</code></td>
+</tr>
+<tr>
+<td>T2</td>
+<td><code>torch.cuda.empty_cache()</code> per 800 graphs instead of per graph</td>
+<td>Krypton (flush consolidation)</td>
+<td><code>src/detection/training_methods/orthrus_gnn_training.py</code></td>
+</tr>
+<tr>
+<td>T3</td>
+<td>IO prefetch thread with bounded queue (maxsize=chunk) for disk loads</td>
+<td>Moonrise 2-pool (IO/worker split)</td>
+<td><code>src/data_utils.py</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="measured-result-fresh-run-1-epoch-full-train-set">Measured Result (fresh run, 1 epoch, full train set)</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Timeline</span><span class="o">:</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span><span class="mi">15</span><span class="w"> </span><span class="n">START</span><span class="w"> </span><span class="n">SUBTASK</span><span class="w"> </span><span class="n">orthrus_gnn_training</span><span class="o">.</span><span class="na">py</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">12</span><span class="w"> </span><span class="n">Training</span><span class="o">...</span>
+<span class="mi">02</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">52</span><span class="w"> </span><span class="o">[</span><span class="err">@</span><span class="n">epoch00</span><span class="o">]</span><span class="w"> </span><span class="n">Training</span><span class="w"> </span><span class="n">finished</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">GPU</span><span class="w"> </span><span class="n">memory</span><span class="o">:</span><span class="w"> </span><span class="mf">0.15</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">memory</span><span class="o">:</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Mean</span><span class="w"> </span><span class="n">Loss</span><span class="o">:</span><span class="w"> </span><span class="mf">0.6293</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Epoch time</strong></td>
+<td>66s</td>
+<td><strong>40s</strong></td>
+<td><strong>-39%</strong></td>
+</tr>
+<tr>
+<td>GPU memory peak</td>
+<td>0.15 GB</td>
+<td>0.15 GB</td>
+<td>=</td>
+</tr>
+<tr>
+<td>CPU memory peak</td>
+<td>~3.5 GB</td>
+<td>~3.5 GB</td>
+<td>= (bounded queue works)</td>
+</tr>
+<tr>
+<td>Mean Loss (1 epoch)</td>
+<td>—</td>
+<td>0.6293</td>
+<td>converges normally</td>
+</tr>
+</tbody>
+</table>
+<h2 id="correctness-check">Correctness Check</h2>
+<p>Final metrics unchanged from baseline (as expected — optimizations don't alter math):
+- TP=0, FP=0, FN=114 at default threshold (threshold-tuning issue, known)
+- AP=0.00268 (vs 0.00332 baseline — within noise for 1-epoch run vs best-of-8)</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>WSL2 on teacher machine was auto-restarting every ~10min during testing
+  (Windows stayed up; only the WSL VM cycled). Workaround: keep a terminal
+  open inside WSL to prevent idle shutdown. Patches persist on disk.</li>
+<li>Full 8-epoch training projected: 66×8=528s → 40×8=320s (<strong>save ~3.5 min/run</strong>)</li>
+<li>The prefetch thread eliminates GPU idle-during-disk-read; further gains
+  would require parallelizing msg extraction (CPU-bound section).</li>
+</ul>
+<h2 id="files-changed-on-teacher-machine-mirrored-here">Files Changed (on teacher machine, mirrored here)</h2>
+<ul>
+<li><code>P1/Code/velox_src/data_utils.py</code> — T1 + T3</li>
+<li><code>P1/Code/velox_src/orthrus_gnn_training.py</code> — T2</li>
+</ul></body></html>

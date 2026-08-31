@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>YEU_CAU_CAI_THIEN_PHASE0</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>YEU_CAU_CAI_THIEN_PHASE0</h1><hr><h1 id="yeu-cau-cai-thien-re-run-phase-0-chuan-hoa-protocol">YÊU CẦU CẢI THIỆN — Re-run Phase 0 (chuẩn hóa protocol)</h1>
+<blockquote>
+<p>Gửi kèm gói handoff. 5 điểm bắt buộc để số liệu Phase 0 dùng được làm bằng chứng.
+Lý do từng điểm nêu ngắn — đã phân tích từ metrics.json hiện tại (15 runs).</p>
+</blockquote>
+<hr />
+<h2 id="1-ghi-ro-split_frac-khong-anh-huong-trong-host_holdout-a-xac-nhan-bang-code-goc">1. GHI RÕ split_frac KHÔNG ảnh hưởng trong host_holdout (đã xác nhận bằng code gốc)</h2>
+<p><strong>Đã nhận <code>load_split()</code> gốc</strong> — kết luận:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_mode</span> <span class="o">==</span> <span class="s2">&quot;host_holdout&quot;</span><span class="p">:</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hold</span><span class="p">]</span>  <span class="c1"># TOÀN BỘ non-holdout</span>
+    <span class="n">test</span>  <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hold</span><span class="p">]</span>
+    <span class="c1"># split_frac KHÔNG được dùng ở đây</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">*</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_frac</span><span class="p">)</span>  <span class="c1"># chỉ causal mới dùng split_frac</span>
+</code></pre></div>
+
+<p>→ <code>split_frac</code> 0.6/0.7 trong metrics.json là <strong>field còn sót, không tác động cỡ train</strong>.
+→ KHÔNG cần đồng bộ split_frac. Cả hai model đã train trên toàn bộ 10,302 dòng non-holdout.</p>
+<p><strong>Yêu cầu thực sự:</strong>
+- Ghi <code>epochs</code> chính xác của Qwen (hiện None) — đồng bộ số epoch (khuyến nghị 3 như ModernBERT) để công bằng.
+- Nếu muốn test sensitivity theo cỡ train, hãy CHỦ ĐỘNG đưa split_frac vào nhánh host_holdout (hiện không có) — nếu không thì bỏ field này khỏi metrics.json để tránh hiểu nhầm.</p>
+<h2 id="2-ghi-ro-so-epoch-qwen-a-chay">2. GHI RÕ SỐ EPOCH QWEN ĐÃ CHẠY</h2>
+<ul>
+<li>Trường <code>epochs</code> của Qwen trong metrics.json hiện <strong>None</strong> — thiếu.</li>
+<li>Bắt buộc ghi: epochs, batch_size, gradient accumulation, total steps, patience/early-stop (nếu có).</li>
+<li>Chèn vào metrics.json mọi run mới.</li>
+</ul>
+<h2 id="3-nhieu-seed-nhieu-host-holdout-bao-cao-mean-std">3. NHIỀU SEED + NHIỀU HOST HOLDOUT → BÁO CÁO mean ± std</h2>
+<p><strong>Hiện trạng:</strong> mọi run chỉ 1 seed (42) + 1 host holdout (SysClient0501).
+<strong>QUAN TRỌNG (từ code gốc):</strong> undersample dùng <code>random.Random(42)</code> CỐ ĐỊNH và host_holdout
+không shuffle train → <strong>đổi seed cấu hình KHÔNG thay đổi train/test hiện tại</strong>.</p>
+<p><strong>Yêu cầu (bắt buộc sửa code trước khi chạy):</strong>
+1. <code>load_split</code>: đổi <code>neg = random.Random(42).sample(...)</code> → <code>random.Random(cfg.seed).sample(...)</code>
+   (và nếu muốn) thêm shuffle train pool theo <code>cfg.seed</code>.
+2. Chạy <strong>≥3 seed</strong> (42, 123, 2026) mỗi cấu hình.
+3. <strong>≥2 host holdout</strong> — thêm host benign thuần (VD <code>SysClient0205</code> — 25 dòng, 1 mal trong
+   train) để đo FP + unseen-host.
+4. Báo cáo <strong>mean ± std</strong> của AUC-PR, recall@FPR, MCC, F1.
+5. Lý do: test chỉ 18 mẫu mal → ±5.6%/mẫu; hiện seed vô hiệu nên số liệu chưa đủ vững.</p>
+<h2 id="4-metric-chinh-auc-pr-hoac-f1mcc-tai-threshold-calibrated-khong-phai-auc">4. METRIC CHÍNH = AUC-PR (hoặc F1/MCC TẠI THRESHOLD CALIBRATED), KHÔNG PHẢI AUC</h2>
+<p><strong>Hiện trạng:</strong> bảng chính thức đặt AUC cạnh AUC-PR, và cột quyết định hay bị đọc theo AUC (Qwen thắng AUC 0.964 → dễ hiểu nhầm).</p>
+<p><strong>Yêu cầu:</strong>
+- <strong>AUC-PR là metric quyết định</strong> (mất cân bằng 2.64% — AUC-ROC bơm số ở FPR thấp, AUC-PR nhạy đúng với lớp hiếm).
+- Bổ sung <strong>F1 và MCC tại threshold đã calibrate</strong> (không dùng ngưỡng 0.5 vốn tùy ý; calibrate trên validation/hoặc theo recall mục tiêu của SOC).
+- Cột AUC chuyển xuống là metric tham khảo, đánh dấu "không dùng để quyết định".
+- Điều này KHỚP với protocol của đề tài (AUC-PR chính, không AUC-ROC) — đã ghi trong <code>DE_CUONG.md</code> / <code>proposal/03_rq_metrics.md</code>.</p>
+<h2 id="5-ghi-peak-vram-cho-modernbert">5. GHI PEAK VRAM CHO MODERNBERT</h2>
+<p><strong>Hiện trạng:</strong> metrics.json ModernBERT <strong>không có <code>peak_mem_gb</code></strong> (chỉ Qwen có: 8.667GB).</p>
+<p><strong>Yêu cầu:</strong>
+- Ghi <code>peak_mem_gb</code> cho ModernBERT (dùng <code>torch.cuda.max_memory_allocated()</code> sau train).
+- Bổ sung cả <code>latency_ms</code> ghi rõ device (GPU/CPU) cho từng model.
+- Lý do: bảng chi phí cần đủ 3 trục — <strong>thời gian train / VRAM / latency</strong> — để so sánh "chi phí hệ thống" (RQ4a) và justify kiến trúc tầng hai.</p>
+<hr />
+<h2 id="tom-tat-thay-oi-bat-buoc-checklist-cho-re-run">Tóm tắt thay đổi bắt buộc (checklist cho re-run)</h2>
+<ul>
+<li>[ ] Sửa <code>load_split</code>: <code>random.Random(42)</code> → <code>random.Random(cfg.seed)</code> (+ shuffle train theo seed nếu cần)</li>
+<li>[ ] Ghi <code>epochs</code> (đồng bộ 3 như ModernBERT), <code>batch_size</code>, <code>peak_mem_gb</code> (cả 2 model), <code>latency_device</code></li>
+<li>[ ] ≥3 seed × ≥2 host holdout → báo cáo mean ± std</li>
+<li>[ ] Bảng kết quả: AUC-PR cột chính; thêm F1/MCC@calibrated threshold; AUC chuyển tham khảo</li>
+<li>[ ] (Không cần đụng split_frac — đã chứng minh vô hiệu trong host_holdout; hoặc bỏ field khỏi metrics.json)</li>
+<li>[ ] Gửi về: metrics.json bản mới + bảng tổng hợp mean±std + script đo VRAM</li>
+</ul>
+<blockquote>
+<p>Kết quả này thay thế số Phase 0 hiện tại trong <code>baseline_comparison.md</code> §3.4 —
+máy BDTG sẽ cập nhật khi nhận được.</p>
+</blockquote></body></html>

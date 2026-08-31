@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>README_orthrus_velox</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>README_orthrus_velox</h1><hr><h1 id="patches-orthrus-velox-tren-optc-h051">Patches: ORTHRUS + Velox trên OpTC H051</h1>
+<p>Áp dụng trên máy L6 (thầy) — WSL Ubuntu user vung2.</p>
+<h2 id="orthrus_opc_h051patch-ap-vao-repo-ubc-provenanceorthrus-clone-optec-l6orthrus">orthrus_opc_h051.patch — áp vào repo <code>ubc-provenance/orthrus</code> (clone ~/optec-l6/orthrus)</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/optec-l6/orthrus
+git<span class="w"> </span>apply<span class="w"> </span>patches/orthrus_opc_h051.patch
+</code></pre></div>
+
+<p>Nội dung các fix (theo thứ tự phát hiện):
+1. <code>src/config.py</code> — thêm dataset <code>OPTC_H051</code> (DB optc_h051_full, Sept 2019, split train 19-21 / val 22 / test 25, GT node_h051_0925.csv 114 nodes, attack window 25/09 10:29-14:25); rel2id đổi sang OpTC ops (OPEN/READ/CREATE/MODIFY/MESSAGE/START/RENAME/DELETE/TERMINATE/WRITE); ROOT_GROUND_TRUTH_DIR bỏ <code>/darpa</code>; DB host localhost
+2. <code>src/graph_construction/build_orthrus_graphs.py</code> — event_table query 8 cột explicit (OpTC có cột edge_label thừa làm unpack fail); nodeid2msg thêm key <strong>node_uuid</strong> (OpTC events tham chiếu UUID, không phải hash_id — root cause graphs rỗng)
+3. <code>src/provnet_utils.py</code> — get_all_files_from_folders fallback lấy tất cả subdirs khi split list rỗng
+4. <code>src/edge_featurization/embed_edges_feature_word2vec.py</code> — skip graph rỗng (tránh torch.vstack crash)
+5. <code>src/data_utils.py</code> — RAM fix: val/test không load vào RAM; msg/t/edge_type của graphs re-point thành views của full_data
+6. <code>src/detection/orthrus_gnn_testing.py</code> — stream val/test one-by-one từ disk; pad full_data zero-slots cho vùng test; max_node_num tính trên toàn bộ splits; resize neighbor_loader sau load_model (checkpoint build với train-only max_node)</p>
+<h2 id="velox_worktreepatch-ap-vao-pidsmaker-branch-velox-54f687c-worktree-optec-l6velox">velox_worktree.patch — áp vào PIDSMaker branch <code>velox</code> @54f687c (worktree ~/optec-l6/velox)</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/optec-l6/PIDSMaker
+git<span class="w"> </span>worktree<span class="w"> </span>add<span class="w"> </span>../velox<span class="w"> </span>54f687c54aa
+<span class="nb">cd</span><span class="w"> </span>../velox
+git<span class="w"> </span>apply<span class="w"> </span>&lt;path&gt;/patches/velox_worktree.patch
+</code></pre></div>
+
+<p>Nội dung: DB name <code>optc_051</code> → <code>optc_h051_full</code>; host <code>postgres</code> → <code>localhost</code>; event query 8 cột explicit.
+Chạy: <code>PYTHONHASHSEED=0 python src/benchmark.py velox optc_h051 --cpu --tuned --from_weights</code></p>
+<h2 id="trang-thai-a-verify-2308">Trạng thái đã verify (23/08)</h2>
+<ul>
+<li>ORTHRUS pipeline chạy qua: graphs 469 TW (có edges), word2vec, embed_edges (train 230/val 94/test 56), GNN training epoch 1 loss 0.9233, testing 94+56 streams — toàn bộ trên 28GB RAM</li>
+<li>Kẹt cuối: neighbor_loader size mismatch sau load_model → patch resize đã viết trong patch file, chưa chạy lại (dừng theo yêu cầu)</li>
+<li>Full run (test 3 ngày) cần ≥40GB RAM → máy Nam 63.6GB</li>
+</ul></body></html>

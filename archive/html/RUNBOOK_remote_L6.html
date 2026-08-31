@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>RUNBOOK_remote_L6</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>RUNBOOK_remote_L6</h1><hr><h1 id="runbook-l6-baseline-tren-may-khoe-pidsmaker-optc-051">RUNBOOK — L6 Baseline trên máy khỏe (PIDSMAKER + OpTC 051)</h1>
+<blockquote>
+<p>Mục tiêu: chạy Flash / MAGIC / Velox / ORTHRUS trên DB full 7 ngày (19.8M events)
+với split chuẩn train=19-21 / val=22 / test=23-25 — việc máy 16GB không làm được (OOM).
+Chuẩn bị bởi Hermes (máy BDTG) 2026-08-15. Số pilot subset tham khảo: <code>LOG.md</code> P1-41→P1-45.</p>
+<p>📌 <strong>VỊ TRÍ DATA (máy thầy):</strong> Toàn bộ data lưu tại <strong><code>E:\Data\Thai</code></strong> (WSL: <code>/mnt/e/Data/Thai</code>).
+Dump/raw/artifacts đều để đó — KHÔNG để trong <code>/home/vung2</code> (WSL home nằm ổ C nhỏ).
+Ví dụ restore: <code>bash setup_all.sh --dump /mnt/e/Data/Thai/optc_h051_full.dump</code></p>
+</blockquote>
+<hr />
+<h2 id="0-yeu-cau-phan-cung">0. Yêu cầu phần cứng</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Yêu cầu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM</td>
+<td><strong>≥32 GB</strong> (training 19.8M events: word2vec embeds 6-10GB + batching load)</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>Docker Desktop / Docker Engine + Docker Compose</td>
+</tr>
+<tr>
+<td>Disk</td>
+<td>≥20 GB trống cho DB + artifacts</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>Không bắt buộc (<code>--cpu</code> OK; GPU chỉ cần nếu chạy SLM tầng hai)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-cai-at">1. Cài đặt</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1.1 Clone PIDSMAKER (commit chuẩn)</span>
+git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/ubc-provenance/PIDSMaker.git
+<span class="nb">cd</span><span class="w"> </span>PIDSMaker
+<span class="c1"># checkout đúng commit nếu cần: 2289cd9b0adf7289a093f63ca7ff11a3b97e46c3</span>
+
+<span class="c1"># 1.2 Áp patches (đã đóng gói trong patches/)</span>
+<span class="c1">#   - all_patches.diff  : 8 file code (config, preprocessing, pipeline, utils)</span>
+<span class="c1">#       → ĐÃ BAO GỒM skip-JSON deviation (malformed JSON guard trong create_database_optc.py)</span>
+git<span class="w"> </span>apply<span class="w"> </span>../patches/all_patches.diff<span class="w">  </span><span class="c1"># (chỉ 1 file)</span>
+
+<span class="c1"># 1.3 Thay config.py (đã patch sẵn: database=optc_h051_full, dates chuẩn)</span>
+cp<span class="w"> </span>../config/config.py<span class="w"> </span>pidsmaker/config/config.py
+
+<span class="c1"># 1.4 Build Docker image</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-postgres.yml<span class="w"> </span>up<span class="w"> </span>-d
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>build
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose-pidsmaker.yml<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<p><strong>Lưu ý mount</strong>: container <code>pidsmaker-pids</code> cần mount:
+- DB dumps → <code>/tmp/dumps/</code>
+- artifacts → <code>/data/artifacts/</code></p>
+<hr />
+<h2 id="2-nap-database">2. Nạp database</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 2.1 Tạo database + schema</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE DATABASE optc_h051_full;&quot;</span>
+<span class="c1"># schema: chạy init-create-databases.sh HOẶC dùng schema trong config.py (xem dưới)</span>
+
+<span class="c1"># 2.2 Restore dump (custom format — nhanh hơn nhiều so với INSERT)</span>
+docker<span class="w"> </span>cp<span class="w"> </span>optc_h051_full.dump<span class="w"> </span>pg-pids:/tmp/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>pg_restore<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>--no-owner<span class="w"> </span>/tmp/optc_h051_full.dump
+
+<span class="c1"># Verify</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pg-pids<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>optc_h051_full<span class="w"> </span>-t<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;SELECT count(*) FROM event_table;&quot;</span><span class="w">   </span><span class="c1"># kỳ vọng: 19,815,600</span>
+</code></pre></div>
+
+<blockquote>
+<p>Schema lưu trong dump luôn (custom format). Nếu restore lỗi owner, thêm <code>--no-owner --no-privileges</code>.</p>
+</blockquote>
+<hr />
+<h2 id="3-chay-l6-baseline">3. Chạy L6 baseline</h2>
+<h3 id="31-flash-word2vec-flash-featurization">3.1 Flash (word2vec flash featurization)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; mkdir -p /data/logs /data/artifacts &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main flash optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method flash \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/flash_full_v2.log; echo FLASH_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Thời gian ước tính</strong>: construction ~1-2h, feat_inference ~1-2h, training 12 epochs ~1-2h (CPU). Tổng <strong>~4-6h</strong>.</p>
+<h3 id="32-magic-only_type-featurization-nhanh-nhat">3.2 MAGIC (only_type featurization — nhanh nhất)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main magic optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method only_type \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/magic_full_v2.log; echo MAGIC_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Ước tính</strong>: ~2-3h (construction cache chung, only_type không train embedding).</p>
+<h3 id="33-velox-word2vec-50-epochs-nang-nhat-ly-do-can-may-khoe">3.3 Velox (word2vec 50 epochs — NẶNG NHẤT, lý do cần máy khỏe)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main velox optc_h051 --cpu \</span>
+<span class="s2">  --database_host pg-pids --database_user postgres --database_password postgres \</span>
+<span class="s2">  --artifact_dir /data/artifacts \</span>
+<span class="s2">  --evaluation.ground_truth_version orthrus \</span>
+<span class="s2">  --batching.intra_graph_batching.used_methods none \</span>
+<span class="s2">  --training.encoder.used_methods none \</span>
+<span class="s2">  --training.decoder.use_few_shot False \</span>
+<span class="s2">  --construction.multi_dataset none \</span>
+<span class="s2">  --featurization.used_method word2vec \</span>
+<span class="s2">  --featurization.training_split all \</span>
+<span class="s2">  --featurization.multi_dataset_training False \</span>
+<span class="s2">  --batching.multi_dataset_training False \</span>
+<span class="s2">  2&gt;&amp;1 | tee /data/logs/velox_full_v1.log; echo VELOX_EXIT=\$?&quot;</span>
+</code></pre></div>
+
+<p><strong>Ước tính</strong>: ~4-6h. <strong>Theo dõi RAM</strong>: nếu <code>free -m</code> &lt; 2GB khi training bắt đầu → giảm
+<code>time_window_size</code> trong flash.yml/velox.yml (15.0 → 30.0) để giảm số graphs.</p>
+<h3 id="34-orthrus-cung-word2vec-chay-sau-velox-construction-cache">3.4 ORTHRUS (cùng word2vec — chạy sau Velox, construction cache)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; \</span>
+<span class="s2">PYTHONPATH=/home/pids python -m pidsmaker.main orthrus optc_h051 --cpu \</span>
+<span class="s2">  ... (cùng flags như Velox, đổi model name + featurization.used_method word2vec) ...&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="4-xac-minh-ket-qua">4. Xác minh kết quả</h2>
+<h3 id="41-so-lieu-chuan-tu-log">4.1 Số liệu chuẩn từ log</h3>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;precision:|recall:|auc:|tp:|fp:|tn:|fn:&quot;</span><span class="w"> </span>/data/logs/*_v2.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-12
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Found .*edge labels|Total distinct&quot;</span><span class="w"> </span>/data/logs/*_v2.log
+</code></pre></div>
+
+<p><strong>Kỳ vọng (so với pilot subset 3 ngày máy 16GB — P1-41→P1-43):</strong>
+- GT edge labels: 135,920/135,928 (pilot subset) — full phải ≥ con số này
+- GT nodes time-window: 114/114
+- Flash: Mean Loss giảm thật, AUC &gt; 0.678
+- MAGIC: tp &gt; 69, recall &gt; 0.602 (nhiều train data hơn)</p>
+<h3 id="42-precision1hop2hop-script-kem-theo">4.2 precision@1hop/2hop (script kèm theo)</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Sửa SCORES path trong script tới scores_model_epoch_*.pkl của run</span>
+docker<span class="w"> </span>cp<span class="w"> </span>scripts/precision_1hop_2hop.py<span class="w"> </span>pidsmaker-pids:/home/pids/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python precision_1hop_2hop.py&quot;</span>
+<span class="c1"># Cần: SCORES path đúng, DB optc_051_sub HOẶC sửa database=optc_h051_full</span>
+</code></pre></div>
+
+<h3 id="43-calib-threshold-script-kem-theo">4.3 Calib threshold (script kèm theo)</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>cp<span class="w"> </span>scripts/calib_threshold.py<span class="w"> </span>pidsmaker-pids:/home/pids/
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pidsmaker-pids<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /home/pids &amp;&amp; PYTHONPATH=/home/pids python calib_threshold.py&quot;</span>
+<span class="c1"># Output: bảng FPR target -&gt; TP/FP/recall/precision@1hop/@2hop. Điểm vận hành khuyến nghị: FPR 0.1%.</span>
+</code></pre></div>
+
+<hr />
+<h2 id="5-tra-ve-may-bdtg">5. Trả về máy BDTG</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flash_full_v2.log</code> + <code>results.pth</code></td>
+<td>Flash full metrics</td>
+</tr>
+<tr>
+<td><code>magic_full_v2.log</code> + <code>results.pth</code></td>
+<td>MAGIC full metrics</td>
+</tr>
+<tr>
+<td><code>velox_full_v1.log</code> + <code>results.pth</code></td>
+<td>Velox full metrics</td>
+</tr>
+<tr>
+<td><code>orthrus_full_v1.log</code> + <code>results.pth</code></td>
+<td>ORTHRUS full metrics</td>
+</tr>
+<tr>
+<td><code>precision_1hop_2hop_*.txt</code></td>
+<td>Kết quả phân tích</td>
+</tr>
+</tbody>
+</table>
+<p>Hermes (máy BDTG) sẽ cập nhật <code>baseline_comparison.md</code> §2/§5 + LOG.md với số liệu chính thức.</p>
+<hr />
+<h2 id="6-pitfalls-a-biet-tu-may-16gb-p1-14p1-45">6. Pitfalls đã biết (từ máy 16GB — P1-14→P1-45)</h2>
+<ol>
+<li><strong><code>config/default</code> phải là <code>default</code></strong> (không có tiền tố <code>config/</code>) — <code>check_args</code> so sánh chuỗi.</li>
+<li><strong>Dotted CLI args</strong> (<code>--featurization.used_method</code>) bị argparse nuốt trong vài phiên bản → nếu lỗi config None, set trong YAML thay vì CLI.</li>
+<li><strong><code>get_yml_cfg(args)</code> nhận Namespace</strong>, không nhận list — dùng qua <code>pidsmaker.main</code>, đừng gọi trực tiếp với list.</li>
+<li><strong>Schema khớp</strong>: <code>event_table</code> 9 cột (có <code>edge_label</code>), node tables có <code>path/cmd/index_id</code> — dump đã chứa schema đúng, đừng recreate bằng init-create-databases.sh cũ (thiếu cột).</li>
+<li><strong>GT UUID→index</strong>: dùng <code>uuid_index_map.csv</code> (113/113 từ DB full). Index trong dump KHỚP với map (giữ nguyên index_id gốc).</li>
+<li><strong>OOM pattern</strong>: log 0 bytes + exit 0 = python bị OOM-kill. Xác nhận bằng <code>/sys/fs/cgroup/memory.events</code> (oom_kill &gt; 0). Không phải lỗi code.</li>
+<li><strong>tee không flush</strong> khi process bị kill — chạy với <code>python -u</code> để log đầy đủ.</li>
+</ol></body></html>

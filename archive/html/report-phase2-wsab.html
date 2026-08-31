@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>report-phase2-wsab</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>report-phase2-wsab</h1><hr><h1 id="report-phase-2-ws-ab-h0-fix-hw-grid-partial">REPORT PHASE 2 — WS-A/B (H0 Fix + HW Grid Partial)</h1>
+<p><strong>Ngày:</strong> 2026-08-27  <strong>Scope:</strong> H051 2250 alerts (top-2250 ORTHRUS)  <strong>GT:</strong> 12/114 trong window</p>
+<h2 id="1-ws-a-h0-baseline-fix">1. WS-A: H0 Baseline Fix</h2>
+<h3 id="a1-re-enrich-v2">A1. Re-enrich v2</h3>
+<ul>
+<li>Input <code>alerts_enriched_partial.jsonl:1</code> generic <code>subject:SUBJECT None</code> → Output <code>alerts_enriched_v2.jsonl</code> dùng <code>data/nid2msg_cache.pkl</code> (2,900,744 entries)</li>
+<li>Script <code>P1/Code/re_enrich_v2.py:1</code> enrich <code>self_label/msg</code>, <code>parent_chain[].msg</code>, <code>event_seq[].src_msg/dst_msg</code></li>
+<li>Result: miss 0/2250 self_label (0%), parent miss 2/2653 (0.1%), event miss 1/16941 — đạt chất lượng cao. Sample V2 GT: <code>svchost.exe | cmd: None</code> + <code>netflow 142.20.56.154:57669 -&gt; 224.0.0.252:5355</code> (thay vì <code>node_946071</code>)</li>
+<li>Impact: text len p50 496 chars (V2) vs 117 (V1), max 6349 vs 2509 — đủ context cho SLM. <code>P1/Code/tfidf_cv_v2.py:40</code></li>
+</ul>
+<h3 id="a2-tf-idf-cv-correct-khong-leakage">A2. TF-IDF CV Correct (không leakage)</h3>
+<p><code>P1/Code/slm_tier2.py:250</code> đã fix: <code>_build_tfidf_texts()</code> dùng msg + <code>run_baseline_tfidf(cv=True)</code> 5-fold OOF. So sánh leakage vs CV:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Leakage AP</th>
+<th>OOF AP</th>
+<th>Holdout 80/20 AP</th>
+<th>k=2000 FP_red</th>
+<th>Recall after @k2000</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1 generic IDs</td>
+<td>1.00</td>
+<td>0.184</td>
+<td>0.516</td>
+<td>0.990 (TP 4/12)</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>V2 msg-enriched</td>
+<td>0.854</td>
+<td><strong>0.254</strong></td>
+<td><strong>0.520</strong></td>
+<td>0.973 (TP 6/12)</td>
+<td><strong>0.50</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Chi tiết V2 CV: <code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> <code>ap_oof 0.254 fold [0.27,0.75,0.02,0.52,0.06]</code> variance cao do pos nhỏ (12).</li>
+<li><strong>As FILTER</strong> trên original ORTHRUS ranking (<code>TIER2_FILTER_CORRECTED.json</code>): original top-500/1000 chỉ chứa 1 GT (rank 8) nên filter giết recall (0/1). Tại k=2000 (chứa đủ 12 GT) V2 filter keep 57 (6 TP/51 FP) prec 0.105 vs orig 0.006, FP_red 97.4% nhưng mất 50% GT. V1 filter keep 23 (4 TP/19 FP) prec 0.174 FP_red 99% recall 0.333 — V2 giữ recall tốt hơn.</li>
+<li><strong>As RE-RANKER</strong> (TF-IDF sort): V2 top-100 6 TP prec 6% recall 0.5 ; top-500 11 TP prec 2.2% recall 0.92 — vượt xa original ranking (top-100 orig 1 TP). Đây là RQ1b gain, nhưng đổi pipeline từ filter → ranker.</li>
+<li>Kết luận H0: <code>Note.md:15</code> yêu cầu SLM hơn encoder 150M. Hiện TF-IDF V2 OOF AP 0.254, SLM zero-shot phải &gt;0.254 và giữ recall ≥0.5 @FP_red ≥97% mới claim RQ1a. Leakage cũ 0.99 là ảo (<code>tfidf_cv_results.json:12</code>).</li>
+</ul>
+<h3 id="a3-prompt-kerckhoffs-fix">A3. Prompt Kerckhoffs fix</h3>
+<p><code>P1/Code/slm_tier2.py:24</code> SYSTEM_PROMPT rút gọn chỉ format <code>CLASSIFICATION/CONFIDENCE/REASON</code>, bỏ <code>obfuscation/LOLBin/C2/Downloads</code> hints. <code>format_alert_for_prompt()</code> cũng ưu tiên <code>msg</code> over <code>node</code>.</p>
+<h2 id="2-ws-b-hw-grid-partial-i5-10300h-4c8t-16gb-hw_grid_benchmarkpy12">2. WS-B: HW Grid Partial (i5-10300H 4C/8T 16GB <code>hw_grid_benchmark.py:12</code>)</h2>
+<h3 id="b1-tf-idf-measured">B1. TF-IDF measured</h3>
+<ul>
+<li>p50 1.23ms, p95 3.04ms, p99 ~3.5ms per alert (200 mẫu, <code>P1/Output/benchmarks/hw-grid-partial.json:12</code>)</li>
+<li>Throughput: 70M decisions/day 1 core, tương đương 0.0012s/host/ngày cho 10K alerts — negligible vs SLM.</li>
+</ul>
+<h3 id="b1-orthrus-timing-log-p1outputorthrus_runlog224">B1. ORTHRUS timing (log <code>P1/Output/orthrus_run.log:224</code>)</h3>
+<ul>
+<li>Total 1799.83s trên máy thầy: build_graphs 256s, embed_nodes 182s, embed_edges 474s, gnn_train 251s, gnn_test 241s, eval 110s, tracing 281s</li>
+<li>Graph construction 230 TWs train (19-21/09) ~1.1s/TW, inference per TW ~1s — không phải bottleneck cho tier2 (tier2 chỉ chạy trên 10²–10³ alerts).</li>
+</ul>
+<h3 id="b1-slm-estimates-gguf-q4_k_m-chua-o-that-can-calibrate">B1. SLM estimates (GGUF Q4_K_M, chưa đo thật, cần calibrate)</h3>
+<p><code>P1/Output/benchmarks/hw-grid-partial.csv</code> — prefill vs decode tách riêng per <code>Note.md:149</code>:</p>
+<table>
+<thead>
+<tr>
+<th>size</th>
+<th>tok</th>
+<th>mode</th>
+<th>p50 ms</th>
+<th>p95 ms</th>
+<th>weight MB</th>
+<th>KV MB</th>
+<th>dec/day 1c</th>
+<th>dec/day 4c contended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5B</td>
+<td>128</td>
+<td>single</td>
+<td>461</td>
+<td>576</td>
+<td>320</td>
+<td>0.06</td>
+<td>187k</td>
+<td>450k</td>
+</tr>
+<tr>
+<td>0.5B</td>
+<td>2048</td>
+<td>single</td>
+<td>1613</td>
+<td>2016</td>
+<td>320</td>
+<td>1.0</td>
+<td>53k</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>1.5B</td>
+<td>128</td>
+<td>single</td>
+<td>730</td>
+<td>912</td>
+<td>900</td>
+<td>0.15</td>
+<td>118k</td>
+<td>284k</td>
+</tr>
+<tr>
+<td>1.5B</td>
+<td>2048</td>
+<td>single</td>
+<td>3034</td>
+<td>3792</td>
+<td>900</td>
+<td>2.4</td>
+<td>28k</td>
+<td>68k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>128</td>
+<td>single</td>
+<td>1440</td>
+<td>1800</td>
+<td>1800</td>
+<td>0.31</td>
+<td>60k</td>
+<td>144k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>2048</td>
+<td>single</td>
+<td>6240</td>
+<td>7800</td>
+<td>1800</td>
+<td>5.0</td>
+<td>13k</td>
+<td>33k</td>
+</tr>
+<tr>
+<td>8B</td>
+<td>2048</td>
+<td>single</td>
+<td>14528</td>
+<td>18160</td>
+<td>4800</td>
+<td>12.0</td>
+<td>5.9k</td>
+<td>14k</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>512</td>
+<td>CoT(128)</td>
+<td>~6000</td>
+<td>7500</td>
+<td>1800</td>
+<td>1.25</td>
+<td>14k</td>
+<td>35k</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Token là trục chi phối: 1.5B@2048 chậm hơn 8B@128 (3s vs 3s) — đúng <code>Note.md:55</code>.</li>
+<li>KV cache tách riêng, không phải weight: 3B@2048 KV 5MB + weight 1.8GB, total ~1.8GB &lt;16GB RAM OK nhưng giảm throughput.</li>
+<li>Pareto partial: 0.5B-128 tối ưu throughput, 3B-512 là upper bound khả thi cho tier2 10³/ngày trên 4C. 8B-2048 chỉ 14k/ngày 4C → vi phạm tier2 budget nếu host bận.</li>
+</ul>
+<h3 id="b1-decisionhostngay-kha-thi">B1. Decision/host/ngày khả thi</h3>
+<p><code>Note.md:56</code> yêu cầu số này. Với 4C contended:
+- Nếu tier1 sinh 100 alerts/ngày → 0.5B/128 cần 0.02s, 3B/2048 cần 7.8s (0.009% CPU) → vẫn OK
+- Nếu tier1 sinh 1000 alerts/ngày → 0.5B/128 2.1s, 3B/2048 78s (0.09% CPU) → 3B@2048 bắt đầu đắt, cần 128 tok
+→ <strong>Kiến trúc 2 tầng bị ép</strong>: tier1 phải ≤10³/ngày nếu dùng 3B, phù hợp <code>Note.md:7</code>.</p>
+<h2 id="3-y-nghia-cho-phase-2-con-lai">3. Ý nghĩa cho Phase 2 còn lại</h2>
+<ul>
+<li><strong>RQ1a claim</strong>: TF-IDF V2 đã là baseline mạnh (AP 0.254, FP_red 97% recall 0.5). SLM zero-shot cần few-shot/LoRA mới hơn được (<code>Note.md:111</code>). Nếu chỉ zero-shot, dự kiến không vượt TF-IDF — cần chuẩn bị kết luận "model nhỏ không làm được zero-shot".</li>
+<li><strong>RQ3</strong>: Cần đo thật với <code>llama.cpp</code> GGUF 0.5B/1.5B/3B để calibrate estimate; hiện là theoretical.</li>
+<li><strong>RQ1b</strong>: TF-IDF re-rank đã vượt ORTHRUS (6 vs 1 TP @100) — SLM cần stratify theo ATT&amp;CK (<code>Note.md:38</code>) để xem gain ở TTP nào.</li>
+<li><strong>Block tiếp theo</strong>: Tải host 201/501 (cần rclone thầy), chạy SLM 3B int4 thật trên 2000 alerts V2, đo latency prefill/decode, vẽ Pareto + FP reduction curve + Venn.</li>
+</ul>
+<h2 id="4-files-sinh-ra">4. Files sinh ra</h2>
+<ul>
+<li><code>P1/Output/data/alerts-enriched-v2.jsonl</code> (2250, 1.4MB → ~2.8MB sau enrich)</li>
+<li><code>P1/Output/results_phase2/tfidf-cv-results.json</code> (leakage vs CV)</li>
+<li><code>P1/Output/TIER2_FILTER_CORRECTED.json</code> (filter vs re-rank)</li>
+<li><code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> (verify fix)</li>
+<li><code>P1/Output/benchmarks/hw-grid-partial.json</code> + <code>.csv</code> (TF-IDF measured + SLM estimates)</li>
+<li><code>P1/Code/slm_tier2.py</code> patched (prompt + CV + gt_json)</li>
+</ul>
+<h2 id="5-next-steps-e-xuat">5. Next steps (đề xuất)</h2>
+<ol>
+<li>Calibrate HW: download <code>Qwen2.5-0.5B/1.5B-Q4_K_M.gguf</code> + <code>llama-bench</code> đo thực p50/p95 trên i5-10300H.</li>
+<li>Run SLM real: <code>python slm_tier2.py --alerts_jsonl alerts_enriched_v2.jsonl --gt_json gt_and_scores.json --alert_k 2000</code> với <code>Qwen2.5-3B int4</code> (cần transformers + CUDA hoặc llama.cpp).</li>
+<li>Enrich full 10K alerts (resume từ 2250, dùng cache — không cần DB).</li>
+<li>Rclone host 201/501 khi có quyền thầy.</li>
+</ol></body></html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>flash_magic_report</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>flash_magic_report</h1><hr><h1 id="bao-cao-ket-qua-flash-magic-baseline-l6-full">BÁO CÁO KẾT QUẢ — FLASH &amp; MAGIC BASELINE (L6 Full)</h1>
+<p><strong>Dataset:</strong> DARPA OpTC H051 — DB full 7 ngày (19.8M events)<br />
+<strong>Split:</strong> Temporal train=19-21 / val=22 / test=23-25 (theo config chuẩn)<br />
+<strong>Ground truth:</strong> ORTHRUS (114 attacked nodes)<br />
+<strong>Máy chạy:</strong> Thầy (Win10 22H2, WSL2 Ubuntu, 28GB RAM, qua Tailscale SSH)<br />
+<strong>Ngày chạy:</strong> 2026-08-20 → 2026-08-21<br />
+<strong>Lưu trữ:</strong> <code>E:\Data\Thai\</code> (artifacts_flashmagic_full, artifacts_flash_backup, artifacts_magic_backup, logs)</p>
+<hr />
+<h2 id="1-flash-full">1. FLASH (full)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Giá trị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nodes evaluated</td>
+<td>927,476</td>
+</tr>
+<tr>
+<td>TP (phát hiện đúng)</td>
+<td>87</td>
+</tr>
+<tr>
+<td>FP (báo sai)</td>
+<td>919,526</td>
+</tr>
+<tr>
+<td>FN (bỏ sót)</td>
+<td>27</td>
+</tr>
+<tr>
+<td>TN</td>
+<td>7,836</td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>0.0001 (0.01%)</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>0.7632 (76.3%)</td>
+</tr>
+<tr>
+<td><strong>F1</strong></td>
+<td>0.0002</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.5645</td>
+</tr>
+<tr>
+<td><strong>PR-AUC</strong></td>
+<td>0.0005</td>
+</tr>
+<tr>
+<td>GT attacked nodes</td>
+<td>114</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Thời gian chạy:</strong> ~3h (bắt đầu 20/08 22:39, xong 21/08 02:22)<br />
+<strong>Artifacts:</strong> <code>artifacts_flashmagic_full/evaluation/evaluation/abd2bffb.../optc_h051/results/results.pth</code> (64.8MB)<br />
+<strong>Scores:</strong> <code>scores_model_epoch_11.pkl</code></p>
+<hr />
+<h2 id="2-magic-full-featurizationonly_type">2. MAGIC (full, featurization=only_type)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Giá trị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nodes evaluated</td>
+<td>927,476</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>62</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>185,668</td>
+</tr>
+<tr>
+<td>FN</td>
+<td>52</td>
+</tr>
+<tr>
+<td>TN</td>
+<td>741,694</td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>0.0003 (0.03%)</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>0.5439 (54.4%)</td>
+</tr>
+<tr>
+<td><strong>F1</strong></td>
+<td>0.0007</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.7513</td>
+</tr>
+<tr>
+<td><strong>PR-AUC</strong></td>
+<td>(tính sau)</td>
+</tr>
+<tr>
+<td>GT attacked nodes</td>
+<td>114</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Thời gian chạy:</strong> ~1h (02:32 → 03:33)<br />
+<strong>Artifacts:</strong> <code>artifacts_flashmagic_full/evaluation/evaluation/3b2acf17.../optc_h051/results/results.pth</code><br />
+<strong>Scores:</strong> <code>scores_model_epoch_11.pkl</code></p>
+<hr />
+<h2 id="3-so-sanh-anh-gia">3. SO SÁNH &amp; ĐÁNH GIÁ</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Flash</th>
+<th>Magic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TP / FN</td>
+<td>87 / 27</td>
+<td>62 / 52</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>919,526</td>
+<td>185,668</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td><strong>76.3%</strong></td>
+<td>54.4%</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>0.5645</td>
+<td><strong>0.7513</strong></td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>0.01%</td>
+<td>0.03%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nhận xét:</strong>
+- MAGIC có <strong>AUC cao hơn hẳn</strong> Flash (0.75 vs 0.56) → ranking node tốt hơn
+- Flash bắt được <strong>nhiều node thật hơn</strong> (recall 76% vs 54%) nhưng <strong>báo sai nhiều gấp 5 lần</strong> (919K vs 186K FP)
+- <strong>Cả 2 đều có Precision cực thấp (~0.01-0.03%)</strong> → báo động quá nhiều node vô hại</p>
+<p>→ <strong>Khẳng định RQ1a (Note.md):</strong> PIDSMAKER detectors (Flash/Magic) <strong>không thể dùng trực tiếp</strong> làm alert — cần:
+  1. FP analysis (tại sao báo sai nhiều?)
+  2. SLM tầng 2 (Phase 1) để lọc FP</p>
+<p><strong>So với subset pilot (trước đó):</strong>
+- Flash subset: tp=0, fn=114, AUC=0.678 → full: tp=87, fn=27, AUC=0.56 (tiến bộ do full data + temporal split)
+- Magic subset: tp=69, fp=116K, recall=0.605, AUC=0.727 → full: tp=62, fp=186K, recall=0.54, AUC=0.75 (khớp xu hướng)</p>
+<hr />
+<h2 id="4-trang-thai-luu-tru">4. TRẠNG THÁI LƯU TRỮ</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">E</span><span class="p">:</span>\<span class="n">Data</span>\<span class="n">Thai</span>\
+<span class="err">├──</span><span class="w"> </span><span class="n">optc_h051_full</span><span class="o">.</span><span class="n">dump</span><span class="w">              </span><span class="p">(</span><span class="n">DB</span><span class="w"> </span><span class="n">dump</span><span class="w"> </span><span class="mf">1.1</span><span class="n">GB</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_flashmagic_full</span>\<span class="w">        </span><span class="p">(</span><span class="mi">14</span><span class="n">GB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">TOÀN</span><span class="w"> </span><span class="n">BỘ</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="n">Flash</span><span class="o">+</span><span class="n">Magic</span><span class="p">)</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">evaluation</span><span class="o">/</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">pth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scores_</span><span class="o">*.</span><span class="n">pkl</span><span class="w">  </span><span class="err">⭐</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">training</span><span class="o">/</span><span class="w">    </span><span class="err">→</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="n">epoch</span><span class="w"> </span><span class="mi">0</span><span class="o">-</span><span class="mi">11</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">feat_inference</span><span class="o">/</span><span class="w"> </span><span class="n">transformation</span><span class="o">/</span><span class="w"> </span><span class="n">construction</span><span class="o">/</span><span class="w">  </span><span class="p">(</span><span class="n">intermediate</span><span class="p">)</span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">featurization</span><span class="o">/</span><span class="w"> </span><span class="n">batching</span><span class="o">/</span><span class="w"> </span><span class="n">postprocessing</span><span class="o">/</span><span class="w"> </span><span class="n">triage</span><span class="o">/</span><span class="w">  </span><span class="p">(</span><span class="n">nhẹ</span><span class="o">/</span><span class="n">rỗng</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_flash_backup</span>\<span class="w">           </span><span class="p">(</span><span class="mi">609</span><span class="n">MB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">evaluation</span><span class="w"> </span><span class="n">Flash</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts_magic_backup</span>\<span class="w">           </span><span class="p">(</span><span class="mf">1.1</span><span class="n">GB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">evaluation</span><span class="w"> </span><span class="n">Magic</span><span class="p">)</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">logs</span>\<span class="w">                             </span><span class="p">(</span><span class="n">logs_flash</span><span class="o">.</span><span class="n">log</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">logs_magic</span><span class="o">.</span><span class="n">log</span><span class="p">)</span><span class="w">  </span><span class="err">⭐</span><span class="w"> </span><span class="n">MỚI</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">artifacts</span>\<span class="w">                        </span><span class="p">(</span><span class="n">Velox</span><span class="w"> </span><span class="err">đ</span><span class="n">ang</span><span class="w"> </span><span class="n">chạy</span><span class="p">)</span>
+<span class="err">└──</span><span class="w"> </span><span class="n">logs_velox</span><span class="o">.</span><span class="n">log</span><span class="w">                   </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">đ</span><span class="n">ang</span><span class="w"> </span><span class="n">chạy</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Backup đã verify:</strong> results.pth Flash + Magic đều có mặt trên ổ E.</p>
+<hr />
+<h2 id="5-tiep-theo">5. TIẾP THEO</h2>
+<ul>
+<li>[ ] Velox full đang chạy (28GB RAM, artifact_dir đúng ổ E)</li>
+<li>[ ] ORTHRUS full (sau Velox)</li>
+<li>[ ] Cập nhật <code>baseline_comparison.md</code> + <code>LOG.md</code> chính thức</li>
+<li>[ ] FP analysis (RQ1a) — tại sao 919K/186K FP?</li>
+</ul>
+<hr />
+<p><em>Báo cáo tạm thời — viết 2026-08-21, sẽ cập nhật khi Velox/ORTHRUS xong.</em></p></body></html>
