@@ -171,8 +171,10 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <h2>3) Security Classifier — Zero-shot vs Fine-tuned (S1 380 train / 94 test, 3 epoch)</h2>
 <table>
 <tr><th>Model</th><th>Chế độ</th><th>AP</th><th>AUC</th><th>Acc (ZS)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
-<tr><td><b>jackaduma/SecBERT (110M)</b></td><td>Fine-tuned</td><td class="ap">0.0452</td><td>0.421</td><td>-</td><td>1.5 ms</td><td>1.8 GB</td><td>Gấp 10× thua emb</td></tr>
+<tr><td><b>google/byt5-small (byte, 300M) ★</b></td><td>Fine-tuned 410</td><td class="ap">0.0752</td><td>0.575</td><td>-</td><td>~1.2s train</td><td>~8GB</td><td><b>Thắng SecBERT 0.045</b> — normalize+oversample 5x</td></tr>
+<tr><td><b>jackaduma/SecBERT (110M)</b></td><td>Fine-tuned</td><td class="ap">0.0452</td><td>0.421</td><td>-</td><td>1.5 ms</td><td>1.8 GB</td><td>Thua ByT5 40%</td></tr>
 <tr><td><b>protectai/deberta-v3-base-prompt-injection-v2 (86M)</b></td><td>Fine-tuned</td><td class="ap">0.0257</td><td>0.205</td><td>-</td><td>11 ms</td><td>2.2 GB</td><td>Thua 20×</td></tr>
+<tr><td>google/byt5-small</td><td>Zero-shot (LR)</td><td>0.033</td><td>-</td><td>-</td><td>27 ms</td><td>1.2GB</td><td>Byte chưa tune</td></tr>
 <tr><td>jackaduma/SecBERT</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.49</td><td>1.5 ms</td><td>1.8 GB</td><td>Random</td></tr>
 <tr><td>AungMoonLord/bert-log-anomaly</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.10</td><td>4.1 ms</td><td>1.8 GB</td><td>Pred 91% mal</td></tr>
 <tr><td>protectai/deberta-v3-base-prompt-injection-v2</td><td>Zero-shot</td><td>-</td><td>-</td><td>0.01</td><td>11 ms</td><td>2.2 GB</td><td>Pred 100% mal</td></tr>
