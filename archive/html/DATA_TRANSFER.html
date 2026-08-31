@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>DATA_TRANSFER</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>DATA_TRANSFER</h1><hr><h1 id="data_transfer-file-lon-khong-trong-github-gioi-han-100mb">DATA_TRANSFER — file lớn KHÔNG trong GitHub (giới hạn 100MB)</h1>
+<p>File ≥100MB phải chuyển bằng đường khác. Đề xuất theo thứ tự ưu tiên:</p>
+<h2 id="cach-1-khuyen-nghi-nhat-o-cung-ngoaiusb-giua-2-may">Cách 1 (khuyến nghị nhất) — Ổ cứng ngoài/USB giữa 2 máy</h2>
+<p>Nếu 2 máy gặp nhau vật lý hoặc có chung mạng LAN:
+- <code>D:\OpTC-raw\25Sept\</code> trên máy BDTG → gồm <code>AIA-51-75</code> (1.34GB) + <code>AIA-351-375</code> (1.5GB) + <code>HUONG_DAN_MO_RONG_DAY3.md</code>
+- <code>C:\Users\BDTG\OpTC-data\phase1\handoff_remote.zip</code> (1.63GB) → gồm 2 dump + patches + config + scripts + runbook</p>
+<h2 id="cach-2-google-drive">Cách 2 — Google Drive</h2>
+<p>Tải từ <code>https://drive.google.com/drive/folders/1n3kkS3KR31KUegn42yk3-e6JkZvf0Caa</code> (ecar/evaluation/25Sept)
+với rclone (máy BDTG có cấu hình sẵn):</p>
+<div class="codehilite"><pre><span></span><code>rclone --config D:/Tools/rclone-v1.75.0-windows-amd64/rclone.conf copy mydrivename1:ecar/evaluation/25Sept/AIA-351-375/ &lt;dest&gt; -P
+<span class="gh">#</span> AIA-51-75 tương tự (máy BDTG cũng có sẵn tại phase1/data/raw/host051_25Sept/)
+</code></pre></div>
+
+<h2 id="tom-tat-cac-file-lon">Tóm tắt các file lớn</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Vị trí nguồn (máy BDTG)</th>
+<th>Cách chuyển</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optc_h051_full.dump</code></td>
+<td>1.13 GB</td>
+<td><code>phase1/handoff_remote/dumps/</code></td>
+<td>USB / zip hiện có / LAN</td>
+</tr>
+<tr>
+<td><code>optc_051_sub.dump</code></td>
+<td>504 MB</td>
+<td><code>phase1/handoff_remote/dumps/</code></td>
+<td>USB / zip</td>
+</tr>
+<tr>
+<td><code>AIA-51-75.ecar-last.json.gz</code></td>
+<td>1.34 GB</td>
+<td><code>phase1/data/raw/host051_25Sept/</code></td>
+<td>USB / Drive</td>
+</tr>
+<tr>
+<td><code>AIA-351-375.ecar-last.json.gz</code></td>
+<td>1.50 GB</td>
+<td><code>D:\OpTC-raw\25Sept\AIA-351-375/</code></td>
+<td>USB / Drive</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checksums-verify-sau-khi-chuyen">Checksums (verify sau khi chuyển)</h2>
+<div class="codehilite"><pre><span></span><code><span class="mf">1</span><span class="n">a76c0ff605497df11b63b2d38b8dea3ac1962a4244c4984b06939b56ac3a302</span><span class="w">  </span><span class="n">optc_051_sub</span><span class="mf">.</span><span class="n">dump</span>
+<span class="mf">93</span><span class="n">f9a65cb07f4417f66b4c8d21b4267b7b54155b1c4902c86a8692b2aef944cd</span><span class="w">  </span><span class="n">optc_h051_full</span><span class="mf">.</span><span class="n">dump</span>
+<span class="mf">6</span><span class="n">afd2056353f825efe9c083a887781068fe09dd134715dc34700353f21efd0b0</span><span class="w">  </span><span class="n">AIA</span><span class="o">-</span><span class="mf">51</span><span class="o">-</span><span class="mf">75.</span><span class="n">ecar</span><span class="o">-</span><span class="n">last</span><span class="mf">.</span><span class="n">json</span><span class="mf">.</span><span class="n">gz</span>
+<span class="n">d52c3fc3439de53123fe199374f08a7d7b2af8e9358727bf88b2a5325a32cc75</span><span class="w">  </span><span class="n">AIA</span><span class="o">-</span><span class="mf">351</span><span class="o">-</span><span class="mf">375.</span><span class="n">ecar</span><span class="o">-</span><span class="n">last</span><span class="mf">.</span><span class="n">json</span><span class="mf">.</span><span class="n">gz</span>
+</code></pre></div></body></html>

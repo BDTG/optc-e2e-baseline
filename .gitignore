@@ -4,7 +4,8 @@ vendor/Finetune_phase0
 
 # === Project data (32GB, never commit) ===
 data/
-Note.md
+# Note.md at repo root only (allow archive/md/Note.md)
+/Note.md
 *.pkl
 *.pth
 

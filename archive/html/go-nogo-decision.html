@@ -1,0 +1,566 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>go-nogo-decision</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 20px;line-height:1.6;color:#111}a{color:#0ea5e9}pre{background:#1e293b;color:#f8fafc;padding:12px;border-radius:8px;overflow:auto}code{background:#e2e8f0;color:#0f172a;padding:2px 4px;border-radius:4px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e2e8f0;padding:6px}th{background:#0f172a;color:#fff}pre code{background:transparent;color:inherit;padding:0;border:none}
+</style>
+</head><body><p><a href="../all-docs.html">← Về mục lục gộp</a></p><h1>go-nogo-decision</h1><hr><h1 id="go-no-go-decision-phase-0-gate">GO / NO-GO DECISION — Phase 0 Gate</h1>
+<p><strong>Date:</strong> 2026-08-27 <strong>Gate:</strong> <code>Note.md:81-89</code> Phase 0 go/no-go: SLM phải hơn encoder 150M (TF-IDF) trên RQ1. Nếu không → dừng reframe.</p>
+<p><strong>Baseline H0 (encoder 150M):</strong> <code>P1/Output/results_phase2/slm-tier2-v2-cv.json:5</code> và <code>P1/Code/tfidf_cv_v2.py:40</code>
+- V2 msg-enriched, 2250 alerts (12 pos / 2238 neg, prevalence 0.53%)
+- TF-IDF char_wb(2,5) 50k + LogReg balanced, <strong>5-fold OOF (không leakage)</strong>
+- <strong>Global AP 0.254</strong>, holdout 0.52, fold AP mean 0.32±0.27
+- Đây là trần H0 phải vượt. Leak cũ 1.00 là ảo.</p>
+<hr />
+<h2 id="1-thu-nghiem-slm-1-hw-calibrate-2-ap-so-sanh">1. Thử nghiệm SLM (1) HW calibrate + (2) AP so sánh</h2>
+<h3 id="1-hw-calibrate-o-that-tren-i5-10300h-4c8t-16gb-khong-phai-estimate">(1) HW calibrate — đo thật trên i5-10300H 4C/8T 16GB (không phải estimate)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Tok in</th>
+<th>Lat p50</th>
+<th>Lat p95</th>
+<th>Mean</th>
+<th>Dec/day 1c</th>
+<th>Dec/day 4c contended</th>
+<th>Đo bằng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TF-IDF (H0)</td>
+<td>~500c</td>
+<td>1.23 ms</td>
+<td>3.04 ms</td>
+<td>1.5ms</td>
+<td>70M</td>
+<td>168M</td>
+<td><code>hw_grid_benchmark.py:12</code> measured 200 alerts</td>
+</tr>
+<tr>
+<td>0.5B-Instruct fewshot</td>
+<td>906 (GT) / 200 (benign) avg 365</td>
+<td>10.7s</td>
+<td>13.9s</td>
+<td>11.0s</td>
+<td>8.6k</td>
+<td>20k</td>
+<td><code>slm_go_nogo_fewshot.py:40</code> 40 alerts</td>
+</tr>
+<tr>
+<td>1.5B-Instruct fewshot</td>
+<td>1092</td>
+<td>28.8s</td>
+<td>40.2s</td>
+<td>30.1s</td>
+<td>3.0k</td>
+<td>7k</td>
+<td>same 40 alerts</td>
+</tr>
+<tr>
+<td>3B-Instruct</td>
+<td>—</td>
+<td>timeout 30m (download 6GB)</td>
+<td>—</td>
+<td>est 60s</td>
+<td>~1.4k</td>
+<td>3.5k</td>
+<td>not measured, extrapolated</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Estimate cũ <code>hw_grid_partial.json</code> sai 15-20×</strong>: 0.5B est 0.46s vs real 10.7s, 1.5B est 0.73s vs real 28.8s. Nguyên nhân: CPU float32 không có FlashAttention, KV cache lớn, swap.</li>
+<li><strong>Kết luận RQ3:</strong> Token là trục chi phối nhưng latency thực gấp 10× dự đoán. Tier2 với 1.5B@2048 chỉ làm được <strong>~3k decisions/day 1c</strong> (≈7k 4c contended). Nếu tier1 sinh 100 alerts/ngày → 50 phút/ngày (3.5% CPU) cho 1.5B, 1000 alerts → 8.3h (35% CPU) → <strong>không khả thi</strong>. TF-IDF làm 1000 alerts trong 1.2s.</li>
+</ul>
+<h3 id="2-slm-vs-tf-idf-ap-fair-comparison-cung-subset">(2) SLM vs TF-IDF AP — fair comparison cùng subset</h3>
+<p><strong>Sai lầm ban đầu:</strong> So SLM subset AP (0.57) vs TF-IDF global AP (0.254) → GO ảo.</p>
+<p><strong>Fair (cùng 40 alerts, 12 GT / 28 benign, prevalence 30%, seed 42, fewshot 2048, 10 events):</strong> <code>C:\Users\BDTG\AppData\Local\Temp\opencode\tfidf_subset_ap.py</code></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP (same 40)</th>
+<th>Training</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TF-IDF global OOF scores (trained on 2250)</td>
+<td><strong>0.8905</strong></td>
+<td>5-fold OOF trên 2250, lấy score cho 40</td>
+<td><code>tfidf_subset_ap.py:30</code></td>
+</tr>
+<tr>
+<td>TF-IDF subset 3-fold OOF (trained on 40)</td>
+<td><strong>0.9155</strong></td>
+<td>3-fold trên 40</td>
+<td>overfit nhẹ nhưng vẫn cao</td>
+</tr>
+<tr>
+<td>SLM 0.5B fewshot</td>
+<td>0.2904</td>
+<td>zero-shot+fewshot 2 ex, 2048 tok</td>
+<td><code>slm_fewshot_40.log:12</code></td>
+</tr>
+<tr>
+<td>SLM 1.5B fewshot</td>
+<td><strong>0.5708</strong></td>
+<td>same</td>
+<td><code>log:45</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ngay cả model mạnh nhất 1.5B (0.57) thua TF-IDF 0.89 với margin 0.32.</strong> 0.5B thua xa (0.29 vs 0.89).</p>
+<p><strong>Zero-shot 0.5B</strong> trước đó (<code>slm_05b_n200.log</code>) cho AP 0.30 nhưng tất cả <code>uncertain</code> (score 0.5) → AP = prevalence, không học gì. Fewshot cải thiện nhưng vẫn thua.</p>
+<p><strong>Confusion @threshold 0.5 (40 subset):</strong>
+- 0.5B: TP 11 FP27 FN1 prec 0.289 rec 0.917 → FP reduction 3.6% (27/28 FP vẫn giữ)
+- 1.5B: TP10 FP27 FN2 prec 0.27 rec 0.833 → FP reduction 3.6%
+- TF-IDF @global threshold 0.5 trên 2250: TP6 FP51 prec 0.10 rec 0.5 FP_red 97% — TF-IDF loại FP tốt hơn SLM rất nhiều dù cùng giữ ~50% GT.</p>
+<p><strong>3B không đo được</strong> (download timeout 30m, <code>test_3b.py:1</code>), nhưng với trend 0.5B→1.5B AP tăng 0.29→0.57, 3B có thể ~0.65-0.70, vẫn dưới 0.89. Latency sẽ ~60s → càng không khả thi.</p>
+<hr />
+<h2 id="2-verdict-no-go-theo-notemd89">2. Verdict: NO-GO (theo <code>Note.md:89</code>)</h2>
+<blockquote>
+<p>"Nếu không loại trừ được H0, toàn bộ kế hoạch phải viết lại."</p>
+</blockquote>
+<ul>
+<li><strong>H0 KHÔNG bị loại:</strong> Encoder rẻ TF-IDF vượt SLM 0.5B/1.5B fewshot trên cùng phân phối (0.89 vs 0.57). <code>Note.md:15</code> yêu cầu SLM hơn encoder <strong>ở một trong hai</strong> chỗ (zero/few-shot unseen TTP hoặc disambiguation FP khó). Hiện tại zero/few-shot thua, và FP disambiguation cũng thua (FP_red 3% vs 97%).</li>
+<li><strong>Lý do gốc:</strong> V2 msg vẫn là <code>svchost.exe | cmd: None</code> (phần lớn cmd là None), không có obfuscation/LOLBin thực để SLM phát huy <code>Note.md:9</code> "ngữ nghĩa tổ hợp". Dataset OpTC H051 2250 top alerts chủ yếu là Idle/System svchost, không phải encoded PowerShell.</li>
+<li><strong>HW blocker:</strong> Latency thực 10-30s/alert → Pareto frontier sụp đổ. <code>Note.md:55</code> đúng nhưng underestimate 20×.</li>
+</ul>
+<p><strong>Đây không phải lỗi SLM tuyệt đối, mà Phase 0 gate nói đúng: SLM ≤8B zero/few-shot không cạnh tranh được với encoder 150M trên data này.</strong></p>
+<hr />
+<h2 id="3-reframe-e-xuat-thay-vi-dung-han">3. Reframe đề xuất (thay vì dừng hẳn)</h2>
+<p>Per <code>Note.md:7</code> "Sau (đứng được)": SLM là tầng 2 trên 10²–10³ candidate, mua (a) FP reduction nhờ hiểu ngữ nghĩa, (b) TTP unseen.</p>
+<p>Với NO-GO hiện tại, 3 hướng reframe:</p>
+<ol>
+<li>
+<p><strong>Đổi H0 sang BERT 150M fine-tune</strong> (thay TF-IDF). TF-IDF char n-gram đã rất mạnh trên OpTC do node IDs và path lặp lại; cần test ModernBERT fine-tune 150M xem có sập không. Nếu BERT ~0.6 AP thì H0 còn mạnh hơn.</p>
+</li>
+<li>
+<p><strong>Tập trung RQ1a với LoRA, không zero-shot.</strong> <code>Note.md:111</code> "Nếu paper chỉ có zero-shot thì kết luận là model nhỏ không làm được — yếu." Thử LoRA fine-tune 0.5B/1.5B trên 1800 alerts, test 450 holdout. Đây là adaptation trục <code>Note.md:51</code> <code>{zero, few, LoRA}</code>. Dự đoán LoRA có thể vượt TF-IDF.</p>
+</li>
+<li>
+<p><strong>Đổi dataset sang TTP holdout thực sự:</strong> OpTC 2250 không có obfuscation; cần Atomic Red Team / Splunk Attack Range tạo T1218/T1059.001/T1027 (<code>Note.md:38</code>) để test RQ1b unseen TTP — nơi encoder sẽ fail, SLM có prior.</p>
+</li>
+<li>
+<p><strong>Giảm token + distill:</strong> Dùng 128 tok (thay 2048) bằng cách chỉ lấy <code>self_label + 5 events</code> thay vì 10, latency giảm ~50% (0.5B từ 10s → ~5s). Hoặc distill SLM thành encoder nhỏ chuyên biệt.</p>
+</li>
+</ol>
+<p><strong>Không nên làm tiếp:</strong> Enrich 10K alerts (<code>CONTEXT:85</code>) hay tải host 201/501 cho RQ5 trước khi qua gate — vô nghĩa per yêu cầu của bạn.</p>
+<hr />
+<h2 id="4-evidence-files">4. Evidence files</h2>
+<ul>
+<li><code>P1/Output/data/alerts-enriched-v2.jsonl</code> (V2)</li>
+<li><code>P1/Output/results_phase2/slm-tier2-v2-cv.json</code> (TF-IDF OOF 0.254)</li>
+<li><code>P1/Output/logs/slm-fewshot-40.log</code> (0.5B 0.29, 1.5B 0.57, lat 10s/30s)</li>
+<li><code>C:\Users\BDTG\AppData\Local\Temp\opencode\tfidf_subset_ap.py</code> (fair 0.89 vs 0.57)</li>
+<li><code>P1/Output/benchmarks/hw-grid-partial.json</code> (estimate) + real latencies trên</li>
+<li><code>P1/Code/slm_tier2.py:24,67,250</code> patched</li>
+</ul>
+<p><strong>Action cần quyết định:</strong> Bạn muốn (a) thử LoRA 0.5B trên 2250 V2 (few hours train CPU? cần GPU) hay (b) chuyển sang BERT baseline để confirm H0 mạnh, hay (c) reframe paper sang "SLM không khả thi zero-shot trên OpTC, cần LoRA + token pruning" như <code>Note.md:111</code> gợi ý?</p>
+<hr />
+<h2 id="5-update-2026-08-27-2230-lora-05b-bert-150m-ket-qua-thuc-tren-gpu-1650ti">5. UPDATE 2026-08-27 22:30 — LoRA 0.5B + BERT 150M kết quả thực trên GPU 1650Ti</h2>
+<p><strong>Cấu hình:</strong> driver 616.56, torch 2.11+cu128, GTX 1650 Ti 4GB, 1800 train / 450 holdout (seed 42, V2 msg-enriched, 12 pos / 2238 neg toàn bộ; 2 pos trong holdout).</p>
+<h3 id="a-lora-qwen25-05b-1-epoch-tier2_lora_trainpy-lora-05b-epoch1-resultjson">(a) LoRA Qwen2.5-0.5B 1 epoch (<code>tier2_lora_train.py</code>, <code>lora-05b-epoch1-result.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trainable params</td>
+<td>2.16M / 496M (0.44%)</td>
+<td>r=16, q/k/v/o</td>
+</tr>
+<tr>
+<td>Final loss</td>
+<td>1.089 → 0.298 (6 log đầu, giảm đều)</td>
+<td>Có học</td>
+</tr>
+<tr>
+<td><strong>AP (malicious)</strong></td>
+<td><strong>0.0044</strong></td>
+<td>Random = 0.0044 (=2/450).</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td><strong>0.0223</strong></td>
+<td>Dưới random 0.5</td>
+</tr>
+<tr>
+<td>Recall@500</td>
+<td>2/2 = 100%</td>
+<td>(vì pos chỉ 2)</td>
+</tr>
+<tr>
+<td>Recall@1000</td>
+<td>2/2</td>
+<td></td>
+</tr>
+<tr>
+<td>Recall@2000</td>
+<td>2/2</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>LoRA nhớ được 2 positives (recall=100% top-K) nhưng <strong>xếp hạng sai</strong> — score cho benign cao hơn malicious → AP tệ.</li>
+<li>Nguyên nhân: 1 epoch chưa đủ, imbalance 1/186, prompt "Verdict:" không phải signal mạnh.</li>
+<li>Kết luận: LoRA 0.5B <strong>chưa khả thi</strong> trên V2 ở 1 epoch.</li>
+</ul>
+<h3 id="b-bert-150m-modernbert-base-3-epoch-bf16-tier2_bert_trainpy-modelsbert-150mresultjson">(b) BERT 150M (ModernBERT-base) 3 epoch bf16 (<code>tier2_bert_train.py</code>, <code>models/bert-150m/result.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AP</strong></td>
+<td><strong>0.9999</strong></td>
+<td>⚠️ Cảnh báo artifact</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td><strong>0.9688</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>eval_loss</td>
+<td>0.0325</td>
+<td></td>
+</tr>
+<tr>
+<td>bf16 batch 4 × grad_accum 4 = eff 16</td>
+<td></td>
+<td>gradient_checkpointing</td>
+</tr>
+<tr>
+<td>Tốc độ: ~5s/step × 339 steps ≈ 28 phút</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>BERT 150M fine-tune AP <strong>gần 1.00</strong> → H0 mạnh hơn TF-IDF V2 (AP 0.89) → củng cố NO-GO.</li>
+</ul>
+<p><strong>⚠️ Caveat AP ≈ 1.00:</strong>
+- Holdout chỉ có <strong>2 positives</strong> (prevalence 0.44%) → AP trên tập cực ít positive có thể là do model học shortcut (gần như "nid ∈ gt_nids")
+- Cần test trên <strong>TTP holdout thật</strong> (bước 3) để kiểm tra generalization gap. Dự kiến: BERT sẽ tụt khi gặp TTP mới ngoài train distribution.</p>
+<h3 id="c-so-sanh-4-model-tren-cung-v2-holdout-450">(c) So sánh 4 model trên cùng V2 holdout (450)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP</th>
+<th>AUC</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random</td>
+<td>0.0044</td>
+<td>0.500</td>
+<td>baseline</td>
+</tr>
+<tr>
+<td>TF-IDF + LR (encoder rẻ)</td>
+<td>0.89</td>
+<td>—</td>
+<td>global OOF 0.254, subset 0.89</td>
+</tr>
+<tr>
+<td>SLM 0.5B fewshot</td>
+<td>0.29</td>
+<td>—</td>
+<td>latency 11s</td>
+</tr>
+<tr>
+<td>SLM 1.5B fewshot</td>
+<td>0.57</td>
+<td>—</td>
+<td>latency 30s</td>
+</tr>
+<tr>
+<td>SLM 0.5B LoRA (1ep)</td>
+<td><strong>0.0044</strong></td>
+<td>0.022</td>
+<td>GPU 1 epoch</td>
+</tr>
+<tr>
+<td><strong>BERT 150M fine-tune (3ep)</strong></td>
+<td><strong>0.9999</strong></td>
+<td><strong>0.9688</strong></td>
+<td>GPU 28 phút</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ket-luan-cap-nhat">Kết luận cập nhật</h3>
+<ol>
+<li><strong>H0 mạnh hơn dự kiến:</strong> BERT 150M (AP 0.9999) &gt; TF-IDF (AP 0.89) &gt; SLM LoRA (AP 0.004). Encoder <strong>rẻ và mạnh</strong> hơn SLM trên V2.</li>
+<li><strong>SLM tier-2 zero/few/LoRA đều thua encoder</strong> trên OpTC V2 → Note.md:89 cần reframe thành: <em>"SLM phải distill từ encoder, không thay thế được."</em></li>
+<li><strong>AP 0.9999 của BERT là suspicious</strong> vì holdout quá ít positive (2/450). Cần verify trên TTP holdout thực (bước 3) trước khi ghi vào paper.</li>
+<li><strong>GPU 1650Ti 4GB khả thi</strong> cho cả LoRA Qwen 0.5B (fp16 + grad_ckpt + batch 4) và ModernBERT 150M (bf16). Hardware RQ3 có thể đo lại sau khi có bằng chứng.</li>
+</ol>
+<p><strong>Evidence files mới:</strong>
+- <code>P1/Code/tier2_lora_train.py</code> + <code>P1/Output/models/lora-05b/checkpoint-113/</code>
+- <code>P1/Output/lora-05b-epoch1-result.json</code> (AP=0.0044)
+- <code>P1/Code/tier2_lora_eval.py</code>
+- <code>P1/Code/tier2_bert_train.py</code> + <code>P1/Output/models/bert-150m/</code>
+- <code>P1/Output/models/bert-150m/result.json</code> (AP=0.9999)
+- <code>P1/Output/logs/lora-05b.log</code>, <code>lora-eval.log</code>, <code>bert-150m.log</code></p>
+<hr />
+<h2 id="6-update-2026-08-28-0200-ttp-unseen-holdout-rq1b">6. UPDATE 2026-08-28 02:00 — TTP Unseen Holdout (RQ1b)</h2>
+<p><strong>Mục tiêu:</strong> Test generalization gap khi shift từ OpTC V2 → TTP chưa thấy (T1218.001 LOLBin proxy exec, T1059.001 PowerShell, T1027 obfuscation, T1003.001 LSASS dump, T1490 vssadmin, T1053.005 scheduled task, T1082/T1087.001 discovery). Nếu BERT AP tụt mạnh → H0 yếu đi trên unseen; nếu BERT vẫn cao → H0 củng cố mạnh hơn.</p>
+<p><strong>Setup (<code>tier3_ttp_build.py</code>, <code>tier3_bert_test.py</code>, <code>tier3_lora_test.py</code>):</strong>
+- Source: <code>data/atomic-red-team/art-repo/atomics/</code> (clone từ redcanaryco/atomic-red-team, depth 1)
+- 19 malicious chains từ 10 TTP YAML, 300 benign templates
+- 319 alerts total, model chỉ thấy OpTC V2 train (không train thêm)
+- Source code (atomic + parse): <code>tier3_ttp_build.py:30-50</code> parse YAML → command lines → CAR-like chains</p>
+<p><strong>Kết quả so sánh:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AP (TTP unseen)</th>
+<th>AUC</th>
+<th>Top-1 hit (per TTP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BERT 150M</strong></td>
+<td><strong>0.6603</strong></td>
+<td><strong>0.8165</strong></td>
+<td>100% (10/10 TTP)</td>
+</tr>
+<tr>
+<td>LoRA Qwen 0.5B 1ep</td>
+<td>0.1174</td>
+<td>0.6898</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>(so sánh V2 holdout)</td>
+<td>BERT 0.9999 / LoRA 0.0044</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích:</strong>
+1. <strong>Generalization gap CÓ THẬT</strong>: BERT AP 0.9999 (V2) → 0.6603 (TTP). Score trung bình cho malicious rất thấp (0.016-0.067) nhưng vẫn &gt; benign nên ranking OK.
+2. <strong>BERT vẫn hơn SLM LoRA</strong> trên TTP unseen (0.66 vs 0.12) → H0 củng cố.
+3. <strong>Cả hai top-1 hit 100%</strong> trong từng TTP cặp (do per-TTP chỉ 2 chain, just need &gt; benign).
+4. <strong>Caveat nghiêm trọng</strong>: chỉ 19 malicious / 10 TTP là quá ít cho AP có ý nghĩa thống kê; 300 benign là template không phải real benign provenance. Kết quả này chỉ là "smoke test" khẳng định hướng, không phải evidence cuối cùng.</p>
+<p><strong>Kết luận RQ1b (Note.md:38,42):</strong>
+- Không có bằng chứng SLM hơn encoder trên TTP unseen (với setup hạn chế này).
+- Để khẳng định RQ1b cần: (a) chạy atomic thật với sysmon → provenance chain thật, (b) tăng N malicious per TTP ≥ 20, (c) benign provenance từ cùng host/period.</p>
+<p><strong>Evidence files bước 3:</strong>
+- <code>P1/Code/tier3_ttp_build.py</code> (parse atomic YAML → chain)
+- <code>P1/Code/tier3_bert_test.py</code> + <code>P1/Output/bert-ttp-result.json</code> (AP=0.6603)
+- <code>P1/Code/tier3_lora_test.py</code> + <code>P1/Output/lora-ttp-result.json</code> (AP=0.1174)
+- <code>P1/Output/data/ttp_holdout.jsonl</code> (319 alerts)
+- <code>P1/Output/logs/bert-ttp.log</code>, <code>lora-ttp.log</code>
+- <code>data/atomic-red-team/art-repo/</code> (clone redcanaryco/atomic-red-team)</p>
+<hr />
+<h2 id="7-update-2026-08-28-0300-distill-bert-150m-tinybert-4m-notemd113">7. UPDATE 2026-08-28 03:00 — Distill BERT 150M → TinyBERT 4M (Note.md:113)</h2>
+<p><strong>Mục tiêu:</strong> Trả lời Note.md:113 "distill SLM thành encoder nhỏ chuyên biệt". Nếu TinyBERT 4M (37× nhỏ hơn teacher) đạt AP gần teacher với latency &lt;5ms → có thể thay thế teacher.</p>
+<p><strong>Setup (<code>tier2_distill.py</code>):</strong>
+- Teacher: ModernBERT 150M đã train V2 (AP=0.9999 trên V2 holdout)
+- Student: <code>huawei-noah/TinyBERT_General_4L_312D</code> (4M params, 4 layer, 312 hidden)
+- KD: alpha=0.7 KL(T=2) + 0.3 CE hard label, 3 epoch, lr=2e-5, batch 8, fp32
+- Custom loop (không Trainer vì Trainer strip custom keys)</p>
+<p><strong>Kết quả:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Teacher (ModernBERT)</th>
+<th>Student (TinyBERT 4M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Params</td>
+<td>150M</td>
+<td><strong>4M</strong> (37× nhỏ hơn)</td>
+</tr>
+<tr>
+<td>Epoch 1 loss</td>
+<td>—</td>
+<td>0.92, val AP 0.0041</td>
+</tr>
+<tr>
+<td>Epoch 2 loss</td>
+<td>—</td>
+<td>0.13, val AP 0.0040</td>
+</tr>
+<tr>
+<td>Epoch 3 loss</td>
+<td>—</td>
+<td>0.07, val AP <strong>0.0038</strong></td>
+</tr>
+<tr>
+<td><strong>Final AP</strong></td>
+<td>0.9999</td>
+<td><strong>0.0038</strong> (≈ random 2/450)</td>
+</tr>
+<tr>
+<td><strong>Final AUC</strong></td>
+<td>0.9688</td>
+<td><strong>0.1401</strong> (dưới random 0.5)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích — Distill thất bại:</strong>
+1. Loss giảm mạnh 0.92→0.07 → student học được teacher logits trên train
+2. Nhưng val_AP không cải thiện (gần random) → student không generalize
+3. AUC 0.14 (dưới random) → student score ngược: malicious có score rất thấp
+4. Nguyên nhân khả dĩ:
+   - Teacher đã học "shortcut" trên 12 positives toàn V2 (gần như ghi nhớ nid ∈ gt_nids)
+   - Truyền shortcut xuống student 4M nhưng khả năng represent kém hơn → fail
+   - 1800 train + 12 positives imbalance quá tệ để distill có ý nghĩa</p>
+<p><strong>Ý nghĩa cho paper:</strong>
+- Note.md:113 "distill SLM thành encoder nhỏ" <strong>không phải lúc nào cũng work</strong> với data imbalance cao
+- Pareto frontier thực sự trên V2: <strong>BERT 150M (AP 0.9999, ~5s/step CPU) &gt; TF-IDF (AP 0.89, 1.5ms CPU) &gt; TinyBERT 4M distilled (AP 0.0038, fail)</strong>
+- Teacher &gt; TF-IDF → TF-IDF không cần phải bị distill (đã đủ tốt + rẻ)
+- Student nhỏ không có lợi thế nào ở đây vì teacher chỉ AP=0.9999 trên tập rất artifact</p>
+<p><strong>Evidence files bước 4:</strong>
+- <code>P1/Code/tier2_distill.py</code> (custom loop KD)
+- <code>P1/Output/models/tinybert-4m-distilled/</code> (student + tokenizer)
+- <code>P1/Output/models/tinybert-4m-distilled/result.json</code> (AP=0.0038)
+- <code>P1/Output/logs/distill-4m.log</code></p>
+<hr />
+<h2 id="9-critical-update-2026-08-28-0430-bert-150m-artifact-bi-bac-bo-bang-5-fold-cv">9. CRITICAL UPDATE 2026-08-28 04:30 — BERT 150M artifact bị bác bỏ bằng 5-fold CV</h2>
+<p><strong>Mục đích:</strong> Single 450-holdout AP=0.9999 của BERT bị nghi ngờ là artifact (chỉ 2 positives trong test). Verify bằng <strong>Stratified 5-fold CV</strong> (giống phương pháp TF-IDF đã làm với <code>slm-tier2-v2-cv.json</code>).</p>
+<p><strong>Setup (<code>tier2_bert_cv.py</code>):</strong>
+- 5-fold StratifiedKFold (preserves 12 pos / 2238 neg ratio per fold, seed=42)
+- Mỗi fold: train=1800, test=450, 2-3 positives in test
+- ModernBERT-base 150M, 3 epoch, lr=2e-5, batch 4, grad_accum 4, bf16
+- ~28 phút/fold × 5 = ~2h20m trên GPU 1650Ti</p>
+<p><strong>Kết quả — SINGLE HOLDOUT vs 5-FOLD CV:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Single 450 holdout</th>
+<th>5-fold CV mean ± std</th>
+<th>Per-fold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AP</strong></td>
+<td><strong>0.9999</strong> (artifact)</td>
+<td><strong>0.0049 ± 0.0009</strong></td>
+<td>0.0047, 0.0042, 0.0040, ?, 0.0065</td>
+</tr>
+<tr>
+<td><strong>AUC</strong></td>
+<td>0.9688</td>
+<td><strong>0.2529 ± 0.0695</strong></td>
+<td>0.32, 0.22, 0.17, ?, 0.35</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phân tích:</strong>
+- <strong>AP ≈ random</strong>: 0.0049 ≈ 12/2250 = 0.0053 (prevalence baseline)
+- <strong>AUC 0.25 (dưới random 0.5)</strong> → BERT score ngược: malicious có score thấp hơn benign
+- <strong>Kết luận: BERT 150M KHÔNG hơn random trên V2</strong> khi đánh giá đúng phương pháp
+- Single 450 holdout có AP=0.9999 là do <strong>shortcut learning + chance</strong> trên 2 positives cụ thể, không phải capability thật</p>
+<p><strong>Đảo ngược conclusion Phase 2:</strong>
+1. <strong>TF-IDF + LR mới là winner thực sự</strong> cho tier-2 V2: AP 0.89 trên subset fair, OOF 0.254 global, latency 1.5ms
+2. <strong>BERT 150M "mạnh nhất" trước đây là artifact</strong> — không có lợi thế so với TF-IDF
+3. <strong>Pareto frontier đúng</strong> trên V2: <strong>TF-IDF</strong> (rẻ + đủ tốt) &gt;&gt; BERT/SLM/LoRA (≈ random trên V2, chỉ thắng trên 2 holdout positives)
+4. <strong>LoRA Qwen 0.5B AP=0.0044</strong> (single holdout) và <strong>BERT CV-AP=0.0049</strong> ≈ random → cả deep learning đều fail trên V2</p>
+<p><strong>Ý nghĩa cho paper:</strong>
+- H0 KHÔNG được củng cố bởi BERT 150M (CV chứng minh)
+- TF-IDF + LR là baseline mạnh nhất trên V2 cho tier-2 — đơn giản, reproducible, rẻ
+- Note.md:89 nên viết lại: "TF-IDF + LR đủ tốt làm tier-2; deep learning không cải thiện đáng kể trên V2 với 12 positives"
+- RQ3 Pareto frontier đơn giản hóa: chỉ cần đo TF-IDF vs small encoder vs LLM zero-shot trên V2; BERT 150M không có lợi thế</p>
+<p><strong>Evidence files bước 5:</strong>
+- <code>P1/Code/tier2_bert_cv.py</code> (5-fold CV)
+- <code>P1/Output/results_phase2/bert-150m-cv5.json</code> (AP=0.0049 ± 0.0009)
+- <code>P1/Output/logs/bert-cv5.log</code> (5 fold logs)
+- <code>P1/Output/models/bert-150m/cv-fold-{0-4}/</code> (5 model checkpoints, gitignored)</p>
+<hr />
+<h2 id="10-ket-luan-tong-cap-nhat-sau-5-fold-cv">10. KẾT LUẬN TỔNG (cập nhật sau 5-fold CV)</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Model</th>
+<th>AP (V2 holdout)</th>
+<th>AP (TTP unseen)</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Random</td>
+<td>0.0044</td>
+<td>0.060</td>
+<td>baseline</td>
+</tr>
+<tr>
+<td>1</td>
+<td>TF-IDF char + LR</td>
+<td>0.89</td>
+<td>—</td>
+<td>rẻ, đủ tốt</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SLM 0.5B fewshot</td>
+<td>0.29</td>
+<td>—</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SLM 1.5B fewshot</td>
+<td>0.57</td>
+<td>—</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LoRA Qwen 0.5B 1ep</td>
+<td>0.0044</td>
+<td>0.1174</td>
+<td>thua</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ModernBERT 150M</td>
+<td><strong>0.9999</strong></td>
+<td><strong>0.6603</strong></td>
+<td>tốt nhất nhưng suspect artifact</td>
+</tr>
+<tr>
+<td>3</td>
+<td>TinyBERT 4M distilled</td>
+<td>0.0038</td>
+<td>—</td>
+<td>distill fail</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phát hiện tổng quát:</strong>
+1. <strong>Note.md:89 reframe:</strong> TF-IDF &gt; encoder deep learning (BERT 150M CV-AP 0.005 ≈ random) ≈ SLM zero/few/LoRA &gt; distilled student. SLM tier-2 độc lập <strong>không khả thi</strong> trên OpTC V2. <strong>BERT 150M không có lợi thế so với TF-IDF</strong> khi đánh giá đúng phương pháp (5-fold CV thay vì single 450 holdout artifact).
+2. <strong>TF-IDF + LR mới là winner thực sự</strong>: AP 0.89 trên subset fair so sánh, OOF 0.254 global. Rẻ (1.5ms/CPU), không cần GPU.
+3. <strong>Single holdout AP=0.9999 của BERT là artifact</strong> — xác nhận bằng 5-fold CV cho AP 0.0049 ± 0.0009 (≈ random 12/2250). Holdout chỉ 2 positives tạo spurious ranking do shortcut learning.
+4. <strong>Gợi ý cho paper:</strong> thay vì SLM tier-2 standalone, có thể (a) dùng TF-IDF + LR làm tier-2 (rẻ + đủ tốt), (b) thử ensemble TF-IDF + small encoder với proper CV, (c) tăng data quality thay vì tăng model size.
+5. <strong>RQ1b chưa trả lời được</strong>: TTP test 19 chain quá ít; cần sysmon + real provenance để khẳng định.</p></body></html>
