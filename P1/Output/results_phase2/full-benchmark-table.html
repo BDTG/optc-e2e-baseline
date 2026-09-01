@@ -171,8 +171,9 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <h2>3) Security Classifier — Zero-shot vs Fine-tuned (S1 380 train / 94 test, 3 epoch)</h2>
 <table>
 <tr><th>Model</th><th>Chế độ</th><th>AP</th><th>AUC</th><th>Acc (ZS)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
-<tr><td><b>google/byt5-small (byte, 300M) ★</b></td><td>SD+COMBINED 2242 ★</td><td class="ap">0.753</td><td>0.745</td><td>-</td><td>8.6min train</td><td>~8GB bf16</td><td><b>Best 0.753 (ep1)</b> — S1 474+EVTX468+SD500+benign800, phá 0.50!</td></tr>
-<tr><td>google/byt5-small (byte, 300M)</td><td>Fine-tuned S1+EVTX 942</td><td class="ap">0.149</td><td>0.747</td><td>-</td><td>22min train</td><td>~8GB</td><td>Gộp EVTX 65 pos</td></tr>
+<tr><td><b>google/byt5-small (byte, 300M) ★★</b></td><td>SD v2 2742 ★★</td><td class="ap">0.832</td><td>0.817</td><td>-</td><td>29min train</td><td>~8GB bf16</td><td><b>Best 0.832 (ep1)</b> — S1 474+EVTX468+SD1000+benign800, 2742 alerts!</td></tr>
+<tr><td>google/byt5-small (byte, 300M) ★</td><td>SD+COMBINED 2242</td><td class="ap">0.753</td><td>0.745</td><td>-</td><td>8.6min</td><td>~8GB</td><td>SD500 ep1 best</td></tr>
+<tr><td>google/byt5-small (byte, 300M)</td><td>Fine-tuned S1+EVTX 942</td><td class="ap">0.149</td><td>0.747</td><td>-</td><td>22min</td><td>~8GB</td><td>Gộp EVTX 65 pos</td></tr>
 <tr><td>google/byt5-small (byte, 300M)</td><td>Fine-tuned S1 410</td><td class="ap">0.0752</td><td>0.575</td><td>-</td><td>~12min</td><td>~8GB</td><td>S1-only, oversample 5x</td></tr>
 <tr><td><b>jackaduma/SecBERT (110M)</b></td><td>Fine-tuned</td><td class="ap">0.0452</td><td>0.421</td><td>-</td><td>1.5 ms</td><td>1.8 GB</td><td>Thua ByT5 40%</td></tr>
 <tr><td><b>protectai/deberta-v3-base-prompt-injection-v2 (86M)</b></td><td>Fine-tuned</td><td class="ap">0.0257</td><td>0.205</td><td>-</td><td>11 ms</td><td>2.2 GB</td><td>Thua 20×</td></tr>
@@ -207,8 +208,8 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 20 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 5 + Generative 8 + 8-Filter Sweep 162 configs + <b>Decoder TTP constrained 60 alerts</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
-<b>Pareto hiện tại:</b> TF-IDF (0.89) &gt; <b>ByT5-byte 0.753 (SD+COMBINED 2242, ep1)</b> &gt; Embedding 0.6B (0.50) &gt; ByT5 0.149 (S1+EVTX) &gt; 8-Filter Sweet Spot 39 alerts, 9 pos, prev 23.1%, rec 75%, F1 0.353 (tf0.5 em0.5 prev&lt;10% final&gt;0.7) &gt; ByT5 S1-only 0.075 &gt; Classifier FT (0.045) &gt;&gt; Generative AP ~0.02.<br>
+<b>Tổng đã bench 21 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 6 + Generative 8 + 8-Filter Sweep 162 configs + <b>Decoder TTP constrained 60 alerts</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto hiện tại:</b> TF-IDF (0.89) &gt; <b>ByT5-byte 0.832 (SD v2 2742, ep1, 29min)</b> &gt; ByT5 0.753 &gt; Embedding 0.6B (0.50) &gt; ByT5 0.149 (S1+EVTX) &gt; 8-Filter Sweet Spot 39 alerts, 9 pos, prev 23.1%, rec 75%, F1 0.353 (tf0.5 em0.5 prev&lt;10% final&gt;0.7) &gt; ByT5 S1-only 0.075 &gt; Classifier FT (0.045) &gt;&gt; Generative AP ~0.02.<br>
 <b>Decoder TTP (constrained):</b> Qwen0.5B <b>54/60 valid 90% halluc 10% TTP 1/3</b> thắng Qwen1.5B 1/60 valid 2% halluc 98% — <b>0.5B sweet spot decoder</b>; encoder TTP 0% nên decoder thắng ở giải thích TTP sau 8-filter (39 alerts giàu). Warning <code>temperature ignored</code> là cosmetic khi <code>do_sample=False</code>.<br>
 <b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
 </div>
