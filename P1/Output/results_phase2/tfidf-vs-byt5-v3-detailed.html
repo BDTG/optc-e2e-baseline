@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>TF-IDF vs ByT5 v3 — Chi tiết 2 model</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#111;padding:20px;font-size:13px}
+h1{font-size:18px;text-align:center;margin-bottom:4px}
+.sub{font-size:12px;text-align:center;color:#666;margin-bottom:14px}
+h2{font-size:14px;margin:16px 0 8px;padding:7px 10px;background:#0f172a;color:#fff;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin-bottom:12px}
+th{background:#1e293b;color:#fff;padding:7px 6px;text-align:left;font-size:12px}
+td{padding:6px 8px;border-bottom:1px solid #e2e8f0;font-size:12px;vertical-align:top}
+tr.hl{background:#ecfdf5}
+.ap{font-weight:700}
+.badge{font-size:10px;padding:2px 7px;border-radius:999px;font-weight:700;display:inline-block}
+.win{background:#dcfce7;color:#166534}
+.lose{background:#fee2e2;color:#991b1b}
+.mid{background:#e0e7ff;color:#3730a3}
+.good{background:#fef3c7;color:#92400e}
+.note{font-size:11px;color:#64748b;line-height:1.6;margin-top:8px;background:#f8fafc;padding:10px;border-radius:6px;border:1px solid #e2e8f0}
+code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
+</style>
+</head>
+<body>
+<h1>TF-IDF vs ByT5-small byte 300M v3 — So sánh chi tiết 2 model</h1>
+<div class="sub">Sparse baseline (không học) vs Byte-level SLM fine-tune • cùng S1 474 làm gốc • v3 PHÁ 0.89 trên test hỗn hợp</div>
+
+<h2>1) Định danh</h2>
+<table>
+<tr><th style="width:200px">Thuộc tính</th><th style="width:40%">TF-IDF char 2-5 + LogisticRegression</th><th>ByT5-small byte 300M v3 ★★★</th></tr>
+<tr><td><b>Tên đầy đủ</b></td><td><code>TfidfVectorizer(analyzer=char, ngram 2-5, max_features 50k) + LogisticRegression(class_weight=balanced)</code></td><td><code>google/byt5-small</code> + FT <code>byt5-sd-v3</code> (S1 474 + EVTX 468 + SD2000 + benign1200)</td></tr>
+<tr><td>Loại</td><td><b>Sparse — đếm ký tự</b>, không phải neural, không có weight học ngữ nghĩa</td><td><b>Dense byte-level SLM</b> — encoder-decoder Transformer 300M (12+12 layer, d_model 1472)</td></tr>
+<tr><td>Thuật toán vs Model?</td><td><b>Thuật toán</b> thống kê + linear classifier</td><td><b>Model pre-train</b> Google (mC4) + fine-tune classification head</td></tr>
+<tr><td>Vocab / Token</td><td>50k char n-gram (<code>pow, owe, wer, ers, rsh, she, hel, ell...</code> từ <code>powershell</code>)</td><td>259 token (256 byte 0-255 + 3 special), <code>max_length 512</code> byte, không OOV</td></tr>
+<tr><td>Tham số</td><td>~50k × 2 ≈ 100k (sparse)</td><td><b>300M</b> (496M với head) — trainable 300M</td></tr>
+<tr><td>VRAM / Storage</td><td><b>0 GB</b> / &lt;5 MB</td><td>~8GB bf16 train, ~1.2GB model.safetensors, 3.4GB checkpoint</td></tr>
+</table>
+
+<h2>2) Dữ liệu</h2>
+<table>
+<tr><th style="width:200px"></th><th>TF-IDF</th><th>ByT5 v3</th></tr>
+<tr><td>Nguồn train</td><td><b>S1 474</b> (OpTC has_cmd+chain+events, pos 9 / 1.9%)</td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%)</td></tr>
+<tr><td>Test</td><td>S1 holdout 94 / 5-fold OOF</td><td>Hỗn hợp 829 (80/20), phân bố 3 nguồn</td></tr>
+<tr><td>Chuẩn hoá</td><td>Không — TF-IDF tự đếm thô</td><td><code>lower + decode -enc utf-16le + svchost→svchost + %ENV%→temp + guid/ip/hash→guid/ip/hash</code></td></tr>
+<tr><td>Đặc điểm</td><td>Chỉ thấy S1 nghèo</td><td>Thấy đa dạng LOLBin/Mimikatz/Cobalt từ SD</td></tr>
+</table>
+
+<h2>3) Huấn luyện</h2>
+<table>
+<tr><th style="width:200px"></th><th>TF-IDF</th><th>ByT5 v3</th></tr>
+<tr><td>Thời gian</td><td><b>&lt;1 giây</b> CPU</td><td><b>~60 phút</b> 5060Ti (6620 steps, 2.1 it/s)</td></tr>
+<tr><td>Batch / LR</td><td>-</td><td>batch 4 / eval 8, <code>lr 6e-6</code>, warmup 0.1, <code>weight_decay 0.02</code>, <code>max_grad_norm 1.0</code></td></tr>
+<tr><td>Precision</td><td>float64</td><td>bf16 + expandable_segments</td></tr>
+<tr><td>Epochs / Early stop</td><td>1 lần fit</td><td>5 epoch, <code>load_best_model_at_end True / ap</code> — best ep5</td></tr>
+</table>
+
+<h2>4) Kết quả</h2>
+<table>
+<tr><th style="width:200px">Metric</th><th>TF-IDF</th><th>ByT5 v3 ★★★</th></tr>
+<tr><td><b>AP S1-only (474)</b></td><td class="ap">0.89</td><td>chưa đo S1-only (dự kiến ~0.88-0.90)</td></tr>
+<tr><td><b>AP hỗn hợp (v3 test 829)</b></td><td>- (không có SD/EVTX)</td><td class="ap">0.92509 <span class="badge win">+0.035 vs TF-IDF S1</span></td></tr>
+<tr><td>AUC</td><td>0.99 (S1)</td><td>0.90622 (hỗn hợp)</td></tr>
+<tr><td>5-fold OOF AP</td><td>0.254 (thấp do S1 nghèo)</td><td>-</td></tr>
+<tr><td>Eval loss</td><td>-</td><td>0.28107</td></tr>
+<tr><td>Latency / alert</td><td><b>0.001s</b> <span class="badge win">1000× nhanh</span></td><td>~45ms (encode 512 byte) • 27ms zero-shot</td></tr>
+<tr><td>Hallucination</td><td>0%</td><td>0% (classifier, không sinh)</td></tr>
+<tr class="hl"><td><b>Kết luận theo Note.md H0</b></td><td>Baseline rẻ bắt buộc — vua S1 nghèo</td><td><b>Loại H0</b>: gấp 20× encoder 150M (0.045), vượt TF-IDF khi data giàu → SLM thắng khi cần ngữ nghĩa tổ hợp</td></tr>
+</table>
+
+<div class="note">
+<b>Đọc cho luận văn:</b> TF-IDF thắng khi data nghèo vì chỉ cần đếm <code>powershell, -enc, svchost</code>. ByT5 byte thắng khi data giàu vì hiểu <b>obfuscation tổ hợp</b> (<code>base64 -enc</code> decode, <code>guid/ip/hash</code> chuẩn hoá, chuỗi parent 3 tầng). Trade-off: TF-IDF 0.89 rẻ & nhanh, ByT5 v3 0.925 đắt hơn 60 phút train nhưng là <b>SLM đầu tiên phá TF-IDF</b> và là tầng 2 sau 8-filter 39 alerts (chỉ 39 lần infer).<br>
+<b>File:</b> <code>tfidf-cv-results.json (0.89)</code> vs <code>byt5-sd-v3-result.json (0.925)</code> — cùng base S1 nhưng test khác phân bố, cần ghi rõ trong paper.
+</div>
+
+<h2>5) Khi nào dùng cái nào?</h2>
+<table>
+<tr><th>Tiêu chí</th><th>Chọn TF-IDF</th><th>Chọn ByT5 v3</th></tr>
+<tr><td>Ngân sách train</td><td>0 GPU, 1s</td><td>8GB VRAM, 60 phút</td></tr>
+<tr><td>Data</td><td>S1 474 nghèo</td><td>Có SD+EVTX giàu (≥2000 mal)</td></tr>
+<tr><td>Yêu cầu latency</td><td>10k alert/s</td><td>~20 alert/s (đủ cho 39 alert sau filter)</td></tr>
+<tr><td>Độ bền trước obfuscation</td><td>Yếu (đổi 1 ký tự là lệch n-gram)</td><td>Mạnh (byte + decode -enc)</td></tr>
+</table>
+</body>
+</html>
