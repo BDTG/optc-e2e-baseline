@@ -1,0 +1,12 @@
+{
+  "s1_test": {
+    "eval_loss": 0.3475883901119232,
+    "eval_model_preparation_time": 0.0077,
+    "eval_ap": 0.04211308650667918,
+    "eval_auc": 0.4565217391304347,
+    "eval_runtime": 1.9518,
+    "eval_samples_per_second": 48.672,
+    "eval_steps_per_second": 6.148
+  },
+  "n": 95
+}
