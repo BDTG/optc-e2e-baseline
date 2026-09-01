@@ -24,7 +24,7 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </head>
 <body>
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
-<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 20 lần chạy</div>
+<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 22 lần chạy — <b style="color:#16a34a">ByT5 v3 PHÁ TF-IDF!</b></div>
 
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
@@ -43,17 +43,28 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tbody>
 <tr class="hl-1">
   <td class="rank">1</td>
+  <td><b>ByT5-small byte 300M v3 ★★★</b></td>
+  <td>Byte FT</td>
+  <td class="ap">0.925 <span class="bar"><span class="fill gold" style="width:100%"></span></span></td>
+  <td>0.906</td>
+  <td><b>~45ms*</b></td>
+  <td>~8GB</td>
+  <td>0%</td>
+  <td><span class="badge win">VUA MỚI — PHÁ 0.89</span></td>
+</tr>
+<tr>
+  <td class="rank">2</td>
   <td><b>TF-IDF char 2-5 + LR</b></td>
   <td>Sparse</td>
-  <td class="ap">0.89 <span class="bar"><span class="fill gold" style="width:100%"></span></span></td>
+  <td class="ap">0.89 <span class="bar"><span class="fill" style="width:96%"></span></span></td>
   <td>0.99</td>
   <td><b>0.001s</b></td>
   <td>0 GB</td>
   <td>0%</td>
-  <td><span class="badge b-win">VUA S1</span></td>
+  <td>Cựu vua S1</td>
 </tr>
-<tr class="hl-2">
-  <td class="rank">2</td>
+<tr>
+  <td class="rank">3</td>
   <td><b>Qwen3-Embedding-0.6B</b></td>
   <td>Embedding</td>
   <td class="ap">0.50 <span class="bar"><span class="fill green" style="width:56%"></span></span></td>
@@ -171,7 +182,8 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <h2>3) Security Classifier — Zero-shot vs Fine-tuned (S1 380 train / 94 test, 3 epoch)</h2>
 <table>
 <tr><th>Model</th><th>Chế độ</th><th>AP</th><th>AUC</th><th>Acc (ZS)</th><th>Latency</th><th>VRAM</th><th>Kết luận</th></tr>
-<tr><td><b>google/byt5-small (byte, 300M) ★★</b></td><td>SD v2 2742 ★★</td><td class="ap">0.832</td><td>0.817</td><td>-</td><td>29min train</td><td>~8GB bf16</td><td><b>Best 0.832 (ep1)</b> — S1 474+EVTX468+SD1000+benign800, 2742 alerts!</td></tr>
+<tr><td><b>google/byt5-small (byte, 300M) ★★★</b></td><td>SD v3 4142 ★★★</td><td class="ap">0.925</td><td>0.906</td><td>-</td><td>~60min train</td><td>~8GB bf16</td><td><b>PHÁ TF-IDF 0.89!</b> — S1 474+EVTX468+SD2000+benign1200</td></tr>
+<tr><td>google/byt5-small (byte, 300M) ★★</td><td>SD v2 2742 ★★</td><td class="ap">0.832</td><td>0.817</td><td>-</td><td>29min</td><td>~8GB</td><td>S1 474+EVTX468+SD1000+benign800</td></tr>
 <tr><td>google/byt5-small (byte, 300M) ★</td><td>SD+COMBINED 2242</td><td class="ap">0.753</td><td>0.745</td><td>-</td><td>8.6min</td><td>~8GB</td><td>SD500 ep1 best</td></tr>
 <tr><td>google/byt5-small (byte, 300M)</td><td>Fine-tuned S1+EVTX 942</td><td class="ap">0.149</td><td>0.747</td><td>-</td><td>22min</td><td>~8GB</td><td>Gộp EVTX 65 pos</td></tr>
 <tr><td>google/byt5-small (byte, 300M)</td><td>Fine-tuned S1 410</td><td class="ap">0.0752</td><td>0.575</td><td>-</td><td>~12min</td><td>~8GB</td><td>S1-only, oversample 5x</td></tr>
@@ -208,8 +220,8 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 21 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 6 + Generative 8 + 8-Filter Sweep 162 configs + <b>Decoder TTP constrained 60 alerts</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
-<b>Pareto hiện tại:</b> TF-IDF (0.89) &gt; <b>ByT5-byte 0.832 (SD v2 2742, ep1, 29min)</b> &gt; ByT5 0.753 &gt; Embedding 0.6B (0.50) &gt; ByT5 0.149 (S1+EVTX) &gt; 8-Filter Sweet Spot 39 alerts, 9 pos, prev 23.1%, rec 75%, F1 0.353 (tf0.5 em0.5 prev&lt;10% final&gt;0.7) &gt; ByT5 S1-only 0.075 &gt; Classifier FT (0.045) &gt;&gt; Generative AP ~0.02.<br>
+<b>Tổng đã bench 22 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 1 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 configs + <b>Decoder TTP constrained 60 alerts</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto hiện tại:</b> <b>ByT5-byte 0.925 (SD v3 4142, 60min) PHÁ TF-IDF 0.89!</b> &gt; TF-IDF 0.89 &gt; ByT5 0.832 &gt; ByT5 0.753 &gt; Embedding 0.6B (0.50) &gt; ByT5 0.149 &gt; 8-Filter Sweet Spot 39 alerts, 9 pos, prev 23.1%, rec 75%, F1 0.353 (tf0.5 em0.5 prev&lt;10% final&gt;0.7) &gt; ByT5 S1-only 0.075 &gt; Classifier FT (0.045) &gt;&gt; Generative AP ~0.02.<br>
 <b>Decoder TTP (constrained):</b> Qwen0.5B <b>54/60 valid 90% halluc 10% TTP 1/3</b> thắng Qwen1.5B 1/60 valid 2% halluc 98% — <b>0.5B sweet spot decoder</b>; encoder TTP 0% nên decoder thắng ở giải thích TTP sau 8-filter (39 alerts giàu). Warning <code>temperature ignored</code> là cosmetic khi <code>do_sample=False</code>.<br>
 <b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
 </div>
