@@ -25,7 +25,7 @@ code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
 </head>
 <body>
 <h1>TF-IDF vs ByT5-small byte 300M v3 — So sánh chi tiết 2 model</h1>
-<div class="sub">Sparse baseline (không học) vs Byte-level SLM fine-tune • cùng S1 474 làm gốc • v3 PHÁ 0.89 trên test hỗn hợp</div>
+<div class="sub">Sparse vs Byte SLM • cân kèo 4142 • <b style="color:#dc2626">CẢNH BÁO: S1/EVTX text rỗng do bug `to_text` — AP hỗn hợp 0.92 là SD-heavy, không phản ánh OpTC</b></div>
 
 <h2>1) Định danh</h2>
 <table>
@@ -44,34 +44,36 @@ code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
 <tr><td>Nguồn train</td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%) — <b>re-test cân kèo</b></td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%)</td></tr>
 <tr><td>Test</td><td>Hỗn hợp 829 (80/20) — <b>cùng split 42</b></td><td>Hỗn hợp 829 (80/20) — <b>cùng split 42</b></td></tr>
 <tr><td>Chuẩn hoá</td><td><code>lower + decode -enc + guid/ip/hash</code> (cùng ByT5)</td><td><code>lower + decode -enc utf-16le + svchost→svchost + %ENV%→temp + guid/ip/hash→guid/ip/hash</code></td></tr>
-<tr><td>Đặc điểm</td><td>Cùng thấy SD/EVTX giàu — nhưng chỉ đếm n-gram</td><td>Cùng thấy SD/EVTX giàu — hiểu byte + ngữ nghĩa</td></tr>
+<tr><td>Đặc điểm</td><td>SD-heavy nhưng cùng bug empty → AP 0.926 <b>ảo</b></td><td>SD-heavy + empty S1/EVTX → 0.925 <b>ảo</b> — S1-only 0.046 lộ bug</td></tr>
 </table>
 
 <h2>3) Huấn luyện</h2>
 <table>
 <tr><th style="width:200px"></th><th>TF-IDF</th><th>ByT5 v3</th></tr>
-<tr><td>Thời gian</td><td><b>&lt;1 giây</b> CPU</td><td><b>~60 phút</b> 5060Ti (6620 steps, 2.1 it/s)</td></tr>
+<tr><td>Thời gian</td><td><b>&lt;1 giây</b> CPU</td><td><b>~60 phút</b> 5060Ti (6620 steps) — best ckpt 3972 ep3</td></tr>
 <tr><td>Batch / LR</td><td>-</td><td>batch 4 / eval 8, <code>lr 6e-6</code>, warmup 0.1, <code>weight_decay 0.02</code>, <code>max_grad_norm 1.0</code></td></tr>
 <tr><td>Precision</td><td>float64</td><td>bf16 + expandable_segments</td></tr>
-<tr><td>Epochs / Early stop</td><td>1 lần fit</td><td>5 epoch, <code>load_best_model_at_end True / ap</code> — best ep5</td></tr>
+<tr><td>Epochs / Early stop</td><td>1 lần fit</td><td>5 epoch, <code>load_best_model_at_end True / ap</code> — best ep3 (3972, AP 0.925)</td></tr>
 </table>
 
 <h2>4) Kết quả</h2>
 <table>
 <tr><th style="width:200px">Metric</th><th>TF-IDF</th><th>ByT5 v3 ★★★</th></tr>
-<tr><td><b>AP S1-only (474)</b></td><td class="ap">0.89 (cũ)</td><td>chưa đo S1-only</td></tr>
-<tr><td><b>AP hỗn hợp 4142 (cân kèo)</b></td><td class="ap">0.92685 <span class="badge win">hòa</span></td><td class="ap">0.92509 <span class="badge win">hòa -0.0017</span></td></tr>
-<tr><td>AUC</td><td>0.90613 (4142)</td><td>0.90622 (4142)</td></tr>
+<tr><td><b>AP S1-only (474)</b></td><td class="ap">0.89 <span class="badge win">S1 thật</span></td><td class="ap">0.046 <span class="badge lose">S1-test 95</span> / 0.016 full 474 — <b>thua xa</b> (text rỗng)</td></tr>
+<tr><td><b>AP hỗn hợp 4142 (cân kèo, SD-heavy)</b></td><td class="ap">0.92685 <span class="badge mid">SD 2000</span></td><td class="ap">0.92509 <span class="badge mid">SD 2000</span> — hòa nhưng <b>ảo do empty vs SD</b></td></tr>
+<tr><td>AUC hỗn hợp</td><td>0.90613 (4142)</td><td>0.90622 (4142)</td></tr>
+<tr><td>AUC S1-only</td><td>0.99 (S1)</td><td>0.39 (test 95) / 0.26 (full) — <span class="badge lose">&lt; random</span></td></tr>
 <tr><td>5-fold OOF AP</td><td>0.254 (thấp do S1 nghèo)</td><td>-</td></tr>
 <tr><td>Eval loss</td><td>-</td><td>0.28107</td></tr>
 <tr><td>Latency / alert</td><td><b>0.001s</b> <span class="badge win">1000× nhanh</span></td><td>~45ms (encode 512 byte) • 27ms zero-shot</td></tr>
 <tr><td>Hallucination</td><td>0%</td><td>0% (classifier, không sinh)</td></tr>
-<tr class="hl"><td><b>Kết luận theo Note.md H0</b></td><td>Baseline rẻ bắt buộc — vua S1 nghèo</td><td><b>Loại H0</b>: gấp 20× encoder 150M (0.045), vượt TF-IDF khi data giàu → SLM thắng khi cần ngữ nghĩa tổ hợp</td></tr>
+<tr class="hl"><td><b>Kết luận theo Note.md H0</b></td><td>Baseline rẻ bắt buộc — vua S1 nghèo <b>0.89 thật</b></td><td><b>CHƯA loại H0 trên S1</b>: v3 thua xa 0.046 vs 0.045 encoder — do bug text rỗng. Cần retrain <code>build_text = parent_chain[-3:]</code> như <code>train_byt5_s1.py</code></td></tr>
 </table>
 
 <div class="note">
-<b>Đọc cho luận văn:</b> TF-IDF thắng khi data nghèo vì chỉ cần đếm <code>powershell, -enc, svchost</code>. ByT5 byte thắng khi data giàu vì hiểu <b>obfuscation tổ hợp</b> (<code>base64 -enc</code> decode, <code>guid/ip/hash</code> chuẩn hoá, chuỗi parent 3 tầng). Trade-off: TF-IDF 0.89 rẻ & nhanh, ByT5 v3 0.925 đắt hơn 60 phút train nhưng là <b>SLM đầu tiên phá TF-IDF</b> và là tầng 2 sau 8-filter 39 alerts (chỉ 39 lần infer).<br>
-<b>File:</b> <code>tfidf-cv-results.json (0.89)</code> vs <code>byt5-sd-v3-result.json (0.925)</code> — cùng base S1 nhưng test khác phân bố, cần ghi rõ trong paper.
+<b>Bug phát hiện 2026-09-01:</b> <code>train_byt5_sd*.py to_text</code> dùng <code>if "chain" in co else co["msg"]</code> — S1 alerts có <code>parent_chain</code> và <code>msg=""</code> nên → <code>""</code> rỗng. EVTX cũng rỗng. Chỉ SD có <code>chain</code> nên có text. Kết quả: model học <code>empty (pos+benign lẫn) vs SD non-empty</code> → AP hỗn hợp 0.92 <b>ảo</b>, S1-only 0.046 lộ. Fix: dùng <code>build_text = " | ".join(parent_chain[-3:])</code> như <code>train_byt5_s1.py:32</code> — cần <b>retrain v4</b>. TF-IDF cân kèo cũng dính cùng bug nên 0.926 cũng ảo.<br>
+<b>Đọc cho luận văn:</b> TF-IDF 0.89 S1 là <b>thật</b> (đếm n-gram trên parent_chain). ByT5 v3 0.925 trên 4142 là <b>ảo SD-heavy</b>, S1-only 0.046 thua cả encoder 0.045. Chỉ khi fix text mới so được.<br>
+<b>File:</b> <code>byt5-sd-v3-result.json (0.925 ảo)</code> + <code>byt5-v3-s1only-result.json (0.046 / 0.016)</code> vs <code>tfidf-cv-results.json 0.89 thật</code> + <code>tfidf-combined-4142 0.926 ảo</code> — phải ghi Limitations.
 </div>
 
 <h2>5) Khi nào dùng cái nào?</h2>
