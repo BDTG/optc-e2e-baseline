@@ -1,0 +1,22 @@
+{
+  "s1_test_20pct": {
+    "eval_loss": 7.335217475891113,
+    "eval_model_preparation_time": 0.0042,
+    "eval_ap": 0.046274966157646,
+    "eval_auc": 0.3913043478260869,
+    "eval_runtime": 2.5717,
+    "eval_samples_per_second": 36.94,
+    "eval_steps_per_second": 4.666
+  },
+  "s1_full_474": {
+    "eval_loss": 7.460196018218994,
+    "eval_model_preparation_time": 0.004,
+    "eval_ap": 0.016852555416553013,
+    "eval_auc": 0.2593787335722819,
+    "eval_runtime": 22.8825,
+    "eval_samples_per_second": 20.714,
+    "eval_steps_per_second": 2.622
+  },
+  "s1_test_n": 95,
+  "s1_test_pos": 3
+}
