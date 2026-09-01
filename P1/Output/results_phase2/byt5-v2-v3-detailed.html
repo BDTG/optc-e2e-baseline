@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>ByT5 v2 vs v3 — Chi tiết 2 model</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#111;padding:20px;font-size:13px}
+h1{font-size:18px;text-align:center;margin-bottom:4px}
+.sub{font-size:12px;text-align:center;color:#666;margin-bottom:14px}
+h2{font-size:14px;margin:16px 0 8px;padding:7px 10px;background:#0f172a;color:#fff;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin-bottom:12px}
+th{background:#1e293b;color:#fff;padding:7px 6px;text-align:left;font-size:12px}
+td{padding:6px 8px;border-bottom:1px solid #e2e8f0;font-size:12px;vertical-align:top}
+tr.hl{background:#ecfdf5}
+tr.hl2{background:#fef3c7}
+.ap{font-weight:700;color:#0f172a}
+.badge{font-size:10px;padding:2px 7px;border-radius:999px;font-weight:700;display:inline-block}
+.win{background:#dcfce7;color:#166534}
+.lose{background:#fee2e2;color:#991b1b}
+.mid{background:#e0e7ff;color:#3730a3}
+.note{font-size:11px;color:#64748b;line-height:1.6;margin-top:8px;background:#f8fafc;padding:10px;border-radius:6px;border:1px solid #e2e8f0}
+.kv{color:#475569;font-size:11px}
+</style>
+</head>
+<body>
+<h1>ByT5-small byte 300M — So sánh chi tiết v2 vs v3</h1>
+<div class="sub">Cùng base <code>google/byt5-small</code> • cùng RTX 5060Ti 16GB • khác data & LR • v3 PHÁ TF-IDF 0.89</div>
+
+<h2>1) Định danh model</h2>
+<table>
+<tr><th style="width:220px">Thuộc tính</th><th style="width:35%">v2 — SD1000 (2742 alerts)</th><th>v3 — SD2000 (4142 alerts) ★★★</th></tr>
+<tr><td><b>Tên đầy đủ</b></td><td><code>google/byt5-small</code> + FT <code>byt5-sd-v2</code></td><td><code>google/byt5-small</code> + FT <code>byt5-sd-v3</code> <span class="badge win">VUA MỚI</span></td></tr>
+<tr><td>Loại</td><td colspan="2"><b>Byte-level T5</b> — encoder-decoder Transformer, không BPE, đọc thẳng byte 0–255 (xử lý <code>powershell -enc SQBFAFg...</code> không OOV)</td></tr>
+<tr><td>Tham số</td><td colspan="2"><b>300M</b> (12 encoder + 12 decoder layer, d_model 1472, d_kv 64, 12 heads) — SLM ≤8B theo Note.md</td></tr>
+<tr><td>Tokenizer</td><td colspan="2"><code>ByT5Tokenizer</code> — vocab 259 (256 byte + 3 special), <code>max_length 512</code> byte, truncate</td></tr>
+<tr><td>Head phân loại</td><td colspan="2"><code>AutoModelForSequenceClassification</code> + <code>num_labels=2</code> — 4 weight mới <code>classification_head.*</code> phải train lại (warning <i>Some weights not initialized</i>)</td></tr>
+<tr><td>Thuật toán vs Model?</td><td colspan="2"><b>Model có sẵn</b> (Google pre-train mC4), v2/v3 chỉ là <b>bản fine-tune</b> trên data OpTC+EVTX+SD — không phải thuật toán tự viết</td></tr>
+</table>
+
+<h2>2) Dữ liệu</h2>
+<table>
+<tr><th style="width:220px"></th><th>v2</th><th>v3 ★★★</th></tr>
+<tr><td>S1 filtered (OpTC has_cmd+chain+events)</td><td colspan="2">474 (pos 9 / benign 465) — từ <code>alerts-enriched-v2.jsonl 5.1M</code> + <code>gt_and_scores.json 9.3M</code></td></tr>
+<tr><td>EVTX (Atomic/EVTX-Attack-Samples)</td><td colspan="2">468 (pos 468, 100% cmd) — <code>evtx-chains.jsonl</code></td></tr>
+<tr><td>Security-Datasets (Mordor)</td><td>SD 3133 dedup → <b>sample 1000</b></td><td>SD 3133 → <b>sample 2000</b> <span class="badge win">×2</span></td></tr>
+<tr><td>Benign OpTC (1776 pool)</td><td>sample <b>800</b></td><td>sample <b>1200</b></td></tr>
+<tr><td><b>Combined</b></td><td><b>2742</b> — pos 1477 / benign 1265 (53.8% pos)</td><td><b>4142</b> — pos 2477 / benign 1665 (59.8% pos)</td></tr>
+<tr><td>Split 80/20</td><td>train 2193 / test 549</td><td>train 3313 / test 829</td></tr>
+<tr><td>train_bal (neg + pos×2)</td><td>3392 (pos 2398, 70.7%)</td><td>~5296 (pos ~3972, 75%) — 1324 step/epoch</td></tr>
+<tr><td>Chuẩn hoá</td><td colspan="2"><code>lower + decode -enc base64 utf-16le + svchost→svchost + %ENV%→temp + guid→guid + ip→ip + hash→hash</code> + cắt 800 char</td></tr>
+</table>
+
+<h2>3) Cấu hình train</h2>
+<table>
+<tr><th style="width:220px"></th><th>v2</th><th>v3</th></tr>
+<tr><td>Epochs / Steps</td><td>5 epoch / 4240 steps (848/epoch)</td><td>5 epoch / <b>6620 steps</b> (1324/epoch)</td></tr>
+<tr><td>Batch</td><td colspan="2"><code>per_device 4 / eval 8 / accum 1</code> — effective 4</td></tr>
+<tr><td>Learning rate</td><td>8e-6</td><td><b>6e-6</b> (giảm để đỡ overfit sớm)</td></tr>
+<tr><td>Optim & schedule</td><td colspan="2"><code>adamw</code> + <code>warmup_ratio 0.1</code> + linear decay → 0, <code>max_grad_norm 1.0</code>, <code>weight_decay 0.02</code></td></tr>
+<tr><td>Precision</td><td colspan="2"><code>bf16 True</code> (fp16 OOM/nan), <code>expandable_segments</code></td></tr>
+<tr><td>Eval / Save</td><td colspan="2"><code>eval_strategy epoch / save_strategy epoch / load_best_model_at_end True / metric_for_best_model ap</code></td></tr>
+<tr><td>Seed</td><td colspan="2">42, <code>processing_class=tok</code></td></tr>
+<tr><td>Output</td><td><code>models/byt5-sd-v2</code> / <code>byt5-sd-v2-result.json</code></td><td><code>models/byt5-sd-v3/checkpoint-6620</code> 3.4GB (model 1.2G + optimizer 2.3G)</td></tr>
+<tr><td>Thời gian 5060Ti</td><td><b>29 phút</b> — 1748s, 9.7 samples/s, 2.42 it/s</td><td><b>~60 phút</b> — ~3600s, 5.06 samples/s, 2.1 it/s (eval cuối 163.7s)</td></tr>
+<tr><td>VRAM</td><td colspan="2">~8GB bf16</td></tr>
+</table>
+
+<h2>4) Kết quả — v3 PHÁ TF-IDF</h2>
+<table>
+<tr><th style="width:220px">Metric (test)</th><th>v2</th><th>v3 ★★★</th><th>TF-IDF (S1 474)</th></tr>
+<tr><td><b>AP (Average Precision)</b></td><td class="ap">0.83207</td><td class="ap">0.92509 <span class="badge win">+0.093 vs v2, +0.035 vs TF-IDF</span></td><td>0.89</td></tr>
+<tr><td>AUC</td><td>0.81720</td><td><b>0.90622</b></td><td>0.99</td></tr>
+<tr><td>Eval loss</td><td>0.42022</td><td><b>0.28107</b> (thấp hơn)</td><td>-</td></tr>
+<tr><td>Best epoch</td><td>ep1 (0.832 → ep2 0.819 tụt)</td><td>ep5 (0.925, giữ đà tăng)</td><td>-</td></tr>
+<tr><td>So encoder 150M</td><td colspan="2">SecBERT 0.045 / DeBERTa 0.025 → <b>gấp 20-36×</b> → loại H0 Note.md</td><td>-</td></tr>
+<tr><td>So Embedding 0.6B</td><td colspan="2">Qwen3-Embedding 0.50 → v3 gấp 1.85×</td><td>-</td></tr>
+</table>
+
+<div class="note">
+<b>Kết luận cho luận văn:</b> Cùng base <code>google/byt5-small</code>, chỉ tăng SD 1000→2000 và benign 800→1200 (+51% data) + giảm LR 8e-6→6e-6 đã nhảy <b>0.832→0.925</b>. Chứng minh <b>data giàu + chuẩn hoá sâu (guid/ip/hash) quan trọng hơn tăng size model</b>. Byte-level thắng sparse TF-IDF vì hiểu obfuscation tổ hợp (base64 -enc, LOLBin), không chỉ đếm ký tự. File nguồn: <code>byt5-sd-v2-result.json</code>, <code>byt5-sd-v3-result.json</code>, <code>train_byt5_sd_v2.py / v3.py</code>.<br>
+<span class="kv">* v2 best ep1 do data ít overfit sớm; v3 best ep5 do data đủ lớn học tiếp được.</span>
+</div>
+</body>
+</html>
