@@ -41,10 +41,10 @@ code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
 <h2>2) Dữ liệu</h2>
 <table>
 <tr><th style="width:200px"></th><th>TF-IDF</th><th>ByT5 v3</th></tr>
-<tr><td>Nguồn train</td><td><b>S1 474</b> (OpTC has_cmd+chain+events, pos 9 / 1.9%)</td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%)</td></tr>
-<tr><td>Test</td><td>S1 holdout 94 / 5-fold OOF</td><td>Hỗn hợp 829 (80/20), phân bố 3 nguồn</td></tr>
-<tr><td>Chuẩn hoá</td><td>Không — TF-IDF tự đếm thô</td><td><code>lower + decode -enc utf-16le + svchost→svchost + %ENV%→temp + guid/ip/hash→guid/ip/hash</code></td></tr>
-<tr><td>Đặc điểm</td><td>Chỉ thấy S1 nghèo</td><td>Thấy đa dạng LOLBin/Mimikatz/Cobalt từ SD</td></tr>
+<tr><td>Nguồn train</td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%) — <b>re-test cân kèo</b></td><td><b>4142</b> — S1 474 + EVTX 468 + SD2000 + benign1200 (pos 2477 / 59.8%)</td></tr>
+<tr><td>Test</td><td>Hỗn hợp 829 (80/20) — <b>cùng split 42</b></td><td>Hỗn hợp 829 (80/20) — <b>cùng split 42</b></td></tr>
+<tr><td>Chuẩn hoá</td><td><code>lower + decode -enc + guid/ip/hash</code> (cùng ByT5)</td><td><code>lower + decode -enc utf-16le + svchost→svchost + %ENV%→temp + guid/ip/hash→guid/ip/hash</code></td></tr>
+<tr><td>Đặc điểm</td><td>Cùng thấy SD/EVTX giàu — nhưng chỉ đếm n-gram</td><td>Cùng thấy SD/EVTX giàu — hiểu byte + ngữ nghĩa</td></tr>
 </table>
 
 <h2>3) Huấn luyện</h2>
@@ -59,9 +59,9 @@ code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
 <h2>4) Kết quả</h2>
 <table>
 <tr><th style="width:200px">Metric</th><th>TF-IDF</th><th>ByT5 v3 ★★★</th></tr>
-<tr><td><b>AP S1-only (474)</b></td><td class="ap">0.89</td><td>chưa đo S1-only (dự kiến ~0.88-0.90)</td></tr>
-<tr><td><b>AP hỗn hợp (v3 test 829)</b></td><td>- (không có SD/EVTX)</td><td class="ap">0.92509 <span class="badge win">+0.035 vs TF-IDF S1</span></td></tr>
-<tr><td>AUC</td><td>0.99 (S1)</td><td>0.90622 (hỗn hợp)</td></tr>
+<tr><td><b>AP S1-only (474)</b></td><td class="ap">0.89 (cũ)</td><td>chưa đo S1-only</td></tr>
+<tr><td><b>AP hỗn hợp 4142 (cân kèo)</b></td><td class="ap">0.92685 <span class="badge win">hòa</span></td><td class="ap">0.92509 <span class="badge win">hòa -0.0017</span></td></tr>
+<tr><td>AUC</td><td>0.90613 (4142)</td><td>0.90622 (4142)</td></tr>
 <tr><td>5-fold OOF AP</td><td>0.254 (thấp do S1 nghèo)</td><td>-</td></tr>
 <tr><td>Eval loss</td><td>-</td><td>0.28107</td></tr>
 <tr><td>Latency / alert</td><td><b>0.001s</b> <span class="badge win">1000× nhanh</span></td><td>~45ms (encode 512 byte) • 27ms zero-shot</td></tr>
