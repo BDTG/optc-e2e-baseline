@@ -24,7 +24,7 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </head>
 <body>
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
-<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 23 lần chạy — <b style="color:#dc2626">⚠️ Combined 4142 bug empty — S1 thật TF-IDF 0.89 vua, ByT5 S1-only 0.046</b></div>
+<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 25 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 vẫn vua S1</b></div>
 
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
@@ -76,14 +76,36 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </tr>
 <tr style="background:#fffbeb">
   <td class="rank">—</td>
-  <td><b>ByT5 v3 S1-only (thật)</b></td>
-  <td>Byte</td>
+  <td><b>ByT5 v3 S1-only (bug)</b></td>
+  <td>Byte bug</td>
   <td class="ap">0.046 <span class="bar"><span class="fill" style="width:5%;background:#fde68a"></span></span></td>
   <td>0.39</td>
   <td>~45ms</td>
   <td>~8GB</td>
   <td>0%</td>
-  <td><span class="badge lose">thua TF-IDF 0.89</span></td>
+  <td><span class="badge lose">thua 0.89 bug empty</span></td>
+</tr>
+<tr style="background:#fef2f2">
+  <td class="rank">—</td>
+  <td><b>ByT5 v4 Combined 4142 (fix)</b></td>
+  <td>Byte fix</td>
+  <td class="ap">0.996 <span class="bar"><span class="fill" style="width:100%;background:#fca5a5"></span></span></td>
+  <td>0.992</td>
+  <td>~45ms</td>
+  <td>~8GB</td>
+  <td>0%</td>
+  <td><span class="badge" style="background:#fee2e2;color:#991b1b">SD-easy 0.996 ảo</span></td>
+</tr>
+<tr style="background:#fffbeb">
+  <td class="rank">—</td>
+  <td><b>ByT5 v4 S1-only (fix)</b></td>
+  <td>Byte fix</td>
+  <td class="ap">0.042 <span class="bar"><span class="fill" style="width:4%;background:#fde68a"></span></span></td>
+  <td>0.456</td>
+  <td>~45ms</td>
+  <td>~8GB</td>
+  <td>0%</td>
+  <td><span class="badge lose">vẫn thua 0.89 — domain shift</span></td>
 </tr>
 <tr>
   <td class="rank">3</td>
@@ -242,9 +264,9 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 24 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 (S1 0.89 thật + Combined 0.926 ảo) + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 configs + <b>Decoder TTP constrained 60 alerts</b> + <b>ByT5 S1-only eval</b> — tất cả trên 5060Ti trừ TF-IDF CPU.<br>
-<b>Pareto S1 thật:</b> <b>TF-IDF 0.89</b> &gt; Embedding 0.6B 0.50 &gt; ByT5 S1-only 0.046 (bug) / 0.075 old &gt; Encoder FT 0.045 &gt;&gt; Generative 0.02. <b>Combined 4142 0.925 ảo</b> (empty vs SD) không tính.<br>
-<b>Bug 2026-09-01:</b> <code>train_byt5_sd*.py to_text</code> → S1/EVTX empty, chỉ SD có text → AP 0.925 ảo. S1-only 0.046 lộ. Fix: <code>parent_chain[-3:]</code> như <code>train_byt5_s1.py:32</code> → cần retrain v4.<br>
+<b>Tổng đã bench 25 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 + <b>Decoder TTP 60</b> + <b>ByT5 S1-only eval 2 + ByT5 v4 fix</b> — 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto S1 thật:</b> <b>TF-IDF 0.89</b> &gt; Emb 0.50 &gt; ByT5 S1-old 0.075 &gt; v3 bug 0.046 &gt; v4 fix 0.042 &gt; Encoder FT 0.045 ≈ — SD 2000 không giúp. <b>Combined 0.996 (v4) SD-easy</b> không tính S1.<br>
+<b>v4 2026-09-02 fix:</b> parent_chain[-5:] + SD2000 → Combined 0.996 AUC0.992 nhưng S1-only 0.042 ≈ v3 — domain shift OpTC vs SD, cần S1-focused reweight/LoRA trên 39 alerts.<br>
 <b>Decoder TTP (constrained):</b> Qwen0.5B <b>54/60 valid 90% halluc 10% TTP 1/3</b> thắng Qwen1.5B 1/60 valid 2% halluc 98% — <b>0.5B sweet spot decoder</b>; encoder TTP 0% nên decoder thắng ở giải thích TTP sau 8-filter (39 alerts giàu). Warning <code>temperature ignored</code> là cosmetic khi <code>do_sample=False</code>.<br>
 <b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
 </div>
