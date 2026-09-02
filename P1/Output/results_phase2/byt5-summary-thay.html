@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>ByT5 tiến trình — Gửi thầy (vừa vừa)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#111;padding:22px;font-size:13px;line-height:1.5}
+h1{font-size:18px;text-align:center;margin-bottom:2px}
+.sub{font-size:12px;text-align:center;color:#666;margin-bottom:16px}
+h2{font-size:14px;margin:16px 0 8px;padding:7px 10px;background:#0f172a;color:#fff;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px}
+th{background:#1e293b;color:#fff;padding:7px 6px;text-align:left;font-size:11px}
+td{padding:6px 7px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+tr.hl{background:#f8fafc}
+.ap{font-weight:700}
+.badge{font-size:10px;padding:2px 7px;border-radius:999px;font-weight:700;display:inline-block}
+.win{background:#dcfce7;color:#166534}
+.lose{background:#fee2e2;color:#991b1b}
+.mid{background:#fef9c3;color:#854d0e}
+.bad{background:#fee2e2;color:#991b1b}
+.note{font-size:11px;color:#475569;line-height:1.6;background:#f8fafc;padding:10px;border:1px solid #e2e8f0;border-radius:8px;margin-top:8px}
+code{font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:3px}
+ul{margin:6px 0 0 18px;font-size:12px;color:#334155}
+</style>
+</head>
+<body>
+<h1>ByT5-small (300M) — Tiến trình qua các phiên bản (gửi thầy)</h1>
+<div class="sub">google/byt5-small byte-level • S1 474 (pos 9) làm gốc • 5060 Ti 16GB • so với TF-IDF S1 0.89</div>
+
+<h2>1) Bảng chính — chỉ nhìn S1 mới biết thắng thua</h2>
+<table>
+<tr><th style="width:26%">Phiên bản</th><th>Data (Combined)</th><th>AP Combined (829 test)</th><th>AP S1-only (95 test)</th><th>Thời gian</th><th>Kết luận</th></tr>
+<tr>
+  <td><b>v0 S1-only</b><br><code>train_byt5_s1.py</code></td>
+  <td>S1 474 (pos 9) + oversample 5x</td>
+  <td class="ap">— (0.075 trên S1 94)</td>
+  <td class="ap">0.075 <span class="badge mid">S1 94</span></td>
+  <td>3 ep 716s</td>
+  <td>Yếu hơn TF-IDF 0.89</td>
+</tr>
+<tr class="hl">
+  <td><b>v0 Combined</b><br><code>train_byt5_combined</code></td>
+  <td>S1 474 + EVTX 468 (942, pos 74)</td>
+  <td class="ap">0.149 <span class="badge mid">best ep1</span></td>
+  <td class="ap">—</td>
+  <td>3 ep</td>
+  <td>EVTX giúp +0.07 nhưng vẫn thấp</td>
+</tr>
+<tr>
+  <td><b>v1 SD 500</b><br><code>train_byt5_sd.py</code></td>
+  <td>S1 474 + EVTX 468 + SD 500 + ben 800 (2242)</td>
+  <td class="ap">0.753 <span class="badge mid">bug empty</span></td>
+  <td class="ap">—</td>
+  <td>8.6 min 1926 steps</td>
+  <td>Nhảy vọt nhưng <b>bug</b> empty S1/EVTX</td>
+</tr>
+<tr class="hl">
+  <td><b>v2 SD 1000</b><br><code>train_byt5_sd_v2.py</code></td>
+  <td>S1 474 + EVTX 468 + SD1000 + ben1200 (2742)</td>
+  <td class="ap">0.832 <span class="badge mid">bug empty</span></td>
+  <td class="ap">—</td>
+  <td>29 min 4240 steps</td>
+  <td>Thêm SD lên tiếp — vẫn bug</td>
+</tr>
+<tr style="background:#fef2f2">
+  <td><b>v3 SD 2000 bug</b><br><code>train_byt5_sd_v3.py</code></td>
+  <td>4142 pos2477 empty S1/EVTX</td>
+  <td class="ap">0.925 <span class="badge bad">ảo</span></td>
+  <td class="ap">0.046 <span class="badge lose">S1-95 0.016 full</span></td>
+  <td>60 min 6620 steps ep3 best 3972</td>
+  <td><b>Tưởng phá TF-IDF — lộ bug empty</b></td>
+</tr>
+<tr style="background:#fff7ed">
+  <td><b>v4 SD 2000 fix ★</b><br><code>train_byt5_sd_v4.py</code></td>
+  <td>4142 fix <code>parent_chain[-5:]</code> empty 818</td>
+  <td class="ap">0.996 <span class="badge bad">SD-easy</span></td>
+  <td class="ap">0.042 <span class="badge lose">S1-95</span></td>
+  <td>4h44 6620 steps ep5 best</td>
+  <td><b>Fix xong Combined 0.996 nhưng S1-only vẫn 0.042 — SD không transfer</b></td>
+</tr>
+<tr style="background:#ecfdf5">
+  <td><b>TF-IDF S1 (thật)</b></td>
+  <td>S1 474 char2-5 50k+LR</td>
+  <td class="ap">0.89 <span class="badge win">S1 thật</span></td>
+  <td class="ap"><b>0.89</b> <span class="badge win">VUA</span></td>
+  <td>&lt;1s CPU</td>
+  <td>Vẫn vua trên đúng S1</td>
+</tr>
+</table>
+
+<div class="note">
+<b>Tóm cho thầy (3 dòng):</b><br>
+1) ByT5 từ 0.075 (S1 nghèo) → 0.149 (+EVTX) → 0.753→0.832→0.925 (bug empty) → <b>v4 fix 0.996 Combined nhưng S1-only 0.042</b>.<br>
+2) <b>Combined 0.996 là SD-easy</b> (SD mshta/powershell dễ tách benign), không phản ánh OpTC. S1-only 0.042 thua TF-IDF 0.89 → <b>nhồi SD/EVTX không giúp S1</b> do domain shift (OpTC chain svchost/wmiprvse khác SD).<br>
+3) <b>Next:</b> không nhồi thêm SD, mà FT trên <b>39 alerts sau 8-filter</b> (prev 23.1%) như Note.md tier-2 + oversample S1-pos x5 — đó mới là đất của SLM.
+</div>
+
+<h2>2) Chi tiết v4 (đã fix)</h2>
+<table>
+<tr><th style="width:200px">Mục</th><th>Giá trị</th></tr>
+<tr><td>Build text fix</td><td><code>parent_chain[-5:] | cmd/image</code> cho S1/EVTX, <code>chain[-3:]</code> cho SD — trước đó <code>msg=""</code> rỗng</td></tr>
+<tr><td>Combined 4142 split 80/20</td><td>train 3313 test 829 (pos_test ~? SD chiếm đa số) → AP 0.996 AUC 0.992 loss 0.11</td></tr>
+<tr><td>S1-only 95 (pos 3)</td><td>AP 0.042 loss 0.347 AUC 0.456 — <span class="badge lose">&lt; random</span>, v3 bug 0.046 tương tự</td></tr>
+<tr><td>So v1 S1-only 0.075</td><td>v4 thậm chí <b>giảm</b> (0.042 &lt; 0.075) → thêm SD làm nhiễu S1</td></tr>
+<tr><td>Train log</td><td>17045s (4h44) 0.388 steps/s, 6620 steps, best ep5 0.996 (ep3 0.9959, ep1 0.964)</td></tr>
+<tr><td>File</td><td><code>byt5-sd-v4-result.json (0.996)</code> + <code>byt5-v4-s1only-result.json (0.042)</code></td></tr>
+</table>
+
+<h2>3) Đề xuất ghi Limitations (để thầy duyệt)</h2>
+<ul>
+<li>ByT5 Combined AP 0.92–0.99 là <b>SD-easy artifact</b> — không dùng để claim phá TF-IDF trên OpTC.</li>
+<li>Đánh <b>S1-only 474</b> mới hợp lệ (temporal, prev 1.9%, 9 pos). Trên đó TF-IDF 0.89 vẫn là baseline mạnh nhất.</li>
+<li>SLM chỉ có cơ hội sau <b>8-filter 2250→39 alerts</b> (F1 0.353, rec 75%), nơi prev 23.1% giàu — đó là Tier-2 theo Note.md, không phải primary detector.</li>
+</ul>
+</body>
+</html>
