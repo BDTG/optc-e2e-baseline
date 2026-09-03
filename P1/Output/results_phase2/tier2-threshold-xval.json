@@ -1,0 +1,29 @@
+{
+  "n": 40,
+  "pos": 12,
+  "k": 4,
+  "seed": 42,
+  "slm_constrained": {
+    "acc_mean": 0.775,
+    "acc_std": 0.1299,
+    "f1_mean": 0.6167,
+    "f1_std": 0.2466,
+    "auc_mean": 0.9167,
+    "auc_std": 0.0974,
+    "auc_pooled": 0.8988,
+    "ap_pooled": 0.8253,
+    "oof_acc": 0.775
+  },
+  "tfidf_same40": {
+    "acc_mean": 0.8,
+    "acc_std": 0.0707,
+    "f1_mean": 0.675,
+    "f1_std": 0.1601,
+    "auc_mean": 0.9167,
+    "auc_std": 0.1443,
+    "auc_pooled": 0.8482,
+    "ap_pooled": 0.7634,
+    "oof_acc": 0.8
+  },
+  "note": "Cung 40 mau S1 (12 pos + 28 neg top-rank), cung fold. SLM fit nguong train-fold; TF-IDF char2-5 50k + LR balanced."
+}
