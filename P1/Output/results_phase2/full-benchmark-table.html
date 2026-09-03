@@ -24,7 +24,7 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </head>
 <body>
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
-<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 25 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 vẫn vua S1</b></div>
+<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 26 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 vẫn vua S1</b> + <b style="color:#166534">tier-2 constrained hòa TF-IDF (AUC 0.90 vs 0.85, cùng 40 mẫu)</b></div>
 
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
@@ -231,11 +231,11 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 25 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 + <b>Decoder TTP 60</b> + <b>ByT5 S1-only eval 2 + ByT5 v4 fix</b> — 5060Ti trừ TF-IDF CPU.<br>
+<b>Tổng đã bench 26 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 + <b>Decoder TTP 60</b> + <b>ByT5 S1-only eval 2 + ByT5 v4 fix</b> — 5060Ti trừ TF-IDF CPU.<br>
 <b>Pareto S1 thật:</b> <b>TF-IDF 0.89</b> &gt; Emb 0.50 &gt; ByT5 S1-old 0.075 &gt; v3 bug 0.046 &gt; v4 fix 0.042 &gt; Encoder FT 0.045 ≈ — SD 2000 không giúp. <b>Combined 0.996 (v4) SD-easy</b> không tính S1.<br>
 <b>v4 2026-09-02 fix:</b> parent_chain[-5:] + SD2000 → Combined 0.996 AUC0.992 nhưng S1-only 0.042 ≈ v3 — domain shift OpTC vs SD, cần S1-focused reweight/LoRA trên 39 alerts.<br>
 <b>Decoder TTP (constrained):</b> Qwen0.5B <b>54/60 valid 90% halluc 10% TTP 1/3</b> thắng Qwen1.5B 1/60 valid 2% halluc 98% — <b>0.5B sweet spot decoder</b>; encoder TTP 0% nên decoder thắng ở giải thích TTP sau 8-filter (39 alerts giàu). Warning <code>temperature ignored</code> là cosmetic khi <code>do_sample=False</code>.<br>
-<b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
+<b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tier2-explain-constrained (A/B/C) + xval CPU, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
 </div>
 <h2>6) Decoder TTP Constrained — SLM thắng encoder ở TTP (60 alerts, 3 susp, constrained JSON)</h2>
 <table>
@@ -244,5 +244,13 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr style="background:#fef2f2"><td class="rank">2</td><td>Qwen2.5-1.5B-Instruct (constrained)</td><td>1/60 = 2%</td><td>98%</td><td>1/3*</td><td><span class="badge bad">BỊA 98%</span> — không phải do temp, intrinsic</td></tr>
 </table>
 <div class="note">*TTP hit 1.5B tính cả khi halluc nên ảo; 0.5B là vua decoder TTP. Đặt sau 8-filter 39 alerts → chỉ 39 lần sinh, latency ~0.3s/alert, halluc 10% chấp nhận cho giải thích.</div>
+<h2>7) Tier-2 Constrained Scoring — SLM chấm điểm thay vì sinh tự do (Qwen2.5-0.5B+LoRA ckpt-113, 1650Ti)</h2>
+<table>
+<tr><th>Tập</th><th>Generate cũ</th><th>Constrained (xval 4-fold)</th><th>TF-IDF cùng tập</th><th>Kết luận</th></tr>
+<tr style="background:#ecfdf5"><td><b>S1 40 (12pos+28neg top-rank)</b></td><td>acc 0.30 (toàn MAL)</td><td class="ap">acc <b>0.775±0.13</b> F1 0.617 AUC <b>0.899</b> AP <b>0.825</b></td><td>acc 0.80±0.07 F1 0.675 AUC 0.848 AP 0.763</td><td><span class="badge good">HÒA trong noise</span> — 0.875 tune-trên-tập-đo là lạc quan, số xval mới báo cáo được</td></tr>
+<tr><td>TTP holdout 38 (19 có GT)</td><td>TTP 0/19</td><td class="ap">TTP <b>3/19 = 0.158</b>, verdict AUC 0.34</td><td>— (không giải thích)</td><td>TTP vẫn yếu; chain len 1 không cứu bằng ngưỡng — <b>limitation</b></td></tr>
+<tr><td>SD transfer 30 (pos-only)</td><td>27/30 bịa T1010 ngoài enum</td><td>30/30 <b>T1218 trong enum</b></td><td>—</td><td>Constrained hết bịa 100%</td></tr>
+</table>
+<div class="note">Evidence rule-based → validity 1.0 theo cấu tạo (generate cũ halluc 60-97%). File: tier2-explain-constrained-A/B/C.json + tier2-threshold-xval.json + tier2_explain_eval_constrained.py</div>
 </body>
 </html>

@@ -1,0 +1,59 @@
+{
+  "A_optc_s1": {
+    "n": 40,
+    "verdict_accuracy": 0.3,
+    "invalid_rate": 0.0,
+    "evidence_validity": 0.4,
+    "grounding_rate": 1.0,
+    "hallucination_rate": 0.6,
+    "ttp_accuracy_on_gt": null,
+    "ttp_scored_count": 0,
+    "confusion": {
+      "TP": 12,
+      "TN": 0,
+      "FP": 28,
+      "FN": 0
+    },
+    "avg_latency_sec": 8.834,
+    "parse_fail": 0,
+    "decisions_per_hour": 407.5
+  },
+  "B_ttp_holdout": {
+    "n": 38,
+    "verdict_accuracy": 0.5,
+    "invalid_rate": 0.0,
+    "evidence_validity": 1.0,
+    "grounding_rate": 1.0,
+    "hallucination_rate": 0.0,
+    "ttp_accuracy_on_gt": 0.0,
+    "ttp_scored_count": 19,
+    "confusion": {
+      "TP": 19,
+      "TN": 0,
+      "FP": 19,
+      "FN": 0
+    },
+    "avg_latency_sec": 9.032,
+    "parse_fail": 0,
+    "decisions_per_hour": 398.6
+  },
+  "C_sd_transfer": {
+    "n": 30,
+    "verdict_accuracy": 0.9667,
+    "invalid_rate": 0.0,
+    "evidence_validity": 0.0333,
+    "grounding_rate": 1.0,
+    "hallucination_rate": 0.9667,
+    "ttp_accuracy_on_gt": null,
+    "ttp_scored_count": 0,
+    "confusion": {
+      "TP": 29,
+      "TN": 0,
+      "FP": 0,
+      "FN": 1
+    },
+    "avg_latency_sec": 8.915,
+    "parse_fail": 1,
+    "decisions_per_hour": 403.8
+  }
+}
