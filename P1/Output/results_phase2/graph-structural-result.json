@@ -1,0 +1,30 @@
+{
+  "structural_logistic": {
+    "ap": 0.025561706284597852,
+    "auc": 0.3709677419354839,
+    "coef": {
+      "chain_len": -0.19188655903462035,
+      "event_len": 0.3046647267969705,
+      "log_cmd_len": 0.735629669333054,
+      "unique_proc": -0.05809334127216789,
+      "rarity": -0.39330483335312855,
+      "file_cnt": 0.0,
+      "flow_cnt": 0.0
+    }
+  },
+  "isolation_forest": {
+    "ap": 0.04976851851851852,
+    "auc": 0.6989247311827957
+  },
+  "n": 474,
+  "pos": 9,
+  "names": [
+    "chain_len",
+    "event_len",
+    "log_cmd_len",
+    "unique_proc",
+    "rarity",
+    "file_cnt",
+    "flow_cnt"
+  ]
+}
