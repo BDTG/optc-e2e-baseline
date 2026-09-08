@@ -82,14 +82,18 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'Multi A/B/C',d:'A acc 0.30 toàn MAL, evid 0.4. B TTP 0/19. C 27/30 bịa T1010 ngoài enum.',status:'done'},
  {text:'Constrained AUC 0.90',d:'Logprob scoring + TTP argmax 24 enum + evidence rule. xval 0.775±0.13, hòa TF-IDF.',status:'doing'},
  {text:'Raw: FP/FN đọc được',d:'FP 8182/9740/8293 nhái cmd-None. FN 8191/8187 netflow-thuần không cmd.',status:'doing'}]},
-{text:'🛤️ 6 hướng tiếp cận',d:'Text thua → đổi họ phương pháp. Chốt neuro-symbolic (Approach 5).',status:'doing',children:[
- {text:'1 causal · 2 anomaly',d:'HOLMES/NoDoze/RapSheet/Poirot: cấu trúc + luật lan truyền, hợp pos=9. Anomaly: học bình thường, nhiều FP, dễ mimicry.',status:'info'},
+{text:'🛤️ 6 hướng tiếp cận',d:'Text thua → đổi họ phương pháp. CHỐT: Approach 5 neuro-symbolic (SLM + đồ thị).',status:'doing',children:[
+ {text:'★ CHỐT: Approach 5',d:'Detector đồ thị tầng 1 (ORTHRUS/Velox) lọc 2250→39 → SLM tầng 2 giải thích bằng constrained scoring (verdict log-odds + TTP argmax enum + evidence rule). Là chỗ SLM độc quyền — TF-IDF không giải thích được.',status:'doing'},
+ {text:'Loại: text thuần',d:'Không model nào vượt baseline; 0.89 không tái hiện dưới CV → không có vua thật.',status:'done'},
+ {text:'Loại: structural đơn thuần',d:'Không đọc text: Logistic 0.0256, ISO 0.0498 — cấu trúc một mình không đủ.',status:'done'},
+ {text:'1 causal · 2 anomaly',d:'HOLMES/NoDoze/RapSheet/Poirot: cấu trúc + luật lan truyền, hợp pos=9. Anomaly: nhiều FP, dễ mimicry.',status:'info'},
  {text:'3 TTP-match · 6 taint',d:'Khớp MITRE/MultiKG không học — mạnh khi ít pos. Taint: lan nhãn nguồn, cổ điển vững.',status:'info'},
- {text:'4 GNN · 5 neuro ★',d:'Velox/ORTHRUS/Flash = họ GNN, AUC node cao hơn TF-IDF. 5: SLM ngữ nghĩa + graph nhân quả — khớp SLM+explanation.',status:'doing'},
+ {text:'4 GNN',d:'Velox/ORTHRUS/Flash = họ này, AUC node cao hơn TF-IDF — dùng làm tầng 1 trong Approach 5.',status:'info'},
  {text:'Review structural 0.0256',d:'7 feats không đọc text (1 model 1 dataset): Logistic 0.0256, ISO 0.0498 < text.',status:'done'}]},
-{text:'📦 File & artifact',d:'Bảng thầy + pack logic + commit 69b0987 đã push.',status:'done',children:[
+{text:'📦 File & artifact',d:'Bảng thầy + pack logic + commit 69b0987, 52be19d đã push.',status:'done',children:[
  {text:'HTML gửi thầy',d:'byt5-summary 4 hàng bỏ bug + tuan-qua 25 runs + full-benchmark r26 + mindmap/roadmap.',status:'done'},
- {text:'Pack Desktop + zip',d:'optc_logic_pack demo + train_v4 gốc + review_structural + OpTC-Code-logic.zip 51 file.',status:'done'}]},
+ {text:'Pack Desktop + zip',d:'optc_logic_pack demo + train_v4 gốc + review_structural + OpTC-Code-logic.zip 51 file.',status:'done'},
+ {text:'TF-IDF S1 re-check',d:'eval_tfidf_s1.py + tfidf-s1-474-result.json: OOF 0.40 (msg) / 0.52 (self_label), fold 0.03-1.0 — 0.89 không tái hiện.',status:'done'}]},
 {text:'📌 Đã làm & rễ tương lai',d:'Nội dung đã làm xong và các hướng mọc tiếp.',status:'doing',children:[
  {text:'AUC 0.90 vs 0.85',d:'Constrained 40 mẫu (12pos+28neg): SLM xval acc 0.775±0.13, F1 0.617, AP 0.825. TF-IDF cùng tập: 0.80±0.07, AP 0.763. HÒA trong noise. 0.875 tune-trên-tập-đo là lạc quan.',status:'doing',children:[
   {text:'thr 2.47: TP10 FP3 FN2',d:'pos score [1.84,3.09], neg [1.50,2.65] — tách được, chỉ lệch ngưỡng.',status:'done'}]},
@@ -97,7 +101,11 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'TTP 3/19 = bias',d:'Cả 3 hit là T1218 = đáp án few-shot. Mọi miss cũng đoán T1218. Số thật ~0.',status:'doing'},
  {text:'🌱 Rễ: few-shot cân bằng',d:'Bỏ T1218, 2 shots cân MAL/BENIGN → chạy lại chặng B.',status:'todo'},
  {text:'🌱 Rễ: lock ngưỡng',d:'thr 2.47 lock trên fold riêng, đo tập khác cho số sạch.',status:'todo'},
- {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'}]}
+ {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'},
+ {text:'🌱 Rễ: TF-IDF 0.89 ⚠️',d:'08/09 tái hiện thất bại: OOF 0.03-0.52 (5 protocol), in-sample 0.82-1.0. pos=9 quá ít. Cần patch bảng thầy + verify Mamba 0.144 (mất nguồn, mamba-ssm fail Windows — chạy WSL2/thầy).',status:'todo'},
+ {text:'🌱 Rễ: SSH GPD3N9T',d:'PC mới 192.168.1.29 cùng LAN — chưa bật sshd. Sau khi bật: chạy lại eval + bench trên đó.',status:'todo'},
+ {text:'🌱 Rễ: bảng thầy chưa cập nhật',d:'Section 7 vẫn ghi "TF-IDF 0.89 vua" — cần sửa caption hòa + ghi ⚠️ baseline không tái hiện.',status:'todo'},
+ {text:'🌱 Rễ: hạn chế data chưa khắc phục',d:'GỐC RỄ: S1 chỉ 12 pos → mọi AP S1-only bất ổn. Đã thử và bế: nhồi SD/EVTX (domain shift), oversample ×5, constrained (fold dao động ±0.14). 2 đường ra: (a) gán nhãn thêm tập FP tầng 1 — RQ1a, bản thân tập FP là contribution; (b) FT trên 39 alerts như Note định.',status:'todo'}]}
 ]};
 const SVGNS='http://www.w3.org/2000/svg';
 let S=1,TX=0,TY=0;
