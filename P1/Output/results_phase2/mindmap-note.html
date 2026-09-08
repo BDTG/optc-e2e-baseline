@@ -61,7 +61,7 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'P0 Go/no-go ✓',d:'Errata actor_id #1 (gen_nodeid2msg SUBJECT None). rclone 1 bundle host 201 ecar/eval. TF-IDF+GBM, ModernBERT/DeBERTa ~150M, SLM 3B+8B đúng split.',status:'done'},
  {text:'P1 Baseline ✓',d:'PIDSMAKER harness. Rerun H201/H501/H051. Ghi tập FP từng hệ = test set RQ1a.',status:'done'},
  {text:'P2 Grid HW ◐',d:'1650Ti 4GB local + 5060Ti 16GB thầy (Tailscale USB). Thiếu: đo tranh chấp, KV tách, full grid quant×token.',status:'doing'},
- {text:'P3 Chính ◐',d:'LoRA r16 ckpt-113. ByT5-SD v1→v4 + constrained scoring hòa TF-IDF. TTP collapse T1218.',status:'doing',children:[
+ {text:'P3 Chính ◐',d:'LoRA r16 ckpt-113. ByT5-SD v1→v4 + constrained scoring hòa TF-IDF. TTP collapse T1218. AD-GEN bench: mức Âm (0.095).',status:'doing',children:[
   {text:'v1 0.753 → v2 0.832',d:'SD500→1000, lr 1e-5→8e-6, norm sâu: lower + decode -enc + guid/ip/hash.',status:'done'},
   {text:'v3 bug 0.925 → v4 fix',d:'Bug `chain else msg` làm S1/EVTX rỗng → AP ảo SD-heavy. v4 parent_chain[-5:]: Combined 0.996 nhưng S1-only 0.042 ≈ v3 0.046.',status:'done'},
   {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'}]},
@@ -77,7 +77,7 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'v1 0.753 → v2 0.832',d:'SD500→1000 (EID 1/4688/4103/800, dedup, bỏ WFP 5156). lr 1e-5→8e-6, bf16, 521s→29ph.',status:'done'},
  {text:'v3 bug 0.925 → v4 fix',d:'Bug empty SD-heavy (ckpt 3972 ep3 best). v4 parent_chain[-5:], 4h44 best ep5. S1-only 0.042≈0.046.',status:'done'},
  {text:'Cân kèo TF-IDF 0.92685',d:'Cùng split/norm 4142: hòa 0.0017 (0.92685 vs 0.92509). Cả 2 dính bug → đã gỡ.',status:'done'}]},
-{text:'🔧 Tier-2 eval lineage',d:'v1→v2→v3→multi→constrained. Parse sạch, signal nằm ở scoring.',status:'doing',children:[
+{text:'🔧 Tier-2 eval lineage',d:'v1→v2→v3→multi→constrained→AD-GEN 704. Parse sạch, signal ở scoring; TTP zero-shot mức Âm.',status:'doing',children:[
  {text:'v1 0.0 → v2 0.5 → v3 0.43',d:'v1 toàn BENIGN (65 susp thuần, parse 12). v2 cân bằng 60: TP0. v3 fewshot lật bias: TP20/FP24.',status:'done'},
  {text:'Multi A/B/C',d:'A acc 0.30 toàn MAL, evid 0.4. B TTP 0/19. C 27/30 bịa T1010 ngoài enum.',status:'done'},
  {text:'Constrained AUC 0.90',d:'Logprob scoring + TTP argmax 24 enum + evidence rule. xval 0.775±0.13, hòa TF-IDF.',status:'doing'},
@@ -93,19 +93,20 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
 {text:'📦 File & artifact',d:'Bảng thầy + pack logic + commit 69b0987, 52be19d đã push.',status:'done',children:[
  {text:'HTML gửi thầy',d:'byt5-summary 4 hàng bỏ bug + tuan-qua 25 runs + full-benchmark r26 + mindmap/roadmap.',status:'done'},
  {text:'Pack Desktop + zip',d:'optc_logic_pack demo + train_v4 gốc + review_structural + OpTC-Code-logic.zip 51 file.',status:'done'},
+ {text:'AD-GEN nạp + bench',d:'namhop88/AD-GEN 235,723 narratives → 239,815 chains (10,878 mal, 6,522 GT TTP). TF-IDF balanced-200 OOF AP 0.916 AUC 0.90 — signal thật. Synthetic labels của Đ.P.Nam (UIT, đồng nghiệp) — khai báo nguồn.',status:'done'},
  {text:'TF-IDF S1 re-check',d:'eval_tfidf_s1.py + tfidf-s1-474-result.json: OOF 0.40 (msg) / 0.52 (self_label), fold 0.03-1.0 — 0.89 không tái hiện.',status:'done'}]},
 {text:'📌 Đã làm & rễ tương lai',d:'Nội dung đã làm xong và các hướng mọc tiếp.',status:'doing',children:[
  {text:'AUC 0.90 vs 0.85',d:'Constrained 40 mẫu (12pos+28neg): SLM xval acc 0.775±0.13, F1 0.617, AP 0.825. TF-IDF cùng tập: 0.80±0.07, AP 0.763. HÒA trong noise. 0.875 tune-trên-tập-đo là lạc quan.',status:'doing',children:[
   {text:'thr 2.47: TP10 FP3 FN2',d:'pos score [1.84,3.09], neg [1.50,2.65] — tách được, chỉ lệch ngưỡng.',status:'done'}]},
  {text:'FP cmd-None, FN netflow',d:'FP: services→wmiprvse, csrss→svchost cmd None — nhái pattern S1 thiếu mỗi cmd. FN: 8191/8187 chain thuần netflow/file, không process|cmd.',status:'doing'},
- {text:'TTP 3/19 = bias',d:'Cả 3 hit là T1218 = đáp án few-shot. Mọi miss cũng đoán T1218. Số thật ~0.',status:'doing'},
- {text:'🌱 Rễ: few-shot cân bằng',d:'Bỏ T1218, 2 shots cân MAL/BENIGN → chạy lại chặng B.',status:'todo'},
+ {text:'TTP collapse xác nhận trên 704 GT',d:'AD-GEN bench 704 chain GT: 0.095 (67/704, toàn T1218 — GT=T1218 hit 100%, còn lại 0/637). Cả 3/19 OpTC lẫn 704 AD-GEN → collapse = bias few-shot, số thật ~0.',status:'done'},
+ {text:'🌱 Rễ: TTP head trên AD-GEN',d:'SLM zero-shot 0.095 thua TF-IDF multi-label head AP 0.673 (12 TTP, 5.5K chains 80/20). Con đường TTP duy nhất: FT head trên 6.5K GT; SLM giữ trục giải thích. Bảng 3 mức thầy: hiện mức Âm.',status:'doing'},
  {text:'🌱 Rễ: lock ngưỡng',d:'thr 2.47 lock trên fold riêng, đo tập khác cho số sạch.',status:'todo'},
  {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'},
  {text:'🌱 Rễ: TF-IDF 0.89 ⚠️',d:'08/09 tái hiện thất bại: OOF 0.03-0.52 (5 protocol), in-sample 0.82-1.0. pos=9 quá ít. Cần patch bảng thầy + verify Mamba 0.144 (mất nguồn, mamba-ssm fail Windows — chạy WSL2/thầy).',status:'todo'},
- {text:'🌱 Rễ: SSH GPD3N9T',d:'PC mới 192.168.1.29 cùng LAN — chưa bật sshd. Sau khi bật: chạy lại eval + bench trên đó.',status:'todo'},
+ {text:'🌱 GPD3N9T: bench thứ 2',d:'SSH OK (Radmin 26.32.133.135, administrators_authorized_keys). Python 3.12 + venv + sklearn 1.9. AD-GEN 200 + S1 474 khớp 100% Nitro → máy đối chiếu CPU chuẩn.',status:'done'},
  {text:'🌱 Rễ: bảng thầy chưa cập nhật',d:'Section 7 vẫn ghi "TF-IDF 0.89 vua" — cần sửa caption hòa + ghi ⚠️ baseline không tái hiện.',status:'todo'},
- {text:'🌱 Rễ: hạn chế data chưa khắc phục',d:'GỐC RỄ: S1 chỉ 12 pos → mọi AP S1-only bất ổn. Đã thử và bế: nhồi SD/EVTX (domain shift), oversample ×5, constrained (fold dao động ±0.14). 2 đường ra: (a) gán nhãn thêm tập FP tầng 1 — RQ1a, bản thân tập FP là contribution; (b) FT trên 39 alerts như Note định.',status:'todo'}]}
+ {text:'🌱 Rễ: hạn chế data chưa khắc phục',d:'GỐC RỄ: S1 chỉ 12 pos → mọi AP S1-only bất ổn. Đã thử và bế: nhồi SD/EVTX (domain shift), oversample ×5, constrained (fold dao động ±0.14). 2 đường ra: (a) gán nhãn thêm tập FP tầng 1 — RQ1a, bản thân tập FP là contribution; (b) FT trên 39 alerts như Note định; (c) AD-GEN auxiliary: 10,878 mal / 6,522 GT TTP — đã cứu N (12 pos → ≥20/TTP × 12).',status:'doing'}]}
 ]};
 const SVGNS='http://www.w3.org/2000/svg';
 let S=1,TX=0,TY=0;
