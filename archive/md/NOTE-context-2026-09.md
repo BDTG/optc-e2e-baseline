@@ -1,0 +1,1 @@
+AD-GEN (namhop88, Dinh Phuong Nam): 235.7K narratives Sysmon COMISET, JSONL co GT TTP/tactics/verdict - CHUA chay. Ung vien cho TTP head + han che 12 pos S1 (label synthetic-validated, khong phai forensic GT).
