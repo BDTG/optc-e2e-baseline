@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Roadmap OpTC × SLM tier-2</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--foreground);font-size:13px;line-height:1.5;margin:0;padding:10px 12px;max-width:860px}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted-foreground);font-size:12px;margin-bottom:10px}
+.nums{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.num{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.num b{font-size:16px}
+.num small{color:var(--muted-foreground)}
+.tl{position:relative;margin:6px 0 6px 12px;padding-left:26px;border-left:3px solid var(--border)}
+.ph{position:relative;margin-bottom:12px}
+.ph::before{content:'';position:absolute;left:-36px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--pc,#888);border:3px solid #fff;box-shadow:0 0 0 2px var(--pc,#888)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+.card h2{font-size:14px;margin:0 0 4px}
+.card h2 .w{font-weight:400;color:var(--muted-foreground);font-size:12px}
+.tag{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:6px;white-space:nowrap}
+.t-done{background:#dcfce7;color:#166534}.t-doing{background:#fef3c7;color:#92400e}.t-todo{background:#fee2e2;color:#991b1b}
+.gate{display:inline-block;font-size:11px;background:#e0e7ff;color:#3730a3;border-radius:6px;padding:2px 8px;margin:4px 0;font-weight:700}
+ul{margin:4px 0;padding-left:18px}
+li{margin:2px 0}
+.miss{color:#b45309}
+.block{color:#991b1b}
+.next{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;padding:8px 12px;margin-top:4px}
+.next h2{font-size:14px;margin:0 0 4px;color:#166534}
+.src{font-size:11px;color:var(--muted-foreground);margin-top:10px}
+b.k{font-size:13px}
+</style>
+</head>
+<body>
+<h1>🛣️ Roadmap luận văn — SLM ≤8B tier-2 × OpTC (tới 08/09)</h1>
+<div class="sub">Note.md: P0 tuần 1 → P5 viết • Trạng thái thật + số thật • Cầm đi họp</div>
+<div class="nums">
+<div class="num"><b>0.89 ⚠️ vs 0.90</b><br><small>TF-IDF 0.89 <b>không tái hiện</b> dưới CV (OOF 0.40–0.52, pos=9 quá ít) — số sạch là xval cùng 40 mẫu: <b>hòa</b> 0.775 vs 0.80</small></div>
+<div class="num"><b>2250 → 39</b><br><small>Cascade 8-filter: prev 23.1%, F1 0.353 — operating point tier-2</small></div>
+<div class="num"><b>3/19 → ~0</b><br><small>TTP holdout collapse về đáp án few-shot T1218 — limitation phải ghi</small></div>
+</div>
+<div class="tl">
+<div class="ph" style="--pc:#16a34a"><div class="card"><h2>P0 — Go/no-go <span class="w">tuần 1</span><span class="tag t-done">XONG ✓</span></h2>
+<div class="gate">⛔ Cổng: SLM hơn encoder 150M ở 1/2 lớp H0 — CHƯA qua, H0 đứng vững</div>
+<ul><li>Đọc <code>OpTCRedTeamGroundTruth.pdf</code> + <code>errata.md</code> (FiveDirections/OpTC-data) TRƯỚC khi parse — <b>actor_id #1</b> sai do source không de-conflict ⇒ parent chain cấm dùng actor_id raw</li><li>Bug <code>gen_nodeid2msg</code> đọc positional index i[2],i[4] sau migrate schema → mọi subject "SUBJECT None" — fix: luôn SELECT tên cột</li><li>rclone list trước khi tải (folder id <code>1n3kkS3KR31KUegn42yk3-e6JkZvf0Caa</code>); 1 bundle host 201 (ecar/evaluation), lọc <code>PROCESS/CREATE</code> streaming → Parquet</li><li>TF-IDF char2-5 50k + GBM <b>0.89 S1 ⚠️</b> (08/09 tái hiện: OOF chỉ 0.40–0.52, pos=9 quá ít cho AP ổn định) • ModernBERT/DeBERTa-v3 ~150M FT • SLM 3B/8B đúng split — không vượt encoder ⇒ reframe sang tier-2</li></ul></div></div>
+<div class="ph" style="--pc:#16a34a"><div class="card"><h2>P1 — Baseline chạy lại <span class="w">tuần 2–3</span><span class="tag t-done">XONG ✓</span></h2>
+<ul><li>PIDSMAKER harness (arXiv 2601.22983); rerun H201/H501/H051 + 72 benign miễn phí (tập unseen-host RQ5a, khỏi tải thêm)</li><li>Vạch trần <b>labeling 2-hop</b> paper gốc (precision cao là artifact) • Temporal split, cấm random (leak entity) • Cấm gán malicious lan rộng</li><li>Ceiling: ORTHRUS recall@10K <b>88.6%</b> (101/114), trần precision (path+cmd) 1.01% (P1 gate PASSED) • Velox @10K: TP=20 (17.5%), trần precision <b>0.20%</b></li><li>Ghi <b>tập FP</b> từng hệ = test set RQ1a • SHIELD: prior art LLM-aided, không reproduce nếu thiếu code</li></ul></div></div>
+<div class="ph" style="--pc:#f59e0b"><div class="card"><h2>P2 — Grid phần cứng <span class="w">tuần 4</span><span class="tag t-doing">DỞ ◐</span></h2>
+<ul><li>26 runs, 2 máy: 1650Ti 4GB local + 5060Ti 16GB thầy (Tailscale qua USB tethering)</li><li>Gen 8 model: Qwen0.5B <b>0.31s</b> 11.4k/h halluc85% ngọt nhất • Coder-7B 5.42s halluc95% OOM sát trần 15GB • LoRA r16 không cải thiện gen</li><li>Emb 5 model: Qwen3-0.6B AP <b>0.50</b> AUC0.978 12ms/alert thay dense • granite 0.45 • MiniLM 0.41 • 4B (0.44) thua 0.6B</li><li>Classifier FT: SecBERT 0.045 • DeBERTa 0.026 — thua TF-IDF 10-20× • Zero-shot token-free S1: Mamba130m 0.144 thắng ByT5 0.033</li><li>Decoder TTP constrained 60 alerts: Qwen0.5B <b>54/60 valid 90%</b> halluc10% thắng 1.5B (1/60, halluc98%) — 0.5B sweet spot</li><li class="miss">Thiếu: đo dưới tranh chấp • tách weight ≠ KV cache • full grid quant×token (trục token chi phối: 1.5B đọc 2000 token chậm hơn 8B đọc 200 token)</li></ul></div></div>
+<div class="ph" style="--pc:#f59e0b"><div class="card"><h2>P3 — Thí nghiệm chính <span class="w">tuần 5–7</span><span class="tag t-doing">DỞ ◐ — ĐANG Ở ĐÂY</span></h2>
+<ul><li>ByT5-small 300M byte FT bf16: v0 S1 <b>0.075</b> (716s) → v0 Combined 942 <b>0.149</b> → v1 SD500 <b>0.753</b> (521s) → v2 SD1000 <b>0.832</b> (29ph, lr8e-6) → v3 SD2000 <b>0.925 bug</b> (ckpt-6620 3.4GB) → <b>v4 fix 0.996 Combined / 0.042 S1-only</b> (4h44, 6620 steps, best ep5)</li><li>Bug empty: <code>to_text = chain["chain"] else msg</code> làm S1/EVTX rỗng → AP ảo SD-heavy; v4 fix parent_chain[-5:], empty còn 818/4142 (benign) — dòng bug đã xóa khỏi bảng thầy</li><li>Cân kèo fair: TF-IDF cùng split/norm 4142 AP <b>0.92685</b> vs ByT5 v3 0.92509 — HÒA 0.0017 (cả 2 dính bug, đã gỡ)</li><li><b>KL domain shift:</b> S1 <code>svchost | wmiprvse -Embedding | GoogleUpdate</code> 3 tầng vs SD <code>mshta javascript:getobject(...atomic...)</code> one-liner — S1-pos chìm giữa 2477 pos dù oversample ×2</li><li>6 hướng khi text thua: causal / anomaly / TTP-matching / GNN / <b>neuro-symbolic ★</b> / taint — đã review structural (7 feats, không đọc text): Logistic 0.0256, ISO 0.0498 → thua text, chốt Approach 5 trên 39 alerts</li><li>Tier-2 eval lineage: v1 65 susp toàn BENIGN (0.0) → v2 cân bằng 60 acc 0.5 → v3 chuẩn hoá+fewshot acc 0.43 (TP20/FP24) → multi A/B/C → <b>constrained AUC 0.90 vs 0.85, xval 0.775±0.13</b></li><li>Raw log: FP 8182/9740/8293 nhái pattern cmd-None • FN 8191/8187 chain thuần netflow/file • TTP 3/19 toàn T1218 = bias few-shot ⇒ số thật ~0</li><li class="block">Blocker: TTP collapse — fix: đổi example few-shot, chạy lại chặng B</li></ul></div></div>
+<div class="ph" style="--pc:#dc2626"><div class="card"><h2>P4 — Khái quát + đối kháng <span class="w">tuần 8</span><span class="tag t-todo">CHƯA ☐</span></h2>
+<ul><li>Temporal train-sớm/test-muộn • Threshold transfer (drift alert/host/ngày ×lần)</li><li>Tập evasion (paraphrase/rename/pad) + injection — baseline 96%→38%, số để paper chính</li><li>Attack range sẵn: Splunk SD <b>3133 chains / 99 attack</b> • Mordor 150 zip OTRF</li></ul></div></div>
+<div class="ph" style="--pc:#dc2626"><div class="card"><h2>P5 — Viết <span class="tag t-todo">CHƯA ☐</span></h2>
+<ul><li>Thứ tự Note.md: P2 (đo lường) → P1 → P3 → P4 → intro/related cuối</li><li>Claim cầm đi viết: <b>hòa TF-IDF + TTP limitation</b> • 6 hình (Pareto định danh) • 4 bảng • 6 artifact</li></ul></div></div>
+<div class="ph" style="--pc:#0ea5e9"><div class="card"><h2>📦 File gửi thầy + artifact <span class="tag t-done">XONG ✓</span></h2>
+<ul><li><code>byt5-summary-thay.html</code> (gọn 4 hàng, bỏ bug) • <code>tuan-qua-1-tuan.html</code> (25 runs 26/08-02/09) • <code>full-benchmark-table.html</code> (r26) • mindmap + roadmap này</li><li><code>optc_logic_pack.py</code> (demo 1 file) + <code>train_byt5_sd_v4.py</code> gốc + <code>review_graph_structural.py</code> + <code>OpTC-Code-logic.zip</code> (51 file) — đã copy Desktop</li><li>Commit <code>69b0987</code> trên <code>main</code>: 6 script tier2 + 12 JSON + bảng — push OK</li></ul></div></div>
+</div>
+<div class="next"><h2>▶ 5 việc tiếp theo</h2>
+<ul><li><b>1.</b> Đổi few-shot (bỏ T1218, 2 shots cân MAL/BENIGN) → chạy lại chặng B lấy số TTP trung thực <i>(local, ~10 phút)</i></li><li><b>2.</b> Lock thr=2.47 trên fold riêng → đo tập khác <i>(CPU vài phút — xval đã xong 0.775±0.13)</i></li><li><b>3.</b> Patch bảng thầy section 7 với số TTP mới + ghi limitation bias</li><li><b>4.</b> Báo thầy 3 câu: hòa TF-IDF • lỗi đọc được • TTP limitation — xin ý kiến sang P4</li><li><b>5.</b> Chuẩn bị P4: temporal split + threshold transfer trên bundle đã có (khỏi tải thêm)</li></ul></div>
+<div class="src">Nguồn: archive/md/Note.md • full-benchmark-table.html r26 • tier2-threshold-xval.json • commit 69b0987</div>
+</body>
+</html>

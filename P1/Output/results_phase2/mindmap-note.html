@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Mindmap OpTC × SLM tier-2</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--foreground);font-size:12px;margin:0;padding:6px}
+h1{font-size:16px;margin:0 0 2px}
+.sub{color:var(--muted-foreground);font-size:11px;margin-bottom:4px}
+#wrap{display:flex;gap:8px;align-items:flex-start}
+#cv{flex:1;min-width:0;border:1px solid var(--border);border-radius:8px;background:#fff}
+#panel{width:250px;flex:none;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;line-height:1.5;max-height:640px;overflow:auto}
+#panel h3{margin:0 0 4px;font-size:13px}
+#panel .d{color:var(--muted-foreground)}
+.btns{margin:4px 0}
+button{background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:6px;padding:2px 10px;cursor:pointer;margin-right:4px}
+button:hover{border-color:var(--accent)}
+.link{fill:none;stroke-width:2;opacity:.5}
+.legend{font-size:11px;color:var(--muted-foreground);margin-top:4px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
+</style>
+</head>
+<body>
+<h1>🧠 SLM ≤8B tier-2 × OpTC — mindmap Note.md → 08/09</h1>
+<div class="sub">Mỗi nút: tiêu đề + số liệu chi tiết • Bấm nhánh để thu/mở</div>
+<div class="btns"><button onclick="zoom(1.25)">+</button><button onclick="zoom(0.8)">−</button><button onclick="reset()">Reset</button></div>
+<div id="wrap">
+<svg id="cv"><g id="g"></g></svg>
+<div id="panel"><h3>Chi tiết</h3><div class="d">Bấm vào một nút để xem ghi chú đầy đủ.</div></div>
+</div>
+<div class="legend"><span><span class="dot" style="background:#16a34a"></span>Xong</span> <span><span class="dot" style="background:#f59e0b"></span>Đang dở</span> <span><span class="dot" style="background:#dc2626"></span>Chưa / limitation</span> <span><span class="dot" style="background:#0ea5e9"></span>Định hướng</span></div>
+<script>
+/* Nút nhiều dòng chi tiết, đo thật bằng getComputedTextLength. */
+const STC={done:'#16a34a',doing:'#f59e0b',todo:'#dc2626',info:'#0ea5e9'};
+const BCOL=['#0284c7','#d97706','#7c3aed','#16a34a','#db2777','#ea580c','#0891b2','#ca8a04'];
+const GAP=10,XGAP=42,MAXC=46,MAXL=5;
+const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/host/ngày. Không phải primary detector. Mua: cắt FP + TTP unseen.',status:'info',children:[
+{text:'🎯 Định vị',d:'Velox chỉ-text vẫn mạnh ⇒ tiền đề GNN-vứt-cmdline sai. Claim còn lại là ngữ nghĩa tổ hợp.',status:'info',children:[
+ {text:'Tầng 2, không detector chính',d:'Số quyết định/host/ngày ép ra kiến trúc 2 tầng (RQ3). SLM chạy sau detector đồ thị.',status:'info'},
+ {text:'2 thứ PIDS thiếu',d:'(a) Cắt FP bằng ngữ nghĩa tổ hợp cmdline: ý định tổ hợp argument, obfuscation lồng, LOLBin chưa thấy. (b) TTP chưa thấy mà không cần nhãn.',status:'info'}]},
+{text:'⛔ H0: encoder ≈ SLM?',d:'CHƯA loại. TF-IDF 0.89 không tái hiện dưới CV (OOF 0.40-0.52, pos=9); ByT5 0.042; SecBERT 0.045.',status:'doing',children:[
+ {text:'TTP ngoài train',d:'Zero/few-shot trên TTP encoder chưa thấy. Hiện holdout 3/19 → thực ~0 do bias few-shot T1218.',status:'doing'},
+ {text:'Disambiguation FP khó',d:'Admin script / installer / CI runner cần prior ý định. Constrained AUC 0.90 là tín hiệu đầu tiên.',status:'doing'},
+ {text:'Prior art chống lại',d:'2408.02637: obfuscation transformer train từ đầu, model nhỏ scale không mất hiệu năng. 2412.01655: BERT risk cmd. SHIELD 2507.10873: LLM-aided IDS so với Flash/MAGIC/ORTHRUS.',status:'info'}]},
+{text:'❓ RQ1 centerpiece',d:'Claim chính RQ1a: FP reduction @recall cố định trên tập FP Flash/MAGIC sinh lại.',status:'doing',children:[
+ {text:'RQ1a: 2250→39 alerts',d:'Cascade 8-filter: has_cmd 614 → chain 477 → events 474 (pos 9) → TF-IDF>0.5 → Emb → SecBERT → prev<10%. KQ: 39 alerts, prev 23.1%, F1 0.353.',status:'doing',children:[
+  {text:'Operating point tier-2',d:'39 alerts thay vì 2250: đúng nơi SLM chạy (~10² candidate).',status:'done'}]},
+ {text:'RQ1b: gain theo technique',d:'Stratify ATT&CK: T1218 LOLBin proxy, T1059.001 encoded PS, T1027 obfuscation, T1003.001 comsvcs dump, T1490 vssadmin, T1087/T1082 discovery, T1053 sched task.',status:'doing'}]},
+{text:'❓ RQ2 · RQ3',d:'RQ2: đơn vị process+cmd+parent, cấm AUC-ROC chính. RQ3: Pareto 26 runs trên 5060Ti + 1650Ti.',status:'doing',children:[
+ {text:'Qwen0.5B 0.31s ngọt nhất',d:'Gen nhanh nhất 11.4k/h. 7B 5.42s halluc 95% OOM sát trần 15GB. LoRA r16 không cải thiện gen.',status:'done'},
+ {text:'Emb 0.6B AP 0.50',d:'Qwen3-Embedding-0.6B: AUC 0.978, 12ms/alert, 1.8GB. granite 0.45, MiniLM 0.41, 4B thua 0.6B.',status:'done'},
+ {text:'Decoder TTP-valid 90%',d:'Qwen0.5B 54/60 valid thắng 1.5B (1/60, halluc 98%). Constrained scoring: AUC 0.90 vs TF-IDF 0.85 cùng 40 mẫu.',status:'done',children:[
+  {text:'1.5B bịa intrinsic',d:'Không phải do temperature (do_sample=False). 0.5B là sweet spot decoder.',status:'done'}]},
+ {text:'Thiếu: tranh chấp + KV',d:'Chưa đo dưới Chrome/Teams. Chưa tách weight ≠ KV cache (KV mới là ràng buộc với context dài). Chưa quét int4/int8 đơn điệu.',status:'todo'}]},
+{text:'❓ RQ4 · RQ5',d:'R4: tổng chi phí hệ thống + overlap/cascade. R5: unseen host, threshold drift, evasion/injection.',status:'todo',children:[
+ {text:'Velox trần 0.20%',d:'Sweep k=10K: TP=20 (17.5%). Rerun vạch trần labeling 2-hop của paper gốc (precision cao là artifact).',status:'done'},
+ {text:'Split thời gian',d:'Random split = leak qua entity chung. Unseen host miễn phí: 72 benign kèm bundle 051/501.',status:'todo'},
+ {text:'Evasion 96%→38%',d:'2605.24421: paraphrase/rename/pad + injection `# approved by IT`. Kerckhoffs: attacker đọc weight+prompt, cấm giấu logic trong prompt. Số injection ở paper chính.',status:'todo'}]},
+{text:'🗺️ Phase 0–5',d:'P0✓ P1✓ P2◐ P3◐ P4☐ P5☐. Viết cuối: P2→P1→P3→P4→intro/related.',status:'doing',children:[
+ {text:'P0 Go/no-go ✓',d:'Errata actor_id #1 (gen_nodeid2msg SUBJECT None). rclone 1 bundle host 201 ecar/eval. TF-IDF+GBM, ModernBERT/DeBERTa ~150M, SLM 3B+8B đúng split.',status:'done'},
+ {text:'P1 Baseline ✓',d:'PIDSMAKER harness. Rerun H201/H501/H051. Ghi tập FP từng hệ = test set RQ1a.',status:'done'},
+ {text:'P2 Grid HW ◐',d:'1650Ti 4GB local + 5060Ti 16GB thầy (Tailscale USB). Thiếu: đo tranh chấp, KV tách, full grid quant×token.',status:'doing'},
+ {text:'P3 Chính ◐',d:'LoRA r16 ckpt-113. ByT5-SD v1→v4 + constrained scoring hòa TF-IDF. TTP collapse T1218.',status:'doing',children:[
+  {text:'v1 0.753 → v2 0.832',d:'SD500→1000, lr 1e-5→8e-6, norm sâu: lower + decode -enc + guid/ip/hash.',status:'done'},
+  {text:'v3 bug 0.925 → v4 fix',d:'Bug `chain else msg` làm S1/EVTX rỗng → AP ảo SD-heavy. v4 parent_chain[-5:]: Combined 0.996 nhưng S1-only 0.042 ≈ v3 0.046.',status:'done'},
+  {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'}]},
+ {text:'P4 Khái quát ☐',d:'Temporal train-sớm/test-muộn, threshold transfer (drift ×lần), tập evasion+injection, attack range Atomic/Splunk (SD 3133/99 attack đã sẵn).',status:'todo'},
+ {text:'P5 Viết ☐',d:'Sau khi biết claim thật: constrained hòa TF-IDF + TTP limitation.',status:'todo'}]},
+{text:'📏 Metric · Output',d:'Chính: recall@1/10/100 alert/host/ngày + AUC-PR + MCC. Cost: p95/p99, prefill≠decode, CPU-s, Wh, $ cuối.',status:'info',children:[
+ {text:'Cấm ROC, FPR phân số',d:'FPR 0.1% trên 10⁷ event/ngày = 10.000 alert/host — chết ngay. MCC cấm trên test resample.',status:'info'},
+ {text:'Hình định danh: Pareto',d:'x = latency p95/CPU-s, y = recall@10. + bar ATT&CK (bán RQ1b), FP curve (bán RQ1a), Venn cascade, risk–coverage, threshold transfer.',status:'todo'},
+ {text:'Artifact: tập FP',d:'Loader streaming eCAR→Parquet + manifest; YAML PIDSMAKER; LoRA public; tập FP gán nhãn (quý hơn model); tập evasion; HW notes.',status:'todo'},
+ {text:'Limit phải ghi',d:'Không primary detector. OpTC/DARPA realism bị chất vấn. Attacker co-resident. Injection số ở paper chính, không appendix.',status:'todo'}]},
+{text:'🧬 ByT5 v0→v4',d:'SD2000 không transfer OpTC. v4 fix xong Combined 0.996 SD-easy, S1-only 0.042.',status:'doing',children:[
+ {text:'v0 S1 0.075 → Comb 0.149',d:'S1 474 pos9 norm sâu + oversample ×5, 3 epoch 716s. Combined 942 pos74 overfit ep3 0.11.',status:'done'},
+ {text:'v1 0.753 → v2 0.832',d:'SD500→1000 (EID 1/4688/4103/800, dedup, bỏ WFP 5156). lr 1e-5→8e-6, bf16, 521s→29ph.',status:'done'},
+ {text:'v3 bug 0.925 → v4 fix',d:'Bug empty SD-heavy (ckpt 3972 ep3 best). v4 parent_chain[-5:], 4h44 best ep5. S1-only 0.042≈0.046.',status:'done'},
+ {text:'Cân kèo TF-IDF 0.92685',d:'Cùng split/norm 4142: hòa 0.0017 (0.92685 vs 0.92509). Cả 2 dính bug → đã gỡ.',status:'done'}]},
+{text:'🔧 Tier-2 eval lineage',d:'v1→v2→v3→multi→constrained. Parse sạch, signal nằm ở scoring.',status:'doing',children:[
+ {text:'v1 0.0 → v2 0.5 → v3 0.43',d:'v1 toàn BENIGN (65 susp thuần, parse 12). v2 cân bằng 60: TP0. v3 fewshot lật bias: TP20/FP24.',status:'done'},
+ {text:'Multi A/B/C',d:'A acc 0.30 toàn MAL, evid 0.4. B TTP 0/19. C 27/30 bịa T1010 ngoài enum.',status:'done'},
+ {text:'Constrained AUC 0.90',d:'Logprob scoring + TTP argmax 24 enum + evidence rule. xval 0.775±0.13, hòa TF-IDF.',status:'doing'},
+ {text:'Raw: FP/FN đọc được',d:'FP 8182/9740/8293 nhái cmd-None. FN 8191/8187 netflow-thuần không cmd.',status:'doing'}]},
+{text:'🛤️ 6 hướng tiếp cận',d:'Text thua → đổi họ phương pháp. Chốt neuro-symbolic (Approach 5).',status:'doing',children:[
+ {text:'1 causal · 2 anomaly',d:'HOLMES/NoDoze/RapSheet/Poirot: cấu trúc + luật lan truyền, hợp pos=9. Anomaly: học bình thường, nhiều FP, dễ mimicry.',status:'info'},
+ {text:'3 TTP-match · 6 taint',d:'Khớp MITRE/MultiKG không học — mạnh khi ít pos. Taint: lan nhãn nguồn, cổ điển vững.',status:'info'},
+ {text:'4 GNN · 5 neuro ★',d:'Velox/ORTHRUS/Flash = họ GNN, AUC node cao hơn TF-IDF. 5: SLM ngữ nghĩa + graph nhân quả — khớp SLM+explanation.',status:'doing'},
+ {text:'Review structural 0.0256',d:'7 feats không đọc text (1 model 1 dataset): Logistic 0.0256, ISO 0.0498 < text.',status:'done'}]},
+{text:'📦 File & artifact',d:'Bảng thầy + pack logic + commit 69b0987 đã push.',status:'done',children:[
+ {text:'HTML gửi thầy',d:'byt5-summary 4 hàng bỏ bug + tuan-qua 25 runs + full-benchmark r26 + mindmap/roadmap.',status:'done'},
+ {text:'Pack Desktop + zip',d:'optc_logic_pack demo + train_v4 gốc + review_structural + OpTC-Code-logic.zip 51 file.',status:'done'}]},
+{text:'📌 Đã làm & rễ tương lai',d:'Nội dung đã làm xong và các hướng mọc tiếp.',status:'doing',children:[
+ {text:'AUC 0.90 vs 0.85',d:'Constrained 40 mẫu (12pos+28neg): SLM xval acc 0.775±0.13, F1 0.617, AP 0.825. TF-IDF cùng tập: 0.80±0.07, AP 0.763. HÒA trong noise. 0.875 tune-trên-tập-đo là lạc quan.',status:'doing',children:[
+  {text:'thr 2.47: TP10 FP3 FN2',d:'pos score [1.84,3.09], neg [1.50,2.65] — tách được, chỉ lệch ngưỡng.',status:'done'}]},
+ {text:'FP cmd-None, FN netflow',d:'FP: services→wmiprvse, csrss→svchost cmd None — nhái pattern S1 thiếu mỗi cmd. FN: 8191/8187 chain thuần netflow/file, không process|cmd.',status:'doing'},
+ {text:'TTP 3/19 = bias',d:'Cả 3 hit là T1218 = đáp án few-shot. Mọi miss cũng đoán T1218. Số thật ~0.',status:'doing'},
+ {text:'🌱 Rễ: few-shot cân bằng',d:'Bỏ T1218, 2 shots cân MAL/BENIGN → chạy lại chặng B.',status:'todo'},
+ {text:'🌱 Rễ: lock ngưỡng',d:'thr 2.47 lock trên fold riêng, đo tập khác cho số sạch.',status:'todo'},
+ {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'}]}
+]};
+const SVGNS='http://www.w3.org/2000/svg';
+let S=1,TX=0,TY=0;
+function el(n,a,p){const e=document.createElementNS(SVGNS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function wrap(meas,s){
+ const words=String(s||'').split(/\s+/).filter(Boolean),lines=[];let cur='';
+ words.forEach(w=>{
+  if((cur+' '+w).trim().length>MAXC){lines.push(cur.trim());cur=w;}
+  else cur+=' '+w;
+ });
+ if(cur.trim())lines.push(cur.trim());
+ if(lines.length>MAXL)return lines.slice(0,MAXL-1).concat([lines[MAXL-1].slice(0,MAXC-3)+'…']);
+ return lines.length?lines:[''];
+}
+function subtreeH(n){if(!n._kids.length)return n._bh;return n._kids.reduce((s,c)=>s+subtreeH(c)+GAP,0)-GAP;}
+function layout(){
+ const g=document.getElementById('g'),svg=document.getElementById('cv');g.innerHTML='';
+ const meas=el('text',{visibility:'hidden'},g);
+ const all=[];
+ (function walk(n,dep){n._dep=dep;n._kids=(n._hide||!n.children)?[]:n.children;
+  meas.setAttribute('font-size',13);meas.textContent=n.text;
+  const tw=meas.getComputedTextLength();
+  meas.setAttribute('font-size',10.5);
+  n._dl=wrap(meas,n.d);let dw=0;
+  n._dl.forEach(l=>{meas.textContent=l;dw=Math.max(dw,meas.getComputedTextLength());});
+  n._bw=Math.ceil(Math.max(tw,dw))+34;
+  n._bh=10+17+4+n._dl.length*12.5+8;
+  all.push(n);n._kids.forEach(c=>walk(c,dep+1));})(DATA,0);
+ meas.remove();
+ const CX=700;
+ DATA._x=CX;DATA._y=640;
+ const sides=[[],[]];
+ DATA.children.forEach((b,i)=>{b._col=BCOL[i%BCOL.length];(i%2===0?sides[0]:sides[1]).push(b);});
+ let minX=CX-DATA._bw/2,maxX=CX+DATA._bw/2,minY=DATA._y-80,maxY=DATA._y+80;
+ sides.forEach((arr,si)=>{
+  const dir=si===0?1:-1;
+  const H=arr.reduce((s,b)=>s+subtreeH(b)+GAP*2,0)-GAP*2;
+  let y=DATA._y-H/2;
+  arr.forEach(b=>{
+   const bh=subtreeH(b);
+   b._x=CX+dir*(DATA._bw/2+XGAP+b._bw/2);b._y=y+bh/2;
+   placeKids(b,dir);y+=bh+GAP*2;
+  });
+ });
+ function placeKids(p,dir){
+  let y=p._y-subtreeH(p)/2;
+  p._kids.forEach(c=>{
+   const ch=subtreeH(c);
+   c._x=p._x+dir*(p._bw/2+XGAP+c._bw/2);c._y=y+ch/2;
+   if(c._kids.length)placeKids(c,dir);
+   y+=ch+GAP;
+  });
+ }
+ all.forEach(n=>{
+  minX=Math.min(minX,n._x-n._bw/2);maxX=Math.max(maxX,n._x+n._bw/2);
+  minY=Math.min(minY,n._y-n._bh/2);maxY=Math.max(maxY,n._y+n._bh/2);
+ });
+ const P=24;
+ svg.setAttribute('viewBox',`${minX-P} ${minY-P} ${maxX-minX+P*2} ${maxY-minY+P*2}`);
+ all.forEach(n=>{if(n===DATA)return;const p=findP(n);
+  const x1=p._x+(p._x<n._x?-1:1)*p._bw/2,x2=n._x+(p._x<n._x?1:-1)*n._bw/2,mx=(x1+x2)/2;
+  el('path',{d:`M ${x1} ${p._y} C ${mx} ${p._y}, ${mx} ${n._y}, ${x2} ${n._y}`,class:'link',stroke:n._col||'#888'},g);});
+ all.forEach(n=>{
+  const ctr=n===DATA;
+  const gg=el('g',{style:'cursor:pointer',transform:`translate(${n._x-n._bw/2},${n._y-n._bh/2})`},g);
+  el('rect',{width:n._bw,height:n._bh,rx:9,fill:ctr?'#0f172a':'#ffffff',stroke:n._col||'#0ea5e9','stroke-width':ctr?3:2},gg);
+  const t=el('text',{x:17,y:22,'font-size':13,'font-weight':'700',fill:ctr?'#ffffff':'#111827'},gg);
+  t.textContent=n.text;
+  n._dl.forEach((l,i)=>{const d=el('text',{x:17,y:22+17+i*12.5,'font-size':10.5,fill:ctr?'#cbd5e1':'#475569'},gg);d.textContent=l;});
+  el('circle',{cx:n._bw-12,cy:12,r:5,fill:STC[n.status]||'#888'},gg);
+  if(n._kids.length){const b=el('text',{x:n._bw-11,y:n._bh-5,'font-size':9,fill:'#64748b'},gg);b.textContent=n._hide?'+':'–';}
+  gg.addEventListener('click',ev=>{ev.stopPropagation();show(n);
+   if(n.children&&n.children.length){n._hide=!n._hide;layout();}});
+ });
+ apply();
+}
+function findP(n){let f=null;const s=m=>{(m.children||[]).forEach(c=>{if(c===n)f=m;else s(c);});};s(DATA);return f||DATA;}
+function show(n){/* SAFE: text/detail là chuỗi tĩnh trong file */document.getElementById('panel').innerHTML='<h3>'+n.text+'</h3><div class=d>'+(n.d||'—')+'</div>';}
+function apply(){document.getElementById('g').setAttribute('transform',`translate(${TX},${TY}) scale(${S})`);}
+function zoom(f){S=Math.min(3,Math.max(0.3,S*f));apply();}
+function reset(){S=1;TX=0;TY=0;apply();}
+(function(){let d=null;const svg=document.getElementById('cv');
+svg.addEventListener('mousedown',e=>{d={x:e.clientX,y:e.clientY,tx:TX,ty:TY};});
+window.addEventListener('mousemove',e=>{if(d){const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;TX=d.tx+(e.clientX-d.x)*vb.width/r.width;TY=d.ty+(e.clientY-d.y)*vb.height/r.height;apply();}});
+window.addEventListener('mouseup',()=>d=null);
+svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.15:0.87);},{passive:false});})();
+layout();
+</script>
+</body>
+</html>
