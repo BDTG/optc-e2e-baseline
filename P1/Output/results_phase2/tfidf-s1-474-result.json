@@ -1,0 +1,29 @@
+{
+ "n": 474,
+ "pos": 9,
+ "k": 5,
+ "seed": 42,
+ "model": "TF-IDF char2-5 50k + LogReg balanced (raw msg concat, no norm)",
+ "ap_oof": 0.4005,
+ "auc_oof": 0.856,
+ "fold_aps": [
+  0.0619,
+  0.1127,
+  0.8333,
+  1.0,
+  0.0312
+ ],
+ "self_label_cv": {
+  "text": "self_label",
+  "ap_oof": 0.5211,
+  "auc_oof": 0.8977,
+  "folds": [
+   0.1556,
+   0.0413,
+   1.0,
+   1.0,
+   0.125
+  ]
+ },
+ "conclusion": "0.89 khong tai hien duoi CV (OOF 0.40 msg / self_label CV). In-sample 0.82-1.0 -> 0.89 kha nang la so khong held-out."
+}
