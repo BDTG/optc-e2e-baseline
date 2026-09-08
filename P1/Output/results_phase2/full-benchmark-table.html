@@ -24,7 +24,7 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </head>
 <body>
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
-<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 26 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 vẫn vua S1</b> + <b style="color:#166534">tier-2 constrained hòa TF-IDF (AUC 0.90 vs 0.85, cùng 40 mẫu)</b></div>
+<div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 27 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 KHÔNG tái hiện dưới CV (OOF 0.40–0.52, pos=9) ⚠️</b> + <b style="color:#166534">tier-2 constrained hòa TF-IDF (xval cùng 40 mẫu: 0.775 vs 0.80 — HÒA, không có vua)</b></div>
 
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
@@ -231,11 +231,11 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 </table>
 
 <div class="note">
-<b>Tổng đã bench 26 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 + <b>Decoder TTP 60</b> + <b>ByT5 S1-only eval 2 + ByT5 v4 fix</b> — 5060Ti trừ TF-IDF CPU.<br>
-<b>Pareto S1 thật:</b> <b>TF-IDF 0.89</b> &gt; Emb 0.50 &gt; ByT5 S1-old 0.075 &gt; v3 bug 0.046 &gt; v4 fix 0.042 &gt; Encoder FT 0.045 ≈ — SD 2000 không giúp. <b>Combined 0.996 (v4) SD-easy</b> không tính S1.<br>
+<b>Tổng đã bench 27 / Catalog 1029 (885 fit 16GB):</b> TF-IDF 2 + Embedding 5 + Classifier 7 + Generative 8 + 8-Filter Sweep 162 + <b>Decoder TTP 60</b> + <b>ByT5 S1-only eval 2 + ByT5 v4 fix</b> — 5060Ti trừ TF-IDF CPU.<br>
+<b>Pareto S1 thật (sau re-check 08/09):</b> TF-IDF 0.89 <b>⚠️ KHÔNG TÁI HIỆN</b> (5 protocol CV: OOF 0.03–0.52, pos=9 quá ít) &gt; Emb 0.50 &gt; ByT5 S1-old 0.075 &gt; v3 bug 0.046 &gt; v4 fix 0.042 &gt; Encoder FT 0.045 ≈ — SD 2000 không giúp. <b>Combined 0.996 (v4) SD-easy</b> không tính S1. Số sạch duy nhất: xval cùng 40 mẫu — <b>HÒA 0.775±0.13 vs 0.80±0.07</b>.<br>
 <b>v4 2026-09-02 fix:</b> parent_chain[-5:] + SD2000 → Combined 0.996 AUC0.992 nhưng S1-only 0.042 ≈ v3 — domain shift OpTC vs SD, cần S1-focused reweight/LoRA trên 39 alerts.<br>
 <b>Decoder TTP (constrained):</b> Qwen0.5B <b>54/60 valid 90% halluc 10% TTP 1/3</b> thắng Qwen1.5B 1/60 valid 2% halluc 98% — <b>0.5B sweet spot decoder</b>; encoder TTP 0% nên decoder thắng ở giải thích TTP sau 8-filter (39 alerts giàu). Warning <code>temperature ignored</code> là cosmetic khi <code>do_sample=False</code>.<br>
-<b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tier2-explain-constrained (A/B/C) + xval CPU, tfidf-cv-results.json + hf-specialist-catalog.csv (1029)
+<b>File nguồn:</b> sweep-loose.json (162), slm-explain-v2-metrics.json (8 gen), classifier-benchmark.json (3 ZS), secbert/deberta-finetuned-result.json (2 FT), embedding-benchmark.json (5 emb), filter-8cascade.json (8), <b>decoder-ttp-benchmark.json (60 alerts)</b>, tier2-explain-constrained (A/B/C) + xval CPU, tfidf-cv-results.json + hf-specialist-catalog.csv (1029) + adgen-bench/adgen-constrained-ttp/adgen-ttp-head (3)
 </div>
 <h2>6) Decoder TTP Constrained — SLM thắng encoder ở TTP (60 alerts, 3 susp, constrained JSON)</h2>
 <table>
@@ -248,9 +248,17 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <table>
 <tr><th>Tập</th><th>Generate cũ</th><th>Constrained (xval 4-fold)</th><th>TF-IDF cùng tập</th><th>Kết luận</th></tr>
 <tr style="background:#ecfdf5"><td><b>S1 40 (12pos+28neg top-rank)</b></td><td>acc 0.30 (toàn MAL)</td><td class="ap">acc <b>0.775±0.13</b> F1 0.617 AUC <b>0.899</b> AP <b>0.825</b></td><td>acc 0.80±0.07 F1 0.675 AUC 0.848 AP 0.763</td><td><span class="badge good">HÒA trong noise</span> — 0.875 tune-trên-tập-đo là lạc quan, số xval mới báo cáo được</td></tr>
-<tr><td>TTP holdout 38 (19 có GT)</td><td>TTP 0/19</td><td class="ap">TTP <b>3/19 = 0.158</b>, verdict AUC 0.34</td><td>— (không giải thích)</td><td>TTP vẫn yếu; chain len 1 không cứu bằng ngưỡng — <b>limitation</b></td></tr>
-<tr><td>SD transfer 30 (pos-only)</td><td>27/30 bịa T1010 ngoài enum</td><td>30/30 <b>T1218 trong enum</b></td><td>—</td><td>Constrained hết bịa 100%</td></tr>
+<tr><td>TTP holdout 38 (19 có GT)</td><td>TTP 0/19</td><td class="ap">TTP <b>3/19 = 0.158</b>, verdict AUC 0.34</td><td>— (không giải thích)</td><td>TTP vẫn yếu; cả 3 hit = đáp án few-shot T1218 (mọi miss cũng T1218) ⇒ <b>số thật ~0</b> — <b>limitation</b></td></tr>
+<tr><td>SD transfer 30 (pos-only)</td><td>27/30 bịa T1010 ngoài enum</td><td>30/30 <b>T1218 trong enum</b></td><td>—</td><td>Constrained hết bịa 100% (nhưng T1218 ăn theo few-shot)</td></tr>
 </table>
 <div class="note">Evidence rule-based → validity 1.0 theo cấu tạo (generate cũ halluc 60-97%). File: tier2-explain-constrained-A/B/C.json + tier2-threshold-xval.json + tier2_explain_eval_constrained.py</div>
+<h2>8) AD-GEN TTP Bench — 704 chain có GT TTP (data auxiliary 235,723 narratives, 09/09) — 3 mức đặt trước của thầy</h2>
+<table>
+<tr><th>Bài đo</th><th>SLM zero/few-shot</th><th>Baseline</th><th>Kết luận</th></tr>
+<tr style="background:#fef2f2"><td><b>TTP accuracy (GT per-chain, 12 TTP × ≥60)</b></td><td class="ap"><b>0.095</b> (67/704; toàn bộ 67 trúng là GT=T1218 = đáp án few-shot; còn lại 0/637 — collapse xác nhận trên 2 domain)</td><td><b>TF-IDF multi-label head AP 0.673</b> (12 TTP, 5,519 chains 80/20: T1055 0.905, T1059 0.884, T1490 0.881… T1071 0.229)</td><td><span class="badge bad">MỨC ÂM</span> (khung thầy: TTP&lt;0.60 + halluc&gt;15%) — SLM 0.5B zero-shot chưa đủ làm TTP-analyst. <b>TTP phải đi FT head; SLM giữ trục giải thích</b>. Sửa giả định "TF-IDF TTP=0": đúng cho free-form, sai cho classification head.</td></tr>
+<tr><td>Hallucination (metric mới: phạt né evidence=none)</td><td><b>0.0</b> — nhưng vì evidence là rule-based (cấu trúc quyết, model không giữ vai trò) ⇒ <b>ghi rõ limitation</b></td><td>—</td><td>Verdict pos-only bench: TP=704 FP=0 toàn MALICIOUS (AUC không tính được trên pos-only)</td></tr>
+<tr><td>Verdict AD-GEN balanced-200 (100+100)</td><td>AUC 0.644 AP 0.654 acc 0.5 (toàn MAL)</td><td>TF-IDF OOF <b>AP 0.916</b> AUC 0.900 (5 fold 0.81–0.97 — signal thật, đối chiếu 2 máy khớp 100%)</td><td>Domain AD-GEN: SLM yếu hơn OpTC S1 (AUC 0.90) — narrative dài 233–181K ký tự khác phân bố S1</td></tr>
+</table>
+<div class="note">N thầy yêu cầu: ≥20 GT/TTP × 12 TTP (đáp ứng: T1059 209, T1003 81, T1574 68, T1071 66, T1562 66, T1055 65…). Không leak: bench pos-only chưa đủ — cần split LAB/REAL khi chạy TTP head SLM. Labels = synthetic analyst LLM-validated (tác giả dataset: Đinh Phương Nam, UIT — đồng nghiệp luận văn; <b>khai báo nguồn, không claim GT forensic OpTC</b>). File: adgen-constrained-ttp.json + adgen-ttp-head.json + adgen-bench.json</div>
 </body>
 </html>
