@@ -17,19 +17,21 @@ DATA = r"C:\Users\BDTG\optc-bench\adgen-ttp-head-data.jsonl"
 OUT = r"C:\Users\BDTG\optc-bench\adgen-ttp-head-slm-result.json"
 KEEP = ["T1059","T1547","T1055","T1543","T1003","T1562","T1490","T1553","T1036","T1070","T1218","T1071"]
 SEED = 42
-EPOCHS = 2
+EPOCHS = int(os.environ.get("EPOCHS", "3"))
 BS = 16
 LR = 2e-4
 MAXLEN = 512
+# Split theo moi truong (dieu kien bat buoc cua thay: khong random split, hoc P0)
+# train = LAB (3682), test = REAL (2840) — T1553/T1070 REAL pos <20 → skip, ghi nho result
 
 random.seed(SEED); torch.manual_seed(SEED)
 
 def main():
-    from sklearn.model_selection import train_test_split
     rows = [json.loads(l) for l in open(DATA, encoding="utf-8")]
-    # split ngau nhien stratified theo label dau tien de co ca LAB/REAL phan bo (file da la tap mal co GT)
-    tr, te = train_test_split(rows, test_size=0.15, random_state=SEED)
-    print(f"train {len(tr)} / test {len(te)}")
+    # LAB = train, REAL = test (khong random — dieu kien thay)
+    tr = [r for r in rows if r.get("src") == "LAB"]
+    te = [r for r in rows if r.get("src") == "REAL"]
+    print(f"train LAB {len(tr)} / test REAL {len(te)}")
     tok = AutoTokenizer.from_pretrained(MODEL)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
