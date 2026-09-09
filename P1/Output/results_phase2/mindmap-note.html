@@ -61,7 +61,7 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'P0 Go/no-go ✓',d:'Errata actor_id #1 (gen_nodeid2msg SUBJECT None). rclone 1 bundle host 201 ecar/eval. TF-IDF+GBM, ModernBERT/DeBERTa ~150M, SLM 3B+8B đúng split.',status:'done'},
  {text:'P1 Baseline ✓',d:'PIDSMAKER harness. Rerun H201/H501/H051. Ghi tập FP từng hệ = test set RQ1a.',status:'done'},
  {text:'P2 Grid HW ◐',d:'1650Ti 4GB local + 5060Ti 16GB thầy (Tailscale USB). Thiếu: đo tranh chấp, KV tách, full grid quant×token.',status:'doing'},
- {text:'P3 Chính ◐',d:'LoRA r16 ckpt-113. ByT5-SD v1→v4 + constrained scoring hòa TF-IDF. TTP collapse T1218. AD-GEN bench: mức Âm (0.095).',status:'doing',children:[
+ {text:'P3 Chính ◐',d:'LoRA r16 ckpt-113. ByT5 v1→v4 + constrained hòa TF-IDF. AD-GEN: zero-shot Âm 0.095 → FT head 0.6966 Dương-thấp.',status:'doing',children:[
   {text:'v1 0.753 → v2 0.832',d:'SD500→1000, lr 1e-5→8e-6, norm sâu: lower + decode -enc + guid/ip/hash.',status:'done'},
   {text:'v3 bug 0.925 → v4 fix',d:'Bug `chain else msg` làm S1/EVTX rỗng → AP ảo SD-heavy. v4 parent_chain[-5:]: Combined 0.996 nhưng S1-only 0.042 ≈ v3 0.046.',status:'done'},
   {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'}]},
@@ -100,11 +100,11 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
   {text:'thr 2.47: TP10 FP3 FN2',d:'pos score [1.84,3.09], neg [1.50,2.65] — tách được, chỉ lệch ngưỡng.',status:'done'}]},
  {text:'FP cmd-None, FN netflow',d:'FP: services→wmiprvse, csrss→svchost cmd None — nhái pattern S1 thiếu mỗi cmd. FN: 8191/8187 chain thuần netflow/file, không process|cmd.',status:'doing'},
  {text:'TTP collapse xác nhận trên 704 GT',d:'AD-GEN bench 704 chain GT: 0.095 (67/704, toàn T1218 — GT=T1218 hit 100%, còn lại 0/637). Cả 3/19 OpTC lẫn 704 AD-GEN → collapse = bias few-shot, số thật ~0.',status:'done'},
- {text:'🌱 Rễ: TTP head trên AD-GEN',d:'SLM zero-shot 0.095 thua TF-IDF multi-label head AP 0.673 (12 TTP, 5.5K chains 80/20). Con đường TTP duy nhất: FT head trên 6.5K GT; SLM giữ trục giải thích. Bảng 3 mức thầy: hiện mức Âm.',status:'doing'},
+ {text:'🌱 Rễ: TTP head trên AD-GEN',d:'Zero-shot 0.095 → FT head SLM 0.6966 (Qwen0.5B, 2 ep, RX 9060 XT ROCm) vs TF-IDF head 0.673 — thắng +0.024, MỨC DƯƠNG-THẤP. T1218 head 0.735 (zero-shot 0). Còn 0.004 tới mức Dương 0.70: cần ep3/LR sweep/split LAB-REAL.',status:'done'},
  {text:'🌱 Rễ: lock ngưỡng',d:'thr 2.47 lock trên fold riêng, đo tập khác cho số sạch.',status:'todo'},
  {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'},
  {text:'🌱 Rễ: TF-IDF 0.89 ⚠️',d:'08/09 tái hiện thất bại: OOF 0.03-0.52 (5 protocol), in-sample 0.82-1.0. pos=9 quá ít. Cần patch bảng thầy + verify Mamba 0.144 (mất nguồn, mamba-ssm fail Windows — chạy WSL2/thầy).',status:'todo'},
- {text:'🌱 GPD3N9T: bench thứ 2',d:'SSH OK (Radmin 26.32.133.135, administrators_authorized_keys). Python 3.12 + venv + sklearn 1.9. AD-GEN 200 + S1 474 khớp 100% Nitro → máy đối chiếu CPU chuẩn.',status:'done'},
+ {text:'🌱 GPD3N9T: bench thứ 2 + GPU ROCm',d:'SSH OK. sklearn khớp 100% Nitro. ROCm 7.2.1 + torch 2.9.1 native Windows: cuda=True, train SLM 27.5ph → head AP 0.6966. Known-issue: TORCH_BLAS_PREFER_HIPBLASLT=0; curand seed treo; transformers phải 4.41.2.',status:'done'},
  {text:'🌱 Rễ: bảng thầy chưa cập nhật',d:'Section 7 vẫn ghi "TF-IDF 0.89 vua" — cần sửa caption hòa + ghi ⚠️ baseline không tái hiện.',status:'todo'},
  {text:'🌱 Rễ: hạn chế data chưa khắc phục',d:'GỐC RỄ: S1 chỉ 12 pos → mọi AP S1-only bất ổn. Đã thử và bế: nhồi SD/EVTX (domain shift), oversample ×5, constrained (fold dao động ±0.14). 2 đường ra: (a) gán nhãn thêm tập FP tầng 1 — RQ1a, bản thân tập FP là contribution; (b) FT trên 39 alerts như Note định; (c) AD-GEN auxiliary: 10,878 mal / 6,522 GT TTP — đã cứu N (12 pos → ≥20/TTP × 12).',status:'doing'}]}
 ]};
