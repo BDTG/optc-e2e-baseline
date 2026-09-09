@@ -65,6 +65,8 @@
   }
  ],
  "mean_AP": 0.3243,
- "baseline_tfidf_head_AP": 0.673,
- "latency_train_s": 2117
+ "latency_train_s": 2117,
+ "baseline_tfidf_head_same_split_AP": 0.3479,
+ "random_split_reference_AP": 0.6966,
+ "split": "LAB->REAL"
 }
