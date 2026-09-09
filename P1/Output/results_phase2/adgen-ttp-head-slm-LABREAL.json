@@ -1,0 +1,70 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "n_train": 3682,
+ "n_test": 2840,
+ "per_ttp": [
+  {
+   "ttp": "T1059",
+   "AP": 0.4874,
+   "n_test_pos": 618
+  },
+  {
+   "ttp": "T1547",
+   "AP": 0.4151,
+   "n_test_pos": 604
+  },
+  {
+   "ttp": "T1055",
+   "AP": 0.6395,
+   "n_test_pos": 179
+  },
+  {
+   "ttp": "T1543",
+   "AP": 0.5967,
+   "n_test_pos": 387
+  },
+  {
+   "ttp": "T1003",
+   "AP": 0.3765,
+   "n_test_pos": 193
+  },
+  {
+   "ttp": "T1562",
+   "AP": 0.1856,
+   "n_test_pos": 120
+  },
+  {
+   "ttp": "T1490",
+   "AP": 0.1378,
+   "n_test_pos": 272
+  },
+  {
+   "ttp": "T1553",
+   "AP": null,
+   "n_test_pos": 0
+  },
+  {
+   "ttp": "T1036",
+   "AP": 0.1236,
+   "n_test_pos": 44
+  },
+  {
+   "ttp": "T1070",
+   "AP": 0.0996,
+   "n_test_pos": 19
+  },
+  {
+   "ttp": "T1218",
+   "AP": 0.4588,
+   "n_test_pos": 46
+  },
+  {
+   "ttp": "T1071",
+   "AP": 0.0463,
+   "n_test_pos": 48
+  }
+ ],
+ "mean_AP": 0.3243,
+ "baseline_tfidf_head_AP": 0.673,
+ "latency_train_s": 2117
+}
