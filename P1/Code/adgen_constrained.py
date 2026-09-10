@@ -21,8 +21,10 @@ TTP_ENUM = ["T1003", "T1059", "T1053", "T1071", "T1218", "T1027",
 VERDICTS = ["MALICIOUS", "BENIGN"]
 
 FEWSHOT = (
-    'Example: Chain: C:\\Windows\\System32\\rundll32.exe | cmd: rundll32 systemnet.dll -E\n'
-    '{"verdict":"MALICIOUS","technique_id":"T1218","evidence_field":"cmdline","confidence":"high"}\n'
+    'Example: Chain: powershell.exe | cmd: powershell -nop -w hidden -enc SQBFAFgAIA==\n'
+    '{"verdict":"MALICIOUS","technique_id":"T1059","evidence_field":"cmdline","confidence":"high"}\n'
+    'Example: Chain: svchost.exe | chrome.exe | cmd: none\n'
+    '{"verdict":"BENIGN","technique_id":"none","evidence_field":"none","confidence":"high"}\n'
 )
 PREFIX = (
     "You are a security analyst. Classify this Windows process provenance chain.\n"
@@ -73,7 +75,7 @@ def main():
     tok = AutoTokenizer.from_pretrained(BASE, padding_side="left")
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float16, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16, device_map="auto")
     try:
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, CKPT)
@@ -144,3 +146,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
