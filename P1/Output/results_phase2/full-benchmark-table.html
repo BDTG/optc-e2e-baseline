@@ -278,5 +278,14 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr style="background:#fef2f2"><td><b>Qwen2.5-1.5B-Instruct (base)</b></td><td class="ap"><b>0.2628</b></td><td class="ap"><b>0.1236</b></td><td>0.0</td><td>0.448s</td><td>Prior BENIGN mạnh (FN 519/704, pred none 519) — argmax không ngưỡng phạt model lớn; TTP thấp nhất. <b>Lớn hơn ≠ giải thích tốt hơn ở zero-shot.</b></td></tr>
 </table>
 <div class="note">Kết luận trục giải thích (đúng khung 3 mức thầy): TTP 0.29/0.30/0.12 — <b>mức Âm cả 3 size</b>, hal 0.0 cả 3. Bias few-shot đổi chỗ đã chứng minh ở section 8 (T1218×704 → T1059×656). File: slm-explain-{05b,11b,15b,all}.json + explain_{05b,11b,15b}.py + summarize_explain.py. Bench pos-only 704 (chưa đo FP trên benign cùng split — ghi rõ).</div>
+<h2>10b) P2 bổ sung — balanced-200 (verdict acc THẬT, có benign) + 3-shot (chốt collapse)</h2>
+<table>
+<tr><th>Model / setup</th><th>verdict_acc (TP/TN/FP/FN)</th><th>ttp_acc</th><th>hal</th><th>Kết luận</th></tr>
+<tr><td><b>0.5B balanced-200</b></td><td class="ap"><b>0.51</b> (31/71/29/69)</td><td class="ap">0.185</td><td>0.0</td><td>Số pos-only 0.94 chỉ là prior artifact — có benign về đoán mò</td></tr>
+<tr><td><b>1.1B balanced-200</b></td><td class="ap"><b>0.50</b> (100/0/100/0, phán tất cả MAL)</td><td class="ap">0.185</td><td>0.0</td><td>Score sai (0.64) còn cao hơn đúng (0.61) — tune ngưỡng không cứu</td></tr>
+<tr><td><b>1.5B balanced-200</b></td><td class="ap"><b>0.515</b> (16/87/13/84, phán gần hết BENIGN)</td><td class="ap">0.077</td><td>0.0</td><td>Score 2 lớp chồng lấn — yếu thật, không phải lệch ngưỡng</td></tr>
+<tr style="background:#fef2f2"><td><b>0.5B 3-shot (T1059+T1003+BENIGN), 704 bench</b></td><td class="ap"><b>0.1009</b> (TP 71/FN 633)</td><td class="ap"><b>0.0398</b> (T1003×633)</td><td>0.0</td><td><span class="badge bad">Thêm example PHÁ LUÔN verdict</span> — collapse tuyệt đối, prompt hết đường</td></tr>
+</table>
+<div class="note">Kết luận P2 trục giải thích zero/few-shot: <b>Âm cả 3 size, cả 2 prompt</b>. Con đường duy nhất còn số là FT head (A1/A2 section 9). File: slm-explain-bal-{05b,11b,15b,all}.json + raw-explain-3shot-05b.json + explain_bal_*.py + explain_3shot_05b.py.</div>
 </body>
 </html>
