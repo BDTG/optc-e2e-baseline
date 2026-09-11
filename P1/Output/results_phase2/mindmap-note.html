@@ -64,7 +64,9 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'P3 Chính ◐',d:'Constrained hòa TF-IDF. AD-GEN: zero-shot 0.095 Âm; head random-split 0.70 ảo → LAB→REAL 0.32 Âm (SLM 7/9 TTP thắng TF-IDF riêng lẻ).',status:'doing',children:[
   {text:'v1 0.753 → v2 0.832',d:'SD500→1000, lr 1e-5→8e-6, norm sâu: lower + decode -enc + guid/ip/hash.',status:'done'},
   {text:'v3 bug 0.925 → v4 fix',d:'Bug `chain else msg` làm S1/EVTX rỗng → AP ảo SD-heavy. v4 parent_chain[-5:]: Combined 0.996 nhưng S1-only 0.042 ≈ v3 0.046.',status:'done'},
-  {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'}]},
+  {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'},
+  {text:'DOMAIN SHIFT là gì? (chốt 2 domain)',d:'Model học pattern "hàng xóm" của tập train — khi test ở thế giới khác phân bố, tin hiệu học được mất giá trị. SD→S1: 0.996→0.042 (OpTC). LAB→REAL: 0.70→0.32 (AD-GEN). TF-IDF không "học" cũng rơi -0.325 như SLM -0.372 → gap thuộc về DỮ LIỆU, không phải model.',status:'done'},
+  {text:'🌱 Rễ: domain-adapt REAL',d:'A2 XONG 0.4732 vs 0.4591. A1 XONG 0.3639. A3 XONG: 1.5B partial 0.2639 — size thua 0.5B full-FT; full-FT 1.5B sạch cần CUDA (máy thầy).',status:'todo'}]},
  {text:'P4 Khái quát ☐',d:'Temporal train-sớm/test-muộn, threshold transfer (drift ×lần), tập evasion+injection, attack range Atomic/Splunk (SD 3133/99 attack đã sẵn).',status:'todo'},
  {text:'P5 Viết ☐',d:'Sau khi biết claim thật: constrained hòa TF-IDF + TTP limitation.',status:'todo'}]},
 {text:'📏 Metric · Output',d:'Chính: recall@1/10/100 alert/host/ngày + AUC-PR + MCC. Cost: p95/p99, prefill≠decode, CPU-s, Wh, $ cuối.',status:'info',children:[
@@ -100,7 +102,7 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
   {text:'thr 2.47: TP10 FP3 FN2',d:'pos score [1.84,3.09], neg [1.50,2.65] — tách được, chỉ lệch ngưỡng.',status:'done'}]},
  {text:'FP cmd-None, FN netflow',d:'FP: services→wmiprvse, csrss→svchost cmd None — nhái pattern S1 thiếu mỗi cmd. FN: 8191/8187 chain thuần netflow/file, không process|cmd.',status:'doing'},
  {text:'TTP collapse xác nhận + thử nghiệm đổi example',d:'704 GT: few-shot T1218 → 0.095 (67/704, toàn T1218). ĐỔI example T1059+BENIGN: bias ĐỔI CHỖ (T1059×656/704), TTP 0.288, verdict 0.939, lat 0.199s GPU AMD (RX 9060 XT ROCm). Model chép example, không đọc nội dung — bằng chứng định lượng cho Âm.',status:'done'},
- {text:'🌱 Rễ: TTP head trên AD-GEN',d:'Random-split 0.6966 đã LOẠI (vi phạm không-leak — P0). Số thật LAB→REAL: SLM 0.3243 vs TF-IDF 0.3479 — MỨC ÂM, SLM thua head baseline 0.02 nhưng thắng 7/9 TTP riêng lẻ. Domain shift LAB→REAL −0.37 điểm. Path tiếp: 3 ep LAB→REAL domain-adapt / REAL-in-context / déclarer âm có phân tích.',status:'doing'},
+ {text:'🌱 Rễ: TTP head trên AD-GEN',d:'A1 ensemble 0.3639 (SLM fp32 0.3517 lần đầu VƯỢT TF-IDF sạch). A2 domain-adapt: SLM 0.4732 vs TF 0.4591. A3 size-test 1.5B: full-FT fp16 NaN, LoRA xung đột lib, partial-FT 0.2639 < 0.5B — CHỐT: size không phải đáp án, domain shift mới là gốc. Trajectory 0.32→0.36→0.47, vẫn Âm.',status:'doing'},
  {text:'🌱 Rễ: lock ngưỡng',d:'thr 2.47 lock trên fold riêng, đo tập khác cho số sạch.',status:'todo'},
  {text:'🌱 Rễ: sang P4',d:'Temporal split + threshold transfer + tập evasion/injection.',status:'todo'},
  {text:'🌱 Rễ: TF-IDF 0.89 ⚠️',d:'08/09 tái hiện thất bại: OOF 0.03-0.52 (5 protocol), in-sample 0.82-1.0. pos=9 quá ít. Cần patch bảng thầy + verify Mamba 0.144 (mất nguồn, mamba-ssm fail Windows — chạy WSL2/thầy).',status:'todo'},
