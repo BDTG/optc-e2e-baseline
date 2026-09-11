@@ -1,0 +1,9 @@
+{
+ "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+ "n": 704,
+ "verdict_acc": 1.0,
+ "ttp_acc": 0.2955,
+ "hal": 0.0,
+ "latency_s": 0.406,
+ "ttp_scored": 704
+}
