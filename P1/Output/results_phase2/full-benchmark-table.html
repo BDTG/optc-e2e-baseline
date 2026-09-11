@@ -262,5 +262,13 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr><td>Verdict AD-GEN balanced-200 (100+100)</td><td>AUC 0.644 AP 0.654 acc 0.5 (toàn MAL)</td><td>TF-IDF OOF <b>AP 0.916</b> AUC 0.900 (5 fold 0.81–0.97 — signal thật, đối chiếu 2 máy khớp 100%)</td><td>Domain AD-GEN: SLM yếu hơn OpTC S1 (AUC 0.90) — narrative dài 233–181K ký tự khác phân bố S1</td></tr>
 </table>
 <div class="note">N thầy yêu cầu: ≥20 GT/TTP × 12 TTP (đáp ứng: T1059 209, T1003 81, T1574 68, T1071 66, T1562 66, T1055 65…). Không leak: bench pos-only chưa đủ — cần split LAB/REAL khi chạy TTP head SLM. Labels = synthetic analyst LLM-validated (tác giả dataset: Đinh Phương Nam, UIT — đồng nghiệp luận văn; <b>khai báo nguồn, không claim GT forensic OpTC</b>). File: adgen-constrained-ttp.json + adgen-ttp-head.json + adgen-bench.json</div>
+<h2>9) P3b "tăng lên" — ensemble + domain-adapt + size-test (RX 9060 XT, ROCm 7.2.1, split không-leak)</h2>
+<table>
+<tr><th>Bài đo</th><th>SLM</th><th>Baseline</th><th>Kết luận</th></tr>
+<tr style="background:#ecfdf5"><td><b>A1 ensemble SLM+TF-IDF (LAB→REAL)</b></td><td class="ap">SLM fp32 <b>0.3517</b> (fix NaN bằng fp32+clip)</td><td>TF-IDF 0.3227 → <b>ensemble w=0.3: 0.3639</b></td><td><span class="badge good">Lần đầu SLM vượt baseline sạch</span> — fp32 ổn định hơn fp16 (+0.027 so với bản fp16 0.3243)</td></tr>
+<tr style="background:#ecfdf5"><td><b>A2 domain-adapt temporal REAL</b> (train LAB+REAL-sớm 70% → test REAL-muộn 30%)</td><td class="ap"><b>0.4732</b> (thắng 7/11 TTP: T1059 0.608, T1055 0.803, T1490 0.923)</td><td>TF-IDF cùng split 0.4591</td><td>Adapt hiệu quả: cả hai +0.12–0.14. Vẫn Âm nhưng trajectory <b>0.32→0.36→0.47</b></td></tr>
+<tr style="background:#fef2f2"><td><b>A3 size-test Qwen2.5-1.5B (3×)</b> — thay Qwen3-1.7B vì transformers 4.41.2 (pin ROCm) chưa hỗ trợ Qwen3</td><td class="ap">partial-FT (last2+head, 93.6M): <b>0.2639</b>; full-FT fp16 <b>NaN ngay</b>; LoRA peft 0.20 xung đột lib</td><td>0.5B full-FT 0.3517, TF 0.3227</td><td><span class="badge bad">Size không phải đáp án</span> — tuning depth > size ở đây; full-FT 1.5B sạch cần CUDA (máy thầy 5060Ti). <b>Chốt: domain shift là gốc.</b></td></tr>
+</table>
+<div class="note">File: p3b-ensemble-result.json + p3b-domainadapt-result.json + p3b-qwen15-partial-result.json (+ NaN status full-FT/LoRA). Script: optc-bench/a1_full.py, a2.py, a3.py, a3lora.py, a3p.py. Train: A1 ~2h, A2 ~3.1h, A3-partial ~3.1h trên RX 9060 XT.</div>
 </body>
 </html>
