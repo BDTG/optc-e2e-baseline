@@ -1,0 +1,44 @@
+[
+ {
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "n": 200,
+  "verdict_acc": 0.51,
+  "TP": 31,
+  "TN": 71,
+  "FP": 29,
+  "FN": 69,
+  "ttp_acc": 0.1846,
+  "ttp_scored": 65,
+  "hal": 0.0,
+  "score_median_correct": 0.0,
+  "score_median_wrong": 0.0
+ },
+ {
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "n": 200,
+  "verdict_acc": 0.5,
+  "TP": 100,
+  "TN": 0,
+  "FP": 100,
+  "FN": 0,
+  "ttp_acc": 0.1846,
+  "ttp_scored": 65,
+  "hal": 0.0,
+  "score_median_correct": 0.6108,
+  "score_median_wrong": 0.6353
+ },
+ {
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "n": 200,
+  "verdict_acc": 0.515,
+  "TP": 16,
+  "TN": 87,
+  "FP": 13,
+  "FN": 84,
+  "ttp_acc": 0.0769,
+  "ttp_scored": 65,
+  "hal": 0.0,
+  "score_median_correct": -0.6007,
+  "score_median_wrong": -0.2353
+ }
+]

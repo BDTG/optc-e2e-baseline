@@ -1,0 +1,14 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "n": 200,
+ "verdict_acc": 0.51,
+ "TP": 31,
+ "TN": 71,
+ "FP": 29,
+ "FN": 69,
+ "ttp_acc": 0.1846,
+ "ttp_scored": 65,
+ "hal": 0.0,
+ "score_median_correct": 0.0,
+ "score_median_wrong": 0.0
+}

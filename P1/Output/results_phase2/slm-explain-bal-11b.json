@@ -1,0 +1,14 @@
+{
+ "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+ "n": 200,
+ "verdict_acc": 0.5,
+ "TP": 100,
+ "TN": 0,
+ "FP": 100,
+ "FN": 0,
+ "ttp_acc": 0.1846,
+ "ttp_scored": 65,
+ "hal": 0.0,
+ "score_median_correct": 0.6108,
+ "score_median_wrong": 0.6353
+}
