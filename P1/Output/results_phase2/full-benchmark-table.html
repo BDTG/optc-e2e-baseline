@@ -270,5 +270,13 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr style="background:#fef2f2"><td><b>A3 size-test Qwen2.5-1.5B (3×)</b> — thay Qwen3-1.7B vì transformers 4.41.2 (pin ROCm) chưa hỗ trợ Qwen3</td><td class="ap">partial-FT (last2+head, 93.6M): <b>0.2639</b>; full-FT fp16 <b>NaN ngay</b>; LoRA peft 0.20 xung đột lib</td><td>0.5B full-FT 0.3517, TF 0.3227</td><td><span class="badge bad">Size không phải đáp án</span> — tuning depth > size ở đây; full-FT 1.5B sạch cần CUDA (máy thầy 5060Ti). <b>Chốt: domain shift là gốc.</b></td></tr>
 </table>
 <div class="note">File: p3b-ensemble-result.json + p3b-domainadapt-result.json + p3b-qwen15-partial-result.json (+ NaN status full-FT/LoRA). Script: optc-bench/a1_full.py, a2.py, a3.py, a3lora.py, a3p.py. Train: A1 ~2h, A2 ~3.1h, A3-partial ~3.1h trên RX 9060 XT.</div>
+<h2>10) P2 — Trục giải thích SLM: chỉ acc + hal, 3 size base-sạch (704 chain GT, few-shot cân bằng, không TF theo ý thầy)</h2>
+<table>
+<tr><th>Model</th><th>verdict_acc</th><th>ttp_acc</th><th>hal</th><th>latency</th><th>Nhận xét</th></tr>
+<tr style="background:#ecfdf5"><td><b>Qwen2.5-0.5B-Instruct (base)</b></td><td class="ap"><b>0.9389</b></td><td class="ap"><b>0.2884</b></td><td>0.0</td><td>0.206s</td><td>Base == LoRA-113 cũ (0.9389/0.2884 y hệt) ⇒ <b>LoRA không đóng góp gì cho scoring — bỏ LoRA</b></td></tr>
+<tr style="background:#ecfdf5"><td><b>TinyLlama-1.1B-Chat (thay Llama-1B gated)</b></td><td class="ap"><b>1.0</b></td><td class="ap"><b>0.2955</b></td><td>0.0</td><td>0.406s</td><td>Verdict tuyệt đối (prior MAL mạnh); TTP ≈ 0.5B — <b>size 2× không cải thiện TTP</b></td></tr>
+<tr style="background:#fef2f2"><td><b>Qwen2.5-1.5B-Instruct (base)</b></td><td class="ap"><b>0.2628</b></td><td class="ap"><b>0.1236</b></td><td>0.0</td><td>0.448s</td><td>Prior BENIGN mạnh (FN 519/704, pred none 519) — argmax không ngưỡng phạt model lớn; TTP thấp nhất. <b>Lớn hơn ≠ giải thích tốt hơn ở zero-shot.</b></td></tr>
+</table>
+<div class="note">Kết luận trục giải thích (đúng khung 3 mức thầy): TTP 0.29/0.30/0.12 — <b>mức Âm cả 3 size</b>, hal 0.0 cả 3. Bias few-shot đổi chỗ đã chứng minh ở section 8 (T1218×704 → T1059×656). File: slm-explain-{05b,11b,15b,all}.json + explain_{05b,11b,15b}.py + summarize_explain.py. Bench pos-only 704 (chưa đo FP trên benign cùng split — ghi rõ).</div>
 </body>
 </html>

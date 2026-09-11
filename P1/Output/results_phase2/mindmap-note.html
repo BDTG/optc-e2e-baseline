@@ -61,7 +61,7 @@ const DATA={text:'SLM tier-2 × OpTC',d:'Tầng 2 trên ~10²–10³ candidate/h
  {text:'P0 Go/no-go ✓',d:'Errata actor_id #1 (gen_nodeid2msg SUBJECT None). rclone 1 bundle host 201 ecar/eval. TF-IDF+GBM, ModernBERT/DeBERTa ~150M, SLM 3B+8B đúng split.',status:'done'},
  {text:'P1 Baseline ✓',d:'PIDSMAKER harness. Rerun H201/H501/H051. Ghi tập FP từng hệ = test set RQ1a.',status:'done'},
  {text:'P2 Grid HW ◐',d:'1650Ti 4GB local + 5060Ti 16GB thầy (Tailscale USB). Thiếu: đo tranh chấp, KV tách, full grid quant×token.',status:'doing'},
- {text:'P3 Chính ◐',d:'Constrained hòa TF-IDF. AD-GEN: zero-shot 0.095 Âm; head random-split 0.70 ảo → LAB→REAL 0.32 Âm (SLM 7/9 TTP thắng TF-IDF riêng lẻ).',status:'doing',children:[
+ {text:'P2 tier-2 giải thích ◐ (thầy: P2 chứ, chỉ SLM acc+hal)',d:'3 size base-sạch 704 GT: 0.5B 0.94/0.29, 1.1B 1.0/0.30, 1.5B 0.26/0.12 — hal 0 cả 3. Mức Âm cả 3. LoRA-113 vô dụng (base y hệt). Bỏ TF baseline theo ý thầy.',status:'doing',children:[
   {text:'v1 0.753 → v2 0.832',d:'SD500→1000, lr 1e-5→8e-6, norm sâu: lower + decode -enc + guid/ip/hash.',status:'done'},
   {text:'v3 bug 0.925 → v4 fix',d:'Bug `chain else msg` làm S1/EVTX rỗng → AP ảo SD-heavy. v4 parent_chain[-5:]: Combined 0.996 nhưng S1-only 0.042 ≈ v3 0.046.',status:'done'},
   {text:'KL: SD không transfer',d:'SD mshta one-liner vs S1 svchost 3 tầng khác phân bố. 0.996 là SD-easy.',status:'doing'},

@@ -1,0 +1,9 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "n": 704,
+ "verdict_acc": 0.9389,
+ "ttp_acc": 0.2884,
+ "hal": 0.0,
+ "latency_s": 0.206,
+ "ttp_scored": 704
+}
