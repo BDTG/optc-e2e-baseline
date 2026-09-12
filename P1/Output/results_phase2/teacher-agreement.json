@@ -1,0 +1,24 @@
+{
+ "teacher_vs_GT": {
+  "verdict_acc": 0.0398,
+  "ttp_acc": 0.0994,
+  "hal": 0.0,
+  "action_acc_actionable": 0.0301,
+  "n": 704
+ },
+ "student_05b_vs_teacher": {
+  "verdict": 0.101,
+  "ttp": 0.305,
+  "action": 0.101
+ },
+ "student_11b_vs_teacher": {
+  "verdict": 0.04,
+  "ttp": 0.239,
+  "action": 0.037
+ },
+ "student_15b_vs_teacher": {
+  "verdict": 0.726,
+  "ttp": 0.547,
+  "action": 0.724
+ }
+}
