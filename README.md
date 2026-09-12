@@ -217,24 +217,32 @@ Tất cả commit push lên GitHub: https://github.com/BDTG/optc-e2e-baseline
 
 ---
 
-# OpTC × SLM tier-2 — P2: SLM trên trục giải thích (chỉ acc + hal)
+# P2 — SLM trên trục giải thích (chỉ acc + hal, không baseline TF)
 
-Luận văn: detector đồ thị tầng 1 (cascade 2250→39 alerts) + SLM tầng 2 giải thích.
-Repo này: code + số P2 (explanation-axis) và P3b (FT head). Không baseline TF (theo hướng thầy).
+Tier-2 chạy sau detector đồ thị tầng 1 (cascade 2250→39 alerts). Chỉ đo SLM trên
+trục giải thích: `verdict_acc + ttp_acc + hal`.
 
-## 1. Môi trường
+## 1. Yêu cầu môi trường (máy bất kỳ)
 
-| Máy | GPU | Stack |
-|---|---|---|
-| GPD3N9T (chạy chính) | AMD RX 9060 XT 16GB | Python 3.12 venv `C:\Users\BDTG\venv-ml`, torch 2.9.1+rocm7.2.1, transformers **4.41.2** (pin — bản mới hơn gãy `torch.distributed` trên ROCm Windows) |
-| Nitro | GTX 1650Ti 4GB | torch 2.11+cu128 |
+- Python **3.12** (khuyến nghị venv riêng)
+- GPU: NVIDIA (CUDA) **hoặc** AMD RX 9000 + ROCm 7.2.1 (Windows) **hoặc** CPU
+  (CPU chỉ chạy được baseline sklearn, không chạy SLM)
+- transformers **== 4.41.2** (pin có lý do — xem mục 5.3)
 
-Biến môi trường bắt buộc trên AMD (known-issue hipBLASLt):
-```bat
-set TORCH_BLAS_PREFER_HIPBLASLT=0
+```bash
+python -m venv venv-ml
+# Windows:
+venv-ml\Scripts\activate
+# Linux:
+source venv-ml/bin/activate
+
+# Torch — chọn 1 dòng theo GPU:
+pip install torch --index-url https://download.pytorch.org/whl/cu128            # NVIDIA
+pip install --no-cache-dir https://repo.radeon.com/rocm/windows/rocm-rel-7.2.1/torch-2.9.1+rocm7.2.1-cp312-cp312-win_amd64.whl  # AMD RX 9000
+pip install scikit-learn pandas numpy transformers==4.41.2 peft accelerate datasets sentencepiece protobuf
 ```
 
-## 2. Model dùng — link tải (toàn bộ public, không cần token)
+## 2. Model (public, không cần token)
 
 | Ký hiệu | Model | Link |
 |---|---|---|
@@ -242,35 +250,37 @@ set TORCH_BLAS_PREFER_HIPBLASLT=0
 | 1.1B | TinyLlama/TinyLlama-1.1B-Chat-v1.0 (thay Llama-3.2-1B gated) | https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0 |
 | 1.5B | Qwen/Qwen2.5-1.5B-Instruct | https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct |
 
-Tự động tải khi chạy lần đầu (HF cache). LoRA cũ `P1/Output/models/lora-05b/checkpoint-113` đã chứng minh **vô dụng cho scoring** (base cho số y hệt) — không dùng nữa.
+Tự động tải khi chạy lần đầu (HF cache). LoRA cũ (`P1/Output/models/lora-05b/`)
+đã chứng minh vô dụng cho scoring (base cho số y hệt) — không dùng nữa.
 
-## 3. Dữ liệu
+## 3. Dữ liệu (không commit — xem .gitignore)
 
-- AD-GEN gốc (235,723 narratives, synthetic-validated, Đ.P.Nam/UIT): https://huggingface.co/datasets/namhop88/AD-GEN
-  - `P1/Output/data/adgen/LAB/LAB.jsonl` (642MB) + `REAL/REAL.jsonl` (1.3GB) — tải 1 lần, **không commit** (gitignore).
-- Adapter có sẵn: `P1/Code/convert_adgen.py` → `P1/Output/data/adgen-chains.jsonl` (239,815 chains)
-- Bench GT: `P1/Output/data/adgen-ttp-bench.jsonl` (709 chain, 12 TTP) — build bằng `P1/Code/build_adgen_ttpbench.py`
-- Balanced: `P1/Output/data/adgen-chains-balanced.jsonl` (200: 100 mal + 100 ben)
-
-## 4. Cách chạy — trục giải thích 3 size (ra acc + hal)
-
-```bat
-cd C:\Users\BDTG\Desktop\Backup\OpTC-thesis
-set TORCH_BLAS_PREFER_HIPBLASLT=0
-REM bench 704 GT (TTP acc + hal):
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_05b.py
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_11b.py
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_15b.py
-REM balanced-200 (verdict acc thật, có benign):
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_05b.py
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_11b.py
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_15b.py
-REM tong hop output sach (chi acc + hal):
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\summarize_explain.py
-C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\summarize_bal.py
+1. Tải AD-GEN (synthetic-validated, Đ.P.Nam/UIT — khai báo nguồn, không claim GT forensic):
+   https://huggingface.co/datasets/namhop88/AD-GEN
+2. Đặt vào: `P1/Output/data/adgen/LAB/LAB.jsonl` và `P1/Output/data/adgen/REAL/REAL.jsonl`
+3. Chạy adapter + build bench (CPU, vài phút):
+```bash
+python P1/Code/convert_adgen.py      # -> P1/Output/data/adgen-chains.jsonl (239,815 chains)
+python P1/Code/build_adgen_ttpbench.py  # -> P1/Output/data/adgen-ttp-bench.jsonl (709 chain GT, 12 TTP)
 ```
 
-Output (đúng format thầy duyệt — mỗi model 1 file, chỉ acc + hal):
+## 4. Cách chạy — trục giải thích 3 size
+
+```bash
+# Bench 704 GT (TTP acc + hal):
+python P1/Code/explain_05b.py
+python P1/Code/explain_11b.py
+python P1/Code/explain_15b.py
+# Balanced-200 (verdict acc thật, có benign):
+python P1/Code/explain_bal_05b.py
+python P1/Code/explain_bal_11b.py
+python P1/Code/explain_bal_15b.py
+# Tổng hợp output sạch (chỉ acc + hal):
+python P1/Code/summarize_explain.py
+python P1/Code/summarize_bal.py
+```
+
+Output (mỗi model 1 file JSON):
 - `P1/Output/results_phase2/slm-explain-{05b,11b,15b,all}.json` — bench 704
 - `P1/Output/results_phase2/slm-explain-bal-{05b,11b,15b,all}.json` — balanced-200
 
@@ -279,16 +289,25 @@ Output (đúng format thầy duyệt — mỗi model 1 file, chỉ acc + hal):
  "verdict_acc": 0.9389, "ttp_acc": 0.2884, "hal": 0.0, "latency_s": 0.206}
 ```
 
-## 5. FT head (P3b, cần GPU) — con đường duy nhất còn số
+## 5. Known issues (ghi để người sau khỏi vấp lại)
 
-```bat
-C:\Users\BDTG\venv-ml\Scripts\python.exe C:\Users\BDTG\optc-bench\a1_full.py   REM ensemble (TF-IDF + SLM fp32)
-C:\Users\BDTG\venv-ml\Scripts\python.exe C:\Users\BDTG\optc-bench\a2.py        REM domain-adapt temporal REAL
-```
-Script P3b đã đưa hết vào `P1/Code/p3b/`. Kết quả: `p3b-ensemble-result.json` (0.3639), `p3b-domainadapt-result.json` (SLM 0.4732).
+1. **AMD ROCm Windows — bắt buộc:** `set TORCH_BLAS_PREFER_HIPBLASLT=0`
+   (training/fine-tune treo hoặc crash nếu thiếu; curand seed cũng treo — chỉ dùng matmul/attention).
+2. **transformers pin 4.41.2:** bản mới import vô điều kiện `torch.distributed.tensor`,
+   thứ không tồn tại trong build ROCm Windows → `No module named 'torch._C._distributed_c10d'`.
+3. **Qwen không có bản 1B:** mốc "1b" dùng TinyLlama-1.1B-Chat (Llama-3.2-1B gated cần token).
+4. **Qwen3 cần transformers mới** (xung đột với pin 4.41.2) → size-test >1.5B cần máy CUDA.
+5. **1.5B full-FT fp16 NaN ngay** trên ROCm; fp32 cần ~20GB VRAM (vượt 16GB) → dùng partial-FT
+   (đóng băng base, train 2 block cuối + head) hoặc LoRA.
 
-## 6. Đọc kết quả nhanh (báo thầy)
+## 6. FT head (P3b, cần GPU ~16GB) — con đường duy nhất còn số
+
+Script đã đưa hết vào `P1/Code/p3b/` (`a1_full.py` ensemble, `a2.py` domain-adapt,
+`a3p.py` partial-FT). Kết quả: `p3b-ensemble-result.json` (0.3639),
+`p3b-domainadapt-result.json` (SLM 0.4732).
+
+## 7. Đọc kết quả nhanh
 
 - `P1/Output/results_phase2/full-benchmark-table.html` — section 8/9/10/10b (mở bằng browser)
-- `P1/Output/results_phase2/chuong-p2-draft.md` — draft chương P2 (7 mục)
+- `P1/Output/results_phase2/chuong-p2-draft.md` — draft chương P2
 - `P1/Output/results_phase2/mindmap-note.html` + `roadmap-note.html` — vị trí hiện tại
