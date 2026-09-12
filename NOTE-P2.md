@@ -50,3 +50,8 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 ## 6. Còn lại
 - Chờ duyệt: full-FT 1.5B/3B trên CUDA, hoặc chốt Âm chuyển P4 (+B1/B2).
 - Chạy lại: xem README mục P2. Code + số: đã push GitHub.
+
+## 7. Tài liệu liên quan trong repo (không chép lại để NOTE ngắn)
+- Cấu trúc repo, setup end-to-end P0/P1, restore từ patches: xem README mục 1, 3, 8.
+- Kết quả P0 (Flash/Magic) + P1 (Velox): README mục 2, 4, 5.
+- Chi tiết P2 đầy đủ (bảng section 8/9/10/10b, mindmap, draft chương): `P1/Output/results_phase2/`.
