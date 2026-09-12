@@ -48,7 +48,7 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - LoRA-113 vô dụng (base cho số y hệt) — đã bỏ.
 
 ## 6. Teacher + audit mới (12-13/09)
-- Teacher Qwen2.5-7B scoring: đang chạy resume (checkpoint 50 mẫu).
+- Teacher Qwen2.5-7B scoring XONG: vs GT verdict 0.04/TTP 0.10 (tệ hơn cả student) — to hơn không dạy được; agreement cao nhất ở 15B (0.73 verdict) chỉ vì cùng thiên BENIGN.
 - Giám khảo Muse Spark 40 mẫu: vs GT 0.30/0.225; student-vs-judge cao nhất 15B verdict 0.60 (cùng thiên BENIGN), TTP agree 0.05–0.15.
 - Audit: narrative leak tag `[hint:*]`; student input sạch 0 hint; dual-use (Deep Freeze/bcdedit) chặn trên mọi acc-vs-GT.
 - Human-eval pack 40 blind + key + teacher reference: sẵn sàng gửi người chấm.

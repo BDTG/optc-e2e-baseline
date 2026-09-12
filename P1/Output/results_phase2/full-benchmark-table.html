@@ -296,6 +296,15 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr><td><b>Student-1.1B vs judge-full</b></td><td class="ap">0.30</td><td class="ap">0.125</td><td class="ap">0.20</td></tr>
 <tr><td><b>Student-1.5B vs judge-full</b></td><td class="ap">0.60</td><td class="ap">0.05</td><td class="ap">0.55</td></tr>
 </table>
+<table>
+<tr><th>Teacher Qwen2.5-7B (704, chunked-4, 10.8s/mẫu)</th><th>verdict</th><th>TTP</th><th>action(actionable)</th><th>hal</th></tr>
+<tr style="background:#fef2f2"><td><b>Teacher vs GT</b></td><td class="ap"><b>0.0398</b> (TP28/FN676)</td><td class="ap"><b>0.0994</b></td><td>0.788 / <b>0.030</b></td><td>0.0</td></tr>
+<tr><td>Student-0.5B vs teacher</td><td class="ap">0.101</td><td class="ap">0.305</td><td class="ap">0.101</td><td rowspan="3">15B đồng ý teacher nhất vì <b>cả hai thiên BENIGN</b> — agreement không đồng nghĩa đúng. Mọi agreement phải đọc kèm teacher-vs-GT 0.04, nếu không sẽ lừa.</td></tr>
+<tr><td>Student-1.1B vs teacher</td><td class="ap">0.040</td><td class="ap">0.239</td><td class="ap">0.037</td></tr>
+<tr><td>Student-1.5B vs teacher</td><td class="ap">0.726</td><td class="ap">0.547</td><td class="ap">0.724</td></tr>
+</table>
+<div class="note"><b>Kết luận teacher:</b> 7B zero-shot tệ hơn cả 3 student ở verdict (prior BENIGN cực đoan) — <b>to hơn ≠ dạy được</b> trên task này. Teacher chỉ dùng được làm đối chiếu phân bố, không làm chuẩn đúng.
+File: raw-explain-teacher.json + teacher-agreement.json.</div>
 <div class="note"><b>Audit then chốt:</b> narrative chứa tag <code>[hint:T1490]</code> inline = leak nhãn cho ai dùng full text;
 input student (chain stubs) verify <b>sạch 0 hint/240K dòng</b> — số cũ đứng vững.
 Case bcdedit: parent Deep Freeze hợp pháp → dual-use thật (admin và attacker y hệt nhau).
