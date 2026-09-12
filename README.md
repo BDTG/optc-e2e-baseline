@@ -214,3 +214,81 @@ cd ../velox_src && git apply ../patches/velox_worktree.patch
 | `68baa34` context file Phase 2 | seed cho agent | |
 
 Tất cả commit push lên GitHub: https://github.com/BDTG/optc-e2e-baseline
+
+---
+
+# OpTC × SLM tier-2 — P2: SLM trên trục giải thích (chỉ acc + hal)
+
+Luận văn: detector đồ thị tầng 1 (cascade 2250→39 alerts) + SLM tầng 2 giải thích.
+Repo này: code + số P2 (explanation-axis) và P3b (FT head). Không baseline TF (theo hướng thầy).
+
+## 1. Môi trường
+
+| Máy | GPU | Stack |
+|---|---|---|
+| GPD3N9T (chạy chính) | AMD RX 9060 XT 16GB | Python 3.12 venv `C:\Users\BDTG\venv-ml`, torch 2.9.1+rocm7.2.1, transformers **4.41.2** (pin — bản mới hơn gãy `torch.distributed` trên ROCm Windows) |
+| Nitro | GTX 1650Ti 4GB | torch 2.11+cu128 |
+
+Biến môi trường bắt buộc trên AMD (known-issue hipBLASLt):
+```bat
+set TORCH_BLAS_PREFER_HIPBLASLT=0
+```
+
+## 2. Model dùng — link tải (toàn bộ public, không cần token)
+
+| Ký hiệu | Model | Link |
+|---|---|---|
+| 0.5B | Qwen/Qwen2.5-0.5B-Instruct | https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct |
+| 1.1B | TinyLlama/TinyLlama-1.1B-Chat-v1.0 (thay Llama-3.2-1B gated) | https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0 |
+| 1.5B | Qwen/Qwen2.5-1.5B-Instruct | https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct |
+
+Tự động tải khi chạy lần đầu (HF cache). LoRA cũ `P1/Output/models/lora-05b/checkpoint-113` đã chứng minh **vô dụng cho scoring** (base cho số y hệt) — không dùng nữa.
+
+## 3. Dữ liệu
+
+- AD-GEN gốc (235,723 narratives, synthetic-validated, Đ.P.Nam/UIT): https://huggingface.co/datasets/namhop88/AD-GEN
+  - `P1/Output/data/adgen/LAB/LAB.jsonl` (642MB) + `REAL/REAL.jsonl` (1.3GB) — tải 1 lần, **không commit** (gitignore).
+- Adapter có sẵn: `P1/Code/convert_adgen.py` → `P1/Output/data/adgen-chains.jsonl` (239,815 chains)
+- Bench GT: `P1/Output/data/adgen-ttp-bench.jsonl` (709 chain, 12 TTP) — build bằng `P1/Code/build_adgen_ttpbench.py`
+- Balanced: `P1/Output/data/adgen-chains-balanced.jsonl` (200: 100 mal + 100 ben)
+
+## 4. Cách chạy — trục giải thích 3 size (ra acc + hal)
+
+```bat
+cd C:\Users\BDTG\Desktop\Backup\OpTC-thesis
+set TORCH_BLAS_PREFER_HIPBLASLT=0
+REM bench 704 GT (TTP acc + hal):
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_05b.py
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_11b.py
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_15b.py
+REM balanced-200 (verdict acc thật, có benign):
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_05b.py
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_11b.py
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\explain_bal_15b.py
+REM tong hop output sach (chi acc + hal):
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\summarize_explain.py
+C:\Users\BDTG\venv-ml\Scripts\python.exe P1\Code\summarize_bal.py
+```
+
+Output (đúng format thầy duyệt — mỗi model 1 file, chỉ acc + hal):
+- `P1/Output/results_phase2/slm-explain-{05b,11b,15b,all}.json` — bench 704
+- `P1/Output/results_phase2/slm-explain-bal-{05b,11b,15b,all}.json` — balanced-200
+
+```json
+{"model": "Qwen/Qwen2.5-0.5B-Instruct", "n": 704,
+ "verdict_acc": 0.9389, "ttp_acc": 0.2884, "hal": 0.0, "latency_s": 0.206}
+```
+
+## 5. FT head (P3b, cần GPU) — con đường duy nhất còn số
+
+```bat
+C:\Users\BDTG\venv-ml\Scripts\python.exe C:\Users\BDTG\optc-bench\a1_full.py   REM ensemble (TF-IDF + SLM fp32)
+C:\Users\BDTG\venv-ml\Scripts\python.exe C:\Users\BDTG\optc-bench\a2.py        REM domain-adapt temporal REAL
+```
+Script P3b đã đưa hết vào `P1/Code/p3b/`. Kết quả: `p3b-ensemble-result.json` (0.3639), `p3b-domainadapt-result.json` (SLM 0.4732).
+
+## 6. Đọc kết quả nhanh (báo thầy)
+
+- `P1/Output/results_phase2/full-benchmark-table.html` — section 8/9/10/10b (mở bằng browser)
+- `P1/Output/results_phase2/chuong-p2-draft.md` — draft chương P2 (7 mục)
+- `P1/Output/results_phase2/mindmap-note.html` + `roadmap-note.html` — vị trí hiện tại
