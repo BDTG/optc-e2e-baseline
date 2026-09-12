@@ -1,0 +1,316 @@
+[
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate Faronics Deep Freeze service DFServ.exe set bootstatuspolicy to prevent recovery interruptions as part of normal frozen-state operation.",
+  "nid": "ADGEN_0079656"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate signed vmtoolsd.exe SYSTEM process performing expected VMware guest power and network operations with valid Microsoft AMSI Defender loads.",
+  "nid": "ADGEN_0001374"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Signed Microsoft Defrag.exe launched by SYSTEM svchost netsvcs with standard optimization flags is expected system maintenance",
+  "nid": "ADGEN_0023405"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Single legitimate signed cmdkey list execution with no credential theft, persistence, or lateral movement indicators.",
+  "nid": "ADGEN_0171612"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate SYSTEM rundll32 executing acproxy.dll from System32 launched by Task Scheduler svchost service is normal Windows behavior.",
+  "nid": "ADGEN_0106402"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "net.exe legitimately spawning net1.exe to query a user account via LSASS pipe is normal Windows administration, not remote discovery.",
+  "nid": "ADGEN_0011557"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059",
+  "evidence_field": "parent_chain",
+  "action": "terminate_process",
+  "reason": "Unsigned a.exe running as SYSTEM from user Downloads via cmd created a pipe and initiated repeated outbound network connections indicating compromise.",
+  "nid": "ADGEN_0041514"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "rundll32 acproxy.dll PerformAutochkOperations launched by svchost netsvcs as SYSTEM is legitimate and Defender pipe-impersonation detection attributes to a different cmd.exe pid 7028 with no parent link.",
+  "nid": "ADGEN_0035204"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1069",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "PowerShell ADSI query for objectcategory=group performs domain group reconnaissance.",
+  "nid": "ADGEN_0160715"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Decoded base64 only invokes WMI to create notepad.exe with no malicious payload.",
+  "nid": "ADGEN_0170067"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate SYSTEM wsappx svchost spawned signed system rundll32 to load system EDGEHTML.dll ordinal #141 for Microsoft Advertising XAML framework with no malicious indicators.",
+  "nid": "ADGEN_0045097"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059.001",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "Beacon binary spawned SYSTEM PowerShell with bypass and encoded IEX download cradle from localhost high port.",
+  "nid": "ADGEN_0012921"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate taskeng.exe spawned by svchost netsvcs executed Microsoft Windows rempl sedlauncher.exe scheduled task.",
+  "nid": "ADGEN_0030745"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "nslookup performing a single reverse lookup with normal Tcpip registry read shows no malicious behavior.",
+  "nid": "ADGEN_0108980"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft rundll32 launching acproxy.dll via SYSTEM svchost netsvcs parent is normal Windows behavior with no malicious indicators.",
+  "nid": "ADGEN_0029882"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059.001",
+  "evidence_field": "parent_chain",
+  "action": "terminate_process",
+  "reason": "Parent PowerShell uses iex downloadstring to fetch and execute remote WinPwn/WinPEAS script from GitHub.",
+  "nid": "ADGEN_0182424"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft rempl shell scheduled task launching sedlauncher.exe via taskeng.exe with expected parent chain.",
+  "nid": "ADGEN_0043971"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft rempl shell task launching sedlauncher.exe via taskeng.exe under SYSTEM with return code 0.",
+  "nid": "ADGEN_0046569"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059",
+  "evidence_field": "parent_chain",
+  "action": "terminate_process",
+  "reason": "Parent PowerShell downloads PowerSploit PowerView from GitHub and executes Get-DomainGroup for domain reconnaissance.",
+  "nid": "ADGEN_0114347"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0075721"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "WMI throttling errors, RSOP cleanup, and SCCM policy subscriptions are normal SYSTEM management activity with no malicious indicators.",
+  "nid": "ADGEN_0078816"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1053",
+  "evidence_field": "parent_chain",
+  "action": "isolate_host",
+  "reason": "Parent cmd created SYSTEM daily scheduled task executing PowerShell with bypass indicating persistence attempt.",
+  "nid": "ADGEN_0078409"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1003",
+  "evidence_field": "event_seq",
+  "action": "isolate_host",
+  "reason": "Legitimate gpupdate.exe never opens lsass with full access and creates a remote thread, and postex pipe indicates post-exploitation credential theft.",
+  "nid": "ADGEN_0048568"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "conhost.exe launched via VMware Tools poweron-vm-default.bat under SYSTEM is legitimate and Defender IsServiceRunning change from 0 to 1 indicates normal service startup.",
+  "nid": "ADGEN_0048233"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate wmiprvse.exe as NT AUTHORITY system account connecting to wkssvc/srvsvc pipes is normal WMI provider host activity.",
+  "nid": "ADGEN_0059379"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft Task Scheduler rempl shell task launching signed sedlauncher.exe via taskeng under SYSTEM with normal start-finish lifecycle.",
+  "nid": "ADGEN_0030933"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft NGen worker mscorsvw spawned by ngen creating expected NativeImages cache files.",
+  "nid": "ADGEN_0020651"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "svchost.exe as NETWORK_SERVICE performing normal NCSI check to www.msftncsi.com with routine wkssvc/lsass pipes and Tcpip/SCHANNEL/EventLog registry access, making T1543 and T1003 hints false positives.",
+  "nid": "ADGEN_0041094"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1053",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "schtasks created SYSTEM startup and logon persistence tasks executing cmd.exe indicating scheduled task persistence.",
+  "nid": "ADGEN_0178537"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1021.002",
+  "evidence_field": "event_seq",
+  "action": "isolate_host",
+  "reason": "Unsigned random-named SYSTEM process executing from remote ADMIN$ share and creating netsvc pipe indicates lateral movement, not DLL side-loading.",
+  "nid": "ADGEN_0018623"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1003.002",
+  "evidence_field": "parent_chain",
+  "action": "isolate_host",
+  "reason": "Parent cmd executed reg save of SAM SYSTEM SECURITY hives indicating credential dumping.",
+  "nid": "ADGEN_0144178"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0122876"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate conhost.exe with standard ForceV1 command line spawned by Windows upgrade component mighost.exe with no causal link to much later unrelated beacon.exe detection.",
+  "nid": "ADGEN_0012418"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "PowerShell commandline uses reg.exe persistence plus Base64 decoding and IEX execution to write marker file, matching obfuscated execution behavior.",
+  "nid": "ADGEN_0050754"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Parent sedlauncher.exe is legitimate Windows remediation tool running powercfg to log active power scheme to Temp.",
+  "nid": "ADGEN_0022611"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1053",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "schtasks /create with /ru system /sc daily running powershell -ep bypass establishes SYSTEM persistence via scheduled task.",
+  "nid": "ADGEN_0054105"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "w32tm stripchart time sync command is legitimate SYSTEM activity and later delayed events are routine informational noise.",
+  "nid": "ADGEN_0031386"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate cmd.exe writing a plain token to a local named pipe shows no obfuscation, payload, or malicious intent beyond false-positive T1059 hint.",
+  "nid": "ADGEN_0031799"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate .NET NGen worker mscorsvw.exe spawned by ngen.exe ExecuteQueuedItems creating files in NativeImages cache is normal optimization activity.",
+  "nid": "ADGEN_0023123"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "parent_chain",
+  "action": "no_action",
+  "reason": "Legitimate Microsoft-signed rundll32 executing acproxy.dll PerformAutochkOperations spawned by SYSTEM svchost netsvcs from System32.",
+  "nid": "ADGEN_0048727"
+ }
+]

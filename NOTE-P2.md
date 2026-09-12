@@ -47,11 +47,17 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Gốc là domain shift: random 0.70 → LAB→REAL 0.32; FT head + adapt lên 0.47 (A1/A2).
 - LoRA-113 vô dụng (base cho số y hệt) — đã bỏ.
 
-## 6. Còn lại
+## 6. Teacher + audit mới (12-13/09)
+- Teacher Qwen2.5-7B scoring: đang chạy resume (checkpoint 50 mẫu).
+- Giám khảo Muse Spark 40 mẫu: vs GT 0.30/0.225; student-vs-judge cao nhất 15B verdict 0.60 (cùng thiên BENIGN), TTP agree 0.05–0.15.
+- Audit: narrative leak tag `[hint:*]`; student input sạch 0 hint; dual-use (Deep Freeze/bcdedit) chặn trên mọi acc-vs-GT.
+- Human-eval pack 40 blind + key + teacher reference: sẵn sàng gửi người chấm.
+
+## 7. Còn lại
 - Chờ duyệt: full-FT 1.5B/3B trên CUDA, hoặc chốt Âm chuyển P4 (+B1/B2).
 - Chạy lại: xem README mục P2. Code + số: đã push GitHub.
 
-## 7. Tài liệu liên quan trong repo (không chép lại để NOTE ngắn)
+## 8. Tài liệu liên quan trong repo (không chép lại để NOTE ngắn)
 - Cấu trúc repo, setup end-to-end P0/P1, restore từ patches: xem README mục 1, 3, 8.
 - Kết quả P0 (Flash/Magic) + P1 (Velox): README mục 2, 4, 5.
 - Chi tiết P2 đầy đủ (bảng section 8/9/10/10b, mindmap, draft chương): `P1/Output/results_phase2/`.

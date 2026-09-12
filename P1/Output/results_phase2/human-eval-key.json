@@ -1,0 +1,317 @@
+{
+ "ADGEN_0079656": {
+  "ttp_gt": [
+   "T1490"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0001374": {
+  "ttp_gt": [
+   "T1059.001",
+   "T1574.002"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0023405": {
+  "ttp_gt": [
+   "T1562.001"
+  ],
+  "action_gt": "get_file_metadata",
+  "is_mal": 1
+ },
+ "ADGEN_0171612": {
+  "ttp_gt": [
+   "T1059",
+   "T1087"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0106402": {
+  "ttp_gt": [
+   "T1218.002"
+  ],
+  "action_gt": "get_file_metadata",
+  "is_mal": 1
+ },
+ "ADGEN_0011557": {
+  "ttp_gt": [
+   "T1003"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0041514": {
+  "ttp_gt": [
+   "T1059",
+   "T1574.002",
+   "T1036",
+   "T1055.001"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0035204": {
+  "ttp_gt": [
+   "T1218.002",
+   "T1547.001"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0160715": {
+  "ttp_gt": [
+   "T1086",
+   "T1087",
+   "T1547.003"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0170067": {
+  "ttp_gt": [
+   "T1059",
+   "T1027"
+  ],
+  "action_gt": "terminate_process",
+  "is_mal": 1
+ },
+ "ADGEN_0045097": {
+  "ttp_gt": [
+   "T1218.002"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0012921": {
+  "ttp_gt": [
+   "T1059.003",
+   "T1553.004",
+   "T1033",
+   "T1003"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0030745": {
+  "ttp_gt": [
+   "T1053.005"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0108980": {
+  "ttp_gt": [
+   "T1046",
+   "T1082"
+  ],
+  "action_gt": "query_registry",
+  "is_mal": 1
+ },
+ "ADGEN_0029882": {
+  "ttp_gt": [
+   "T1218"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0182424": {
+  "ttp_gt": [
+   "T1059.001",
+   "T1204.002",
+   "T1082"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0043971": {
+  "ttp_gt": [
+   "T1059",
+   "T1218"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0046569": {
+  "ttp_gt": [
+   "T1053"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0114347": {
+  "ttp_gt": [
+   "T1059.001",
+   "T1071.001"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0075721": {
+  "ttp_gt": [
+   "T1059.001",
+   "T1027"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0078816": {
+  "ttp_gt": [
+   "T1082"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0078409": {
+  "ttp_gt": [
+   "T1071.001",
+   "T1546.003",
+   "T1059.001"
+  ],
+  "action_gt": "isolate_host",
+  "is_mal": 1
+ },
+ "ADGEN_0048568": {
+  "ttp_gt": [
+   "T1003",
+   "T1055"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0048233": {
+  "ttp_gt": [
+   "T1562"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0059379": {
+  "ttp_gt": [
+   "T1003",
+   "T1548"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0030933": {
+  "ttp_gt": [
+   "T1053.005",
+   "T1204.002"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0020651": {
+  "ttp_gt": [
+   "T1059",
+   "T1027",
+   "T1003"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0041094": {
+  "ttp_gt": [
+   "T1543",
+   "T1003"
+  ],
+  "action_gt": "get_file_metadata",
+  "is_mal": 1
+ },
+ "ADGEN_0178537": {
+  "ttp_gt": [
+   "T1053"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0018623": {
+  "ttp_gt": [
+   "T1574.002",
+   "T1033"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0144178": {
+  "ttp_gt": [
+   "T1546.003",
+   "T1003"
+  ],
+  "action_gt": "terminate_process",
+  "is_mal": 1
+ },
+ "ADGEN_0122876": {
+  "ttp_gt": [
+   "T1053.005",
+   "T1059.004",
+   "T1204.002"
+  ],
+  "action_gt": "terminate_process",
+  "is_mal": 1
+ },
+ "ADGEN_0012418": {
+  "ttp_gt": [
+   "T1059",
+   "T1562"
+  ],
+  "action_gt": "terminate_process",
+  "is_mal": 1
+ },
+ "ADGEN_0050754": {
+  "ttp_gt": [
+   "T1059.001",
+   "T1027"
+  ],
+  "action_gt": "check_threat_intel",
+  "is_mal": 1
+ },
+ "ADGEN_0022611": {
+  "ttp_gt": [
+   "T1083"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0054105": {
+  "ttp_gt": [
+   "T1053",
+   "T1547.001"
+  ],
+  "action_gt": "query_registry",
+  "is_mal": 1
+ },
+ "ADGEN_0031386": {
+  "ttp_gt": [
+   "T1552.001",
+   "T1087.002"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0031799": {
+  "ttp_gt": [
+   "T1059"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0023123": {
+  "ttp_gt": [
+   "T1027",
+   "T1059.001"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ },
+ "ADGEN_0048727": {
+  "ttp_gt": [
+   "T1059"
+  ],
+  "action_gt": "no_action",
+  "is_mal": 1
+ }
+}

@@ -1,0 +1,123 @@
+{
+ "05b": {
+  "n_actionable": 133,
+  "action_acc_actionable": 0.0,
+  "hits": 0,
+  "confusion_gt_pred": [
+   [
+    "check_threat_intel",
+    "no_action",
+    45
+   ],
+   [
+    "terminate_process",
+    "no_action",
+    35
+   ],
+   [
+    "get_file_metadata",
+    "no_action",
+    25
+   ],
+   [
+    "query_registry",
+    "no_action",
+    20
+   ],
+   [
+    "isolate_host",
+    "no_action",
+    6
+   ],
+   [
+    "check_threat_intel",
+    "get_file_metadata",
+    1
+   ],
+   [
+    "get_network_flow",
+    "no_action",
+    1
+   ]
+  ]
+ },
+ "11b": {
+  "n_actionable": 133,
+  "action_acc_actionable": 0.0,
+  "hits": 0,
+  "confusion_gt_pred": [
+   [
+    "check_threat_intel",
+    "no_action",
+    46
+   ],
+   [
+    "terminate_process",
+    "no_action",
+    35
+   ],
+   [
+    "get_file_metadata",
+    "no_action",
+    25
+   ],
+   [
+    "query_registry",
+    "no_action",
+    20
+   ],
+   [
+    "isolate_host",
+    "no_action",
+    6
+   ],
+   [
+    "get_network_flow",
+    "no_action",
+    1
+   ]
+  ]
+ },
+ "15b": {
+  "n_actionable": 133,
+  "action_acc_actionable": 0.0,
+  "hits": 0,
+  "confusion_gt_pred": [
+   [
+    "check_threat_intel",
+    "no_action",
+    46
+   ],
+   [
+    "terminate_process",
+    "no_action",
+    34
+   ],
+   [
+    "get_file_metadata",
+    "no_action",
+    25
+   ],
+   [
+    "query_registry",
+    "no_action",
+    20
+   ],
+   [
+    "isolate_host",
+    "no_action",
+    6
+   ],
+   [
+    "terminate_process",
+    "get_file_metadata",
+    1
+   ],
+   [
+    "get_network_flow",
+    "no_action",
+    1
+   ]
+  ]
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "_note": "analyst playbook v1, MITRE-grounded, khong hoc tu GT",
+ "map": {
+  "T1059": "terminate_process",
+  "T1055": "terminate_process",
+  "T1218": "terminate_process",
+  "T1053": "terminate_process",
+  "T1003": "isolate_host",
+  "T1490": "isolate_host",
+  "T1562": "isolate_host",
+  "T1071": "get_network_flow",
+  "T1547": "query_registry",
+  "T1543": "query_registry",
+  "T1574": "query_registry",
+  "T1546": "query_registry",
+  "T1027": "get_file_metadata",
+  "T1070": "get_file_metadata",
+  "T1036": "get_file_metadata",
+  "T1083": "get_file_metadata",
+  "T1553": "get_file_metadata",
+  "T1082": "check_threat_intel",
+  "T1087": "check_threat_intel",
+  "T1046": "check_threat_intel"
+ },
+ "default": "check_threat_intel",
+ "benign": "no_action"
+}
