@@ -1,0 +1,387 @@
+{
+ "ADGEN_0001374": {
+  "hints": [
+   "T1059.001",
+   "T1574.002"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1059.001",
+   "T1574.002"
+  ]
+ },
+ "ADGEN_0011557": {
+  "hints": [
+   "T1018"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1003"
+  ]
+ },
+ "ADGEN_0012418": {
+  "hints": [],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1059",
+   "T1562"
+  ]
+ },
+ "ADGEN_0012921": {
+  "hints": [
+   "T1055",
+   "T1059.001",
+   "T1553.004",
+   "T1574.010"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1059.003",
+   "T1553.004",
+   "T1033",
+   "T1003"
+  ]
+ },
+ "ADGEN_0018623": {
+  "hints": [
+   "T1574.002"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1574.002",
+   "T1033"
+  ]
+ },
+ "ADGEN_0020651": {
+  "hints": [
+   "T1574.010"
+  ],
+  "risk": "Low",
+  "label_ttps": [
+   "None"
+  ]
+ },
+ "ADGEN_0022611": {
+  "hints": [
+   "T1059",
+   "T1574.010"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1083"
+  ]
+ },
+ "ADGEN_0023123": {
+  "hints": [
+   "T1574.010"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1027",
+   "T1059.001"
+  ]
+ },
+ "ADGEN_0023405": {
+  "hints": [],
+  "risk": "Low",
+  "label_ttps": [
+   "None"
+  ]
+ },
+ "ADGEN_0029882": {
+  "hints": [
+   "T1218.002"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1218"
+  ]
+ },
+ "ADGEN_0030745": {
+  "hints": [],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1053.005"
+  ]
+ },
+ "ADGEN_0030933": {
+  "hints": [],
+  "risk": "High",
+  "label_ttps": [
+   "T1053.005",
+   "T1204.002"
+  ]
+ },
+ "ADGEN_0031386": {
+  "hints": [
+   "T1059"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1552.001",
+   "T1087.002"
+  ]
+ },
+ "ADGEN_0031799": {
+  "hints": [
+   "T1059"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1059"
+  ]
+ },
+ "ADGEN_0035204": {
+  "hints": [
+   "T1218.002"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1218.002",
+   "T1547.001"
+  ]
+ },
+ "ADGEN_0041094": {
+  "hints": [
+   "T1003",
+   "T1543"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1543",
+   "T1003"
+  ]
+ },
+ "ADGEN_0041514": {
+  "hints": [
+   "T1036",
+   "T1055.001",
+   "T1059",
+   "T1574.002"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1059",
+   "T1574.002",
+   "T1036",
+   "T1055.001"
+  ]
+ },
+ "ADGEN_0043971": {
+  "hints": [],
+  "risk": "High",
+  "label_ttps": [
+   "T1059",
+   "T1218"
+  ]
+ },
+ "ADGEN_0045097": {
+  "hints": [
+   "T1218.002"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1218.002"
+  ]
+ },
+ "ADGEN_0046569": {
+  "hints": [],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1053"
+  ]
+ },
+ "ADGEN_0048233": {
+  "hints": [],
+  "risk": "High",
+  "label_ttps": [
+   "T1562"
+  ]
+ },
+ "ADGEN_0048568": {
+  "hints": [
+   "T1003",
+   "T1055"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1003",
+   "T1055"
+  ]
+ },
+ "ADGEN_0048727": {
+  "hints": [],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1059"
+  ]
+ },
+ "ADGEN_0050754": {
+  "hints": [
+   "T1055",
+   "T1059.001",
+   "T1086",
+   "T1130"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1059.001",
+   "T1027"
+  ]
+ },
+ "ADGEN_0054105": {
+  "hints": [
+   "T1036",
+   "T1053",
+   "T1059"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1053",
+   "T1547.001"
+  ]
+ },
+ "ADGEN_0059379": {
+  "hints": [],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1003",
+   "T1548"
+  ]
+ },
+ "ADGEN_0075721": {
+  "hints": [],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1059.001",
+   "T1027"
+  ]
+ },
+ "ADGEN_0078409": {
+  "hints": [
+   "T1036"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1071.001",
+   "T1546.003",
+   "T1059.001"
+  ]
+ },
+ "ADGEN_0078816": {
+  "hints": [],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1082"
+  ]
+ },
+ "ADGEN_0079656": {
+  "hints": [
+   "T1490"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1490"
+  ]
+ },
+ "ADGEN_0106402": {
+  "hints": [
+   "T1218.002"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1218.002"
+  ]
+ },
+ "ADGEN_0108980": {
+  "hints": [
+   "T1016"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1046",
+   "T1082"
+  ]
+ },
+ "ADGEN_0114347": {
+  "hints": [],
+  "risk": "High",
+  "label_ttps": [
+   "T1059.001",
+   "T1071.001"
+  ]
+ },
+ "ADGEN_0122876": {
+  "hints": [
+   "T1053.005",
+   "T1059"
+  ],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1053.005",
+   "T1059.004",
+   "T1204.002"
+  ]
+ },
+ "ADGEN_0144178": {
+  "hints": [],
+  "risk": "Critical",
+  "label_ttps": [
+   "T1546.003",
+   "T1003"
+  ]
+ },
+ "ADGEN_0160715": {
+  "hints": [
+   "T1055",
+   "T1059.001",
+   "T1086",
+   "T1130"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1086",
+   "T1087",
+   "T1547.003"
+  ]
+ },
+ "ADGEN_0170067": {
+  "hints": [
+   "T1059"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1059",
+   "T1027"
+  ]
+ },
+ "ADGEN_0171612": {
+  "hints": [
+   "T1059"
+  ],
+  "risk": "Medium",
+  "label_ttps": [
+   "T1059",
+   "T1087"
+  ]
+ },
+ "ADGEN_0178537": {
+  "hints": [
+   "T1053",
+   "T1059"
+  ],
+  "risk": "High",
+  "label_ttps": [
+   "T1053"
+  ]
+ },
+ "ADGEN_0182424": {
+  "hints": [],
+  "risk": "High",
+  "label_ttps": [
+   "T1059.001",
+   "T1204.002",
+   "T1082"
+  ]
+ }
+}

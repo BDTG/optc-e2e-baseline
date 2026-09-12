@@ -1,0 +1,316 @@
+[
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1490",
+  "evidence_field": "cmdline",
+  "action": "isolate_host",
+  "reason": "bcdedit with bootstatuspolicy ignoreallfailures disables automatic boot recovery consistent with inhibit system recovery.",
+  "nid": "ADGEN_0079656"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate vmtoolsd.exe self ProcessAccess and CreateKey activity is normal VMware Tools behavior with no malicious indicators.",
+  "nid": "ADGEN_0001374"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Insufficient data to indicate malicious activity.",
+  "nid": "ADGEN_0023405"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Single cmdkey list without suspicious parent is consistent with legitimate admin credential check.",
+  "nid": "ADGEN_0171612"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate system rundll32 path with routine DLL function and no suspicious parent or obfuscation.",
+  "nid": "ADGEN_0106402"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate net1.exe user query from System32 with no malicious parent or attack indicators.",
+  "nid": "ADGEN_0011557"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1071",
+  "evidence_field": "event_seq",
+  "action": "get_network_flow",
+  "reason": "Repeated Event3 network connections from generic Downloads a.exe indicates likely C2 beaconing.",
+  "nid": "ADGEN_0041514"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "none",
+  "evidence_field": "event_seq",
+  "action": "no_action",
+  "reason": "Repeated Event 1116 detections with Event 1117 remediations indicate contained malware.",
+  "nid": "ADGEN_0035204"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Repeated CreateKey by legitimate powershell.exe alone without suspicious cmdline or parent context is insufficient for malicious verdict.",
+  "nid": "ADGEN_0160715"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1059.001",
+  "evidence_field": "cmdline",
+  "action": "terminate_process",
+  "reason": "Encoded PowerShell with exec bypass using Invoke-WmiMethod Win32_Process Create indicates obfuscated malicious execution.",
+  "nid": "ADGEN_0170067"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Rundll32 invoking signed system EDGEHTML.dll with Microsoft Advertising package is normal Windows activity.",
+  "nid": "ADGEN_0045097"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Chain shows only powershell.exe performing routine pipe, DNS, registry, and file operations with no suspicious cmdline or parent indicators.",
+  "nid": "ADGEN_0012921"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "No indicators of compromise in provided chain.",
+  "nid": "ADGEN_0030745"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Legitimate System32 nslookup performing a local IP reverse lookup with no suspicious parent, obfuscation, or persistence indicators.",
+  "nid": "ADGEN_0108980"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Legitimate system rundll32 execution of acproxy.dll autochk operations from System32 with no malicious indicators.",
+  "nid": "ADGEN_0029882"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Standard conhost console host invocation with ForceV1 is normal Windows behavior.",
+  "nid": "ADGEN_0182424"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "No malicious indicators present in the event sequence.",
+  "nid": "ADGEN_0043971"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Chain contains no known malicious indicators.",
+  "nid": "ADGEN_0046569"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Conhost with 0xffffffff ForceV1 flag is standard Windows console hosting behavior.",
+  "nid": "ADGEN_0114347"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Standard conhost console host invocation with expected system path and ForceV1 flag and no suspicious indicators.",
+  "nid": "ADGEN_0075721"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "event_seq",
+  "action": "no_action",
+  "reason": "Event IDs alone provide no malicious indicators without additional context.",
+  "nid": "ADGEN_0078816"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Conhost with ForceV1 flag is standard Windows console host behavior with no malicious indicators.",
+  "nid": "ADGEN_0078409"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Chain shows only legitimate gpupdate.exe self-activity with no suspicious parent or cross-process injection",
+  "nid": "ADGEN_0048568"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Legitimate conhost execution with standard system path and ForceV1 console flag.",
+  "nid": "ADGEN_0048233"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Repeated wmiprvse.exe ConnectPipe events reflect normal WMI provider activity.",
+  "nid": "ADGEN_0059379"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "No malicious indicators are identifiable from the event IDs alone.",
+  "nid": "ADGEN_0030933"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Standard conhost invocation with 0xffffffff -ForceV1 is normal Windows console host behavior.",
+  "nid": "ADGEN_0020651"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "All operations are normal svchost service host pipe and registry activity.",
+  "nid": "ADGEN_0041094"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0178537"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1021.002",
+  "evidence_field": "parent_chain",
+  "action": "isolate_host",
+  "reason": "ADMIN$ share execution of random hex-named exe with pipe creation matches PsExec SMB lateral movement.",
+  "nid": "ADGEN_0018623"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Conhost with 0xffffffff -ForceV1 is a standard legitimate console host invocation.",
+  "nid": "ADGEN_0144178"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1053.005",
+  "evidence_field": "cmdline",
+  "action": "query_registry",
+  "reason": "Scheduled task creation establishes persistence to execute base64-obfuscated PowerShell retrieved from registry.",
+  "nid": "ADGEN_0122876"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Chain provides no malicious indicators without cmdline or parent context.",
+  "nid": "ADGEN_0012418"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Repeated CreateKey and Event11 by powershell.exe alone without suspicious cmdline or parent context is insufficient to determine malice.",
+  "nid": "ADGEN_0050754"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "powercfg /getactivescheme writing to TEMP is standard system inventory with no obfuscation or malicious indicators",
+  "nid": "ADGEN_0022611"
+ },
+ {
+  "verdict": "MALICIOUS",
+  "technique_id": "T1053.005",
+  "evidence_field": "cmdline",
+  "action": "isolate_host",
+  "reason": "schtasks create with /ru system and powershell -ep bypass establishes SYSTEM persistence via scheduled task.",
+  "nid": "ADGEN_0054105"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "none",
+  "action": "no_action",
+  "reason": "Repeated 4672 events indicate routine special privilege assignment during system logons",
+  "nid": "ADGEN_0031386"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "cmdline",
+  "action": "no_action",
+  "reason": "Single echo of a hex string to a named pipe lacks malicious indicators or suspicious parentage.",
+  "nid": "ADGEN_0031799"
+ },
+ {
+  "verdict": "BENIGN",
+  "technique_id": "none",
+  "evidence_field": "event_seq",
+  "action": "no_action",
+  "reason": "Five consecutive Event4104 entries indicate PowerShell script-block logging without malicious indicators.",
+  "nid": "ADGEN_0023123"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0048727"
+ }
+]

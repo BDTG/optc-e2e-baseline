@@ -1,0 +1,29 @@
+{
+ "judge_full_vs_GT": {
+  "verdict_acc": 0.3,
+  "ttp_acc": 0.225,
+  "n": 40
+ },
+ "judge_full_vs_stub": {
+  "verdict_agree": 0.675,
+  "ttp_agree": 0.675
+ },
+ "student_vs_judge_full": {
+  "05b": {
+   "verdict": 0.55,
+   "ttp": 0.15,
+   "action": 0.45
+  },
+  "11b": {
+   "verdict": 0.3,
+   "ttp": 0.125,
+   "action": 0.2
+  },
+  "15b": {
+   "verdict": 0.6,
+   "ttp": 0.05,
+   "action": 0.55
+  }
+ },
+ "note": "judge=Muse Spark 1.3 (opencode zen), full narrative 3000 chars; GT=AD-GEN synthetic (dual-use noise); student=scoring gels from raw-explain"
+}
