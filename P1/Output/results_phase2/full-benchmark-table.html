@@ -26,6 +26,18 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <h1>Tổng hợp TOÀN BỘ Specialist đã test — RTX 5060 Ti 16GB (S1=474 alerts, 9 pos, prev 1.9%)</h1>
 <div class="sub">5060Ti 16GB • driver 610.74 • torch 2.7.1+cu128 • WSL 2 • batch 8 (gen) / 16 (cls) / 32 (emb) • 27 lần chạy — <b style="color:#dc2626">v4 fix SD 0.996 nhưng S1-only 0.042 — TF-IDF 0.89 KHÔNG tái hiện dưới CV (OOF 0.40–0.52, pos=9) ⚠️</b> + <b style="color:#166534">tier-2 constrained hòa TF-IDF (xval cùng 40 mẫu: 0.775 vs 0.80 — HÒA, không có vua)</b></div>
 
+<h2>0b) ĐÃ CHỐT — số lock của thầy (không làm lại, trích nguyên văn spec Paper 2)</h2>
+<table>
+<tr><th>Hạng mục</th><th>Trạng thái</th><th>Số / ghi chú</th></tr>
+<tr><td>Tầng 1 detector (Velox)</td><td>✅</td><td>AUC 0.917, R@20K 81% (P1)</td></tr>
+<tr><td>Lọc cascade</td><td>✅</td><td>474 → 39, tập giàu, recall giữ 75%</td></tr>
+<tr><td>Cơ chế output</td><td>✅ constrained/logprob</td><td>parse_fail 0, valid 100%</td></tr>
+<tr><td>Model tầng 2</td><td>✅ chọn 0.5B</td><td>nhỏ nhất, hợp endpoint nhất</td></tr>
+<tr><td>Dataset</td><td>✅ AD-GEN</td><td>704 chain GT, 12 TTP</td></tr>
+<tr><td>Kết quả TTP (âm)</td><td>✅ đã có</td><td>0.29/0.30/0.12; teacher-7B 0.099</td></tr>
+<tr><td>FT head (dương)</td><td>✅ có, cần củng cố</td><td>A2: 0.4732 &gt; TF-IDF 0.4591 (1 seed — cần multi-seed)</td></tr>
+<tr><td>Verdict tier-2</td><td>✅ đã có</td><td>0.775 ± 0.13 (xval OpTC)</td></tr>
+</table>
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
 <tr>
@@ -321,5 +333,11 @@ Per-judge wins (t7b–05b): gpt 15-14, grok 15-14, spark 11-9, qwen 14-10, deeps
 <b>Trả lời câu hỏi thầy: SLM nhỏ GIỮ ĐƯỢC năng lực giải thích ở 1/14 kích thước</b> (55 vs 59, trong noise; mean 1.365 vs 1.317).
 Chi phí cả đợt ~$0.35. <b>Limitation: LLM-judge là silver-standard</b>, không phải chuyên gia — human pack blind vẫn cần người chấm.
 File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.</div>
+<h2>11b) Action schema + judge-full vs GT (bổ sung Việc 2)</h2>
+<table>
+<tr><th>Bài đo</th><th>Số</th><th>Đọc</th></tr>
+<tr><td><b>Action-acc</b> (playbook v1, GT 81% no_action đã trừ skew, 133 mẫu actionable)</td><td class="ap">0.5B <b>0.256</b> / 1.1B <b>0.263</b> / 1.5B <b>0.105</b> / teacher-7B <b>0.030</b></td><td>GT-match thấp vì GT skew — chất lượng action thật do judge + human chấm (mean actionability 1.365 vs 1.218)</td></tr>
+<tr><td><b>Judge-full (Muse Spark, narrative đầy đủ) vs GT</b> (40 mẫu)</td><td class="ap">verdict <b>0.30</b>, TTP <b>0.225</b> (stub chỉ 0.175/0.10)</td><td>Context đầy đủ gấp đôi stub nhưng vẫn xa GT → GT synthetic nhiễu dual-use, không phải judge dở</td></tr>
+</table>
 </body>
 </html>
