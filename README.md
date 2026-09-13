@@ -104,7 +104,7 @@ Epoch 66s → 40s (-39%), RAM bounded ~3.5GB không swap trên laptop i5-10300H 
 
 ### Yêu cầu
 - Python 3.11, torch 2.11+cu128, transformers 5.16
-- Dataset OpTC H051 (≈25GB) — torrent `thai.rar` đã có, extract vào `data/orthrus/`
+- Dataset OpTC H051 (≈25GB) — extract vào `data/orthrus/`
 - Hardware đo: i5-10300H 16GB + GTX 1650 Ti 4GB (driver 616.56), CUDA 12.x
 
 ### Cài env
