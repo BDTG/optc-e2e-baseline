@@ -53,11 +53,15 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Audit: narrative leak tag `[hint:*]`; student input sạch 0 hint; dual-use (Deep Freeze/bcdedit) chặn trên mọi acc-vs-GT.
 - Human-eval pack 40 blind + key + teacher reference: sẵn sàng gửi người chấm.
 
-## 7. Còn lại
+## 7. Việc 2 xong (LLM-judge blind, 200 ratings)
+- 5 judges (spark/gpt/grok/deepseek/qwen3.8-flash): slm05 mean 1.365 vs t7b 1.317; wins 55 vs 59 — HÒA.
+- SLM 0.5B giữ được năng lực giải thích ở 1/14 kích thước. Chi phí ~$0.35.
+
+## 8. Còn lại
 - Chờ duyệt: full-FT 1.5B/3B trên CUDA, hoặc chốt Âm chuyển P4 (+B1/B2).
 - Chạy lại: xem README mục P2. Code + số: đã push GitHub.
 
-## 8. Tài liệu liên quan trong repo (không chép lại để NOTE ngắn)
+## 9. Tài liệu liên quan trong repo (không chép lại để NOTE ngắn)
 - Cấu trúc repo, setup end-to-end P0/P1, restore từ patches: xem README mục 1, 3, 8.
 - Kết quả P0 (Flash/Magic) + P1 (Velox): README mục 2, 4, 5.
 - Chi tiết P2 đầy đủ (bảng section 8/9/10/10b, mindmap, draft chương): `P1/Output/results_phase2/`.

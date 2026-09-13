@@ -1,0 +1,3382 @@
+[
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A is preferable because the Deep Freeze parent and signed Microsoft bcdedit context support a benign interpretation, though both incorrectly map the behavior to T1059 instead of T1490.",
+  "nid": "ADGEN_0079656",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly flags the Deep Freeze parent as BENIGN with no_action while both mis-map to T1059; B wrongly calls it MALICIOUS.",
+  "nid": "ADGEN_0079656",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "A better fits the signed VMware Tools process and legitimate Microsoft security-module loads, while B overstates unsupported command execution and recommends disruptive termination.",
+  "nid": "ADGEN_0001374",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats vmtoolsd guest-tools activity (cmd access, Tcpip key, AMSI/MpOAV loads) as benign while B mislabels it T1059/malicious.",
+  "nid": "ADGEN_0001374",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly mark legitimate SYSTEM svchost-launched defrag as benign with coherent fields.",
+  "nid": "ADGEN_0023405",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify the legitimate Microsoft Defrag.exe execution from a SYSTEM svchost parent as benign and recommend no action.",
+  "nid": "ADGEN_0023405",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical correct BENIGN assessments with matching fields and parent_chain evidence for legitimate defrag.exe.",
+  "nid": "ADGEN_0023405",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The signed Microsoft cmdkey.exe merely lists stored credentials, so benign/no action is better supported, while A overstates maliciousness and termination despite correctly identifying command-line evidence.",
+  "nid": "ADGEN_0171612",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly references the observed cmdline and T1059 hint with a coherent (if aggressive) action, while B's none/BENIGN contradicts pointing at the same cmdline.",
+  "nid": "ADGEN_0171612",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The rundll32 command invokes the Windows acproxy Autochk operation from a SYSTEM scheduled-task service context, supporting a benign assessment and not T1059 or termination.",
+  "nid": "ADGEN_0106402",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the Schedule-spawned rundll32 acproxy.dll,PerformAutochkOperations as benign Windows autochk while A invents T1059 and a terminate action.",
+  "nid": "ADGEN_0106402",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The net user command and LSASS pipe connection do not by themselves establish maliciousness or T1059 abuse, making the benign assessment more appropriately calibrated than A's unsupported malicious verdict and termination recommendation.",
+  "nid": "ADGEN_0011557",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the net user invocation (plus incidental lsass pipe) as ordinary admin activity rather than T1059 malware.",
+  "nid": "ADGEN_0011557",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly flags unsigned SYSTEM download with pipe and network activity as malicious while B ignores clear suspicious indicators.",
+  "nid": "ADGEN_0041514",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A aligns with the SYSTEM-launched unsigned executable, command-shell parent, named ATT&CK hint, and outbound connections, while B incorrectly dismisses these indicators as benign.",
+  "nid": "ADGEN_0041514",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly flags the unsigned SYSTEM-launched Downloads binary plus pipe/C2 as malicious with a usable action while B contradicts the same parent_chain evidence.",
+  "nid": "ADGEN_0041514",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "winner": "tie",
+  "reason": "Both identically ignore the Severe Event 1116 SevPrivEscByPipeImpersonation detection and misclassify as BENIGN with no_action.",
+  "nid": "ADGEN_0035204",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "tie",
+  "reason": "Both outputs identically dismiss the suspicious rundll32 execution, Defender configuration change, and severe privilege-escalation detection without meaningful evidence or actionable guidance.",
+  "nid": "ADGEN_0035204",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical JSON outputs with matching fields and the same parent_chain evidence.",
+  "nid": "ADGEN_0035204",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "Both correctly associate PowerShell with T1059 and cite a real parent chain, but the narrative does not establish maliciousness, making B's benign/no-action assessment more proportionate than A's unsupported termination recommendation.",
+  "nid": "ADGEN_0160715",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B better matches ADSI group enumeration plus normal .NET/srvsvc artifacts as non-malicious PowerShell rather than over-flagging T1059 for termination.",
+  "nid": "ADGEN_0160715",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs identically cite the encoded command line and align the suspicious execution-bypass behavior with T1059, providing a coherent and actionable termination recommendation.",
+  "nid": "ADGEN_0170067",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly flag the encoded PowerShell cmdline as T1059 malicious activity.",
+  "nid": "ADGEN_0170067",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "A is more internally coherent because the legitimate EdgeHTML rundll32 command supports a benign assessment, although both outputs misclassify the technique as T1059 instead of T1218.002.",
+  "nid": "ADGEN_0045097",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly treats the wsappx/EdgeHTML rundll32 spawn as benign while B invents malice and a wrong T1059 mapping.",
+  "nid": "ADGEN_0045097",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies encoded PowerShell download cradle from beacon.exe as T1059 malicious while B mislabels clearly malicious behavior as benign.",
+  "nid": "ADGEN_0012921",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies suspicious encoded PowerShell launched by beacon.exe as malicious and maps it to PowerShell execution, while B contradicts the observed behavior and recommends no action.",
+  "nid": "ADGEN_0012921",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly flags the beacon.exe-spawned encoded PowerShell download as T1059 malicious while B contradicts the same parent_chain evidence by calling it benign.",
+  "nid": "ADGEN_0012921",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify a benign Windows Task Scheduler chain involving taskeng.exe and the legitimate remediation task, with an appropriate no-action recommendation.",
+  "nid": "ADGEN_0030745",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical correct BENIGN assessments that both cite the legitimate svchost parent chain.",
+  "nid": "ADGEN_0030745",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A's benign verdict and no-action recommendation better fit ordinary nslookup behavior, although T1218 is misapplied; B overstates maliciousness and termination based only on a cmd-launched nslookup command.",
+  "nid": "ADGEN_0108980",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly treats ordinary nslookup as benign with a matching no-action, while B invents malice and the wrong T1059.",
+  "nid": "ADGEN_0108980",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The command line shows a signed Windows rundll32 invocation of acproxy.dll from a SYSTEM svchost context, supporting benign behavior and not T1059 or a malicious verdict.",
+  "nid": "ADGEN_0029882",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the svchost-spawned rundll32 /d acproxy.dll,PerformAutochkOperations as benign Windows behavior while A mislabels it T1059 malicious.",
+  "nid": "ADGEN_0029882",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies the malicious PowerShell download-and-execute command and recommends intervention, while B incorrectly labels the clearly suspicious behavior benign.",
+  "nid": "ADGEN_0182424",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly flags the WinPwn/winPEAS download-and-execute PowerShell cmdline as T1059 malicious activity; B ignores that evidence and calls it benign.",
+  "nid": "ADGEN_0182424",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and equally reference the legitimate parent chain with coherent benign disposition.",
+  "nid": "ADGEN_0043971",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify a benign scheduled-task execution, but the generic parent_chain evidence and no_action recommendation provide limited analyst-specific support or actionability.",
+  "nid": "ADGEN_0043971",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical outputs correctly flag legitimate Task Scheduler/rempl activity via parent_chain with no contradictions.",
+  "nid": "ADGEN_0043971",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify the legitimate rempl scheduled task as benign.",
+  "nid": "ADGEN_0046569",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify the legitimate taskeng.exe-to-Task Scheduler parent chain and sedlauncher.exe task execution as benign, with no ATT&CK technique and no action required.",
+  "nid": "ADGEN_0046569",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical correct BENIGN assessments that cite the legitimate svchost netsvcs parent chain for the Microsoft rempl scheduled task.",
+  "nid": "ADGEN_0046569",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the parent PowerShell IEX download of PowerSploit PowerView as malicious T1059 while A dismisses clear recon tool download as benign.",
+  "nid": "ADGEN_0114347",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies the PowerShell command line downloading and executing PowerView as malicious activity aligned with T1059, while A incorrectly labels it benign.",
+  "nid": "ADGEN_0114347",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "A wrongly calls PowerView download+Get-DomainGroup benign; B correctly flags the PowerShell IEX/IWR as malicious T1059.",
+  "nid": "ADGEN_0114347",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The obfuscated PowerShell command launched through cmd.exe supports malicious command-and-scripting activity, making B substantially better aligned and more actionable than A.",
+  "nid": "ADGEN_0075721",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags obfuscated encoded PowerShell (T1059) from the parent cmdline while A wrongly calls it benign.",
+  "nid": "ADGEN_0075721",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical with ungrounded evidence field parent_chain not present in narrative.",
+  "nid": "ADGEN_0078816",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs reasonably classify the WMI/RSOP/Configuration Manager activity as benign with no MITRE technique, but cite absent parent-chain evidence and provide an overly unsupported no-action recommendation.",
+  "nid": "ADGEN_0078816",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical outputs correctly classify routine SYSTEM WMI/RSOP/CCM activity as benign with coherent no-action recommendation.",
+  "nid": "ADGEN_0078816",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies legitimate VMware conhost and Defender enablement as benign while B mislabels normal activity as T1059 with an inappropriate terminate action.",
+  "nid": "ADGEN_0048233",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats repeated wmiprvse wkssvc/srvsvc pipe connects as benign with no technique while A invents an unsupported T1059 malicious claim.",
+  "nid": "ADGEN_0059379",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs identically and correctly identify the legitimate Microsoft rempl scheduled task as benign.",
+  "nid": "ADGEN_0030933",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0079656",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0079656",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A's benign/no_action better fits a signed bcdedit execution by Deep Freeze, whereas B recommends disruptive termination despite both missing the more appropriate T1490 technique.",
+  "nid": "ADGEN_0079656",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats signed vmtoolsd.exe AMSI/Defender loads as benign while B falsely maps valid Microsoft images to T1059 malicious.",
+  "nid": "ADGEN_0001374",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0001374",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "Output A better matches the likely benign VMware Tools behavior and avoids a disruptive unsupported response, although both cite parent_chain evidence not present in the narrative.",
+  "nid": "ADGEN_0001374",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Outputs are identical and correctly classify the signed SYSTEM defrag process spawned by svchost as benign with no ATT&CK technique.",
+  "nid": "ADGEN_0023405",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs correctly classify the svchost-launched Defrag.exe behavior as benign but use equally vague parent_chain evidence.",
+  "nid": "ADGEN_0023405",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Single cmdkey /list is routine legitimate use with no theft or exfiltration, so BENIGN with no_action fits better than MALICIOUS.",
+  "nid": "ADGEN_0171612",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0171612",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B better reflects that cmdkey /list is a legitimate command-line utility invocation and avoids an unjustified malicious verdict and termination action.",
+  "nid": "ADGEN_0171612",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0106402",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0106402",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly identifies the SYSTEM-parented rundll32 acproxy command as a likely benign false positive with a coherent no-action recommendation, while Output A falsely marks it malicious and maps it to an unsupported T1059 command execution technique.",
+  "nid": "ADGEN_0106402",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats single net user account query as benign admin activity while A mislabels it as malicious T1059.",
+  "nid": "ADGEN_0011557",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B better fits the benign net user account-query behavior, while A incorrectly assigns T1059 and recommends termination without sufficient evidence.",
+  "nid": "ADGEN_0011557",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B aligns better with the signed native net1 user-management command and avoids over-flagging the likely false-positive discovery hint, while A's malicious/T1059/terminate assessment is insufficiently supported.",
+  "nid": "ADGEN_0011557",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0041514",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0041514",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0035204",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Outputs A and B are identical and assign an unsupported BENIGN verdict despite a severe Defender detection, giving neither a better explanation.",
+  "nid": "ADGEN_0035204",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats AD group FindAll enumeration as suspicious requiring action while B dismisses the same recon behavior as benign.",
+  "nid": "ADGEN_0160715",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0160715",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0160715",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0170067",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly flag the encoded PowerShell command line as malicious under T1059, though the cited evidence is only generic 'cmdline'.",
+  "nid": "ADGEN_0170067",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "The outputs are identical and both appropriately cite the suspicious command-line behavior as supporting T1059.",
+  "nid": "ADGEN_0170067",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0045097",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0045097",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A better matches the benign-looking rundll32 EdgeHTML invocation and gives a non-disruptive response, although its T1059 choice is still weaker than the hinted T1218.002.",
+  "nid": "ADGEN_0045097",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0012921",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly identifies malicious PowerShell behavior linked to a suspicious parent process, while B falsely labels the event benign despite clear encoded-command and parent-chain indicators.",
+  "nid": "ADGEN_0012921",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0030745",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and coherently classify the Microsoft scheduled-task behavior as benign, though their cited evidence is minimal.",
+  "nid": "ADGEN_0030745",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify the legitimate Task Scheduler activity as benign with supported parent-chain evidence.",
+  "nid": "ADGEN_0030745",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0108980",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0108980",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B better aligns with suspicious behavior and recommends a concrete response, while A assigns an unrelated technique and a benign verdict despite evidence of command-line discovery and registry modification.",
+  "nid": "ADGEN_0108980",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats isolated signed SYSTEM rundll32 from svchost as benign while A mislabels it as malicious T1059.",
+  "nid": "ADGEN_0029882",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0029882",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly treats the legitimate rundll32/acproxy SYSTEM command as benign with coherent no-action guidance, while Output A asserts malicious T1059 despite mismatched evidence and a harmful termination recommendation.",
+  "nid": "ADGEN_0029882",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "Parent PowerShell downloads and executes remote WinPwn/winPEAS via IEX which is clearly malicious T1059 that A correctly flags while B ignores.",
+  "nid": "ADGEN_0182424",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly flags the malicious PowerShell/T1059 command-line activity, while B ignores the suspicious parent command and recommends no action.",
+  "nid": "ADGEN_0182424",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0182424",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "The outputs are identical and appropriately classify the observed Windows Task Scheduler activity as benign with no action.",
+  "nid": "ADGEN_0043971",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical, classify the behavior as benign based on plausible Microsoft parent-chain context, and offer clear but very concise no_action guidance.",
+  "nid": "ADGEN_0043971",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify the benign scheduled-task/parent-chain activity with no MITRE technique and no required action.",
+  "nid": "ADGEN_0046569",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and accurately label the benign scheduled-task behavior as BENIGN with no ATT&CK technique.",
+  "nid": "ADGEN_0046569",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the PowerShell download/execution of PowerView from the parent command line as malicious with an actionable response, while A ignores that evidence and incorrectly calls it benign.",
+  "nid": "ADGEN_0114347",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B correctly identifies the malicious PowerShell reconnaissance behavior evidenced by the command line and aligns with T1059, whereas A ignores the high-confidence indicators.",
+  "nid": "ADGEN_0114347",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0075721",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly identifies the encoded PowerShell command line as malicious T1059 activity and recommends terminating the process, while Output A wrongly dismisses it as benign.",
+  "nid": "ADGEN_0075721",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0075721",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical; the benign/no-technique verdict is plausible for SYSTEM WMI/SCCM policy activity, but 'parent_chain' is unsupported by the narrative and no_action lacks explanation.",
+  "nid": "ADGEN_0078816",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical: they hallucinate parent_chain evidence, but the benign/none/no_action conclusion is coherent and reasonably aligned with SYSTEM WMI/SCCM-like activity.",
+  "nid": "ADGEN_0078816",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0078409",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B correctly flags the suspicious cmd/PowerShell command line and T1059, while A labels it benign and recommends no action despite clear malicious context.",
+  "nid": "ADGEN_0078409",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the malicious scheduled-task PowerShell command line as T1059, while A mislabels clearly suspicious evidence as benign.",
+  "nid": "ADGEN_0078409",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies malicious command-and-scripting behavior and recommends intervention, although T1059 is less specific than the applicable PowerShell and scheduled-task sub-techniques.",
+  "nid": "ADGEN_0078409",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the schtasks+powershell -ep bypass cmdline as malicious command execution while A wrongly calls it benign.",
+  "nid": "ADGEN_0078409",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B correctly flags the lsass remote-thread injection as malicious while A dismisses clear T1055/T1003 behavior as benign.",
+  "nid": "ADGEN_0048568",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags malicious behavior and recommends termination, though its ATT&CK technique and evidence field are wrong; A incorrectly calls the lsass access and remote thread benign.",
+  "nid": "ADGEN_0048568",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies the LSASS access and remote-thread behavior as malicious and provides a usable containment action, though it cites the wrong ATT&CK technique and unsupported evidence.",
+  "nid": "ADGEN_0048568",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies suspicious behavior and provides an actionable response, but its T1059 mapping and parent_chain evidence are unsupported; A contradicts the clear LSASS access and remote-thread injection indicators.",
+  "nid": "ADGEN_0048568",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B at least flags MALICIOUS with an actionable terminate while A wrongly calls the lsass injection/pipe sequence BENIGN.",
+  "nid": "ADGEN_0048568",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0048233",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "Output A correctly interprets the VMware Tools cmd/conhost launch and Defender service start as benign, while Output B over-flags cmdline use as malicious and recommends an unsafe termination action.",
+  "nid": "ADGEN_0048233",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A better fits the documented VMware Tools batch-launched conhost and Defender service enablement, while B overstates this limited command-shell evidence as malicious and recommends unjustified termination.",
+  "nid": "ADGEN_0048233",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats the VMware Tools conhost/cmd sequence as benign with no action, while B mislabels it malicious T1059 and recommends termination.",
+  "nid": "ADGEN_0048233",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B's benign verdict better matches routine wmiprvse connecting to wkssvc/srvsvc pipes, while A falsely labels it malicious with unrelated T1059 and a terminate action.",
+  "nid": "ADGEN_0059379",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Both outputs cite unsupported parent_chain evidence, but B better matches the benign WMI named-pipe connections and gives a coherent no-action recommendation.",
+  "nid": "ADGEN_0059379",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "Both cite an unsupported parent chain, but B is more consistent with the limited evidence and avoids the unjustified T1059 attribution and process termination recommendation.",
+  "nid": "ADGEN_0059379",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats wmiprvse named-pipe connects to wkssvc/srvsvc as benign WMI RPC while A invents T1059 and a terminate action with no supporting chain.",
+  "nid": "ADGEN_0059379",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify the benign scheduled-task activity as requiring no action, with coherent supporting fields.",
+  "nid": "ADGEN_0030933",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical, correctly mark the sequence as benign, and cite valid parent-chain evidence with limited but coherent detail.",
+  "nid": "ADGEN_0030933",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify the legitimate Task Scheduler taskeng.exe parent chain as benign, with no MITRE technique and no action required.",
+  "nid": "ADGEN_0030933",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "A and B are identical and both correctly treat legitimate Task Scheduler/rempl activity as benign with coherent fields.",
+  "nid": "ADGEN_0030933",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly recognizes legitimate NGen worker activity while A mislabels benign optimization as script-interpreter attack.",
+  "nid": "ADGEN_0020651",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies the legitimate .NET Runtime Optimization Service activity as benign, whereas A mislabels it as malicious T1059 with an inappropriate terminate action.",
+  "nid": "ADGEN_0020651",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The narrative describes a legitimate .NET NGen worker process, so B's benign assessment with no action is more evidence-supported and internally coherent.",
+  "nid": "ADGEN_0020651",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly recognizes the legitimate .NET Runtime Optimization Service behavior, while A misclassifies it as malicious and assigns unsupported command-shell activity.",
+  "nid": "ADGEN_0020651",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the NGen worker (mscorsvw.exe from ngen.exe writing under assembly\\Native) as benign while A invents T1059 malice from the same cmdline.",
+  "nid": "ADGEN_0020651",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0041094",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "{\"A\":{\"evidence_support\":0,\"attck_alignment\":0,\"rationale_consistency\":1,\"actionability",
+  "_parse": "fail",
+  "nid": "ADGEN_0041094",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B better matches the likely benign svchost/NetworkService behavior, while A asserts an unsupported malicious T1059 verdict and cites nonexistent parent-chain evidence.",
+  "nid": "ADGEN_0041094",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "Both incorrectly cite absent parent-chain evidence and miss the indicated T1543 behavior, but A is somewhat more useful because it flags the suspicious activity and provides an actionable response.",
+  "nid": "ADGEN_0041094",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 2,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly labels likely-normal svchost/NETWORK_SERVICE registry and named-pipe activity as BENIGN with no_action, while A invents T1059 and terminate.",
+  "nid": "ADGEN_0041094",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags SYSTEM persistence via schtasks onstart/onlogon creation while A contradicts its own T1053 label by calling it benign with no action.",
+  "nid": "ADGEN_0178537",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly identifies scheduled-task persistence via the schtasks command line and recommends containment, while A's benign/no-action verdict ignores the high-risk T1053 behavior.",
+  "nid": "ADGEN_0178537",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly aligns the schtasks persistence command with T1053 and recommends concrete containment, whereas A labels the same evidence benign and provides no response.",
+  "nid": "ADGEN_0178537",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "Both cite the task-creation command line, but B correctly identifies malicious T1053 persistence, although terminating schtasks alone does not remove the created tasks.",
+  "nid": "ADGEN_0178537",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the schtasks persistence (T1053.005) as malicious with matching action while A contradicts itself by labeling it BENIGN.",
+  "nid": "ADGEN_0178537",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0018623",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "{\"A\":{\"evidence_support\":0,\"attck_alignment\":0,\"rationale_consistency\":1,\"actionability\":",
+  "_parse": "fail",
+  "nid": "ADGEN_0018623",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0018623",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B is more actionable and recognizes the suspicious unsigned ADMIN$ executable, but both outputs cite nonexistent parent-chain evidence and misalign their MITRE technique with the observed DLL-side-loading hint.",
+  "nid": "ADGEN_0018623",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 1,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B at least flags MALICIOUS with an actionable terminate recommendation while A wrongly calls the ADMIN$ unsigned exe + named-pipe sequence BENIGN.",
+  "nid": "ADGEN_0018623",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0144178",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0144178",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "Output A correctly flags the cmd.exe registry-saving behavior as malicious and actionable, while Output B ignores the credential-dumping command line and recommends no action.",
+  "nid": "ADGEN_0144178",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies the malicious command-shell activity and recommends containment, though it should also map the registry hive saves to credential-dumping techniques such as T1003.002.",
+  "nid": "ADGEN_0144178",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats the parent cmdline hive dumps as malicious (even if T1059 is imprecise) while B wrongly labels it benign.",
+  "nid": "ADGEN_0144178",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly maps schtasks /Create persistence to T1053.005 while B merely repeats the generic T1059 hint.",
+  "nid": "ADGEN_0122876",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly identifies the core scheduled-task creation behavior as T1053, while B only tags the broader command-line hint T1059.",
+  "nid": "ADGEN_0122876",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A maps to T1053 for scheduled-task creation, which fits the primary malicious behavior better than B's generic T1059.",
+  "nid": "ADGEN_0122876",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "Both cite the malicious command line and offer an actionable response, but A better captures the primary behavior of creating a scheduled task, whereas B emphasizes secondary command and scripting execution.",
+  "nid": "ADGEN_0122876",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "A correctly maps the schtasks /Create ATOMIC-T1053.005 behavior to T1053 while B mislabels it as T1059 despite identical evidence and action.",
+  "nid": "ADGEN_0122876",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and misclassify a severe CobaltStrike detection as benign with no action.",
+  "nid": "ADGEN_0012418",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and incorrectly dismiss a severe Cobalt Strike detection as benign with no MITRE mapping or action.",
+  "nid": "ADGEN_0012418",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and cite a real parent-chain artifact, but they ignore the CobaltStrike Defender detection, making the benign/no-action assessment poorly aligned and incomplete.",
+  "nid": "ADGEN_0012418",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify the legitimate Windows upgrade parent chain and Defender updates as benign, with no applicable ATT&CK technique and no action required.",
+  "nid": "ADGEN_0012418",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Identical outputs correctly flag the mighost.exe parent as benign Windows-upgrade activity with no MITRE mapping and no action needed.",
+  "nid": "ADGEN_0012418",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 0,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags malicious encoded PowerShell execution while A ignores clear Base64 registry persistence indicators.",
+  "nid": "ADGEN_0050754",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0050754",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly identifies the suspicious PowerShell-encoded execution as malicious T1059 behavior and provides coherent actionable guidance, while A's benign verdict contradicts clear encoded-command evidence.",
+  "nid": "ADGEN_0050754",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B better reflects the encoded PowerShell execution and registry-based payload behavior, although its cited parent-chain evidence is incomplete and T1059 could be more specific.",
+  "nid": "ADGEN_0050754",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the encoded PowerShell/registry payload as T1059 malicious while A wrongly calls it benign.",
+  "nid": "ADGEN_0050754",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats legitimate SYSTEM sedlauncher powercfg logging as benign while A falsely flags it malicious.",
+  "nid": "ADGEN_0022611",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0022611",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Output B correctly identifies the SYSTEM cmd.exe/powercfg logging task as benign T1059 usage, while Output A over-escalates with an unsupported malicious verdict and disruptive termination.",
+  "nid": "ADGEN_0022611",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Both identify the observed cmd.exe command and T1059, but B better fits the benign powercfg query launched by the trusted sedlauncher process, whereas A overstates maliciousness and recommends unnecessary termination.",
+  "nid": "ADGEN_0022611",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "The cmd/powercfg sequence under SYSTEM from rempl/sedlauncher is routine Windows activity, so BENIGN/no_action is correct while MALICIOUS/terminate is not.",
+  "nid": "ADGEN_0022611",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "B",
+  "reason": "B correctly flags SYSTEM daily task with powershell bypass as malicious while A dismisses clear persistence as benign.",
+  "nid": "ADGEN_0054105",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly treats the suspicious schtasks/PowerShell scheduled-task creation as malicious and gives an actionable response, while A's benign verdict is inconsistent with the evidence.",
+  "nid": "ADGEN_0054105",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B's malicious verdict and terminate action better match the suspicious schtasks/command-line evidence, even though both miss the more central T1053 scheduled-task technique.",
+  "nid": "ADGEN_0054105",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Both cite the command line, but B correctly identifies the suspicious scheduled task and PowerShell execution while A incorrectly labels it benign and recommends no action.",
+  "nid": "ADGEN_0054105",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "B correctly flags the schtasks SYSTEM persistence + PowerShell bypass cmdline as malicious and actionable, while A wrongly calls it benign.",
+  "nid": "ADGEN_0054105",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 0
+  },
+  "winner": "tie",
+  "reason": "Identical BENIGN outputs ignore credential-read and LDAP-failure events and misalign with hinted execution behavior.",
+  "nid": "ADGEN_0031386",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0031386",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and equally provide a coherent but minimally specific benign no-action explanation grounded in the parent process chain.",
+  "nid": "ADGEN_0031386",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs cite the legitimate cmd.exe parent chain, but they ignore the registry activity and later remote SAM access, making the benign/no-technique conclusion weak and the no-action recommendation insufficiently supported.",
+  "nid": "ADGEN_0031386",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "A and B are identical JSON with the same coherent but weakly evidenced BENIGN/no_action call.",
+  "nid": "ADGEN_0031386",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "B",
+  "reason": "Single benign echo to named pipe lacks malicious indicators so BENIGN with no_action is correct.",
+  "nid": "ADGEN_0031799",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly identifies the suspicious cmd.exe command-line execution as T1059 and recommends containment, while B ignores the pre-flagged and behaviorally suspicious named-pipe command.",
+  "nid": "ADGEN_0031799",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 2
+  },
+  "winner": "A",
+  "reason": "Output A correctly aligns the suspicious cmd-to-named-pipe behavior with T1059 and provides containment, while Output B misclassifies clear command-line activity as benign with no technique.",
+  "nid": "ADGEN_0031799",
+  "judge": "qwen3.8-flash",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 1,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly identifies command-line execution and maps it to T1059 with a clear response, although the malicious verdict and termination recommendation are not sufficiently supported by this single event.",
+  "nid": "ADGEN_0031799",
+  "judge": "gpt-5.6-luna",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly flags the rundll32-spawned cmd echo-to-named-pipe as malicious T1059 while B wrongly calls it benign.",
+  "nid": "ADGEN_0031799",
+  "judge": "grok-4.6",
+  "A_is": "slm05"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly dismiss the T1574.010 hint as legitimate Microsoft-signed ngen.exe to mscorsvw.exe NGen optimization with no_action.",
+  "nid": "ADGEN_0023123",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify the routine .NET NGEN native-image generation as benign with no applicable technique or action.",
+  "nid": "ADGEN_0023123",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs are identical and correctly classify routine NGEN/mscorsvw behavior as benign, but their evidence and recommended action are too generic.",
+  "nid": "ADGEN_0023123",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 1
+  },
+  "winner": "tie",
+  "reason": "Both outputs consistently identify the legitimate .NET NGen parent-child chain as benign with no applicable ATT&CK technique, though their evidence and no-action recommendation are minimally justified.",
+  "nid": "ADGEN_0023123",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "winner": "tie",
+  "reason": "identical outputs correctly identify legitimate ngen/mscorsvw parent-child chain as benign with no MITRE technique",
+  "nid": "ADGEN_0023123",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A correctly recognizes legitimate SYSTEM rundll32 execution while B misclassifies it as malicious T1059.",
+  "nid": "ADGEN_0048727",
+  "judge": "muse-spark-1.3-contributor",
+  "A_is": "t7b"
+ },
+ {
+  "_raw": "",
+  "_parse": "fail",
+  "nid": "ADGEN_0048727",
+  "judge": "deepseek-v4.1-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "A aligns with the benign signed Windows autocheck command spawned by svchost, whereas B incorrectly marks it malicious and T1059 without sufficient evidence.",
+  "nid": "ADGEN_0048727",
+  "judge": "qwen3.8-flash",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 1,
+   "attck_alignment": 0,
+   "rationale_consistency": 1,
+   "actionability": 1
+  },
+  "winner": "A",
+  "reason": "Output A correctly treats the signed system rundll32 invocation of acproxy.dll PerformAutochkOperations as benign, while B misclassifies it as T1059 and recommends unsupported termination.",
+  "nid": "ADGEN_0048727",
+  "judge": "gpt-5.6-luna",
+  "A_is": "t7b"
+ },
+ {
+  "A": {
+   "evidence_support": 2,
+   "attck_alignment": 2,
+   "rationale_consistency": 2,
+   "actionability": 2
+  },
+  "B": {
+   "evidence_support": 2,
+   "attck_alignment": 0,
+   "rationale_consistency": 0,
+   "actionability": 0
+  },
+  "winner": "A",
+  "reason": "A correctly treats the legitimate SYSTEM rundll32 acproxy.dll autochk invocation as benign with no action, while B invents malice and the wrong T1059.",
+  "nid": "ADGEN_0048727",
+  "judge": "grok-4.6",
+  "A_is": "t7b"
+ }
+]
