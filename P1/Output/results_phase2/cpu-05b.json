@@ -1,0 +1,257 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "device": "cpu",
+ "threads": 4,
+ "cpu": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+ "n": 30,
+ "burn": 0,
+ "p50_s": 21.356,
+ "p95_s": 24.676,
+ "p99_s": 28.421,
+ "ram_rss_gb": 6.73,
+ "ram_model_only_gb": 2.1,
+ "kv_mb_ctx512": 12.6,
+ "throughput_per_day": 4045,
+ "samples": [
+  {
+   "nid": "ADGEN_0032912",
+   "latency_s": 21.254,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0084905",
+   "latency_s": 19.178,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0005161",
+   "latency_s": 18.117,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0034254",
+   "latency_s": 17.175,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0030282",
+   "latency_s": 21.837,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0144178",
+   "latency_s": 18.111,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0037843",
+   "latency_s": 21.356,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0023722",
+   "latency_s": 19.032,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0030598",
+   "latency_s": 18.369,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0007744",
+   "latency_s": 19.258,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0141267",
+   "latency_s": 28.421,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0039642",
+   "latency_s": 21.797,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0033247",
+   "latency_s": 23.998,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0008818",
+   "latency_s": 23.013,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0022949",
+   "latency_s": 18.736,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0052134",
+   "latency_s": 23.546,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0025891",
+   "latency_s": 22.125,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0186830",
+   "latency_s": 19.196,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0048568",
+   "latency_s": 19.756,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0041094",
+   "latency_s": 22.528,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0012983",
+   "latency_s": 22.739,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0041382",
+   "latency_s": 23.701,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0039963",
+   "latency_s": 19.986,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0043412",
+   "latency_s": 22.981,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0026459",
+   "latency_s": 19.786,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0009274",
+   "latency_s": 24.363,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0185718",
+   "latency_s": 24.676,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0038045",
+   "latency_s": 23.665,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0021696",
+   "latency_s": 20.454,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  },
+  {
+   "nid": "ADGEN_0049994",
+   "latency_s": 20.228,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "terminate_process"
+  }
+ ]
+}
