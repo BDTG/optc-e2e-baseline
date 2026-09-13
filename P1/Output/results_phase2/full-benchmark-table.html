@@ -327,6 +327,7 @@ File: judge-spark-40.json + judge-spark-40-full.json + judge-agreement.json + hu
 <tr><th>Hệ (blind A/B)</th><th>evidence</th><th>ATT&CK</th><th>consistency</th><th>actionability</th><th>mean</th><th>pairwise wins</th></tr>
 <tr style="background:#ecfdf5"><td><b>SLM 0.5B</b></td><td class="ap"><b>1.376</b></td><td class="ap">1.133</td><td class="ap">1.527</td><td class="ap"><b>1.424</b></td><td class="ap"><b>1.365</b></td><td class="ap"><b>55</b></td></tr>
 <tr><td><b>Teacher 7B</b></td><td class="ap">1.315</td><td class="ap"><b>1.176</b></td><td class="ap"><b>1.558</b></td><td class="ap">1.218</td><td class="ap">1.317</td><td class="ap"><b>59</b></td></tr>
+<tr><td><b>hal-content (b, free-gen rationale, judge-blind G:0-2)</b> 21 paired nids x 3 judges = 124 ratings</td><td class="neg">0.5B <b>0.96</b> (grounded 0.079)</td><td>teacher-7B <b>0.71</b> (grounded 0.574)</td><td>hal-rule 0.0 BO (vong tron: GT va output cung ham rule_evidence). SLM khong suy luan tu do duoc — ship constrained only (grounded by construction, judge 1.376/2)</td></tr>
 </table>
 <div class="note">Judges: spark + gpt-luna + grok + deepseek-flash + qwen3.8-flash (3 endpoint families, blind swap theo hash, thang 0-2).
 Per-judge wins (t7b–05b): gpt 15-14, grok 15-14, spark 11-9, qwen 14-10, deepseek 4-8.
