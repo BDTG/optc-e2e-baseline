@@ -1,0 +1,32 @@
+{
+ "n_ratings": 126,
+ "n_scored": 124,
+ "n_fail": 2,
+ "paired_nids": 21,
+ "slm05": {
+  "grounded": 0.079,
+  "hal_content": 0.96,
+  "n": 63
+ },
+ "t7b": {
+  "grounded": 0.574,
+  "hal_content": 0.713,
+  "n": 61
+ },
+ "per_judge": {
+  "spark": {
+   "slm05": 0.0,
+   "t7b": 0.571
+  },
+  "deepseek": {
+   "slm05": 0.095,
+   "t7b": 0.368
+  },
+  "qwen3.8-flash": {
+   "slm05": 0.143,
+   "t7b": 0.762
+  }
+ },
+ "method": "free-gen rationale 1-shot, 40 mau pack (compliant 21 slm05/40 t7b, paired 21), blind, G:0-2, hal=1-mean/2",
+ "conclusion": "hal-rule 0.0 BO (vong tron); hal-content that: slm05 0.96 >> teacher 0.71; ship constrained only"
+}

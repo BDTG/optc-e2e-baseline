@@ -65,3 +65,8 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Cấu trúc repo, setup end-to-end P0/P1, restore từ patches: xem README mục 1, 3, 8.
 - Kết quả P0 (Flash/Magic) + P1 (Velox): README mục 2, 4, 5.
 - Chi tiết P2 đầy đủ (bảng section 8/9/10/10b, mindmap, draft chương): `P1/Output/results_phase2/`.
+
+## hal-that (phuong an b, thay hal-rule 0.0)
+- Free-gen rationale 1-shot, 40 mau pack (compliant 21 slm05 / 40 t7b, paired 21), 3 judges blind, 124 ratings.
+- slm05 grounded 0.079 -> hal-content **0.96**; teacher-7B grounded 0.574 -> hal **0.71** (spark 0.0/0.571, deepseek 0.095/0.368, qwen 0.143/0.762).
+- hal-rule 0.0 BO (vong tron). Ket luan deploy: ship constrained only.
