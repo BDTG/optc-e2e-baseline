@@ -29,14 +29,14 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <h2>0b) ĐÃ CHỐT — số lock của thầy (không làm lại, trích nguyên văn spec Paper 2)</h2>
 <table>
 <tr><th>Hạng mục</th><th>Trạng thái</th><th>Số / ghi chú</th></tr>
-<tr><td>Tầng 1 detector (Velox)</td><td>✅</td><td>AUC 0.917, R@20K 81% (P1)</td></tr>
-<tr><td>Lọc cascade</td><td>✅</td><td>474 → 39, tập giàu, recall giữ 75%</td></tr>
-<tr><td>Cơ chế output</td><td>✅ constrained/logprob</td><td>parse_fail 0, valid 100%</td></tr>
-<tr><td>Model tầng 2</td><td>✅ chọn 0.5B</td><td>nhỏ nhất, hợp endpoint nhất</td></tr>
-<tr><td>Dataset</td><td>✅ AD-GEN</td><td>704 chain GT, 12 TTP</td></tr>
-<tr><td>Kết quả TTP (âm)</td><td>✅ đã có</td><td>0.29/0.30/0.12; teacher-7B 0.099</td></tr>
-<tr><td>FT head (dương)</td><td>✅ có, cần củng cố</td><td>A2 3 seeds: 0.4732/0.4645/0.4521 → <b>0.4633 ± 0.0106</b> vs TF-IDF 0.4591</td></tr>
-<tr><td>Verdict tier-2</td><td>✅ đã có</td><td>0.775 ± 0.13 (xval OpTC)</td></tr>
+<tr><td>Tầng 1 detector (Velox)</td><td>Xong</td><td>AUC 0.917, R@20K 81% (P1)</td></tr>
+<tr><td>Lọc cascade</td><td>Xong</td><td>474 → 39, tập giàu, recall giữ 75%</td></tr>
+<tr><td>Cơ chế output</td><td>constrained/logprob</td><td>parse_fail 0, valid 100%</td></tr>
+<tr><td>Model tầng 2</td><td>chọn 0.5B</td><td>nhỏ nhất, hợp endpoint nhất</td></tr>
+<tr><td>Dataset</td><td>AD-GEN</td><td>704 chain GT, 12 TTP</td></tr>
+<tr><td>Kết quả TTP (âm)</td><td>đã có</td><td>0.29/0.30/0.12; teacher-7B 0.099</td></tr>
+<tr><td>FT head (dương)</td><td>có, cần củng cố</td><td>A2 3 seeds: 0.4732/0.4645/0.4521 → <b>0.4633 ± 0.0106</b> vs TF-IDF 0.4591</td></tr>
+<tr><td>Verdict tier-2</td><td>đã có</td><td>0.775 ± 0.13 (xval OpTC)</td></tr>
 </table>
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
 <thead>
@@ -340,6 +340,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>Action-acc</b> (playbook v1, GT 81% no_action đã trừ skew, 133 mẫu actionable)</td><td class="ap">0.5B <b>0.256</b> / 1.1B <b>0.263</b> / 1.5B <b>0.105</b> / teacher-7B <b>0.030</b></td><td>GT-match thấp vì GT skew — chất lượng action thật do judge + human chấm (mean actionability 1.365 vs 1.218)</td></tr>
 <tr><td><b>Judge-full (Muse Spark, narrative đầy đủ) vs GT</b> (40 mẫu)</td><td class="ap">verdict <b>0.30</b>, TTP <b>0.225</b> (stub chỉ 0.175/0.10)</td><td>Context đầy đủ gấp đôi stub nhưng vẫn xa GT → GT synthetic nhiễu dual-use, không phải judge dở</td></tr>
 </table>
+<div style="background:#fffbe6;border:2px solid #fde047;border-radius:8px;padding:12px 14px;margin:12px 0">
 <h2>12) Việc 3 — CPU on-device (on-device không GPU, đo 14/09, i5-10300H 4c/8t fp32, threads=4)</h2>
 <table>
 <tr><th>Model</th><th>p50 (máy rỗi)</th><th>p95</th><th>p99</th><th>Quyết định/ngày (rỗi)</th><th>p50 (máy bận, 4 proc đốt CPU)</th><th>Quyết định/ngày (bận)</th></tr>
@@ -373,5 +374,6 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>7B Qwen2.5 (teacher)</b></td><td class="ap"><b>0.807</b></td><td>0.597</td><td>0.72 / 0.88 / 0.82</td></tr>
 </table>
 <div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
+</div>
 </body>
 </html>
