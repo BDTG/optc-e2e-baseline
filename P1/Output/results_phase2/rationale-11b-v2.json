@@ -1,0 +1,302 @@
+[
+ {
+  "nid": "ADGEN_0144178",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 7.66
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "label": 1,
+  "rationale": "The chain creates a pipe that connects to the gpupdate.exe process, which is a known Windows update process. The pipe is then connected to the Event10 and Event8 processes, which are also known Windows update processes. The pipe is then connected to the gpupdate.exe process, which is a known Windows update process. This chain is a common way to launch a Windows update process.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\nCreateProcessAsUser(0x1000, \"C:\\Windows\\System32\\gpupdate.exe\", \"C:\\Windows\\System32\\gpupdate.exe\", null, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, null, null)\nExplanation: The chain creates a process with the specified arguments and then connects to the gpupdate.exe process. This is a common way",
+  "latency_s": 5.36
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "label": 1,
+  "rationale": "The chain shows a malicious process (ConnectPipe) connecting to a legitimate process (svchost.exe) and modifying its registry key (CreateKey). The legitimate process (svchost.exe) is then used to create a new event (Event22) and modify its registry key (CreateKey). This is a classic example of a process-to-process communication channel.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter ab",
+  "latency_s": 5.48
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "label": 1,
+  "rationale": "The chain shows a user executing a command-line tool (net1.exe) with a pipe to a network service (net1) and a connection to a local service (connectpipe). The pipe is used to transfer data between the two services. The user is executing the command-line tool with a privileged account, which is a known attack vector.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MAL",
+  "latency_s": 5.44
+ },
+ {
+  "nid": "ADGEN_0059379",
+  "label": 1,
+  "rationale": "The chain shows a command-line tool connecting to a WMI service, which is a common way to access remote services. The tool is not malicious, but it is a common attack vector for remote access.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe |",
+  "latency_s": 5.5
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "label": 1,
+  "rationale": "The chain shows a series of events with the same timestamp, indicating a coordinated attack. The events are all related to the same process (Event4104), and the timestamp is consistent across all events. This is a classic example of a coordinated attack.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.35
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "label": 1,
+  "rationale": "The chain creates a key in the registry, which is a common attack vector for malware. The key is created by a command-line tool, which is a known attack vector for malware.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\nCreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | Event11 | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nExplanation: The chain creates a key in the registry, which is a common attack vector for malware. The key is created",
+  "latency_s": 5.49
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "label": 1,
+  "rationale": "The chain shows a command-line execution of powershell with a bypass-bypassing obfuscation pattern. This is a common technique used by attackers to bypass security measures.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none",
+  "latency_s": 5.63
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.36
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.32
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "label": 1,
+  "rationale": "The chain shows a series of events that are all related to the Windows Event Log. The first event (Event200) is a system event, indicating a system-level event. The second event (Event201) is a security event, indicating a security-related event. The third event (Event102) is a system event, indicating a system-level event. The fourth event (Event301) is a security event, indicating a security-related event. The fifth event (Event318) is a system event, indicating a system-level event.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-",
+  "latency_s": 5.31
+ },
+ {
+  "nid": "ADGEN_0030933",
+  "label": 1,
+  "rationale": "The chain shows a series of events that are all related to a specific malware family. The events are all related to the same family, and the chain is a good example of a well-known malware family.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe",
+  "latency_s": 5.31
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "label": 1,
+  "rationale": "The chain shows a series of events that are all related to the Windows Event Log. The first event (Event100) is a system event, indicating a system restart. The second event (Event129) is a system event, indicating a system restart. The third event (Event200) is a user event, indicating a user logon. The fourth event (Event201) is a system event, indicating a system restart. The fifth event (Event102) is a user event, indicating a user logon.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obf",
+  "latency_s": 5.35
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "label": 1,
+  "rationale": "The chain shows a scheduled task created by a malicious attacker, with a command to start powershell.exe with a base64-encoded command, and a scheduled execution with a minimum interval of 5 minutes.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe",
+  "latency_s": 5.41
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "label": 1,
+  "rationale": "The chain shows a scheduled task created by a user with SYSTEM privileges, running a script with a known command-and-scripting-interpreter abuse pattern. The task is scheduled to run daily at 12:00 AM.\nVERDICT: MALICIOUS\nTTP: T1036.004\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:",
+  "latency_s": 5.37
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "label": 1,
+  "rationale": "The chain shows a scheduled task created by a malicious script that executes calc.exe, a known command-and-control tool. The event 7 is a scheduled task that is triggered by the event 1. The T1053_005_OnStartup is a known command-and-control tool.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nT",
+  "latency_s": 5.38
+ },
+ {
+  "nid": "ADGEN_0000501",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.28
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "label": 1,
+  "rationale": "The chain shows a legitimate command prompt with a malicious command, echo, and a pipe to a legitimate file. The pipe is a common attack vector for command injection.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplanation",
+  "latency_s": 5.32
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 1000) triggering a legitimate command-line process (rundll32.exe) with a malicious parent (C:\\Windows\\system32\\rundll32.exe). This is a classic example of a legitimate process being abused by a malicious actor.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVER",
+  "latency_s": 5.32
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "label": 1,
+  "rationale": "The chain shows a PowerShell script running in a remote session, with a connection to a local pipe, and a connection to a remote pipe. The script creates a key in a local registry, and a remote registry key. This is a common PowerShell scripting pattern used for remote access.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059",
+  "latency_s": 5.4
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.59
+ },
+ {
+  "nid": "ADGEN_0000736",
+  "label": 1,
+  "rationale": "The chain shows a user executing a malicious executable from a user-writable folder. The event log entries are all from the same executable, and the user is executing it from a user-writable folder. This is a classic example of a user executing a malicious executable from a user-writable folder.\nVERDICT: MALICIOUS\nTTP: T1053\n\nNow your turn.\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP:",
+  "latency_s": 5.7
+ },
+ {
+  "nid": "ADGEN_0000915",
+  "label": 1,
+  "rationale": "The chain shows a legitimate process (Event7) creating a pipe (CreatePipe) to a malicious process (b4fabde.exe). The pipe is used to transfer data between the two processes.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe",
+  "latency_s": 5.6
+ },
+ {
+  "nid": "ADGEN_0000525",
+  "label": 1,
+  "rationale": "The chain shows a command prompt with a command to create a pipe and write to it, followed by a set value command to write a string to a pipe. The pipe is created with a user-specified name and the string is written to it. The pipe is then closed. This is a common technique for creating a persistent connection to a command prompt.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALIC",
+  "latency_s": 5.8
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.71
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "label": 1,
+  "rationale": "The chain shows a malicious event generated by a malicious beacon. The beacon is a malicious executable that is designed to execute arbitrary code on the victim's system.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplan",
+  "latency_s": 5.83
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "label": 1,
+  "rationale": "The chain shows a series of events with the same timestamp, indicating a coordinated attack. The events are all related to the same process (Event5860), and the timestamp is consistent across all events. This is a classic example of a coordinated attack.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.61
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "label": 1,
+  "rationale": "The chain shows a legitimate DNS query followed by a malicious DNS lookup, with a key file created and executed. The key file is a common attack vector for DNS poisoning.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplan",
+  "latency_s": 5.74
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event 1 (system) spawned with a command line that forces a V1 version of the ConHost.exe process. This is a common attack vector for malware that uses a legitimate process to launch a malicious one.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.93
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "label": 1,
+  "rationale": "The chain shows a malicious PowerShell script running with elevated privileges, and a legitimate PowerShell script being executed with elevated privileges. The legitimate script is being executed with the same privileges as the malicious script.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome",
+  "latency_s": 5.95
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "label": 1,
+  "rationale": "The chain shows a series of events with the same timestamp, indicating a coordinated attack. The events are all related to the same process (Event4672), and the timestamp is consistent across all events. This is a classic example of a coordinated attack.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:",
+  "latency_s": 5.52
+ },
+ {
+  "nid": "ADGEN_0000690",
+  "label": 1,
+  "rationale": "The chain shows a legitimate event that spawns a command line, but the parent is a malicious process. The event is a legitimate process, but the parent is malicious.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nEx",
+  "latency_s": 5.4
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "label": 1,
+  "rationale": "The chain shows a command-line tool used to retrieve credentials from a Windows system. The command key tool is a known credential harvester.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplanation: The chain shows a normal",
+  "latency_s": 5.47
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "label": 1,
+  "rationale": "The chain creates a key in the registry, which is a common attack vector for malware. The key is created by a command-line tool, which is a known attack vector for malware.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\nCreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe | CreateKey | C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nExplanation",
+  "latency_s": 5.62
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "label": 1,
+  "rationale": "The chain shows a series of events with a common event ID (1116) and a common event name (Event1116). This is a common attack pattern used to create a false positive.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe |",
+  "latency_s": 5.72
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "label": 1,
+  "rationale": "The chain shows a series of events that are all related to the Windows Event Log. The first event (Event200) is a system event, indicating a system-level event. The second event (Event201) is a security event, indicating a security-related event. The third event (Event102) is a system event, indicating a system-level event. The fourth event (Event301) is a security event, indicating a security-related event. The fifth event (Event318) is a system event, indicating a system-level event.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-",
+  "latency_s": 5.51
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 1000) triggering a legitimate command-line process (rundll32.exe) with a malicious parent (C:\\WINDOWS\\system32\\rundll32.exe). This is a classic example of a legitimate process being abused by a malicious actor.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.",
+  "latency_s": 5.47
+ },
+ {
+  "nid": "ADGEN_0000869",
+  "label": 1,
+  "rationale": "The chain shows a local server process created by rundll32.exe running with embedded embedding. This is a known malware pattern.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplanation: The chain shows a normal service host",
+  "latency_s": 5.9
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 1000) triggering a legitimate command-line process (rundll32.exe) with a malicious parent (C:\\WINDOWS\\system32\\rundll32.exe). This is a classic example of a legitimate process being abused by a malicious actor.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.",
+  "latency_s": 5.89
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (user-initiated) command line running a malicious EdgeHTML.dll, which is a known malware payload.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd: none\nExplanation:",
+  "latency_s": 6.0
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 100) triggering a command-line command (C:\\Windows\\System32\\bcdedit.exe) with a malicious boot status policy (ignoreallfailures). This is a classic malware payload that exploits a vulnerability in the Windows boot manager.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: M",
+  "latency_s": 5.77
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 100) triggering a command-line command (C:\\Windows\\System32\\bcdedit.exe) with a malicious boot status policy (ignoreallfailures). This is a classic malware payload that exploits a vulnerability in the Windows boot manager.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: M",
+  "latency_s": 5.67
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 5007 (registry editor) being executed with a malicious command line, a known malware command, and a known malware event. The malware is likely a backdoor or a trojan.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsv",
+  "latency_s": 6.02
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "label": 1,
+  "rationale": "The two events are related to the Windows Event Log. Event3004 is a system event that indicates a security event, while Event3089 is a system event that indicates a security event. The two events are related because they both occur when a security event occurs.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:",
+  "latency_s": 5.9
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "label": 1,
+  "rationale": "The chain shows a series of events that are all related to the Windows Event Log. The first event (Event101) is a system event, the second (Event1013) is a system event, the third (Event101) is a system event, and the fourth (Event1001) is a system event. This is a classic example of a system event chain.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpre",
+  "latency_s": 6.01
+ },
+ {
+  "nid": "ADGEN_0000952",
+  "label": 1,
+  "rationale": "The chain shows a malicious downloader that connects to a beacon server, creates a pipe to the beacon server, and then creates a pipe to the beacon server. The beacon server is a common target for malware.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.",
+  "latency_s": 6.03
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "label": 1,
+  "rationale": "The chain shows a user downloading a file, executing it, and then downloading another file. This is a classic example of a \"double-click\" attack, where the user clicks on a file and the attacker downloads a second file.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.",
+  "latency_s": 6.07
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "label": 1,
+  "rationale": "The chain shows a malicious process (vmtoolsd.exe) creating a key in the C:\\Program Files\\VMware\\VMware Tools\\ directory. This is a known keylogger attack.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe | chrome.exe | cmd:",
+  "latency_s": 6.03
+ },
+ {
+  "nid": "ADGEN_0000684",
+  "label": 1,
+  "rationale": "The chain shows a malicious event 1 (e.g. Event 1000) triggering a legitimate rundll32.exe command with a suspicious parent (C:\\Windows\\system32\\rundll32.exe). This is a classic malware-as-a-service (MAAS) attack.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALIC",
+  "latency_s": 5.74
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "label": 1,
+  "rationale": "The chain shows a legitimate process (Event7) creating a pipe (CreatePipe) to a malicious process (841920a.exe). The pipe is used to transfer data between the two processes.\nVERDICT: MALICIOUS\nTTP: T1053\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a classic obfuscation pattern. The parent svchost.exe spawning powershell is abnormal. This matches command-and-scripting-interpreter abuse.\nVERDICT: MALICIOUS\nTTP: T1059\n\nExample:\nChain:\nsvchost.exe |",
+  "latency_s": 5.27
+ }
+]

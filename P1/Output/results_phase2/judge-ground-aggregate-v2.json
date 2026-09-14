@@ -1,0 +1,62 @@
+{
+ "setup": "free-gen 3-shot rationale, 40 mau pack, blind judge G:0-2, hal=1-mean/2",
+ "n_ratings": 480,
+ "n_scored": 479,
+ "per_model": {
+  "slm05": {
+   "name": "Qwen2.5-0.5B",
+   "n": 120,
+   "grounded": 0.2583,
+   "hal": 0.8708
+  },
+  "slm11": {
+   "name": "TinyLlama-1.1B",
+   "n": 120,
+   "grounded": 0.075,
+   "hal": 0.9625
+  },
+  "slm15": {
+   "name": "Qwen2.5-1.5B",
+   "n": 120,
+   "grounded": 0.425,
+   "hal": 0.7875
+  },
+  "t7b": {
+   "name": "Qwen2.5-7B (teacher)",
+   "n": 119,
+   "grounded": 0.8067,
+   "hal": 0.5966
+  }
+ },
+ "per_judge": {
+  "muse-spark-1.3-contributor": {
+   "slm05": 0.35,
+   "slm11": 0.0,
+   "slm15": 0.425,
+   "t7b": 0.725
+  },
+  "deepseek-v4.1-flash": {
+   "slm05": 0.125,
+   "slm11": 0.05,
+   "slm15": 0.35,
+   "t7b": 0.875
+  },
+  "qwen3.8-flash": {
+   "slm05": 0.3,
+   "slm11": 0.175,
+   "slm15": 0.5,
+   "t7b": 0.821
+  }
+ },
+ "v1_compare": {
+  "note": "v1 = 1-shot, 21 paired (N thap hon)",
+  "slm05": {
+   "grounded": 0.079,
+   "hal": 0.96
+  },
+  "t7b": {
+   "grounded": 0.574,
+   "hal": 0.713
+  }
+ }
+}

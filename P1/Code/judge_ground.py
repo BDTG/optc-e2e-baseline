@@ -85,25 +85,58 @@ def _txt_resp(r):
 
 
 def main():
-    only = sys.argv[1] if len(sys.argv) > 1 else "all"
+    args = sys.argv[1:]
+    ver = "v2" if "v2" in args else "v1"
+    only = next((x for x in args if x != "v2" and x not in JUDGES), "all")
+    sfx = "-v2" if ver == "v2" else ""
+    JF = [x for x in args if x in JUDGES]
+    ssfx = sfx
+    if JF:
+        global JUDGES
+        JUDGES = JF
+        ssfx += "-" + ("spark" if "spark" in JF[0] else "deepseek" if "deepseek" in JF[0] else "qwen")
     T = r"C:\Users\BDTG\AppData\Local\Temp"
-    r05 = {x["nid"]: x["rationale"] for x in json.load(open(f"{T}/rationale-05b.json", encoding="utf-8")) if "VERDICT" in x["rationale"]}
-    r7b = {x["nid"]: x["rationale"] for x in json.load(open(f"{T}/rationale-7b.json", encoding="utf-8")) if "VERDICT" in x["rationale"]}
-    print("compliant:", len(r05), len(r7b), flush=True)
+
+    def load_gen(tag):
+        out = {}
+        for suf in (sfx, sfx + "x"):
+            p = f"{T}/rationale-{tag}{suf}.json"
+            if os.path.exists(p):
+                for x in json.load(open(p, encoding="utf-8")):
+                    if "VERDICT" in x["rationale"]:
+                        out[x["nid"]] = x["rationale"]
+        return out
+
+    r05 = load_gen("05b")
+    r7b = load_gen("7b")
+    r11 = load_gen("11b")
+    r15 = load_gen("15b")
+    print(f"[{ver}] compliant: 05b {len(r05)} | 11b {len(r11)} | 15b {len(r15)} | 7b {len(r7b)}", flush=True)
+    paired = sorted(set(r05) & set(r7b))
+    if ver == "v2":
+        pack = set(json.load(open(f"{T}/gen40-nids.json", encoding="utf-8")))
+        pp = [n for n in paired if n in pack]
+        ex = [n for n in paired if n not in pack]
+        nids = pp + ex[:max(0, 40 - len(pp))]
+        print(f"pack-paired {len(pp)} + extra {len(nids)-len(pp)} -> N={len(nids)}", flush=True)
+    else:
+        nids = paired
     narrs = {}
     for l in open(f"{T}/adgen-ttp-bench.jsonl", encoding="utf-8"):
         o = json.loads(l)
         ch = o.get("parent_chain", []) or []
         narrs[o["nid"]] = " | ".join([(c.get("msg") or "") for c in ch[-5:]])[:1500]
-    nids = sorted(set(r05) & set(r7b))
     try:
-        D = json.load(open(f"{T}/judge-ground-scores.json", encoding="utf-8"))
+        D = json.load(open(f"{T}/judge-ground-scores{ssfx}.json", encoding="utf-8"))
     except Exception:
         D = []
     done = {(r["nid"], r["judge"], r["src"]) for r in D}
     jobs = []
+    SRCS = (("slm05", r05), ("slm11", r11), ("slm15", r15), ("t7b", r7b))
     for nid in nids:
-        for src, rr in (("slm05", r05), ("t7b", r7b)):
+        for src, rr in SRCS:
+            if nid not in rr:
+                continue
             for j in JUDGES:
                 if (nid, j, src) not in done:
                     jobs.append((nid, src, rr[nid], j))
@@ -120,9 +153,9 @@ def main():
             D.append({"nid": nid, "src": src, "judge": j,
                       "groundedness": None, "raw": "JOB_FAIL: " + str(e)[:120]})
         if (i + 1) % 10 == 0:
-            json.dump(D, open(f"{T}/judge-ground-scores.json", "w"), indent=1)
+            json.dump(D, open(f"{T}/judge-ground-scores{ssfx}.json", "w"), indent=1)
             print(f"{i+1}/{len(jobs)}", flush=True)
-    json.dump(D, open(f"{T}/judge-ground-scores.json", "w"), indent=1)
+    json.dump(D, open(f"{T}/judge-ground-scores{ssfx}.json", "w"), indent=1)
     print("DONE", len(D), flush=True)
 
 

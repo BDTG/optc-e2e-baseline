@@ -327,7 +327,7 @@ File: judge-spark-40.json + judge-spark-40-full.json + judge-agreement.json + hu
 <tr><th>Hệ (blind A/B)</th><th>evidence</th><th>ATT&CK</th><th>consistency</th><th>actionability</th><th>mean</th><th>pairwise wins</th></tr>
 <tr style="background:#ecfdf5"><td><b>SLM 0.5B</b></td><td class="ap"><b>1.376</b></td><td class="ap">1.133</td><td class="ap">1.527</td><td class="ap"><b>1.424</b></td><td class="ap"><b>1.365</b></td><td class="ap"><b>55</b></td></tr>
 <tr><td><b>Teacher 7B</b></td><td class="ap">1.315</td><td class="ap"><b>1.176</b></td><td class="ap"><b>1.558</b></td><td class="ap">1.218</td><td class="ap">1.317</td><td class="ap"><b>59</b></td></tr>
-<tr><td><b>hal-content (b, free-gen rationale, judge-blind G:0-2)</b> 21 paired nids x 3 judges = 124 ratings</td><td class="neg">0.5B <b>0.96</b> (grounded 0.079)</td><td>teacher-7B <b>0.71</b> (grounded 0.574)</td><td>hal-rule 0.0 BO (vong tron: GT va output cung ham rule_evidence). SLM khong suy luan tu do duoc — ship constrained only (grounded by construction, judge 1.376/2)</td></tr>
+<tr><td><b>hal-content (b, free-gen rationale, judge-blind G:0-2)</b> N=40 cap x 4 he x 3 judges = 480 ratings (section 13)</td><td class="neg">0.5B <b>0.871</b> (grounded 0.258)</td><td>teacher-7B <b>0.597</b> (grounded 0.807)</td><td>hal-rule 0.0 BO (vong tron: GT va output cung ham rule_evidence). Free-gen noi dung yeu ca 4 he — ship constrained only (grounded by construction, judge 1.376/2)</td></tr>
 </table>
 <div class="note">Judges: spark + gpt-luna + grok + deepseek-flash + qwen3.8-flash (3 endpoint families, blind swap theo hash, thang 0-2).
 Per-judge wins (t7b–05b): gpt 15-14, grok 15-14, spark 11-9, qwen 14-10, deepseek 4-8.
@@ -340,5 +340,38 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>Action-acc</b> (playbook v1, GT 81% no_action đã trừ skew, 133 mẫu actionable)</td><td class="ap">0.5B <b>0.256</b> / 1.1B <b>0.263</b> / 1.5B <b>0.105</b> / teacher-7B <b>0.030</b></td><td>GT-match thấp vì GT skew — chất lượng action thật do judge + human chấm (mean actionability 1.365 vs 1.218)</td></tr>
 <tr><td><b>Judge-full (Muse Spark, narrative đầy đủ) vs GT</b> (40 mẫu)</td><td class="ap">verdict <b>0.30</b>, TTP <b>0.225</b> (stub chỉ 0.175/0.10)</td><td>Context đầy đủ gấp đôi stub nhưng vẫn xa GT → GT synthetic nhiễu dual-use, không phải judge dở</td></tr>
 </table>
+<h2>12) Việc 3 — CPU on-device (on-device không GPU, đo 14/09, i5-10300H 4c/8t fp32, threads=4)</h2>
+<table>
+<tr><th>Model</th><th>p50 (máy rỗi)</th><th>p95</th><th>p99</th><th>Quyết định/ngày (rỗi)</th><th>p50 (máy bận, 4 proc đốt CPU)</th><th>Quyết định/ngày (bận)</th></tr>
+<tr><td><b>0.5B Qwen2.5</b></td><td class="ap"><b>21.4s</b></td><td>24.7s</td><td>28.4s</td><td><b>4,045</b></td><td>96.1s</td><td>899</td></tr>
+<tr><td>1.1B TinyLlama</td><td>59.6s</td><td>78.4s</td><td>78.4s</td><td>1,449</td><td>(đang đo)</td><td>—</td></tr>
+<tr><td>1.5B Qwen2.5</td><td>131.5s</td><td>170.8s</td><td>170.8s</td><td>657</td><td>(đang đo)</td><td>—</td></tr>
+</table>
+<h3>RAM footprint (process riêng từng model — weight + KV tách riêng)</h3>
+<table>
+<tr><th>Model</th><th>Params</th><th>Weight (RSS delta fp32)</th><th>Peak RSS (quá trình)</th><th>KV cache @512 ctx</th><th>KV cache @2048 ctx</th></tr>
+<tr><td>0.5B</td><td>0.494B</td><td class="ap"><b>2.1 GB</b></td><td>6.1 GB</td><td>12.6 MB</td><td>50.3 MB</td></tr>
+<tr><td>1.1B</td><td>1.10B</td><td>4.5 GB</td><td>6.1 GB</td><td>23.1 MB</td><td>92.3 MB</td></tr>
+<tr><td>1.5B</td><td>1.544B</td><td>6.2 GB</td><td>9.7 GB</td><td>29.4 MB</td><td>117.4 MB</td></tr>
+</table>
+<div class="note">Đọc: chỉ 0.5B khả thi endpoint 4–8GB RAM (weight 2.1GB + runtime; 39 alert/ngày × 21.4s ≈ 14 phút/ngày lúc rỗi, ≈62 phút lúc bận). 1.5B weight 6.2GB + peak 9.7GB vượt nhiều endpoint; chậm 6× mà TTP thua 0.5B (0.12 vs 0.29). Throughput giả định 1 endpoint chạy liên tục. Script: bench_cpu.py (+ --burn), bench_cpu_mem.py. File: cpu-05b.json, cpu-11b.json, cpu-15b.json, cpu-05b-burn.json, cpu-mem.json.</div>
+<h2>13) Compliance free-gen + hal-content N=40 (3-shot, 3 judges blind, 14/09)</h2>
+<h3>Tỷ lệ compliant (rationale ra đúng format trên 40 mẫu pack)</h3>
+<table>
+<tr><th>Model</th><th>1-shot</th><th>3-shot</th></tr>
+<tr><td>0.5B Qwen2.5</td><td class="neg">21/40 (52.5%)</td><td class="ap"><b>38/40 (95.0%)</b></td></tr>
+<tr><td>1.1B TinyLlama</td><td>37/40 (92.5%)</td><td>40/40 (100%)</td></tr>
+<tr><td>1.5B Qwen2.5</td><td>40/40 (100%)</td><td>40/40 (100%)</td></tr>
+<tr><td>7B Qwen2.5 (teacher)</td><td>40/40 (100%)</td><td>40/40 (100%)</td></tr>
+</table>
+<h3>Groundedness / hal-content (N=40 cặp, blind G:0-2, hal = 1 − mean/2)</h3>
+<table>
+<tr><th>Hệ</th><th>grounded (/2)</th><th>hal-content</th><th>Per-judge (spark/deepseek/qwen)</th></tr>
+<tr><td>0.5B Qwen2.5</td><td>0.258</td><td class="neg">0.871</td><td>0.35 / 0.12 / 0.30</td></tr>
+<tr><td>1.1B TinyLlama</td><td>0.075</td><td class="neg">0.963</td><td>0.00 / 0.05 / 0.17</td></tr>
+<tr><td>1.5B Qwen2.5</td><td>0.425</td><td class="neg">0.788</td><td>0.42 / 0.35 / 0.50</td></tr>
+<tr><td><b>7B Qwen2.5 (teacher)</b></td><td class="ap"><b>0.807</b></td><td>0.597</td><td>0.72 / 0.88 / 0.82</td></tr>
+</table>
+<div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
 </body>
 </html>

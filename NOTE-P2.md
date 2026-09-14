@@ -66,7 +66,14 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Kết quả P0 (Flash/Magic) + P1 (Velox): README mục 2, 4, 5.
 - Chi tiết P2 đầy đủ (bảng section 8/9/10/10b, mindmap, draft chương): `P1/Output/results_phase2/`.
 
-## hal-that (phuong an b, thay hal-rule 0.0)
-- Free-gen rationale 1-shot, 40 mau pack (compliant 21 slm05 / 40 t7b, paired 21), 3 judges blind, 124 ratings.
-- slm05 grounded 0.079 -> hal-content **0.96**; teacher-7B grounded 0.574 -> hal **0.71** (spark 0.0/0.571, deepseek 0.095/0.368, qwen 0.143/0.762).
-- hal-rule 0.0 BO (vong tron). Ket luan deploy: ship constrained only.
+## hal-that (phuong an b, N=40, 3 judges blind, 3-shot)
+- Compliance 3-shot (pack 40): 0.5B 38/40 (95%) | 1.1B 40/40 | 1.5B 40/40 | 7B 40/40. (1-shot: 0.5B 21/40 = 52.5% — vi du BENIGN cuu format)
+- Groundedness (G:0-2): 0.5B 0.258 | 1.1B 0.075 | 1.5B 0.425 | 7B **0.807** → hal-content 0.871 / 0.963 / 0.788 / **0.597**.
+- So v1 (1-shot, 21 cap): 0.5B 0.079→0.96, 7B 0.574→0.71. Teacher dan moi judge; hal-rule 0.0 BO (vong tron).
+- Ket luan deploy: free-gen bia ca 4 he → ship constrained only (evidence trich xuat that, parse_fail 0).
+
+## Viec 3 — CPU on-device (i5-10300H, fp32, 14/09)
+- p50/p95/p99 (may roi): 0.5B 21.4/24.7/28.4s | 1.1B 59.6/78.4/78.4s | 1.5B 131.5/170.8/170.8s. May ban (burn 4): 0.5B p50 96.1s.
+- Throughput/ngay (roi): 4,045 / 1,449 / 657. Ban (0.5B): 899. 39 alert/ngay x 21.4s ≈ 14 phut (roi) / 62 phut (ban).
+- RAM: weight 2.1/4.5/6.2 GB; peak process 6.1/6.1/9.7 GB; KV@512 12.6/23.1/29.4 MB (@2048: 50.3/92.3/117.4 MB).
+- Ket luan: chi 0.5B kha thi endpoint; 1.5B weight 6.2GB + peak 9.7GB vuot endpoint pho thong.
