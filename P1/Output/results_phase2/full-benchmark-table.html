@@ -344,8 +344,8 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <table>
 <tr><th>Model</th><th>p50 (máy rỗi)</th><th>p95</th><th>p99</th><th>Quyết định/ngày (rỗi)</th><th>p50 (máy bận, 4 proc đốt CPU)</th><th>Quyết định/ngày (bận)</th></tr>
 <tr><td><b>0.5B Qwen2.5</b></td><td class="ap"><b>21.4s</b></td><td>24.7s</td><td>28.4s</td><td><b>4,045</b></td><td>96.1s</td><td>899</td></tr>
-<tr><td>1.1B TinyLlama</td><td>59.6s</td><td>78.4s</td><td>78.4s</td><td>1,449</td><td>(đang đo)</td><td>—</td></tr>
-<tr><td>1.5B Qwen2.5</td><td>131.5s</td><td>170.8s</td><td>170.8s</td><td>657</td><td>(đang đo)</td><td>—</td></tr>
+<tr><td>1.1B TinyLlama</td><td>59.6s</td><td>78.4s</td><td>78.4s</td><td>1,449</td><td>không đo được*</td><td>—</td></tr>
+<tr><td>1.5B Qwen2.5</td><td>131.5s</td><td>170.8s</td><td>170.8s</td><td>657</td><td>không đo được*</td><td>—</td></tr>
 </table>
 <h3>RAM footprint (process riêng từng model — weight + KV tách riêng)</h3>
 <table>
@@ -354,7 +354,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>1.1B</td><td>1.10B</td><td>4.5 GB</td><td>6.1 GB</td><td>23.1 MB</td><td>92.3 MB</td></tr>
 <tr><td>1.5B</td><td>1.544B</td><td>6.2 GB</td><td>9.7 GB</td><td>29.4 MB</td><td>117.4 MB</td></tr>
 </table>
-<div class="note">Đọc: chỉ 0.5B khả thi endpoint 4–8GB RAM (weight 2.1GB + runtime; 39 alert/ngày × 21.4s ≈ 14 phút/ngày lúc rỗi, ≈62 phút lúc bận). 1.5B weight 6.2GB + peak 9.7GB vượt nhiều endpoint; chậm 6× mà TTP thua 0.5B (0.12 vs 0.29). Throughput giả định 1 endpoint chạy liên tục. Script: bench_cpu.py (+ --burn), bench_cpu_mem.py. File: cpu-05b.json, cpu-11b.json, cpu-15b.json, cpu-05b-burn.json, cpu-mem.json.</div>
+<div class="note">*Burn 1.1B/1.5B trên i5 4-core (kể cả chỉ 2 tiến trình nền): mỗi mẫu >5–10 phút — CPU inference bandwidth-bound, tranh chấp bộ nhớ; bản thân đây là kết quả: dưới tải thật chỉ 0.5B trụ được (96.1s/mẫu ≈ 899 quyết định/ngày). Đọc: chỉ 0.5B khả thi endpoint 4–8GB RAM (weight 2.1GB + runtime; 39 alert/ngày × 21.4s ≈ 14 phút/ngày lúc rỗi, ≈62 phút lúc bận). 1.5B weight 6.2GB + peak 9.7GB vượt nhiều endpoint; chậm 6× mà TTP thua 0.5B (0.12 vs 0.29). Throughput giả định 1 endpoint chạy liên tục. Script: bench_cpu.py (+ --burn), bench_cpu_mem.py. File: cpu-05b.json, cpu-11b.json, cpu-15b.json, cpu-05b-burn.json, cpu-mem.json.</div>
 <h2>13) Compliance free-gen + hal-content N=40 (3-shot, 3 judges blind, 14/09)</h2>
 <h3>Tỷ lệ compliant (rationale ra đúng format trên 40 mẫu pack)</h3>
 <table>
