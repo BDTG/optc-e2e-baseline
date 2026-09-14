@@ -35,7 +35,7 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <tr><td>Model tầng 2</td><td>✅ chọn 0.5B</td><td>nhỏ nhất, hợp endpoint nhất</td></tr>
 <tr><td>Dataset</td><td>✅ AD-GEN</td><td>704 chain GT, 12 TTP</td></tr>
 <tr><td>Kết quả TTP (âm)</td><td>✅ đã có</td><td>0.29/0.30/0.12; teacher-7B 0.099</td></tr>
-<tr><td>FT head (dương)</td><td>✅ có, cần củng cố</td><td>A2: 0.4732 &gt; TF-IDF 0.4591 (1 seed — cần multi-seed)</td></tr>
+<tr><td>FT head (dương)</td><td>✅ có, cần củng cố</td><td>A2 3 seeds: 0.4732/0.4645/0.4521 → <b>0.4633 ± 0.0106</b> vs TF-IDF 0.4591</td></tr>
 <tr><td>Verdict tier-2</td><td>✅ đã có</td><td>0.775 ± 0.13 (xval OpTC)</td></tr>
 </table>
 <h2>0) Pareto Frontier — Tóm tắt S1 (bản đẹp từ pareto-table)</h2><table>
@@ -278,10 +278,10 @@ td{padding:6px;border-bottom:1px solid #e2e8f0;font-size:12px}
 <table>
 <tr><th>Bài đo</th><th>SLM</th><th>Baseline</th><th>Kết luận</th></tr>
 <tr style="background:#ecfdf5"><td><b>A1 ensemble SLM+TF-IDF (LAB→REAL)</b></td><td class="ap">SLM fp32 <b>0.3517</b> (fix NaN bằng fp32+clip)</td><td>TF-IDF 0.3227 → <b>ensemble w=0.3: 0.3639</b></td><td><span class="badge good">Lần đầu SLM vượt baseline sạch</span> — fp32 ổn định hơn fp16 (+0.027 so với bản fp16 0.3243)</td></tr>
-<tr style="background:#ecfdf5"><td><b>A2 domain-adapt temporal REAL</b> (train LAB+REAL-sớm 70% → test REAL-muộn 30%)</td><td class="ap"><b>0.4732</b> (thắng 7/11 TTP: T1059 0.608, T1055 0.803, T1490 0.923)</td><td>TF-IDF cùng split 0.4591</td><td>Adapt hiệu quả: cả hai +0.12–0.14. Vẫn Âm nhưng trajectory <b>0.32→0.36→0.47</b></td></tr>
+<tr style="background:#ecfdf5"><td><b>A2 domain-adapt temporal REAL</b> (train LAB+REAL-sớm 70% → test REAL-muộn 30%)</td><td class="ap"><b>0.4633 ± 0.0106</b> (3 seeds 0.4732/0.4645/0.4521; thắng 7/11 TTP seed gốc)</td><td>TF-IDF cùng split 0.4591 (deterministic)</td><td>Adapt hiệu quả: cả hai +0.12–0.14. Mean &gt; TF (+0.0042) nhưng CI95 [0.437, 0.490] chứa 0.4591, 2/3 seed thắng → <b>không khác biệt có ý nghĩa</b> — báo trung thực</td></tr>
 <tr style="background:#fef2f2"><td><b>A3 size-test Qwen2.5-1.5B (3×)</b> — thay Qwen3-1.7B vì transformers 4.41.2 (pin ROCm) chưa hỗ trợ Qwen3</td><td class="ap">partial-FT (last2+head, 93.6M): <b>0.2639</b>; full-FT fp16 <b>NaN ngay</b>; LoRA peft 0.20 xung đột lib</td><td>0.5B full-FT 0.3517, TF 0.3227</td><td><span class="badge bad">Size không phải đáp án</span> — tuning depth > size ở đây; full-FT 1.5B sạch cần CUDA (máy thầy 5060Ti). <b>Chốt: domain shift là gốc.</b></td></tr>
 </table>
-<div class="note">File: p3b-ensemble-result.json + p3b-domainadapt-result.json + p3b-qwen15-partial-result.json (+ NaN status full-FT/LoRA). Script: optc-bench/a1_full.py, a2.py, a3.py, a3lora.py, a3p.py. Train: A1 ~2h, A2 ~3.1h, A3-partial ~3.1h trên RX 9060 XT.</div>
+<div class="note">File: p3b-ensemble-result.json + p3b-domainadapt-{result,s43,s44}.json + p3b-domainadapt-multiseed.json + p3b-qwen15-partial-result.json (+ NaN status full-FT/LoRA). Script: optc-bench/a1_full.py, a2.py, a3.py, a3lora.py, a3p.py. Train: A1 ~2h, A2 ~3.1h, A3-partial ~3.1h trên RX 9060 XT.</div>
 <h2>10) P2 — Trục giải thích SLM: chỉ acc + hal, 3 size base-sạch (704 chain GT, few-shot cân bằng, không TF theo ý thầy)</h2>
 <table>
 <tr><th>Model</th><th>verdict_acc</th><th>ttp_acc</th><th>hal</th><th>latency</th><th>Nhận xét</th></tr>
