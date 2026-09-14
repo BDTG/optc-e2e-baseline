@@ -1,0 +1,3362 @@
+[
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents different users and unique keys not in narrative."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents malicious, keylogger, T1053; narrative only shows benign vmtoolsd events."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Misreads Event10 as key creation, invents keylogging exfiltration motive."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Misstates Event10 as repeated registry key creation."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented nbtstat, contradicts net1.exe in narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents privileged account, network pipe, data transfer absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:First clause grounded, backdoor claim speculative not in narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents repeated execution and extra Event2-3 not in narrative"
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents monitoring, anomaly detection, benign behavior not in narrative."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented Windows Event Log and system claims, miscounts chain."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: No invented specifics, correctly notes insufficient context"
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event meanings invented; narrative only lists IDs"
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented process spawn and target registry not in narrative"
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents remote session, local vs remote pipes and registry not in narrative."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Sequential PowerShell grounded; injection and logging purposes speculative."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Spawning and network inference stretch beyond narrative; keys and pipes present."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Treats Event7 as service; invents two services, not in narrative."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented legitimate/malicious labels; misreads same-process pipe as two processes."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Pipe self-reference grounded, but network drive and exfiltration and T1053 invented."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims trace directly to pipe and ADMIN$ path."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented user, privileges, blocked policy not in narrative"
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds malware vector claim, malicious verdict unsupported by single conhost line."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents self-spawning; narrative shows only single conhost command."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims atypical use and obfuscation unsupported by single conhost command line."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Misstates power plan as Active Directory scheme, not in narrative."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No PowerShell, privilege, maliciousness in narrative; all invented."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims self-loop not in narrative; actual exec is powercfg.exe."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Accurately describes powercfg logging, no invented facts."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Adds different times and system-wide not in narrative."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Timestamp claims invented; narrative lacks timestamps."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:invents script injection and system calls not in narrative"
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented logons, users, timing; 4104 is script logging not logon."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents timestamps and same-time claim contradicting numbers."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Windows/security details not in narrative."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims network/file ops not in narrative"
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents explorer.exe and details absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims directly reflect rundll32 acproxy command in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented Event 1000 and malicious parent absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents another process and malware claim not in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims reflect rundll32 command from narrative."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents meanings for numbered events not in narrative"
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:All details invented; narrative lists only IDs."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented file/process/network details not in narrative."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented network, file, exfiltration details absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Different times not in narrative; rest grounded."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented timestamps and process details absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: Fully supported by repeated Event4672 narrative"
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds logon meaning not in narrative"
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Mislabels pipe write as filename and injects injection claim not in narrative."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Echo called malicious, pipe mislabeled legitimate file, injection claim invented."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents remote system and spawn; pipe \\\\.\\ is local."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: TTP T1090 and lateral-movement claims not in narrative"
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: No invented facts; only generic multiple IDs observation."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Attack pattern and T1053 invented, absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: No invented facts, accurately notes repeated events lacking context."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Failed login claim not in narrative"
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents 'another machine' with no support in narrative"
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Treats operations as processes, invents second process and maliciousness"
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented same handle, excessive use, T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All operations cited appear in narrative."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims different users, narrative shows same USERS_5 path repeated."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims downloading executing second file not in narrative"
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented event-log spreading not in narrative"
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Repeated a.exe path supported; persistence inference is speculative stretch"
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents meanings for numbered events not in narrative"
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented system/security types; log source not in narrative."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event meanings invented; narrative lists only IDs."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Updater svchost details invented, narrative only lists IDs"
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: Claims match rundll32 and EDGEHTML.dll in narrative"
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented malicious user-initiated known-payload claims; T1053 absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Edge browser functionality claim not in narrative"
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents non-standard, obfuscation, illegitimacy not in narrative"
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents monitoring, malware, IDS details absent from IDs."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented system/security details and verdict absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event meanings invented, not in narrative"
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents Updater svchost details absent from IDs-only narrative"
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented null-handle syscall; narrative only shows conhost command."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented registry editor, known malware, backdoor claims absent"
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented modified second process; hex is console handle not path."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds undocumented privilege escalation and persistence claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Confuses gpupdate with Windows Update; invents authorization claim."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Event10/8 as update processes, misstates gpupdate purpose."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents pipe-passing spawns and T1053 with no scheduled-task evidence."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Adds Group Policy purpose and malicious inference beyond narrative"
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims reflect narrative command without invented details."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents malicious parent, Event 1000, abuse; narrative only shows rundll32 command."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:invents another process, legitimacy, attack vector not in narrative."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Adds disk-check purpose and common utility not in narrative."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents script injection and RCE details absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: TTP T1053 lacks support; narrative shows only CreateKey via powershell."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Misreads executable path as key location, otherwise grounded"
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Repeated PowerShell CreateKey matches narrative exactly"
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims match schtasks create with bypass"
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents 12:00 AM time and creator privilege not in narrative"
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Task creation grounded, but non-existence not proven by narrative."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Misattributes -ep bypass to elevated privileges, rest grounded"
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents user, privileges, policy block not in narrative."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented malware launch and T1053; conhost -ForceV1 alone is normal."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented self-spawning, misreads -ForceV1, adds injection/DoS not in narrative."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds atypical-use and obfuscation claims absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented user, privileges, policies not in narrative."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented child malware launch; T1053 unrelated to conhost ForceV1."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents self-spawn and T1053 with no support in narrative."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds atypical-use and obfuscation claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds Event5860 purpose not in narrative; invents absence of commands."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents timestamps and process link not in narrative"
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Verdict, TTP, and malware claims lack support from ID-only narrative."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents logon meaning not in narrative"
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds ungrounded purpose as security measure not in narrative."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented Event 100 and boot-manager vulnerability exploit not in narrative."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:TTP T1053 and non-standard claim invented, not in narrative"
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Core command described correctly but TTP T1053 and persistence claim ungrounded."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims derive directly from rundll32 command line"
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Event 1000, malicious parent, abuse not in narrative."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents another process and malware claim not in narrative."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims trace to rundll32 and PerformAutochkOperations."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Output sensitivity claim not in narrative, invented."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents second lookup, file execution, poisoning not in narrative."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented credential harvesting and persistent storage not in narrative"
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Both nslookup query and CreateKey match narrative exactly."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents user, privileges, policy block not in narrative"
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents malware launch chain and attack pattern absent from single conhost narrative."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents self-spawning; narrative shows only single conhost execution."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims atypical use and obfuscation not in narrative"
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents legitimate user and benign intent unsupported by narrative"
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented 5-minute interval; /min is window flag not schedule"
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents sc file; Base64 comes from registry not file."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims directly match schtasks command in narrative."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents user, privileges, policy block not in narrative."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Normal conhost flag mischaracterized as attack; TTP T1053 unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented spawn, injection, DoS, verdict and TTP absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Adds atypicality and obfuscation not in narrative."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents system-level keys and same process details"
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:T1053 scheduled task absent; CreateKey PowerShell only."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented process creation; narrative only shows CreateKey events."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: Claims match CreateKey PowerShell repetition; persistence context is reasonable inference."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event1 benign claim and privilege escalation invented, not in narrative"
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Description grounded but T1053 scheduled task absent invents fact"
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Parent unusual claim not in narrative; rest follows command line."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims match cmdline powershell bypass encoded payload"
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Misstates /list as listing commands, not credentials; ungrounded."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:harvester label and T1053 scheduling unsupported by cmdkey /list narrative"
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All claims match Event1 list command, inference reasonable"
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: Matches Event1 details, no invented facts."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds benign admin purpose ungrounded; ignores T1053 persistence indicator."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents C2 claims, script origin, event trigger not in narrative"
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims match schtasks create onstart SYSTEM calc"
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: All details directly reflect command line in narrative."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented user, privileges, blocked policies not in narrative."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented malware launch and T1053; narrative shows only normal conhost -ForceV1"
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents self-spawning not in narrative; single conhost event only."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds typicality and obfuscation claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds ungrounded purpose as security measure not in narrative"
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Event 100, boot-manager vulnerability, wrong TTP T1053."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:TTP T1053 invented; no scheduled task in narrative; non-standard claim unsupported."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: TTP T1053 and persistence claim absent from narrative"
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm05",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims different users contradicting same USERS_5 path."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm11",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims malicious arbitrary code execution unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm15",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:First sentence grounded, spreading claim not supported"
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "t7b",
+  "judge": "muse-spark-1.3-contributor",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds external RAT attribution not in narrative"
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims different users, unique key events, vulnerability/exploitation; narrative only shows repeated vmtoolsd and CreateKey."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:vmtoolsd.exe and CreateKey appear, but malicious/keylogger claims are unsupported and contradict benign VMware Tools."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Keylogging/exfiltration/T1077 and same-directory claim not grounded; narrative only shows vmtoolsd.exe events."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Main process/event grounded; common-behavior and misuse inference not in narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented nbtstat, network service creation, malicious software claim, and TTP T1053 absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents privileged account, pipe data transfer; ConnectPipe misread as local service."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: ConnectPipe to net1 is grounded, but backdoor/unauthorized access claim is speculative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: \"Repeated execution\" and TTP not supported; narrative shows only one net1 event."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: invents commands and behavioral intent; narrative only lists event IDs."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Windows Event Log, system-event classifications, malicious verdict, and T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported claims about baselines, threat indicators, and malware behaviors; narrative only lists event IDs."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event meanings and malicious intent are invented; narrative only lists IDs."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: invents process spawn, target registry, and privilege escalation beyond narrative."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents remote session, local/remote pipes, registry keys; narrative only lists PowerShell events."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Mostly grounded; \"Event commands\" and script injection/monitoring are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: ConnectPipe as network/C2 is unsupported; PowerShell self-spawning inferred."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents services, expectedness, and breach; narrative only shows CreatePipe on a path."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents legitimate/malicious labels and data transfer not in narrative."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:ADMIN$ is a share, not mapped drive; \u2018pipe to itself\u2019 and exfiltration are unsupported."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Grounded: process, CreatePipe, remote ADMIN$ share match; inferences are reasonable from narrative."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents privilege, policy, user, and authorization details absent from the narrative."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents malware/attack-vector/TTP claims not in narrative; only conhost -ForceV1 grounded."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents self-spawn, forced-close flag; -ForceV1 is not forced close and no injection/DoS evidence."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: ForceV1 flag observation grounded, but malicious intent/obfuscation claim not from narrative."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: \u201cActive Directory scheme\u201d invented; powercfg /getactivescheme retrieves power scheme, not AD."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No PowerShell, privilege, or malicious script facts appear in narrative."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents self-spawn loop; narrative shows powercfg execution redirected to log."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Command, power scheme retrieval, and temp log match narrative; benign assessment is plausible interpretation."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims different times and benign verdict not supported; narrative only repeats Event4104."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists Event4104; timestamp, process, coordination claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event4104 not system calls; script injection, malicious intent, T1053 invented."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event4104 is PowerShell logging; explanation invents successful logons, users, brute force/lateral movement."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists event IDs; explanation invents timestamps, triggering, and maliciousness."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists event IDs; explanation invents Windows Event Log, security event, and relation details."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists event IDs; explanation invents network/file operations and benign intent."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event IDs alone cannot support process, explorer.exe, or network connection claims."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invokes unstated system event, treats DLL as process, and declares benign without narrative evidence."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents malicious event, Event 1000, parent, actor, TTP; narrative only lists Event1 rundll32 command."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents another process, legitimacy, malware assessment, and T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:<Explanation\u2019s claims about rundll32 loading a DLL for autochk/disk-check operations follow directly from command.>"
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No event details in narrative; malicious/benign behavior claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists event IDs; restart/logon/system/user claims are invented."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:File/process/network claims not in narrative; event IDs alone don't indicate behavior."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lists only event IDs; R invents network, file, process, attack, exfiltration details."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative lacks timestamps; \u201cdifferent times\u201d and BENIGN verdict unsupported."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Inv\tent\ts timestamp, process relation, and coordinated attack not in narrative."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims follow directly from repeated Event4672 entries; no invented facts."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Multiple Event4672 grounded, but \u201ctypically indicates logon events\u201d not in narrative."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Mischaracterizes echo to named pipe as crafted filename and injection; not grounded."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Mischaracterizes named pipe as legitimate file; malicious and attack-vector claims unsupported."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Remote system and command execution via pipe are unsupported; named pipe is local, TTP not in narrative."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Core cmd/pipe write grounded, but unusual/malicious and lateral movement/exfiltration are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event IDs repeated, but \"no known patterns\" and verdict/TTP unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Only event IDs/names grounded; attack pattern, false-positive claim, verdict, TTP invented."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded, but events are not all identical; narrative only lists event IDs."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists Event IDs; failed logins and brute force are not stated."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims benign and remote machine not supported; narrative only lists svchost actions."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:ConnectPipe is an action, not malicious process; malicious/legitimate and communication claims not in narrative."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Same process handle, resource exhaustion, T1053, malicious verdict not in narrative."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Mostly grounded; legitimacy and persistence intent are inferences not directly in narrative."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims different users and continuous malware-like execution; narrative only repeats same path."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only repeats a.exe events; download, execution, and second file are invented."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Repeated a.exe execution is grounded, but malware spread and T1053 are unsupported."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Main path/repetition grounded; malware claim and TTP are unsupported."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No narrative support for monitoring, logging, threats, or IDS; only event IDs."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists event IDs; no Windows Event Log or system/security labels provided."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No event meanings or benign-pattern claims appear in narrative; all interpretations invented."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event details and TTPs not in narrative; claims invented."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Explanation accurately reflects rundll32.exe and EDGEHTML.dll from narrative; benign conclusion follows."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents maliciousness, user-initiated, malware payload; EdgeHTML.dll is system DLL and no T1053 evidence."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Claims align with command line; benign assessment is an inference, no invented facts."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command and #141 grounded; malicious obfuscation and non-standard claims are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No narrative details; monitoring, event logging, and IDS claims are invented."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists event IDs; no Windows Event Log or system/security classifications provided."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event ID meanings not in narrative; those descriptions are invented, not grounded."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists event IDs; explanation invents Event318 details and attack characterization."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lacks system call, null handle, and malicious-pattern claims; explanation invents facts."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents maliciousness, registry editor, and backdoor claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented claim about another process modified with hex path; only conhost force command grounded."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented claims: not documented, privilege escalation, persistence; Event5007 meaning unsupported."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents vulnerability, unauthorized Windows Update, not expected; narrative only lists CreatePipe/gpupdate events."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents Event10/Event8 as update processes and common launch method; narrative only lists pipe/process chain."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Says gpupdate twice though narrative lists three; TTP T1053 and RCE/injection not grounded."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R adds unsupported malicious/lateral movement claims; narrative only lists CreatePipe/gpupdate/event IDs."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Benign assessment and no suspicious activity are unsupported; auto-checking inference is speculative."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents malicious event, parent, and verdict; narrative only lists rundll32 command line."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents another process, malware inference, and TTP not in narrative."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Claims align with rundll32 command; benign interpretation plausible."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Speculative attack details not in narrative; only repeated CreateKey/Event11."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanations about malware, command-line attack vector, malicious verdict, and T1053 not grounded in narrative."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:TTP list unsupported; narrative only CreateKey/Event11 for PowerShell."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Core CreateKey PowerShell chain grounded; persistence/evasion and T1090 are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Scheduled task and bypass grounded; authorization/common-method claim is inferential."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Daily timing at 12:00 AM is not in narrative; rest grounded."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Explanation matches command; non-existing inferred from filename, speculative backdoor remains cautious."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All factual claims grounded; TTPs align with scheduled task and masquerading indicators."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents user, privileges, policy blocking, and benign intent; narrative only lists conhost command line."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents spawn context, malware attack vector, and TTP not in narrative."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented spawn, injection, DoS, T1053; narrative only shows conhost command line."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Flag matches, but \"not typical\" and obfuscation/bypass are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents local user, elevated privileges, blocked policy, and authorization details absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Only -ForceV1 is in narrative; malicious vector, system spawn, and T1053 are unsupported."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents spawning, forced close, and attack hypotheses not in narrative."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command grounded, but claims about legitimate use and obfuscation are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event5860's typical monitoring use is invented; narrative only lists event IDs."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lacks timestamps, process details, or attack indicators; explanation invents coordinated attack."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Speculative malware behavior and \"standard security events\" not in narrative; only event IDs listed."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists Event IDs; successful logon meaning and benign rationale are not provided."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Core command match, but \"common security measure preventing unauthorized access\" is unsupported and invented."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents Event 100, malware payload, boot manager vulnerability, and T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: \"system event\" and \"non-standard\" not in narrative; bcdedit is standard Windows tool."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Core bcdedit fact grounded, but malware persistence inference is unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported benign claim; acproxy.dll is loaded by rundll32, not a separate process."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invokes Event 1000, malicious event, and malicious parent not in narrative; T1053 unsupported."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents another process, legitimacy, malware, and TTP absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims align with rundll32 command and autochk operation; no invented facts."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invented output/sensitive info; narrative only shows nslookup command and CreateKey."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents key file execution and DNS poisoning; narrative only shows nslookup and CreateKey."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Misreads CreateKey as key file; credential harvesting speculative, not grounded."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Core nslookup/query and CreateKey grounded; \u201cunusual\u201d and T1053 unsupported."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents elevated local user, blocked command, and attack vector absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only shows conhost command; malicious verdict, malware claim, and TTP T1053 are unsupported."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents self-spawning and forced-close flag; narrative only shows conhost.exe command line."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command flag grounded; claim about typical use and obfuscation is unsupported inference."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Benign/legitimate user claims unsupported; narrative shows suspicious encoded PowerShell scheduled task."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: 5-minute interval not in narrative; rest largely grounded."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents \u201csc file\u201d containing Base64; narrative decodes registry property, not sc file."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Claims match Event1 command: scheduled task runs PowerShell decoding Base64 registry value."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only shows conhost.exe command line; explanation invents privilege, user, policy, and intent."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Speculative malware/TTP claims not in narrative; only -ForceV1 is grounded."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents self-spawning, forced close flag, and malicious purpose; narrative only shows conhost command line."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Command flag is grounded; \"not typical\" and obfuscation inference are unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented system-level key intent and benign rationale; narrative only lists repeated CreateKey events."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:T1053 not supported; maliciousness and malware claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lists CreateKey events; no PowerShell creation, process space, credential storage, or malicious behavior."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Persistence, evasion, malicious intent, and T1098 are unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invented privilege escalation and benign admin claim; narrative only shows encoded bypass command."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:TTP T1053 unsupported; decoded command suggests WMI execution, not scheduled task."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:cmd spawning PowerShell and Base64 are grounded; \u201cunusual for legitimate software\u201d is unsupported."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command facts grounded, but malware/common tactic inference exceeds narrative."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: cmdkey /list lists stored credentials, not all commands; benign claim unsupported."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: T1053 and \u201cknown credential harvester\u201d are unsupported; cmdkey /list only lists stored credentials."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Spawn claim not in narrative; /list only lists, not stores credentials."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command matches narrative; credential-use and T1003 claims are external inferences not stated."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Factual task creation grounded; benign/administrative characterization unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Contains invented claims: malicious script, calc.exe as C2, task name as C2; unsupported event link."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: calc.exe is an executable, not a custom script; persistence is an inference."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All factual claims match narrative: onstart task as system runs calc.exe. TTP T1053 consistent."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Explanation invents user privilege and policy-blocking claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Malicious/attack-vector claims and T1053 are unsupported; only conhost -ForceV1 command is grounded."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:<under 20 words> \"Spawns another instance and forced-close flag not in narrative; speculative attack.\""
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Technical flag is grounded, but \"not typical\" and obfuscation/bypass are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Adds ungrounded claim that policy is a common security measure; narrative only gives command."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented Event 100, malware, and boot-manager vulnerability claims not in narrative."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Path and boot alteration grounded; trigger/non-standard security bypass not supported."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command modification grounded; malware persistence claim exceeds narrative."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm05",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Not grounded: narrative shows repeated same path/event, not different users or multiple files."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm11",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists Event3 and beacon.exe path; R invents malice, code execution, TTP."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm15",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Malware-spreading claim is speculative; narrative only shows repeated beacon.exe path."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "t7b",
+  "judge": "deepseek-v4.1-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Malware-name/RAT claim and TTP not in narrative; persistence inferred beyond events."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents different users and unique key creation; narrative shows repeated vmtoolsd.exe and one CreateKey."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims known keylogger and malicious unsupported; narrative only shows CreateKey with VMware process."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Process/key facts grounded, but malware, keylogging, exfiltration, and T1077 are unsupported."
+ },
+ {
+  "nid": "ADGEN_0001374",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Claims repetition and CreateKey; common behavior and no variation slightly unsupported."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Mentions nbtstat, network service, T1053, malicious software absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents privileged account, service details, and T1053 unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:T1053 is unsupported by net1.exe user pipe; pipe \u201canother instance\u201d is inference."
+ },
+ {
+  "nid": "ADGEN_0011557",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Repetition, persistence, and T1097 are unsupported; other claims follow net1 user event."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented behavior, monitoring, anomaly detection, and process claims absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: R counts four not five and calls events system-related without narrative labels."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Claims about baselines/threat indicators are not directly evidenced."
+ },
+ {
+  "nid": "ADGEN_0012418",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event ID meanings and multiple Event1013 unsupported; contradicts chain, invented facts."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation adds process spawning, registry target, and privilege escalation not in narrative."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative lacks remote session, local/remote pipe, local/remote registry, and T1053 mapping."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:PowerShell sequence grounded; interpreting Event labels as logging is slightly speculative."
+ },
+ {
+  "nid": "ADGEN_0012921",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:CreateKey and repeated PowerShell supported; self-spawn and C2 inference are minor stretches."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents services, event as service, and unexpectedness not in narrative."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims legitimate/malicious process and pipe transfer are unsupported."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:\u201cMapped network drive\u201d is an interpretation of ADMIN$ UNC share; other claims mostly follow."
+ },
+ {
+  "nid": "ADGEN_0018623",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; remote admin share fits, but covert channel is unsupported inference."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Explanation invents user privileges, policy blocking, and unauthorized attack context not in narrative."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Malicious, attack vector, and T1053 claims are unsupported by conhost -ForceV1 event."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported: spawned instance, forced close flag, process injection/DoS, T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0020651",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: ForceV1 grounded; atypical/malicious claims infer beyond narrative."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Misreads getactivescheme as Active Directory; narrative is powercfg power scheme."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative shows cmd.exe/powercfg, no PowerShell, malicious, or elevated privileges."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; loop/self-executing claim speculative, not in narrative."
+ },
+ {
+  "nid": "ADGEN_0022611",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Benign/administrative inference is plausible but not directly supported."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Different times not explicit; repeated Event4104 inferred."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lacks timestamps/process details; coordinated attack and same timestamp are unsupported."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Repeated IDs only; script injection, system calls, malicious verdict, and TTP are unsupported."
+ },
+ {
+  "nid": "ADGEN_0023123",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents logon status, users, timing, and TTP absent from Event4104-only narrative."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative lacks timestamps, trigger relation, and simultaneous timing; R invents and contradicts."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents Windows Event Log, security semantics, and T1053 not present."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative only lists IDs; network/file-operation claims are invented."
+ },
+ {
+  "nid": "ADGEN_0023405",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents process creation, explorer, outbound connection; not in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Benign assessment and lack of malicious activity are unsupported; some process/system wording is inferred."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents malicious Event 1000, parent, actor, and TTP not in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:No evidence of another process, malware, or T1053 in narrative."
+ },
+ {
+  "nid": "ADGEN_0029882",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Disk-check claim inferred from function name, not explicit in narrative."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative gives event IDs only; malicious pattern and access claims are unsupported speculation."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative only lists event IDs; meanings and event types are invented."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event IDs listed; unsupported file/process/network details and TTP T1053 invented."
+ },
+ {
+  "nid": "ADGEN_0030745",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R asserts exfiltration/persistence despite only netstat benign; claims unsupported/contradict narrative."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Different times not shown; repeated Event4672 only; attack context speculative."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims timestamps and process are absent; narrative only repeats Event4672, so unsupported invented facts."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims rest on repeated Event4672; cautious verdict matches sparse narrative."
+ },
+ {
+  "nid": "ADGEN_0031386",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Regular logon attempts not evidenced; repeated Event4672 alone weakly supports benign."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: crafted filename and malicious injection unsupported; contradicts benign verdict."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Malicious claim, pipe as file, and common vector are unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Pipe is local, not clearly remote; other claims plausible but stretched."
+ },
+ {
+  "nid": "ADGEN_0031799",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Pipe string grounded; lateral movement/exfiltration and T1090 are unsupported stretches."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Multiple event IDs grounded; unknown pattern and benign/anomaly claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event repetition grounded; attack-pattern/false-positive claim invented and unsupported."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; verdict contradicts stated uncertainty and is unsupported."
+ },
+ {
+  "nid": "ADGEN_0035204",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Narrative lists event IDs only; failed-login and brute-force claims unsupported."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds unsupported remote machine and benign judgments not in narrative."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invented ConnectPipe as malicious process; Event22 as created event; unsupported malicious interpretation."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:svchost events repeated; process handle, event creation, resource claims unsupported."
+ },
+ {
+  "nid": "ADGEN_0041094",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Repetitive pipe/registry operations grounded; persistence/T1090 inference is minor stretch."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Repeated a.exe and Event3 are grounded; different users and continuous execution are not."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Narrative shows only repeated a.exe events; no second download, double-click attack, or T1053 evidence."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Repetition is grounded; malware spreading through event logs is unsupported."
+ },
+ {
+  "nid": "ADGEN_0041514",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Claims file path is grounded; malware/TTP inference is unsupported."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented monitoring/IDS/threat claims; event codes alone provide no context."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents Windows Event Log link and system/security categories not present in narrative."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Event meanings and TTP/verdict are not supported by narrative."
+ },
+ {
+  "nid": "ADGEN_0043971",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents event details, process names, and behaviors absent from narrative."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Inference about Windows event and benign judgment stretches narrative slightly."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims user-initiated, malicious, known malware payload not in narrative."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Edge functionality claim is external inference; otherwise grounded."
+ },
+ {
+  "nid": "ADGEN_0045097",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:All process/DLL/#141 facts grounded; \"non-standard\" and illegitimate use are minor interpretation stretches."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Event IDs imply logging; malware/IDS/monitoring claims are hedged but not stated."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Event types and Windows Event Log references are not in the narrative; claims are invented."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented event interpretations and TTP not supported by narrative."
+ },
+ {
+  "nid": "ADGEN_0046569",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents Event318 details and attack indicators not present; contradicts benign chain."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents null handle/system call/benign analysis; none stated in narrative."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Most claims invented; narrative doesn't state malicious, malware, backdoor, or T1053."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents modified process/path replacement, malicious verdict, and TTP; narrative only shows conhost command."
+ },
+ {
+  "nid": "ADGEN_0048233",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported claims: undocumented flag malicious, Event5007 meaning, persistence, T1053."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Windows Update/authorization claims unsupported; CreatePipe does not indicate vulnerability."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported Event10/8 process and update claims; contradicts narrative."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Pipe passing and spawning are inferred, not directly stated."
+ },
+ {
+  "nid": "ADGEN_0048568",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Repeated gpupdate, CreatePipe, events grounded; lateral movement/privilege escalation speculative."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command is grounded; benign/no-unusual claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents malicious event/parent and T1053 not in narrative."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents another process and malware stealth claims not in narrative; unsupported malicious/TTP assertion."
+ },
+ {
+  "nid": "ADGEN_0048727",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Disk-check and common-utility claims infer beyond provided command line; mostly grounded."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents script-injection/RCE mechanism unsupported by narrative; only multiple PowerShell key events grounded."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Claims follow from PowerShell CreateKey events; registry/key and command-line tool are supported."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:CreateKey/powershell grounded; malware/persistence and larger attack vector speculative."
+ },
+ {
+  "nid": "ADGEN_0050754",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Core events grounded; persistence/evasion/T1090 are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Task creation, PowerShell execution, and bypass are directly in the narrative."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Run-as SYSTEM and daily grounded; 12:00 AM start time not stated in narrative."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:Claims follow from command; non-existing inferred from filename and persistence intent is plausible."
+ },
+ {
+  "nid": "ADGEN_0054105",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Elevated via -ep bypass and non-existing file are slight unsupported; overall mostly grounded."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims user login, privileges, and blocked command are absent from the narrative."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims malware launching malicious process and T1053; narrative shows only conhost with ForceV1, no child evidence."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents self-spawning and forced-close flag; no narrative evidence. Malicious verdict/TTP unsupported."
+ },
+ {
+  "nid": "ADGEN_0075721",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command-line flag grounded; atypicality and obfuscation/bypass are unsupported interpretations."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents login, elevated privileges, and security-policy blocking; none are present in the conhost command narrative."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:ForceV1 grounded, but malware and T1053 unsupported by event."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents forced close flag, self-spawn, injection/DoS; unsupported by cmd line."
+ },
+ {
+  "nid": "ADGEN_0078409",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: ForceV1 is grounded, but atypicality and bypass claims are unsupported by the event alone."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Event5860 monitoring purpose; unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents timestamps and coordinated attack; narrative only lists event IDs."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:TTP and malware behavior unsupported; only event-ID list present."
+ },
+ {
+  "nid": "ADGEN_0078816",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Event IDs listed, but their successful logon meaning and benign judgment are unsupported."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported claim that this prevents unauthorized access is not in narrative."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents Event 100, malware payload, vulnerability, and unsupported T1053."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Boot-setting alteration and bypass possible, but non-standard and T1053 are unsupported by the narrative."
+ },
+ {
+  "nid": "ADGEN_0079656",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Boot config change is grounded; malware persistence and T1053 are unsupported."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Core DLL and function grounded; process/benign claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Invents malicious event 1000, malicious parent, and abuse verdict not present in narrative."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Uses command, but invents another process and malware/stealth context."
+ },
+ {
+  "nid": "ADGEN_0106402",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Adds external context (disk checks, system utility) not explicitly in command line."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents output containing sensitive network config; narrative shows only nslookup command."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Key file and DNS poisoning invented; CreateKey not file; no second query or T1053."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: T1077, credential harvesting, and key file persistence are unsupported or misread."
+ },
+ {
+  "nid": "ADGEN_0108980",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": null,
+  "raw": "JOB_FAIL: empty msg content"
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents user, login, privileges, policy blocking, attack vector; not in narrative."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Unsupported malware and parent inference beyond provided narrative."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents another instance spawn and forced close flag; not supported by single conhost command."
+ },
+ {
+  "nid": "ADGEN_0114347",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command/flag grounded; obfuscation, bypass, and not typical are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Bogus benign claim; contradicts ATOMIC-T1053.005 scheduled task indicators."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents 5-minute interval; /min is window style, schedule unspecified."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:sc file claim invented; /sc is schedule, not file, and base64 is registry value."
+ },
+ {
+  "nid": "ADGEN_0122876",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE: Claims match the command, registry Base64, and T1053 name; inferences are reasonable."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents user, privileges, blocked policies, authorization, and benign attack vector."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Malware claim and TTP unsupported; spawn/system details absent."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds spawning another instance and forced close flag; T1053/injection/DoS unsupported."
+ },
+ {
+  "nid": "ADGEN_0144178",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Command and flag grounded; obfuscation/bypass inference not stated."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Supported repeated CreateKey; system-level keys and benign claims are unsupported."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:PowerShell key creation grounded; malware attack vector claim is unsupported."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: R invents PowerShell process creations and credential storage not in narrative."
+ },
+ {
+  "nid": "ADGEN_0160715",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:PowerShell CreateKey is grounded; persistence/T1098 is unsupported stretch."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Adds privilege escalation, benign admin inference, no TTP; unsupported by narrative."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; attacker/security bypass claim and T1053 mapping are not explicit."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Most claims grounded; cmd being unusual for legitimate software is a stretch."
+ },
+ {
+  "nid": "ADGEN_0170067",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; malware evasion claim is an inference beyond the raw encoded command."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Claims cmdkey /list lists commands; not in narrative and incorrect."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R asserts cmdkey is known credential harvester; narrative only shows cmdkey /list."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE: Listing credentials is grounded, but inferring storage is a minor unsupported stretch."
+ },
+ {
+  "nid": "ADGEN_0171612",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 2,
+  "raw": "G:2 | NOTE:All claims follow from cmdkey /list and T1003; no invented facts."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Actions grounded; benign administrative intent is not evidenced in narrative."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented C2 claims, task trigger, and Event7 details not supported by narrative."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Task, SYSTEM, command, T1053 grounded; \"recurring\" is a minor stretch from onstart."
+ },
+ {
+  "nid": "ADGEN_0178537",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Task details grounded; privilege escalation claim is a slight analytic stretch."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:R invents local user, elevated privileges, blocked command, authorization; narrative only shows conhost command args."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invents malware attack vector and T1053; unsupported."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Invented spawning/close flag/T1053; narrative only shows conhost with 0xffffffff -ForceV1."
+ },
+ {
+  "nid": "ADGEN_0182424",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:ForceV1 grounded; obfuscation/bypass claims unsupported."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Unsupported security rationale; setting ignores failures, not preventing unauthorized access."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Adds unsupported event ID, malware payload, boot manager exploit, and TTP."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Mostly grounded; \u201cnon-standard method\u201d and T1053 are unsupported/minor stretches."
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 1,
+  "raw": "G:1 | NOTE:Boot change grounded; malware persistence and TTP mapping are unsupported inferences."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm05",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Claims different users, same desktop, permissions/resource allocation are unsupported; narrative only repeats one path."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm11",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Arbitrary-code and T1053 claims are not supported by repeated beacon.exe events."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "slm15",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE: Unsupported T1053 and malware spreading; repeated path alone does not prove execution."
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "src": "t7b",
+  "judge": "qwen3.8-flash",
+  "groundedness": 0,
+  "raw": "G:0 | NOTE:Path/repetition grounded; persistence, malware/RAT, T1090 unsupported."
+ }
+]

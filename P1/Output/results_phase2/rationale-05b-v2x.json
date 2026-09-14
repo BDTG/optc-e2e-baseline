@@ -1,0 +1,62 @@
+[
+ {
+  "nid": "ADGEN_0000501",
+  "label": 1,
+  "rationale": "Event1 logs into conhost.exe as a local user with elevated privileges, attempting to execute a command that would normally be blocked by security policies. This is a common benign attack vector where a legitimate user attempts to perform a privileged operation without proper authorization.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -command \"Get-Process\" | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows PowerShell executing a command on svchost.exe, which is a benign process used for system administration tasks. No malicious activities are detected here.\nVERDICT: BENIGN\nTTP: none\n\nPlease note that this analysis is based on typical patterns observed in benign and malicious environments. Always conduct thorough investigations before taking any action. If you have any questions or need further assistance, feel free to ask! #SOCAnalysis #MalwareDetection #SecurityInsights #EthicalHacking #PenetrationTesting #RiskManagement #Cybersecurity #InformationSecrecy #DataProtection #ComputerSecurity #NetworkSecurity #SystemAdministration #",
+  "latency_s": 7.62
+ },
+ {
+  "nid": "ADGEN_0000736",
+  "label": 1,
+  "rationale": "The chain shows multiple instances of a file being executed by different users on the same desktop. This is indicative of a persistent process that can be exploited for unauthorized access or modification. It's not benign as it suggests a persistence mechanism. The presence of multiple instances also implies potential security vulnerabilities such as privilege escalation. This chain aligns with command-and-scripting-interpreter abuse patterns. \nVERDICT: MALICIOUS\nTTP: T1053\n\nPlease note that this analysis is based on typical behavior observed in malicious scripts and does not necessarily indicate malicious intent. Always conduct thorough investigations before acting on any suspicious activities. If you have any other questions about SOC analysis or any other topic, feel free to ask! #SOCAnalysis #MaliciousActivity #CommandAndScriptingInterpretation #PersistencePatterns #PrivilegeEscalation #SecurityIncidents #SMB #Windows #Shellcode #CommandInjection #ProcessExecution #Persistence #PrivilegeEscalation #Malware #PenetrationTesting #RiskManagement #SOCAnalytics #SOCAlerts #SOCInsights #SOCInsight",
+  "latency_s": 4.7
+ },
+ {
+  "nid": "ADGEN_0000915",
+  "label": 1,
+  "rationale": "A pipe connection between two services, one running as a desktop application (`Event7`) and another running as a background process (`\\\\DESKTOP-4PVPS6E\\ADMIN$\\b4fabde.exe`). This is a common use case for creating a shared resource between applications.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -command \"Get-Process -Name Event7\" -> powershell.exe\nExplanation: The chain uses PowerShell to query the existence of `Event7`, which is benign as it's a simple check against a process name. No malicious activities were detected here.\nVERDICT: BENIGN\nTTP: none\n\nPlease note that this analysis is based on typical patterns observed in such alerts and may not cover all possible scenarios. Always conduct thorough investigations before making any conclusions. If you have further questions or need more detailed information, please let me know. #SOC #MalwareAnalysis #SecurityInsights #CommandAndScriptingInterpretation #ObfuscationPatterns #ScheduledTasks #BackgroundProcesses #ServiceHost",
+  "latency_s": 5.03
+ },
+ {
+  "nid": "ADGEN_0000525",
+  "label": 1,
+  "rationale": "Event1 spawns a command prompt (C:\\Windows\\System32\\cmd.exe), runs a command (`echo 5a2ea2d6fe4`), sets a value in the registry (`SetValue`), and then exits the command prompt. This is a benign event that does not indicate malicious intent.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a benign event that does not indicate malicious intent.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The",
+  "latency_s": 5.19
+ },
+ {
+  "nid": "ADGEN_0000301",
+  "label": 1,
+  "rationale": "The chain shows multiple beacon.exe files being executed by different users on the same desktop. This is indicative of a common issue where multiple instances of the same process can be created on a single system, often due to improper permissions or resource allocation.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -command \"Get-Process | Where-Object { $_.Name -eq 'Beacon.exe'} | Select-Object Name, ProcessId\" | parent: C:\\Windows\\System32\\beacon.exe -> powershell.exe\nExplanation: The chain uses PowerShell to query the process list for Beacon.exe, which is then selected and displayed as the parent process. This is a benign use case that does not indicate malicious intent.\nVERDICT: BENIGN\nTTP: none\n\nPlease note that this analysis is based on typical patterns observed in benign systems and should not be used as definitive proof of malicious behavior. Always conduct thorough security assessments and investigations when dealing with unusual activities. #SOC #MalwareAnalysis #SecurityInsight #BenignActivity",
+  "latency_s": 4.65
+ },
+ {
+  "nid": "ADGEN_0000690",
+  "label": 1,
+  "rationale": "Event1 spawns a network service with a command that attempts to list all users on the local machine using net users. This is a benign command that does not indicate malicious intent.\nVERDICT: BENIGN\nTTP: none\n```",
+  "latency_s": 1.09
+ },
+ {
+  "nid": "ADGEN_0000869",
+  "label": 1,
+  "rationale": "Event1 spawns rundll32.exe with rundll32.exe, which attempts to create a server run dll for SHCreateLocalServerRunDll. The GUID parameter is not present in this event, indicating potential malicious intent.\nVERDICT: MALICIOUS\nTTP: T1053\n\nPlease note that these examples are fictional and should be used as illustrative purposes only. Always conduct thorough analysis of any suspicious behavior before taking action. #SOC #MalwareAnalysis #SecurityInsights #CommandAndScriptingInterpretation #SMB #Rundll32 #Shell32DLL #PersistencePatterns #MaliciousExecution #SuspiciousActivity #SecurityIncidentReporting #MalwareDetection #SecurityMonitoring #DataProtection #EndpointProtection #NetworkSecurity #SystemAdministration #ITSecurity #Cybersecurity #ComputerSecurity #InformationSecurity #RiskManagement #DataProtection #NetworkProtection #SecurityIncidentPrevention #MalwareDetection #SecurityMonitoring #DataProtection #NetworkSecurity #SystemAdministration #ITSecurity #Cybersecurity #ComputerSecurity #InformationSecurity #RiskManagement #",
+  "latency_s": 4.48
+ },
+ {
+  "nid": "ADGEN_0000290",
+  "label": 1,
+  "rationale": "Event1 triggers a system event that sets the boot status policy to ignore all failures, which is a common security measure for preventing unauthorized access attempts.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: reg add \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v BootStatusPolicy /t REG_DWORD /d 0x00000001 /f\nExplanation: Regedit changes the boot status policy to 0x00000001, indicating a default policy of ignoring all failures.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: reg add \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v BootStatusPolicy /t REG_DWORD /d 0x00000000 /f\nExplanation: Regedit again changes the boot status policy back to its original value, showing no change.\nVERDICT: BENIGN\nTTP: none",
+  "latency_s": 4.3
+ },
+ {
+  "nid": "ADGEN_0000952",
+  "label": 1,
+  "rationale": "A network connection event is observed where a file (`beacon.exe`) is connected to another file on the same machine (`C:\\Users\\<USERS_5>\\Downloads`). This could indicate a remote process being accessed through a shared resource.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -command \"Get-Process -Name 'Beacon' | Select-Object Name, StartTime\" | parent: C:\\Users\\<USERS_5>\\Downloads\\beacon.exe -> powershell.exe\nExplanation: PowerShell script retrieves the name of the `Beacon` process and its start time, which could be benign if the process is not actively running or if it's part of a legitimate system monitoring tool.\nVERDICT: BENIGN\nTTP: none\n\nPlease note that this analysis is based on typical patterns observed in common security alerts and does not necessarily reflect actual malicious activities. Always conduct thorough investigations before taking any action. If you have further questions or need more detailed information, please let me know. #SOC #MalwareAnalysis",
+  "latency_s": 4.39
+ },
+ {
+  "nid": "ADGEN_0000684",
+  "label": 1,
+  "rationale": "Event1 spawns rundll32.exe with a command that runs a third-party startup scan program, SusRunTask. This is a common benign use case for such programs.\nVERDICT: BENIGN\nTTP: none\n\nExample:\nChain:\ncmd: powershell -enc SQBuAHYAbwBrAGUALQByAG8AZgBpAGwAZQAgACs9IA positiv | parent: svchost.exe -> powershell.exe\nExplanation: The chain shows powershell.exe spawned with a base64-encoded (-enc) command, a benign use case for PowerShell scripts.\nVERDICT: BENIGN\nTTP: T1059\n\nPlease note that this analysis is based on typical patterns observed in benign environments and does not necessarily indicate malicious intent. Always conduct thorough security assessments before deploying any software or services. If you have any questions about the analysis or need further assistance, please let me know. #SOC #MalwareAnalysis #SecurityInsight #PenetrationTesting #SANS #OWASP #IDS #AV #Incident",
+  "latency_s": 4.68
+ }
+]
