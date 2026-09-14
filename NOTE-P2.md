@@ -74,6 +74,7 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 
 ## Viec 3 — CPU on-device (i5-10300H, fp32, 14/09)
 - p50/p95/p99 (may roi): 0.5B 21.4/24.7/28.4s | 1.1B 59.6/78.4/78.4s | 1.5B 131.5/170.8/170.8s. May ban (burn 4): 0.5B p50 96.1s.
+- Burn 1.1B/1.5B: khong do duoc tren may 4-core (>5-10 phut/mau khi co tai nen — CPU inference bandwidth-bound). Ket qua: duoi tai that chi 0.5B tru duoc.
 - Throughput/ngay (roi): 4,045 / 1,449 / 657. Ban (0.5B): 899. 39 alert/ngay x 21.4s ≈ 14 phut (roi) / 62 phut (ban).
 - RAM: weight 2.1/4.5/6.2 GB; peak process 6.1/6.1/9.7 GB; KV@512 12.6/23.1/29.4 MB (@2048: 50.3/92.3/117.4 MB).
 - Ket luan: chi 0.5B kha thi endpoint; 1.5B weight 6.2GB + peak 9.7GB vuot endpoint pho thong.
