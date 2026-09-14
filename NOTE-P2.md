@@ -44,7 +44,7 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 ## 5. Kết luận
 - Mức Âm cả 3 size. Số pos-only là prior artifact (balanced về ~0.5).
 - Thêm example phá luôn verdict (0.94→0.10) → prompt hết đường. Size không cứu (1.5B tệ nhất).
-- Gốc là domain shift: random 0.70 → LAB→REAL 0.32; FT head + adapt lên 0.47 (A1/A2).
+- Gốc là domain shift: random 0.70 → LAB→REAL 0.32; FT head + adapt lên 0.47 (A1/A2). A2 multi-seed: 0.4633 ± 0.0106 (3 seeds) vs TF 0.4591 — mean nhỉnh +0.0042, CI95 [0.437, 0.490] chứa TF, 2/3 seed thắng → không khác biệt có ý nghĩa.
 - LoRA-113 vô dụng (base cho số y hệt) — đã bỏ.
 
 ## 6. Teacher + audit mới (12-13/09)

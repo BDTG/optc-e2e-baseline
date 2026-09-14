@@ -2,7 +2,7 @@
 Khong-leak: split theo thu tu file (proxy thoi gian), khong random.
 So sanh: TF-IDF head cung split. FP32 + clip + NaN guard (bai hoc A1).
 """
-import json, re, sys, os, time, numpy as np, torch, torch.nn as nn
+import json, re, sys, os, time, argparse, random, numpy as np, torch, torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils import clip_grad_norm_
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_cosine_schedule_with_warmup
@@ -21,6 +21,11 @@ def text_of(ch):
     return " | ".join([(c.get("msg") or "") for c in (ch or [])][-10:])
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--out", default=None)
+    A = ap.parse_args(); SEED = A.seed
+    random.seed(SEED); np.random.seed(SEED); torch.manual_seed(SEED)
     rows = []
     for l in open(DATA, encoding="utf-8"):
         try: o = json.loads(l)
@@ -50,7 +55,7 @@ def main():
     tf = {}
     for j,k in enumerate(KEEP):
         if Ytr[:,j].sum() < 20 or Yte[:,j].sum() < 5: continue
-        clf = LogisticRegression(max_iter=2000, class_weight="balanced", random_state=42)
+        clf = LogisticRegression(max_iter=2000, class_weight="balanced", random_state=SEED)
         clf.fit(Xtr, Ytr[:,j])
         ap = average_precision_score(Yte[:,j], clf.predict_proba(Xte)[:,1])
         tf[k] = round(float(ap),4); print(f"TFIDF {k}: {ap:.3f}", flush=True)
@@ -60,7 +65,7 @@ def main():
     tok = AutoTokenizer.from_pretrained(MODEL)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token; tok.pad_token_id = tok.eos_token_id
-    torch.manual_seed(42)
+    random.seed(SEED); np.random.seed(SEED); torch.manual_seed(SEED)
     model = AutoModelForSequenceClassification.from_pretrained(
         MODEL, num_labels=len(KEEP), problem_type="multi_label_classification",
         torch_dtype=torch.float32).to("cuda")
@@ -106,12 +111,13 @@ def main():
         ap = average_precision_score(Yte[:,j], P[:,j])
         slm[k] = round(float(ap),4); print(f"SLM {k}: {ap:.3f}", flush=True)
     common = sorted(set(tf) & set(slm))
-    res = {"split":"LAB+REALsom70 -> REALmuon30", "n_train":len(tr), "n_test":len(te),
+    res = {"split": "LAB+REALsom70 -> REALmuon30", "seed": SEED, "n_train": len(tr), "n_test": len(te),
            "tfidf": tf, "slm": slm,
            "tfidf_mean": round(float(np.mean([tf[k] for k in common])),4),
            "slm_mean": round(float(np.mean([slm[k] for k in common])),4),
            "train_s": round(time.time()-t0)}
-    json.dump(res, open(OUTD+r"\p3b-domainadapt-result.json","w"), indent=1)
+    OUTNAME = A.out or r"\p3b-domainadapt-result.json"
+    json.dump(res, open(OUTD + OUTNAME, "w"), indent=1)
     print("TF mean:", res["tfidf_mean"], "| SLM mean:", res["slm_mean"], flush=True)
     print("SAVED p3b-domainadapt-result.json", flush=True)
 
