@@ -79,3 +79,12 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Build: ROCm build CPU-path 119s/mau vs CPU wheel 6.3s (3.1 vs 36.9 GFLOPS) — endpoint dung torch CPU wheel.
 - Kit may van phong da gui Duy (optc-cpu-kit.zip) — bo sung so khi co.
 
+## CPU nao phu hop (chot tu so do)
+- Toi thieu (2-4 core, 8GB): 0.5B 15-18s ~ 10-12 phut/ngay (39 alert) — chay duoc, RAM dinh ~7GB sat tran.
+- Chuan van phong (DE XUAT 4-8 core, 16GB): 6-11s ~ 4-7 phut/ngay, du burst 10x. Tran INT8 8-core: 2.3s.
+- Rang buoc that: RAM dinh ~7GB + torch CPU wheel (ROCm build 19x cham) + AVX2 — khong phai toc do CPU.
+
+## Phuong phap luan: log -> AD-GEN -> ML truyen thong -> SLM
+- ML (Velox+cascade) phat hien, keo tai 474->39/ngay; AD-GEN cap nhan de do; SLM dien giai {verdict, technique, evidence, action}.
+- WHY SLM: ML chi tra score; triage can ly do + bang chung + hanh dong; SLM 0.5B giu duoc nang luc giai thich ~ 7B (55 vs 59), CPU 6-18s/mau.
+- CAT ML: (1) SLM khong quet noi raw stream; (2) detect base-rate thap -> FP bung (tu detect thi Am: TTP 0.12-0.30, hal 0.87-0.96); (3) khong co chain de giai thich. Ba tang ba vai tro.
