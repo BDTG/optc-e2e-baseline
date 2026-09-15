@@ -341,21 +341,31 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>Judge-full (Muse Spark, narrative đầy đủ) vs GT</b> (40 mẫu)</td><td class="ap">verdict <b>0.30</b>, TTP <b>0.225</b> (stub chỉ 0.175/0.10)</td><td>Context đầy đủ gấp đôi stub nhưng vẫn xa GT → GT synthetic nhiễu dual-use, không phải judge dở</td></tr>
 </table>
 <div style="background:#fffbe6;border:2px solid #fde047;border-radius:8px;padding:12px 14px;margin:12px 0">
-<h2>12) Việc 3 — CPU on-device (on-device không GPU, đo 14/09, i5-10300H 4c/8t fp32, threads=4)</h2>
+<h2>12) Việc 3 — CPU on-device, đa cấu hình (không GPU; đo 14–15/09)</h2>
+<h3>Bảng 1 — Latency theo máy / cấu hình (0.5B fp32 nếu không ghi khác)</h3>
 <table>
-<tr><th>Model</th><th>p50 (máy rỗi)</th><th>p95</th><th>p99</th><th>Quyết định/ngày (rỗi)</th><th>p50 (máy bận, 4 proc đốt CPU)</th><th>Quyết định/ngày (bận)</th></tr>
-<tr><td><b>0.5B Qwen2.5</b></td><td class="ap"><b>21.4s</b></td><td>24.7s</td><td>28.4s</td><td><b>4,045</b></td><td>96.1s</td><td>899</td></tr>
-<tr><td>1.1B TinyLlama</td><td>59.6s</td><td>78.4s</td><td>78.4s</td><td>1,449</td><td>không đo được*</td><td>—</td></tr>
-<tr><td>1.5B Qwen2.5</td><td>131.5s</td><td>170.8s</td><td>170.8s</td><td>657</td><td>không đo được*</td><td>—</td></tr>
+<tr><th>Máy</th><th>Cấu hình đo</th><th>p50</th><th>p95</th><th>Quyết định/ngày</th></tr>
+<tr><td rowspan="4"><b>i5-10300H</b> 4c/8t · 16GB<br><span style="font-size:0.85em">torch 2.11+cu128</span></td><td>0.5B · n=50</td><td class="ap"><b>17.7s</b></td><td>21.9s</td><td>4,868</td></tr>
+<tr><td>1.1B · n=25</td><td>35.6s</td><td>43.8s</td><td>2,429</td></tr>
+<tr><td>1.5B · n=10</td><td>131.5s</td><td>170.8s</td><td>657</td></tr>
+<tr><td>0.5B · máy bận (burn 4)</td><td>96.1s</td><td>112.4s</td><td>899</td></tr>
+<tr><td rowspan="8"><b>Ryzen 7 7800X3D</b> 8c/16t · 32GB<br><span style="font-size:0.85em">torch 2.14+CPU wheel (MKL)</span></td><td>0.5B · 8 threads</td><td class="ap"><b>6.3s</b></td><td>7.5s</td><td>13,711</td></tr>
+<tr><td>0.5B · 4 threads</td><td>10.4s</td><td>12.6s</td><td>8,348</td></tr>
+<tr><td>0.5B · 2 threads</td><td>15.3s</td><td>18.5s</td><td>5,647</td></tr>
+<tr><td>0.5B · <b>INT8</b></td><td class="ap"><b>2.3s</b></td><td>3.0s</td><td><b>37,719</b></td></tr>
+<tr><td>0.5B · máy bận (burn 4)</td><td>15.1s</td><td>19.3s</td><td>5,723</td></tr>
+<tr><td>0.5B · burn 8</td><td>82.1s</td><td>90.8s</td><td>1,052</td></tr>
+<tr><td>1.1B · 8 threads</td><td>13.5s</td><td>15.5s</td><td>6,422</td></tr>
+<tr><td>1.5B · 8 threads</td><td>15.7s</td><td>20.3s</td><td>5,493</td></tr>
 </table>
-<h3>RAM footprint (process riêng từng model — weight + KV tách riêng)</h3>
+<h3>Bảng 2 — RAM footprint (weight / KV / peak tách riêng)</h3>
 <table>
-<tr><th>Model</th><th>Params</th><th>Weight (RSS delta fp32)</th><th>Peak RSS (quá trình)</th><th>KV cache @512 ctx</th><th>KV cache @2048 ctx</th></tr>
-<tr><td>0.5B</td><td>0.494B</td><td class="ap"><b>2.1 GB</b></td><td>6.1 GB</td><td>12.6 MB</td><td>50.3 MB</td></tr>
-<tr><td>1.1B</td><td>1.10B</td><td>4.5 GB</td><td>6.1 GB</td><td>23.1 MB</td><td>92.3 MB</td></tr>
-<tr><td>1.5B</td><td>1.544B</td><td>6.2 GB</td><td>9.7 GB</td><td>29.4 MB</td><td>117.4 MB</td></tr>
+<tr><th>Model</th><th>Weight fp32</th><th>RSS ổn định</th><th>PEAK khi chấm (logits tạm)</th><th>KV @512 / @2048 ctx</th></tr>
+<tr><td><b>0.5B</b></td><td class="ap">2.1 GB</td><td>2.9–3.2 GB</td><td>6.3–7.0 GB</td><td>12.6 / 50.3 MB</td></tr>
+<tr><td>1.1B</td><td>4.5 GB</td><td>5.9 GB</td><td>chưa đo riêng</td><td>23.1 / 92.3 MB</td></tr>
+<tr><td>1.5B</td><td>6.2 GB</td><td>11.3 GB</td><td>chưa đo riêng</td><td>29.4 / 117.4 MB</td></tr>
 </table>
-<div class="note">*Burn 1.1B/1.5B trên i5 4-core (kể cả chỉ 2 tiến trình nền): mỗi mẫu >5–10 phút — CPU inference bandwidth-bound, tranh chấp bộ nhớ; bản thân đây là kết quả: dưới tải thật chỉ 0.5B trụ được (96.1s/mẫu ≈ 899 quyết định/ngày). Đọc: chỉ 0.5B khả thi endpoint 4–8GB RAM (weight 2.1GB + runtime; 39 alert/ngày × 21.4s ≈ 14 phút/ngày lúc rỗi, ≈62 phút lúc bận). 1.5B weight 6.2GB + peak 9.7GB vượt nhiều endpoint; chậm 6× mà TTP thua 0.5B (0.12 vs 0.29). Throughput giả định 1 endpoint chạy liên tục. Script: bench_cpu.py (+ --burn), bench_cpu_mem.py. File: cpu-05b.json, cpu-11b.json, cpu-15b.json, cpu-05b-burn.json, cpu-mem.json.</div>
+<div class="note">Đọc: (1) <b>Chỉ 0.5B khả thi endpoint 8GB</b> — peak 6.3–7.0GB (trong đó ~3–4GB là logits tạm của harness chấm 13 ứng viên; tối ưu được); 1.5B RSS 11.3GB vượt endpoint phổ thông. (2) <b>Trần trên = INT8</b>: 2.26s/mẫu (nhanh 2.8×, 38K quyết định/ngày); dưới tải thật (burn4) 15.1s vẫn khả thi. (3) <b>Build quan trọng hơn máy</b>: cùng GPD, torch bản ROCm CPU-path = 119s/mẫu (3.1 GFLOPS) vs CPU wheel = 6.3s (36.9 GFLOPS) — endpoint phải dùng torch CPU wheel. (4) Threads 2→8: 15.3→6.3s (tăng sub-tuyến tính). (5) Đo máy bận = 4/8 tiến trình numpy đốt CPU song song. Script: bench_cpu.py (--threads/--int8/--burn, tự ghi spec máy). File: cpu-gpd-*.json + cpu-05b-n50.json + cpu-11b-n25.json + cpu-05b-peak.json + cpu-matrix.json. <b>Kit gửi máy văn phòng (Duy): optc-cpu-kit.zip — số sẽ bổ sung.</b></div>
 <h2>13) Compliance free-gen + hal-content N=40 (3-shot, 3 judges blind, 14/09)</h2>
 <h3>Tỷ lệ compliant (rationale ra đúng format trên 40 mẫu pack)</h3>
 <table>

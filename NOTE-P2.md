@@ -72,9 +72,10 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - So v1 (1-shot, 21 cap): 0.5B 0.079→0.96, 7B 0.574→0.71. Teacher dan moi judge; hal-rule 0.0 BO (vong tron).
 - Ket luan deploy: free-gen bia ca 4 he → ship constrained only (evidence trich xuat that, parse_fail 0).
 
-## Viec 3 — CPU on-device (i5-10300H, fp32, 14/09)
-- p50/p95/p99 (may roi): 0.5B 21.4/24.7/28.4s | 1.1B 59.6/78.4/78.4s | 1.5B 131.5/170.8/170.8s. May ban (burn 4): 0.5B p50 96.1s.
-- Burn 1.1B/1.5B: khong do duoc tren may 4-core (>5-10 phut/mau khi co tai nen — CPU inference bandwidth-bound). Ket qua: duoi tai that chi 0.5B tru duoc.
-- Throughput/ngay (roi): 4,045 / 1,449 / 657. Ban (0.5B): 899. 39 alert/ngay x 21.4s ≈ 14 phut (roi) / 62 phut (ban).
-- RAM: weight 2.1/4.5/6.2 GB; peak process 6.1/6.1/9.7 GB; KV@512 12.6/23.1/29.4 MB (@2048: 50.3/92.3/117.4 MB).
-- Ket luan: chi 0.5B kha thi endpoint; 1.5B weight 6.2GB + peak 9.7GB vuot endpoint pho thong.
+## Viec 3 — CPU on-device (da cau hinh, 14-15/09)
+- i5-10300H (4c/8t): 0.5B 17.7s (n50) | 1.1B 35.6 | 1.5B 131.5 | burn4 96.1.
+- 7800X3D (8c/16t, CPU wheel MKL): 0.5B 6.3s | t4 10.4 | t2 15.3 | **INT8 2.3s (tran, 38K/ngay)** | burn4 15.1 | burn8 82.1 | 1.1B 13.5 | 1.5B 15.7.
+- RAM 0.5B: weight 2.1GB, steady 2.9-3.2, PEAK 6.3-7.0GB (logits 13-cand tam), KV 12.6/50.3MB. 1.5B steady 11.3GB -> vuot endpoint.
+- Build: ROCm build CPU-path 119s/mau vs CPU wheel 6.3s (3.1 vs 36.9 GFLOPS) — endpoint dung torch CPU wheel.
+- Kit may van phong da gui Duy (optc-cpu-kit.zip) — bo sung so khi co.
+
