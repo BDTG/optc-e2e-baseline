@@ -384,6 +384,23 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>7B Qwen2.5 (teacher)</b></td><td class="ap"><b>0.807</b></td><td>0.597</td><td>0.72 / 0.88 / 0.82</td></tr>
 </table>
 <div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
+<h2>14) CPU nào phù hợp? (chốt từ số đo — chỉ CPU, không GPU)</h2>
+<table>
+<tr><th>Phân khúc</th><th>Cấu hình đại diện</th><th>0.5B fp32</th><th>INT8</th></tr>
+<tr><td>Tối thiểu (máy cũ)</td><td>2–4 core, 8GB</td><td>15–18s ≈ 10–12 phút/ngày (39 alert)</td><td>~3–6s</td></tr>
+<tr><td><b>Chuẩn văn phòng (ĐỀ XUẤT)</b></td><td>4–8 core, 16GB</td><td class="ap"><b>6–11s</b> ≈ 4–7 phút/ngày; dư burst 10×</td><td>2–4s</td></tr>
+<tr><td>Trần</td><td>8+ core / INT8</td><td>2.3s → 38K quyết định/ngày</td><td>—</td></tr>
+</table>
+<div class="note">Ràng buộc thật KHÔNG phải tốc độ CPU (39 alert/ngày quá nhẹ) mà là: RAM đỉnh ~7GB (khuyến nghị 16GB), bắt buộc torch CPU wheel (ROCm build CPU-path chậm 19×), x86-64 AVX2. 1.1B/1.5B không cần trên CPU (RAM tăng, chất lượng không tăng).</div>
+<h2>15) Phương pháp luận: log → AD-GEN → ML truyền thống → SLM giải thích</h2>
+<table>
+<tr><th>Tầng</th><th>Vai trò</th><th>Bằng chứng đo</th></tr>
+<tr><td>Log eCAR → provenance chain</td><td>Đơn vị phân tích (node + tổ tiên)</td><td>240K chain AD-GEN; bench 704 GT</td></tr>
+<tr><td>AD-GEN</td><td>Cấp nhãn GT per-chain (OpTC không có) — để ĐO được</td><td>Khai báo synthetic; LAB→REAL chống leak</td></tr>
+<tr><td>ML truyền thống (Velox + cascade; TF-IDF/encoder so)</td><td>Phát hiện + kéo tải 474→39 alert/ngày, recall 75%</td><td>AUC 0.917, R@20K 81%; TF baseline chỉ score, không kênh giải thích</td></tr>
+<tr><td>SLM 0.5B constrained (CPU)</td><td>Diễn giải {verdict, technique, evidence, action}</td><td>valid 100%, parse_fail 0; judge 55 vs teacher 59; 6–18s/mẫu CPU</td></tr>
+</table>
+<div class="note"><b>WHY SLM:</b> ML truyền thống chỉ trả score — triage cần LÝ DO + BẰNG CHỨNG + HÀNH ĐỘNG; trục giải thích là kênh ML không có, và SLM 0.5B giữ được ≈ teacher-7B (55 vs 59) trên CPU. <b>CẮT ML sẽ mất 3 thứ:</b> (1) khả thi compute — SLM không quét nổi raw stream (triệu event/ngày), cascade là điều kiện khiến SLM-CPU khả thi; (2) precision — detect base-rate thấp bùng FP, tự detect thì Âm (TTP 0.12–0.30; hal free-gen 0.87–0.96); (3) đơn vị phân tích — không graph layer thì không có chain để giải thích. Ba tầng ba vai trò: ML phát hiện — SLM diễn giải — AD-GEN nhãn để đo.</div>
 </div>
 </body>
 </html>
