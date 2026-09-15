@@ -384,6 +384,8 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>7B Qwen2.5 (teacher)</b></td><td class="ap"><b>0.807</b></td><td>0.597</td><td>0.72 / 0.88 / 0.82</td></tr>
 </table>
 <div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
+</div>
+<div style="background:#fffbe6;border:2px solid #fde047;border-radius:8px;padding:12px 14px;margin:12px 0">
 <h2>14) CPU nào phù hợp? (chốt từ số đo — chỉ CPU, không GPU)</h2>
 <table>
 <tr><th>Phân khúc</th><th>Cấu hình đại diện</th><th>0.5B fp32</th><th>INT8</th></tr>
