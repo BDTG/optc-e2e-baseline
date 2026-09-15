@@ -366,6 +366,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>1.5B</td><td>6.2 GB</td><td>11.3 GB</td><td>chưa đo riêng</td><td>29.4 / 117.4 MB</td></tr>
 </table>
 <div class="note">Đọc: (1) <b>Chỉ 0.5B khả thi endpoint 8GB</b> — peak 6.3–7.0GB (trong đó ~3–4GB là logits tạm của harness chấm 13 ứng viên; tối ưu được); 1.5B RSS 11.3GB vượt endpoint phổ thông. (2) <b>Trần trên = INT8</b>: 2.26s/mẫu (nhanh 2.8×, 38K quyết định/ngày); dưới tải thật (burn4) 15.1s vẫn khả thi. (3) <b>Build quan trọng hơn máy</b>: cùng GPD, torch bản ROCm CPU-path = 119s/mẫu (3.1 GFLOPS) vs CPU wheel = 6.3s (36.9 GFLOPS) — endpoint phải dùng torch CPU wheel. (4) Threads 2→8: 15.3→6.3s (tăng sub-tuyến tính). (5) Đo máy bận = 4/8 tiến trình numpy đốt CPU song song. Script: bench_cpu.py (--threads/--int8/--burn, tự ghi spec máy). File: cpu-gpd-*.json + cpu-05b-n50.json + cpu-11b-n25.json + cpu-05b-peak.json + cpu-matrix.json. <b>Kit gửi máy văn phòng (Duy): optc-cpu-kit.zip — số sẽ bổ sung.</b></div>
+</div>
 <h2>13) Compliance free-gen + hal-content N=40 (3-shot, 3 judges blind, 14/09)</h2>
 <h3>Tỷ lệ compliant (rationale ra đúng format trên 40 mẫu pack)</h3>
 <table>
