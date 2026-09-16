@@ -86,6 +86,10 @@ lats, outs = [], []
 import threading
 STOP = False
 peak_rss = [rss()]
+cpu0 = None
+if PROC:
+    c = PROC.cpu_times()
+    cpu0 = c.user + c.system
 
 
 def _sampler():
@@ -113,6 +117,10 @@ for i, o in enumerate(rows):
 rss2 = rss()
 STOP = True
 time.sleep(0.2)
+cpu_s = None
+if PROC and cpu0 is not None:
+    c = PROC.cpu_times()
+    cpu_s = round((c.user + c.system) - cpu0, 2)
 for p in burners:
     p.kill()
 lats.sort()
@@ -126,6 +134,8 @@ res = {"model": a.model, "device": "cpu", "threads": torch.get_num_threads(),
        "ram_rss_gb": round(rss2, 2), "ram_model_only_gb": round(rss1 - rss0, 2) if rss0 > 0 else -1,
        "ram_steady_gb": round(rss_warm, 2) if rss_warm > 0 else -1,
        "ram_peak_gb": round(peak_rss[0], 2),
+       "cpu_s_total": cpu_s,
+       "cores_active_avg": round(cpu_s / sum(lats), 2) if (cpu_s and lats) else None,
        "kv_mb_ctx512": round(kv_mb_512, 1),
        "throughput_per_day": int(86400 / q(0.50)) if q(0.50) > 0 else -1,
        "samples": outs}

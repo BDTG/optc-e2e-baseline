@@ -1,0 +1,123 @@
+{
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "device": "cpu",
+ "threads": 2,
+ "cpu": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+ "cpu_physical": 8,
+ "cpu_logical": 16,
+ "ram_total_gb": 33.2,
+ "os": "Windows-11-10.0.26200-SP0",
+ "torch": "2.14.0+cpu",
+ "int8": true,
+ "n": 12,
+ "burn": 0,
+ "p50_s": 4.768,
+ "p95_s": 6.471,
+ "p99_s": 6.471,
+ "ram_rss_gb": 6.21,
+ "ram_model_only_gb": 5.98,
+ "ram_steady_gb": 6.13,
+ "ram_peak_gb": 6.64,
+ "cpu_s_total": 116.78,
+ "cores_active_avg": 1.98,
+ "kv_mb_ctx512": 3.1,
+ "throughput_per_day": 18120,
+ "samples": [
+  {
+   "nid": "ADGEN_0032912",
+   "latency_s": 5.386,
+   "verdict": "BENIGN",
+   "mitre_technique": "none",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0084905",
+   "latency_s": 4.768,
+   "verdict": "BENIGN",
+   "mitre_technique": "none",
+   "evidence": "cmdline",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0005161",
+   "latency_s": 4.335,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0034254",
+   "latency_s": 4.215,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0030282",
+   "latency_s": 5.525,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1053",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0144178",
+   "latency_s": 4.466,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "cmdline",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0037843",
+   "latency_s": 5.271,
+   "verdict": "BENIGN",
+   "mitre_technique": "none",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0023722",
+   "latency_s": 4.527,
+   "verdict": "BENIGN",
+   "mitre_technique": "none",
+   "evidence": "cmdline",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0030598",
+   "latency_s": 4.249,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0007744",
+   "latency_s": 4.649,
+   "verdict": "BENIGN",
+   "mitre_technique": "none",
+   "evidence": "cmdline",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0141267",
+   "latency_s": 6.471,
+   "verdict": "BENIGN",
+   "mitre_technique": "T1053",
+   "evidence": "parent_chain",
+   "recommended_action": "no_action"
+  },
+  {
+   "nid": "ADGEN_0039642",
+   "latency_s": 5.138,
+   "verdict": "MALICIOUS",
+   "mitre_technique": "T1059",
+   "evidence": "parent_chain",
+   "recommended_action": "terminate_process"
+  }
+ ]
+}

@@ -365,7 +365,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>1.1B</td><td>4.5 GB</td><td>5.9 GB</td><td>chưa đo riêng</td><td>23.1 / 92.3 MB</td></tr>
 <tr><td>1.5B</td><td>6.2 GB</td><td>11.3 GB</td><td>chưa đo riêng</td><td>29.4 / 117.4 MB</td></tr>
 </table>
-<div class="note">Đọc: (1) <b>Chỉ 0.5B khả thi endpoint 8GB</b> — peak 6.3–7.0GB (trong đó ~3–4GB là logits tạm của harness chấm 13 ứng viên; tối ưu được); 1.5B RSS 11.3GB vượt endpoint phổ thông. (2) <b>Trần trên = INT8</b>: 2.26s/mẫu (nhanh 2.8×, 38K quyết định/ngày); dưới tải thật (burn4) 15.1s vẫn khả thi. (3) <b>Build quan trọng hơn máy</b>: cùng GPD, torch bản ROCm CPU-path = 119s/mẫu (3.1 GFLOPS) vs CPU wheel = 6.3s (36.9 GFLOPS) — endpoint phải dùng torch CPU wheel. (4) Threads 2→8: 15.3→6.3s (tăng sub-tuyến tính). (5) Đo máy bận = 4/8 tiến trình numpy đốt CPU song song. Script: bench_cpu.py (--threads/--int8/--burn, tự ghi spec máy). File: cpu-gpd-*.json + cpu-05b-n50.json + cpu-11b-n25.json + cpu-05b-peak.json + cpu-matrix.json. <b>Kit gửi máy văn phòng (Duy): optc-cpu-kit.zip — số sẽ bổ sung.</b></div>
+<div class="note">Đọc: (1) <b>Chỉ 0.5B khả thi endpoint 8GB</b> — peak 6.3–7.0GB (trong đó ~3–4GB là logits tạm của harness chấm 13 ứng viên; tối ưu được); 1.5B RSS 11.3GB vượt endpoint phổ thông. (2) <b>Trần trên = INT8</b>: 2.26s/mẫu (nhanh 2.8×, 38K quyết định/ngày); dưới tải thật (burn4) 15.1s vẫn khả thi. (3) <b>Build quan trọng hơn máy</b>: cùng GPD, torch bản ROCm CPU-path = 119s/mẫu (3.1 GFLOPS) vs CPU wheel = 6.3s (36.9 GFLOPS) — endpoint phải dùng torch CPU wheel. (4) Threads 2→8: 15.3→6.3s (tăng sub-tuyến tính). (5) Đo máy bận = 4/8 tiến trình numpy đốt CPU song song. Script: bench_cpu.py (--threads/--int8/--burn, tự ghi spec máy). File: cpu-gpd-*.json + cpu-05b-n50.json + cpu-11b-n25.json + cpu-05b-peak.json + cpu-matrix.json. <b>Theo chỉ đạo 17/09: KHÔNG cần đo nhiều CPU — chỉ chốt CPU tối thiểu + mức ăn hiệu suất (mục 14); kit máy văn phòng để spot-check tuỳ chọn.</b></div>
 </div>
 <h2>13) Compliance free-gen + hal-content N=40 (3-shot, 3 judges blind, 14/09)</h2>
 <h3>Tỷ lệ compliant (rationale ra đúng format trên 40 mẫu pack)</h3>
@@ -387,14 +387,14 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
 </div>
 <div style="background:#fffbe6;border:2px solid #fde047;border-radius:8px;padding:12px 14px;margin:12px 0">
-<h2>14) CPU nào phù hợp? (chốt từ số đo — chỉ CPU, không GPU)</h2>
+<h2>14) CPU tối thiểu đáp ứng SLM + mức "ăn hiệu suất" (chỉ đạo mới 17/09)</h2>
 <table>
-<tr><th>Phân khúc</th><th>Cấu hình đại diện</th><th>0.5B fp32</th><th>INT8</th></tr>
-<tr><td>Tối thiểu (máy cũ)</td><td>2–4 core, 8GB</td><td>15–18s ≈ 10–12 phút/ngày (39 alert)</td><td>~3–6s</td></tr>
-<tr><td><b>Chuẩn văn phòng (ĐỀ XUẤT)</b></td><td>4–8 core, 16GB</td><td class="ap"><b>6–11s</b> ≈ 4–7 phút/ngày; dư burst 10×</td><td>2–4s</td></tr>
-<tr><td>Trần</td><td>8+ core / INT8</td><td>2.3s → 38K quyết định/ngày</td><td>—</td></tr>
+<tr><th>Cấu hình CPU</th><th>p50 / alert</th><th>Nhân dùng</th><th>Core-giây / alert</th><th>39 alert/ngày</th></tr>
+<tr><td>1 nhân (sàn tuyệt đối)</td><td>25.6s</td><td>1</td><td>25</td><td>≈17 phút CPU/ngày</td></tr>
+<tr><td><b>2 nhân + INT8 (khuyến nghị máy yếu)</b></td><td class="ap"><b>4.8s</b></td><td>2</td><td>9</td><td>≈6 phút CPU/ngày</td></tr>
+<tr><td>8 nhân (máy mạnh)</td><td>5.6s</td><td>8</td><td>44</td><td>≈29 phút CPU/ngày</td></tr>
 </table>
-<div class="note">Ràng buộc thật KHÔNG phải tốc độ CPU (39 alert/ngày quá nhẹ) mà là: RAM đỉnh ~7GB (khuyến nghị 16GB), bắt buộc torch CPU wheel (ROCm build CPU-path chậm 19×), x86-64 AVX2. 1.1B/1.5B không cần trên CPU (RAM tăng, chất lượng không tăng).</div>
+<div class="note">Tối thiểu: máy <b>2 nhân AVX2 + 16GB</b> chạy thoải mái (1 nhân vẫn chạy, 25.6s/alert); 8GB sát trần vì RAM đỉnh 6.5–7GB. Ràng buộc thật = RAM đỉnh + torch CPU wheel (ROCm build 19× chậm) — không phải tốc độ CPU. <b>Ăn hiệu suất</b>: 9–44 core-giây/alert (1–8 nhân trong 5–26s) → 39 alert/ngày ≈ 6–29 core-phút ≈ <b>dưới 0.3% công suất máy 8 nhân/ngày</b>, không ảnh hưởng việc khác; INT8 vừa nhanh vừa ăn ít CPU nhất (2.26s, 9 core-giây/alert). Số đo từ bench_cpu.py v2.3 (thêm cpu_s_total + cores_active_avg).</div>
 <h2>15) Phương pháp luận: log → AD-GEN → ML truyền thống → SLM giải thích</h2>
 <table>
 <tr><th>Tầng</th><th>Vai trò</th><th>Bằng chứng đo</th></tr>
