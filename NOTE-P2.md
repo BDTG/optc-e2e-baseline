@@ -88,3 +88,9 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - ML (Velox+cascade) phat hien, keo tai 474->39/ngay; AD-GEN cap nhan de do; SLM dien giai {verdict, technique, evidence, action}.
 - WHY SLM: ML chi tra score; triage can ly do + bang chung + hanh dong; SLM 0.5B giu duoc nang luc giai thich ~ 7B (55 vs 59), CPU 6-18s/mau.
 - CAT ML: (1) SLM khong quet noi raw stream; (2) detect base-rate thap -> FP bung (tu detect thi Am: TTP 0.12-0.30, hal 0.87-0.96); (3) khong co chain de giai thich. Ba tang ba vai tro.
+
+## Fix 17/09 (review): claim + INT8 + on dinh
+- Claim doi: 'ngang' (khong phai giu nang luc teacher); 2 kenh constrained vs free-gen da giai thich o muc 13; dong gop = kenh giai thich.
+- INT8: full-int8 sup kenh scoring (acc 0.092 vs fp32 0.96; lm_head fp32: 0.14) -> chi tham chieu toc do, khong dung san pham.
+- On dinh: protocol High-performance + lap lai: 0.5B 23.70/24.27/24.24s (+-1.2%), 1.1B 58.2/56.9s; 17.7s cu = may ranh.
+- Muc 17 (Word) / section 16 (html): bang Limitation & phan bien (9 diem) da xu ly.

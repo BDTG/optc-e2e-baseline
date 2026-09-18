@@ -331,7 +331,7 @@ File: judge-spark-40.json + judge-spark-40-full.json + judge-agreement.json + hu
 </table>
 <div class="note">Judges: spark + gpt-luna + grok + deepseek-flash + qwen3.8-flash (3 endpoint families, blind swap theo hash, thang 0-2).
 Per-judge wins (t7b–05b): gpt 15-14, grok 15-14, spark 11-9, qwen 14-10, deepseek 4-8.
-<b>Trả lời câu hỏi thầy: SLM nhỏ GIỮ ĐƯỢC năng lực giải thích ở 1/14 kích thước</b> (55 vs 59, trong noise; mean 1.365 vs 1.317).
+<b>Kênh constrained (kênh sản phẩm): SLM NGANG teacher-7B</b> (55 vs 59, trong noise; mean 1.365 vs 1.317). Cùng SLM ở kênh free-gen thua xa (section 13) — hai kênh khác nhau. Limitation: LLM chấm LLM (silver-standard, chưa có neo người).
 Chi phí cả đợt ~$0.35. <b>Limitation: LLM-judge là silver-standard</b>, không phải chuyên gia — human pack blind vẫn cần người chấm.
 File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.</div>
 <h2>11b) Action schema + judge-full vs GT (bổ sung Việc 2)</h2>
@@ -362,8 +362,8 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <table>
 <tr><th>Model</th><th>Weight fp32</th><th>RSS ổn định</th><th>PEAK khi chấm (logits tạm)</th><th>KV @512 / @2048 ctx</th></tr>
 <tr><td><b>0.5B</b></td><td class="ap">2.1 GB</td><td>2.9–3.2 GB</td><td>6.3–7.0 GB</td><td>12.6 / 50.3 MB</td></tr>
-<tr><td>1.1B</td><td>4.5 GB</td><td>5.9 GB</td><td>chưa đo riêng</td><td>23.1 / 92.3 MB</td></tr>
-<tr><td>1.5B</td><td>6.2 GB</td><td>11.3 GB</td><td>chưa đo riêng</td><td>29.4 / 117.4 MB</td></tr>
+<tr><td>1.1B</td><td>4.5 GB</td><td>5.9 GB</td><td>5.95 GB</td><td>23.1 / 92.3 MB</td></tr>
+<tr><td>1.5B</td><td>6.2 GB</td><td>11.3 GB</td><td>11.53 GB</td><td>29.4 / 117.4 MB</td></tr>
 </table>
 <div class="note">Đọc: (1) <b>Chỉ 0.5B khả thi endpoint 8GB</b> — peak 6.3–7.0GB (trong đó ~3–4GB là logits tạm của harness chấm 13 ứng viên; tối ưu được); 1.5B RSS 11.3GB vượt endpoint phổ thông. (2) <b>Trần trên = INT8</b>: 2.26s/mẫu (nhanh 2.8×, 38K quyết định/ngày); dưới tải thật (burn4) 15.1s vẫn khả thi. (3) <b>Build quan trọng hơn máy</b>: cùng GPD, torch bản ROCm CPU-path = 119s/mẫu (3.1 GFLOPS) vs CPU wheel = 6.3s (36.9 GFLOPS) — endpoint phải dùng torch CPU wheel. (4) Threads 2→8: 15.3→6.3s (tăng sub-tuyến tính). (5) Đo máy bận = 4/8 tiến trình numpy đốt CPU song song. Script: bench_cpu.py (--threads/--int8/--burn, tự ghi spec máy). File: cpu-gpd-*.json + cpu-05b-n50.json + cpu-11b-n25.json + cpu-05b-peak.json + cpu-matrix.json. <b>Theo chỉ đạo 17/09: KHÔNG cần đo nhiều CPU — chỉ chốt CPU tối thiểu + mức ăn hiệu suất (mục 14); kit máy văn phòng để spot-check tuỳ chọn.</b></div>
 </div>
@@ -384,7 +384,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>1.5B Qwen2.5</td><td>0.425</td><td class="neg">0.788</td><td>0.42 / 0.35 / 0.50</td></tr>
 <tr><td><b>7B Qwen2.5 (teacher)</b></td><td class="ap"><b>0.807</b></td><td>0.597</td><td>0.72 / 0.88 / 0.82</td></tr>
 </table>
-<div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2.</div>
+<div class="note">So v1 (1-shot, 21 cặp): 0.5B grounded 0.079 → hal 0.96; 7B 0.574 → 0.71. 3-shot cải thiện cả hai, teacher vẫn dẫn mọi judge (~0.6 gap). Kết luận: sinh text tự do thì cả 4 hệ bịa (hal 0.60–0.96) → giữ nguyên kiến trúc constrained (parse_fail 0, evidence trích xuất thật); hal-content là bằng chứng giới hạn, không phải số sản phẩm. File: rationale-{05b,11b,15b,7b}-v2.json + judge-ground-scores-v2.json + judge-ground-aggregate-v2.json + gen-compliance.json. Script: explain_gen.py --shots 3 + judge_ground.py v2. <b>Đối chiếu 2 kênh (giải điểm 'mâu thuẫn section 11 vs 13'):</b> section 11 chấm output CONSTRAINED (JSON, evidence = tên field trích xuất — thang dễ; SLM ngang teacher); section này chấm rationale FREE-GEN (tự viết — thang khó; SLM thua). Không mâu thuẫn — bằng chứng thiết kế: SLM chỉ đáng tin khi bị ràng buộc → ship constrained-only. Teacher cũng bịa 60% + TTP 0.04 → domain shift chặn CẢ HỌ, không phải size.</div>
 </div>
 <div style="background:#fffbe6;border:2px solid #fde047;border-radius:8px;padding:12px 14px;margin:12px 0">
 <h2>14) CPU tối thiểu đáp ứng SLM + mức "ăn hiệu suất" (chỉ đạo mới 17/09)</h2>
@@ -394,7 +394,7 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td><b>2 nhân + INT8 (khuyến nghị máy yếu)</b></td><td class="ap"><b>4.8s</b></td><td>2</td><td>9</td><td>≈6 phút CPU/ngày</td></tr>
 <tr><td>8 nhân (máy mạnh)</td><td>5.6s</td><td>8</td><td>44</td><td>≈29 phút CPU/ngày</td></tr>
 </table>
-<div class="note">Tối thiểu: máy <b>2 nhân AVX2 + 16GB</b> chạy thoải mái (1 nhân vẫn chạy, 25.6s/alert); 8GB sát trần vì RAM đỉnh 6.5–7GB. Ràng buộc thật = RAM đỉnh + torch CPU wheel (ROCm build 19× chậm) — không phải tốc độ CPU. <b>Ăn hiệu suất</b>: 9–44 core-giây/alert (1–8 nhân trong 5–26s) → 39 alert/ngày ≈ 6–29 core-phút ≈ <b>dưới 0.3% công suất máy 8 nhân/ngày</b>, không ảnh hưởng việc khác; INT8 vừa nhanh vừa ăn ít CPU nhất (2.26s, 9 core-giây/alert). Số đo từ bench_cpu.py v2.3 (thêm cpu_s_total + cores_active_avg).</div>
+<div class="note">Tối thiểu: máy <b>2 nhân AVX2 + 16GB</b> chạy thoải mái (1 nhân vẫn chạy, 25.6s/alert); 8GB sát trần vì RAM đỉnh 6.5–7GB. Ràng buộc thật = RAM đỉnh + torch CPU wheel (ROCm build 19× chậm) — không phải tốc độ CPU. <b>Ăn hiệu suất</b>: 9–44 core-giây/alert (1–8 nhân trong 5–26s) → 39 alert/ngày ≈ 6–29 core-phút ≈ <b>dưới 0.3% công suất máy 8 nhân/ngày</b>, không ảnh hưởng việc khác; INT8 vừa nhanh vừa ăn ít CPU nhất (2.26s, 9 core-giây/alert). Số đo từ bench_cpu.py v2.3 (thêm cpu_s_total + cores_active_avg). <b>Chất lượng INT8 (đo theo review):</b> full-INT8 sụp kênh scoring — verdict acc <b>0.092</b> (fp32 0.96 cùng script CPU; 0.939 bản GPU), TTP 0.144 (vs 0.288), 704 GT; giữ lm_head fp32 không cứu (acc 0.14, n=200) → INT8 chỉ là tham chiếu tốc độ, KHÔNG dùng sản phẩm (hướng QAT/GGUF — future). <b>Độ ổn định:</b> protocol High-performance, lặp lại — 0.5B 23.70/24.27/24.24s (±1.2%), 1.1B 58.2/56.9s; số 17.7s trước đó đo lúc máy rảnh hẳn (khác tải nền, cùng máy).</div>
 <h2>15) Phương pháp luận: log → AD-GEN → ML truyền thống → SLM giải thích</h2>
 <table>
 <tr><th>Tầng</th><th>Vai trò</th><th>Bằng chứng đo</th></tr>
@@ -403,7 +403,20 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>ML truyền thống (Velox + cascade; TF-IDF/encoder so)</td><td>Phát hiện + kéo tải 474→39 alert/ngày, recall 75%</td><td>AUC 0.917, R@20K 81%; TF baseline chỉ score, không kênh giải thích</td></tr>
 <tr><td>SLM 0.5B constrained (CPU)</td><td>Diễn giải {verdict, technique, evidence, action}</td><td>valid 100%, parse_fail 0; judge 55 vs teacher 59; 6–18s/mẫu CPU</td></tr>
 </table>
-<div class="note"><b>WHY SLM:</b> ML truyền thống chỉ trả score — triage cần LÝ DO + BẰNG CHỨNG + HÀNH ĐỘNG; trục giải thích là kênh ML không có, và SLM 0.5B giữ được ≈ teacher-7B (55 vs 59) trên CPU. <b>CẮT ML sẽ mất 3 thứ:</b> (1) khả thi compute — SLM không quét nổi raw stream (triệu event/ngày), cascade là điều kiện khiến SLM-CPU khả thi; (2) precision — detect base-rate thấp bùng FP, tự detect thì Âm (TTP 0.12–0.30; hal free-gen 0.87–0.96); (3) đơn vị phân tích — không graph layer thì không có chain để giải thích. Ba tầng ba vai trò: ML phát hiện — SLM diễn giải — AD-GEN nhãn để đo.</div>
+<div class="note"><b>WHY SLM:</b> ML truyền thống chỉ trả score — triage cần LÝ DO + BẰNG CHỨNG + HÀNH ĐỘNG; trục giải thích là kênh ML không có, và SLM 0.5B ngang teacher-7B (55 vs 59) trên kênh constrained, chạy CPU. <b>CẮT ML sẽ mất 3 thứ:</b> (1) khả thi compute — SLM không quét nổi raw stream (triệu event/ngày), cascade là điều kiện khiến SLM-CPU khả thi; (2) precision — detect base-rate thấp bùng FP, tự detect thì Âm (TTP 0.12–0.30; hal free-gen 0.87–0.96); (3) đơn vị phân tích — không graph layer thì không có chain để giải thích. Ba tầng ba vai trò: ML phát hiện — SLM diễn giải — AD-GEN nhãn để đo.</div>
+<h2>16) Limitation &amp; phản biện (review 17/09) — trạng thái xử lý</h2>
+<table>
+<tr><th>Điểm bị đánh</th><th>Xử lý</th></tr>
+<tr><td>Vòng tròn LLM-LLM (nhãn LLM sinh, chấm bằng LLM — không có neo người)</td><td>Ghi rõ LIMITATION: mọi số chất lượng là silver-standard; human pack 40 mẫu đã đóng gói, chờ người chấm (future).</td></tr>
+<tr><td>Mâu thuẫn section 11 (SLM ≈ teacher) vs section 13 (SLM bịa 87%)</td><td>2 KÊNH khác nhau: constrained (sản phẩm; SLM ngang teacher) vs free-gen (ablation; SLM thua). Kết luận: chỉ tin SLM khi constrained.</td></tr>
+<tr><td>Teacher liệt (0.04) → "student giữ năng lực teacher" vô nghĩa</td><td>Đổi claim: domain shift chặn CẢ HỌ — không do size. Đã sửa section 11/13.</td></tr>
+<tr><td>Không còn ô nào SLM "thắng" rõ</td><td>"thắng" → "ngang/không khác biệt có ý nghĩa"; đóng góp = KÊNH GIẢI THÍCH độc quyền, không phải accuracy.</td></tr>
+<tr><td>N=40 nhỏ</td><td>Limitation ghi rõ (judge 40; hal-content 21–40). Tăng mẫu = future/optional.</td></tr>
+<tr><td>Thiếu baseline encoder fine-tune (SecBERT)</td><td>Ghi rõ baseline hiện có; SecBERT fine-tune = future work.</td></tr>
+<tr><td>Domain shift chưa chữa</td><td>Future Work tường minh (ngoài scope theo chốt "KHÔNG làm").</td></tr>
+<tr><td>Số CPU biến động giữa các lượt</td><td>Protocol chuẩn (High-performance + ghi điều kiện); lặp 3 lần ±1.2%. Chênh cũ = máy rảnh vs máy đang chạy việc thật.</td></tr>
+<tr><td>INT8 chưa đo chất lượng</td><td>Đã đo: acc 0.96 → 0.09 (lm_head fp32: 0.14) → không dùng; bảng tốc độ kèm cảnh báo trade-off.</td></tr>
+</table>
 </div>
 </body>
 </html>
