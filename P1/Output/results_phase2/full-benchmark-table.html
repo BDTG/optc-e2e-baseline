@@ -412,11 +412,19 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>Teacher liệt (0.04) → "student giữ năng lực teacher" vô nghĩa</td><td>Đổi claim: domain shift chặn CẢ HỌ — không do size. Đã sửa section 11/13.</td></tr>
 <tr><td>Không còn ô nào SLM "thắng" rõ</td><td>"thắng" → "ngang/không khác biệt có ý nghĩa"; đóng góp = KÊNH GIẢI THÍCH độc quyền, không phải accuracy.</td></tr>
 <tr><td>N=40 nhỏ</td><td>Limitation ghi rõ (judge 40; hal-content 21–40). Tăng mẫu = future/optional.</td></tr>
-<tr><td>Thiếu baseline encoder fine-tune (SecBERT)</td><td>Ghi rõ baseline hiện có; SecBERT fine-tune = future work.</td></tr>
+<tr><td>Thiếu baseline encoder fine-tune (SecBERT)</td><td><b>ĐÃ LÀM (17/09):</b> SecBERT fine-tune verdict AP 0.936 vs TF-IDF 0.826 (+0.11) — encoder phân loại mạnh hơn n-gram; TTP head gần hòa. Kênh giải thích vẫn thuộc SLM constrained.</td></tr>
 <tr><td>Domain shift chưa chữa</td><td>Future Work tường minh (ngoài scope theo chốt "KHÔNG làm").</td></tr>
 <tr><td>Số CPU biến động giữa các lượt</td><td>Protocol chuẩn (High-performance + ghi điều kiện); lặp 3 lần ±1.2%. Chênh cũ = máy rảnh vs máy đang chạy việc thật.</td></tr>
 <tr><td>INT8 chưa đo chất lượng</td><td>Đã đo: acc 0.96 → 0.09 (lm_head fp32: 0.14) → không dùng; bảng tốc độ kèm cảnh báo trade-off.</td></tr>
 </table>
+<h2>16b) Baseline encoder fine-tune — SecBERT (17/09, Nitro 1650Ti)</h2>
+<table>
+<tr><th>Bài đo</th><th>TF-IDF</th><th>SecBERT fine-tune</th><th>Ghi chú</th></tr>
+<tr><td>Verdict AP (balanced-200, 60/40, seed 42)</td><td>0.826</td><td class="ap"><b>0.936</b></td><td>encoder THẮNG +0.11 — phân loại mạnh hơn n-gram</td></tr>
+<tr><td>TTP head AP (LAB→REAL, 3 TTP common)</td><td>0.566</td><td>0.580</td><td>gần hòa (n nhỏ 5/15/5); T1218 0.814 vs 0.627</td></tr>
+<tr><td>Latency</td><td>~ms</td><td>28ms/mẫu</td><td>nhanh ~750× SLM nhưng KHÔNG sinh giải thích</td></tr>
+</table>
+<div class="note">SecBERT fine-tune khép lỗ "chỉ so n-gram": encoder thật phân loại mạnh hơn (verdict +0.11). Nhưng nó vẫn chỉ trả score — kênh giải thích vẫn thuộc SLM constrained. Hai thế mạnh bổ sung. Code: secbert_head_full.py + secbert_balanced.py. File: secbert-head-full.json + secbert-balanced.json.</div>
 </div>
 </body>
 </html>

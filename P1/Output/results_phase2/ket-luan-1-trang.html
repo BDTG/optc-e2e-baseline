@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><title>P2 — Kết luận 1 trang</title></head>
+<body>
+<h1>Paper 2 — SLM tầng giải thích on-device: kết luận 1 trang</h1>
+<p style="opacity:.7">17/09/2026 • AD-GEN 704 GT (LAB→REAL) • judges blind • CPU i5-10300H + 7800X3D</p>
+
+<h2>1) Đã chốt (số cứng, có đối chứng)</h2>
+<table>
+<tr><th>Ý</th><th>Số</th></tr>
+<tr><td>Kênh sản phẩm = <b>constrained</b> (JSON 4 trường, logprob scoring)</td><td>valid 100%, parse_fail 0 theo cấu trúc; evidence trích xuất thật</td></tr>
+<tr><td>Chất lượng kênh constrained: SLM 0.5B <b>ngang</b> teacher-7B</td><td>judge blind 5 models: 55 vs 59 wins (không khác biệt có ý nghĩa); mean 1.365 vs 1.317</td></tr>
+<tr><td>Verdict tier-2 (OpTC, cascade)</td><td>0.775 ± 0.13 (xval) — đạt kỳ vọng &gt;75%</td></tr>
+<tr><td>CPU tối thiểu</td><td>2 nhân AVX2 + 16GB; 1 nhân vẫn chạy (25.6s/alert); ăn 9–44 core-giây/alert → 39 alert/ngày &lt; 0.3% máy 8 nhân</td></tr>
+<tr><td>Endpoint khuyến nghị</td><td>torch CPU wheel (bản ROCm chậm 19×); INT8 nhanh 2.3× nhưng sụp chất lượng → không dùng</td></tr>
+</table>
+
+<h2>2) Kết quả Âm (trung thực — publishable theo khung 3 mức)</h2>
+<table>
+<tr><th>Ý</th><th>Số</th></tr>
+<tr><td>TTP acc (zero/few-shot, cả 3 size)</td><td>0.29 / 0.30 / 0.12 — mức Âm; teacher-7B cũng 0.04</td></tr>
+<tr><td>hal-content (free-gen rationale)</td><td>SLM 0.87–0.96 bịa; teacher 0.60 — domain shift chặn cả họ, không phải size</td></tr>
+<tr><td>FT head A2 (3 seeds)</td><td>0.4633 ± 0.0106 vs TF-IDF 0.4591 — không khác biệt có ý nghĩa</td></tr>
+</table>
+
+<h2>3) Fix theo review 17/09</h2>
+<table>
+<tr><th>Điểm</th><th>Xử lý</th></tr>
+<tr><td>Mâu thuẫn mục 6 vs 13</td><td>2 kênh: constrained (sản phẩm; SLM ngang teacher) vs free-gen (ablation; SLM thua) → chỉ tin SLM khi constrained</td></tr>
+<tr><td>"Student giữ năng lực teacher" vô nghĩa (teacher liệt)</td><td>Đổi claim: domain shift chặn cả họ — không do size</td></tr>
+<tr><td>INT8 khập khiễng</td><td>Đo chất lượng: acc 0.96 → 0.09 → không dùng sản phẩm</td></tr>
+<tr><td>Số CPU "ảo"</td><td>Protocol cố định + lặp 3 lần (±1.2%); mọi số ghi kèm điều kiện đo</td></tr>
+<tr><td>Vòng tròn LLM-LLM, N=40, thiếu SecBERT, domain shift</td><td>Mục Limitation (17) + future work tường minh</td></tr>
+</table>
+
+<h2>4) Còn mở</h2>
+<p>Human pack 40 (chờ chấm — điểm neo người) • SecBERT fine-tune (optional, chờ duyệt) • Giảm RAM peak &lt;4GB (đang làm) • Domain shift = P3/future work.</p>
+<h2>5) SecBERT baseline (17/09, chạy Nitro)</h2>
+<table>
+<tr><th>Bài đo</th><th>TF-IDF</th><th>SecBERT fine-tune</th></tr>
+<tr><td>Verdict AP (balanced-200)</td><td>0.826</td><td><b>0.936</b> — encoder phân loại mạnh hơn n-gram</td></tr>
+<tr><td>TTP head AP (LAB→REAL)</td><td>0.566</td><td>0.580 (gần hòa, n nhỏ)</td></tr>
+<tr><td>Latency</td><td>~ms</td><td>28ms/mẫu — nhưng KHÔNG sinh giải thích</td></tr>
+</table>
+<p style="opacity:.8">SecBERT khép lỗ "chỉ so n-gram" (review): encoder thật phân loại mạnh hơn. Kênh giải thích vẫn thuộc về SLM constrained — hai thế mạnh bổ sung.</p>
+<h2>6) Còn mở (cập nhật)</h2>
+<p>Human pack 40 (chờ chấm) • Giảm RAM peak &lt;4GB (code tên Nitro, số chính thức chờ GPD) • Domain shift = future work</p>
+</body></html>
