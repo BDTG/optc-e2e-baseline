@@ -99,3 +99,7 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - Verdict AP balanced-200: TF-IDF 0.826 vs SecBERT **0.936** (+0.11) — encoder phân loại mạnh hơn n-gram.
 - TTP head (LAB->REAL, 3 TTP common): 0.566 vs 0.580 (hòa, n nhỏ).
 - SecBERT chỉ trả score — kênh giải thích vẫn thuộc SLM constrained. Code: secbert_head_full.py, secbert_balanced.py.
+
+## GGUF Q4_K_M chat luong (17/09, GPU vulkan)
+- Verdict acc: **0.259** (TP 182/FN 522) tren 704 GT; TTP 0.047. s/sample 0.37s.
+- Qwen3.5-4B 4-bit sup chat luong giong INT8 (0.092) — buoc phai Q8_0/Q6_K hoac fp16 GGUF neu muon dung tren san pham.
