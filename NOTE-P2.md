@@ -94,3 +94,8 @@ FT head: script trong `P1/Code/p3b/` (`a1_full.py`, `a2.py`).
 - INT8: full-int8 sup kenh scoring (acc 0.092 vs fp32 0.96; lm_head fp32: 0.14) -> chi tham chieu toc do, khong dung san pham.
 - On dinh: protocol High-performance + lap lai: 0.5B 23.70/24.27/24.24s (+-1.2%), 1.1B 58.2/56.9s; 17.7s cu = may ranh.
 - Muc 17 (Word) / section 16 (html): bang Limitation & phan bien (9 diem) da xu ly.
+
+## SecBERT baseline (17/09, Nitro)
+- Verdict AP balanced-200: TF-IDF 0.826 vs SecBERT **0.936** (+0.11) — encoder phân loại mạnh hơn n-gram.
+- TTP head (LAB->REAL, 3 TTP common): 0.566 vs 0.580 (hòa, n nhỏ).
+- SecBERT chỉ trả score — kênh giải thích vẫn thuộc SLM constrained. Code: secbert_head_full.py, secbert_balanced.py.
