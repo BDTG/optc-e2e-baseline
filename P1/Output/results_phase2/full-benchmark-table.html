@@ -425,6 +425,14 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 <tr><td>Latency</td><td>~ms</td><td>28ms/mẫu</td><td>nhanh ~750× SLM nhưng KHÔNG sinh giải thích</td></tr>
 </table>
 <div class="note">SecBERT fine-tune khép lỗ "chỉ so n-gram": encoder thật phân loại mạnh hơn (verdict +0.11). Nhưng nó vẫn chỉ trả score — kênh giải thích vẫn thuộc SLM constrained. Hai thế mạnh bổ sung. Code: secbert_head_full.py + secbert_balanced.py. File: secbert-head-full.json + secbert-balanced.json.</div>
+<h2>16c) GGUF Q4_K_M — llama.cpp GPU Vulkan (Qwen3.5-4B, chất lượng 704 GT)</h2>
+<table>
+<tr><th>Bài đo</th><th>Số</th><th>Ghi chú</th></tr>
+<tr><td>Verdict acc (704 GT)</td><td class="neg">0.259 (TP182/FN522)</td><td>model 4-bit sụp chất lượng</td></tr>
+<tr><td>TTP acc</td><td>0.047</td><td>predict sai kỹ thuật</td></tr>
+<tr><td>s/sample (GPU Vulkan ngl=-99)</td><td class="ap"><b>0.37s</b></td><td>57× nhanh fp32 pipeline</td></tr>
+</table>
+<div class="note">GGUF Q4_K_M 4-bit sụp như INT8 (0.939 → 0.259; INT8 0.092). Muốn dùng model to qua GGUF: Q8_0/Q6_K, QAT, hoặc fp16 GGUF — đây là lời đòi có chất lượng cùng bảng tốc độ. INT8/GGUF Q4 không dùng sản phẩm.</div>
 </div>
 </body>
 </html>
