@@ -434,5 +434,19 @@ File: llm-judge-scores.json + llm-judge-aggregate.json + P1/Code/llm_judge3.py.<
 </table>
 <div class="note">GGUF Q4_K_M 4-bit sụp như INT8 (0.939 → 0.259; INT8 0.092). Muốn dùng model to qua GGUF: Q8_0/Q6_K, QAT, hoặc fp16 GGUF — đây là lời đòi có chất lượng cùng bảng tốc độ. INT8/GGUF Q4 không dùng sản phẩm.</div>
 </div>
+
+<details open><summary><b>18b. P3/RQ1b — LoRA fine-tune trên cascade flagged (23/09)</b></summary>
+<div style="margin:8px 12px 16px">
+<p><b>Setup:</b> rule "chain ≥ 2" pre-filter → 21 dị nghi (12 mal + 9 FP) → LoRA r8 trên Qwen2.5-0.5B,
+train balanced 84 mal / 76 benign (160 mẫu, 2 epochs, 15 phút CPU GPD), eval generation đúng prompt train.</p>
+<table class="result">
+<tr><th>Hệ</th><th>TP</th><th>TN</th><th>FP</th><th>FN</th><th>F1</th></tr>
+<tr><td>Rule-only (chain ≥ 2)</td><td>12</td><td>183</td><td>9</td><td>0</td><td>0.727</td></tr>
+<tr><td><b>LoRA v4 (balanced 84/76)</b></td><td>11</td><td>3</td><td>6</td><td>1</td><td><b>0.759</b></td></tr>
+<tr><td>SLM zero-shot</td><td>0</td><td>—</td><td>—</td><td>12</td><td>0</td></tr>
+</table>
+<p><i>Phát hiện:</i> benign dữ liệu cạn (19 template + 57 chain trắng đồng nhất) → ceiling FP lọc 3/9.
+Cần benign có nhiễu thật để đạt Dương ≥0.60 (khung thầy). SLM zero-shot TP 0/12 xác nhận RQ1a.</p>
+</div></details>
 </body>
 </html>
