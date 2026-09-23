@@ -1,0 +1,17 @@
+{
+ "n": 204,
+ "mal": 12,
+ "flagged_for_slm": 21,
+ "auto_clean": 183,
+ "compute_saved_pct": 89.7,
+ "rule_only": {
+  "TP": 12,
+  "TN": 183,
+  "FP": 9,
+  "FN": 0,
+  "precision": 0.5714,
+  "recall": 1.0,
+  "F1": 0.7273
+ },
+ "next": "12 d\u1ecb nghi (TP 12 + FP 9) chuy\u1ec3n qua SLM/LoRA \u0111\u1ec3 l\u1ecdc FP \u2014 m\u1ee5c ti\u00eau SLM ch\u1ec9 c\u1ea7n \u0111\u1ea9y 9 FP \u2192 BENIGN thay v\u00ec 204 m\u1eabu"
+}
