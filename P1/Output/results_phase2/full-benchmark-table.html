@@ -463,5 +463,18 @@ Cần benign có nhiễu thật để đạt Dương ≥0.60 (khung thầy). SLM
 kéo ensemble về phía MALICIOUS. <b>Bài học:</b> ensemble không cứu được khi benign thiếu nhiễu — đường trên vẫn là
 bổ sung benign chất lượng (delimitation RQ1b), không phải cộng thêm mô hình.</p>
 </div></details>
+
+<details open><summary><b>18d. P3/RQ2 — A2 multi-seed 5 seeds (24/09)</b></summary>
+<div style="margin:8px 12px 16px">
+<p><b>Config v2 (reduced budget):</b> EPOCHS=1, MAXLEN=256, seeds 42-46, GPU 9060XT AOTriton ROCm (~45p/seed).</p>
+<table class="result">
+<tr><th>Seed</th><th>42</th><th>43</th><th>44</th><th>45</th><th>46</th><th>mean±std</th></tr>
+<tr><td>SLM mean AP</td><td>0.4185</td><td>0.4332</td><td>0.3269</td><td>0.3901</td><td>0.4191</td><td><b>0.3976 ± 0.0425</b></td></tr>
+<tr><td>TF-IDF (cùng split)</td><td colspan="5">0.4591 (cố định)</td><td>0.4591</td></tr>
+</table>
+<p><i>Kết luận:</i> dưới reduced budget, SLM 0.3976±0.0425 &lt; TF-IDF 0.4591 (gap −0.062, std lớn do seed 44 outlier).
+Nhưng full budget (2 ep/512) seed 42 gốc = <b>0.4733 &gt; 0.4591</b>. <b>Bài học:</b> ngân sách train (epoch + seq len) quyết định
+SLM có vượt baseline n-gram hay không — 1 epoch/256 token là insufficient. Publishable: cả 2 đều report.</p>
+</div></details>
 </body>
 </html>
