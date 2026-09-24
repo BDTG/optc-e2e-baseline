@@ -1,0 +1,10 @@
+{
+ "rq4_quantization": {
+  "q4_k_m_verdict_acc": 0.2585,
+  "q8_0_verdict_acc": 0.2557,
+  "q8_0_ttp_acc": 0.0597,
+  "q8_0_s_per_sample": 0.49,
+  "fp32_reference": 0.939,
+  "conclusion": "Q8_0 (0.256) ~= Q4_K_M (0.259) \u2014 khong phai do bit-width. Ca 2 quantized GGUF deu s\u1ee5p vs fp32 0.939. Nghi van he thong: bench prompt GGUF co the khac few-shot cua fp32 pipeline (limitation ghi ro). GO/NO-GO: NO-GO quantized cho scoring product; fp32 CPU giu la con duong duy nhat"
+ }
+}
