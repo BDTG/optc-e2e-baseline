@@ -503,5 +503,28 @@ Giả thuyết: benchmark GGUF prompt (chat+few-shot) khác cấu hình pipeline
 <b>Empirical proof của delimitation RQ1b:</b> SLM 0.5B không đủ capacity tách benign noise thật khỏi mal chain thật —
 không phải thiếu data mà là khoảng cách tín hiệu quá mỏng cho tier-2. v4 giữ làm config tốt nhất (headline).</p>
 </div></details>
+<details open><summary><b>18g. P3/RQ4b — Bonsai-2 27B ternary (PTQ1_0, PrismML fork) trên sus (26/09)</b></summary>
+<div style="margin:8px 12px 16px">
+<p><b>Setup:</b> máy mới sus = CachyOS Linux, RX 9060 XT (Vulkan RADV PRADV), 30GB RAM, 16 lõi 7800X3D. Build PrismML
+llama.cpp fork từ branch <code>prism</code> (9a4dd89) — build-only, release prebuilt b10660 từ chối ternary type 143;
+model <code>Ternary-Bonsai-2-27B-PTQ1_0.gguf</code> 5.95GB (1.75 bpw, ternary g128 - Bonsai-2 = Qwen 27B retrained 1/0/1 Hadamard).
+Decode 29 t/s (Vulkan ngl=99, CPU-on-ly 1.7 t/s); PQ2_0 7.2GB segfault (bỏ). Đo bằng chính script gguf_quality_gpu3.py port
+sang sus (PORT 8767, path Linux, parse keep); llama-server Vulkan ngl=99.</p>
+<table class="result">
+<tr><th>Định lượng</th><th>Verdict acc</th><th>TTP acc</th><th>s/mẫu</th></tr>
+<tr><td><b>Bonsai-2 27B ternary PTQ1_0 (5.95GB)</b></td><td class="ap"><b>0.2926</b></td><td>0.081</td><td>1.37 (GPU)</td></tr>
+<tr><td>GGUF Qwen3.5-4B Q4_K_M</td><td>0.259</td><td>0.047</td><td>0.37</td></tr>
+<tr><td>GGUF Qwen3.5-4B Q8_0</td><td>0.256</td><td>0.060</td><td>0.49</td></tr>
+<tr><td>fp32 (transformers, tham chiếu)</td><td><b>0.939</b></td><td><b>0.288</b></td><td>21.4 (CPU)</td></tr>
+</table>
+<p><i>Đọc:</i> ternary "tốt nhất thế hệ" (bằng g128 Hadamard, claim 98.2% fp16 benchmark chuẩn) chỉ đạt <b>0.293</b> —
+hơn chút Q4/Q8 4B (0.256–0.259) và khác hẳn fp32 (0.939). Constant-MALICIOUS vẫn còn (TN=0, 498 FN).
+<br><b>Kết luận RQ4b — NO-GO xác nhận ở mức format ternary tối ưu:</b> quant collapse là thuộc tính của quantization
+khi dùng cho channel scoring fine-grained, KHÔNG phải do RTN thô (ternary recomposed + Hadamard không cứu).
+<br><b>Tham chiếu Flash-Next 177B (n-gram table offload SSD):</b> hướng đi "model to mà vẫn giữ chất lượng" tồn tại
+nhưng là architecture-level (core 125B + n-gram table stream từ NVMe) — core 45.8GB vẫn không fit tier-2 (sus/chỉ CPU on-device),
+không áp dụng cho RQ4 của mình; ghi trong limitation.</p>
+</div></details>
+
 </body>
 </html>
