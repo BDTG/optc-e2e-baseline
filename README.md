@@ -18,15 +18,15 @@ optc-e2e-baseline/
 │
 ├── P1/                          # Phase 1: ORTHRUS + Velox tier-1 GNN
 │   ├── Code/                    # orthrus.yml, velox worktree, orthrus_src, patches, launch_scripts
-│   └── Output/                  # data/, results_phase0/, results_phase1/, results_phase2/ (P2 KQ), results_phase3/ (P3 KQ), models/, benchmarks/
+│   └── Output/                  # data/, results_phase0/, results_phase1/, models/, benchmarks/
 │
 ├── P2/                          # Phase 2: SLM tier-2 grid (constrained explain, judge, compliance, FT-head, SecBERT, AD-GEN)
 │   ├── Code/                    # tier2_*.py, explain_*.py, judge, bench_cpu, p3b/ (a1_full/a2/a3 FT-head)
-│   └── Output/                  # symlink → ../P1/Output/results_phase2
+│   └── Output/results_phase2/   # KẾT QUẢ P2 — file thật
 │
 ├── P3/                          # Phase 3: đánh giá phương pháp RQ1a–RQ4b (cascade thật, quant, ternary)
 │   ├── Code/                    # rq1a_*.py, rq1b_*.py, a2_multiseed, rq3_ensemble, gguf_quality_gpu3, rq4_*
-│   └── Output/                  # symlink → ../P1/Output/results_phase3
+│   └── Output/results_phase3/   # KẾT QUẢ P3 — file thật
 │
 └── data/                        # (gitignored) raw data OpTC + WSL vhdx 16GB
     ├── orthrus/velox/           # ground truth + edge tables
@@ -171,17 +171,17 @@ python tier3_lora_test.py         # LoRA on TTP unseen
 
 | File | Nội dung |
 |------|---------|
-| `P1/Output/results_phase2/go-nogo-decision.md` | Phân tích NO-GO đầy đủ 8 sections |
-| `P1/Output/results_phase2/report-for-advisor.txt` | Báo cáo cho thầy (Tiếng Việt) |
-| `P1/Output/results_phase2/report-phase2-wsab.md` | Working-scratch báo cáo phase 2 |
-| `P1/Output/results_phase2/context-phase2-execution.md` | Context file cho agent |
-| `P1/Output/results_phase2/slm-tier2-v2-cv.json` | TF-IDF V2 CV (encoder rẻ baseline AP 0.254) |
-| `P1/Output/results_phase2/slm-go-nogo-qwen05b-n40.json` | SLM 0.5B go-nogo n=40 |
-| `P1/Output/results_phase2/tfidf-cv-results.json` | TF-IDF CV results |
-| `P1/Output/results_phase2/tier2-filter-corrected.json` | Tier-2 filter experiment |
-| `P1/Output/results_phase2/lora-05b-epoch1-result.json` | LoRA 0.5B AP=0.0044 |
-| `P1/Output/results_phase2/bert-ttp-result.json` | BERT TTP AP=0.6603 |
-| `P1/Output/results_phase2/lora-ttp-result.json` | LoRA TTP AP=0.1174 |
+| `P2/Output/results_phase2/go-nogo-decision.md` | Phân tích NO-GO đầy đủ 8 sections |
+| `P2/Output/results_phase2/report-for-advisor.txt` | Báo cáo cho thầy (Tiếng Việt) |
+| `P2/Output/results_phase2/report-phase2-wsab.md` | Working-scratch báo cáo phase 2 |
+| `P2/Output/results_phase2/context-phase2-execution.md` | Context file cho agent |
+| `P2/Output/results_phase2/slm-tier2-v2-cv.json` | TF-IDF V2 CV (encoder rẻ baseline AP 0.254) |
+| `P2/Output/results_phase2/slm-go-nogo-qwen05b-n40.json` | SLM 0.5B go-nogo n=40 |
+| `P2/Output/results_phase2/tfidf-cv-results.json` | TF-IDF CV results |
+| `P2/Output/results_phase2/tier2-filter-corrected.json` | Tier-2 filter experiment |
+| `P2/Output/results_phase2/lora-05b-epoch1-result.json` | LoRA 0.5B AP=0.0044 |
+| `P2/Output/results_phase2/bert-ttp-result.json` | BERT TTP AP=0.6603 |
+| `P2/Output/results_phase2/lora-ttp-result.json` | LoRA TTP AP=0.1174 |
 
 ## 7. Data + models
 
@@ -287,8 +287,8 @@ python P1/Code/summarize_bal.py
 ```
 
 Output (mỗi model 1 file JSON):
-- `P1/Output/results_phase2/slm-explain-{05b,11b,15b,all}.json` — bench 704
-- `P1/Output/results_phase2/slm-explain-bal-{05b,11b,15b,all}.json` — balanced-200
+- `P2/Output/results_phase2/slm-explain-{05b,11b,15b,all}.json` — bench 704
+- `P2/Output/results_phase2/slm-explain-bal-{05b,11b,15b,all}.json` — balanced-200
 
 ```json
 {"model": "Qwen/Qwen2.5-0.5B-Instruct", "n": 704,
@@ -314,16 +314,16 @@ Script đã đưa hết vào `P1/Code/p3b/` (`a1_full.py` ensemble, `a2.py` doma
 
 ## 7. Đọc kết quả nhanh
 
-- `P1/Output/results_phase2/full-benchmark-table.html` — section 8/9/10/10b (mở bằng browser)
-- `P1/Output/results_phase2/chuong-p2-draft.md` — draft chương P2
-- `P1/Output/results_phase2/mindmap-note.html` + `roadmap-note.html` — vị trí hiện tại
+- `P2/Output/results_phase2/full-benchmark-table.html` — section 8/9/10/10b (mở bằng browser)
+- `P2/Output/results_phase2/chuong-p2-draft.md` — draft chương P2
+- `P2/Output/results_phase2/mindmap-note.html` + `roadmap-note.html` — vị trí hiện tại
 
 ## 8. Phân phase kết quả (26/09 — tách P2/P3)
 
 Thu trước 26/09 mọi KQ P3 (RQ1a–RQ4b) nằm chung results_phase2 — đã tách:
 
-- `P1/Output/results_phase2/` — P2 thôi (tier2-explain, judge, teacher, CPU bench, 3 size, SecBERT, adgen-bench, human-eval, action). Còn 5 file `p3b-*` cổ (A1 ensemble / A3 size-test / probs.npy) của giai đoạn FT-head thuộc P2 grid — giữ nguyên vì kết quả trong full-benchmark-table.html mục 9 tham chiếu trực tiếp.
-- `P1/Output/results_phase3/` — P3/RQ:
+- `P2/Output/results_phase2/` — P2 thôi (tier2-explain, judge, teacher, CPU bench, 3 size, SecBERT, adgen-bench, human-eval, action). Còn 5 file `p3b-*` cổ (A1 ensemble / A3 size-test / probs.npy) của giai đoạn FT-head thuộc P2 grid — giữ nguyên vì kết quả trong full-benchmark-table.html mục 9 tham chiếu trực tiếp.
+- `P3/Output/results_phase3/` — P3/RQ:
   - RQ1a: rq1a-subset-result.json, raw-explain-rq1a.json
   - RQ1b: rq1b-hybrid-result.json, rq1b-lora-eval.json, rq1b5-lora-eval.json, rq1b-final.json
   - RQ2: p3b-da-seed42..46.json, p3b-da-fullbudget-seed42.json, p3b-domainadapt-*.json, rq2-final.json, p3b-Ytest.json
