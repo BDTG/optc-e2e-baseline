@@ -1,0 +1,14 @@
+{
+ "n_total": 704,
+ "verdict_acc": 0.2926,
+ "TP": 206,
+ "TN": 0,
+ "FP": 0,
+ "FN": 498,
+ "ttp_acc_on_gt": 0.081,
+ "ttp_n": 704,
+ "s_per_sample": 1.37,
+ "wall_s": 965,
+ "backend": "Bonsai-2 27B ternary PTQ1_0 vulkan ngl=99 sus",
+ "endpoint": "chat+chat_template_kwargs disable_thinking"
+}
