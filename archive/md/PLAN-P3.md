@@ -32,7 +32,17 @@ Mục tiêu: biến SLM từ "chỉ kể chuyện" thành "kể chuyện ĐÚNG 
 - Câu hỏi mở (đã nêu với thầy): nhiều cụm 0.5B hỗ trợ nhau để tăng verdict accuracy thay vì 1 model tự suy luận.
 - Lộ trình: 3 instance 0.5B independent → majority-vote logprob → so với 1 instance đơn lẻ + so với teacher 7B. Chi phí ~1 giờ trên GPD.
 
-## 5) RQ4 — Quantization chính thức
+## 5) RQ4 — Quantization chính thức (ĐÓNG — NO-GO chốt, 26/09)
+
+- **Q8_0 (24/09): 0.256 ≈ Q4_K_M 0.259** — tăng bit-width KHÔNG cứu. Đọc thêm: ternary (26/09):
+- **RQ4b — Bonsai-2 27B ternary PTQ1_0 (máy sus, PrismML fork, Vulkan ngl=99):**
+  - verdict acc **0.2926** (TP 206, TN 0, FN 498), TTP 0.081, 1.37s/mẫu, 965s wall.
+  - Chỉ hơn Q4/Q8 4B (0.256–0.259) chút, khác hẳn fp32 0.939 — constant-MALICIOUS vẫn còn (TN=0).
+  - **NO-GO xác nhận ở mức format ternary tối ưu nhất**: quant collapse là thuộc tính của quantization
+  trên scoring fine-grained, KHÔNG phải RTN thô (ternary recomposed + Hadamard không cứu).
+  - Limitation: Qwen3.8 Flash-Next 177B (n-gram table offload SSD) cho thấy con đường quality-at-size là
+  architecture-level (core 125B + 51B lookup table stream từ NVMe, IQ4XS 22 t/s trên 4-bit) — core 45.8GB
+  vẫn không fit tier-2 CPU-on-device, không phải giải pháp RQ4 (chỉ citing trong limitation).
 
 - INT8/GGUF-Q4 **sụp chất lượng** (0.96→0.09) → lên án quantized cho scoring product
 - Nhưng GGUF-Q8/Q6 chưa đo — làm *backend thủ công tốt hơn* (cam kết giữ acc ≥ 0.90) trước khi tuyên bố GO/NO-GO về quantized. Nếu đo xong vẫn sụp → chốt: fp32 CPU là con đường duy nhất của tier-2.
@@ -40,7 +50,7 @@ Mục tiêu: biến SLM từ "chỉ kể chuyện" thành "kể chuyện ĐÚNG 
 ## 6) Vuông trống — lỗ hổng P3 chưa lấp
 
 - N=40 compliance/groundedness chỉ có 3 hệ (0.5B / 1.1B / 1.5B) — **thiếu teacher-as-judge N=40 nội bộ** (đang chờ router kết nối lại)
-- GGUF quality Q4_K_M và Q8_0 chưa so pairwise cùng 1 dataset (chỉ có Q4 = 0.259, Q8 chưa chạy)
+- ~~GGUF quality Q4_K_M và Q8_0 chưa so pairwise cùng 1 dataset~~ → **ĐÃ XONG pairwise (Q8 0.256, Q4 0.259) + ternary Bonsai-2 0.2926 (18g)**
 - Multi-seed A2 là số — chưa đi vào bảng.
 
 ## 7) Bảng việc cụ thể (thứ tự ưu tiên)
@@ -51,11 +61,12 @@ Mục tiêu: biến SLM từ "chỉ kể chuyện" thành "kể chuyện ĐÚNG 
 | 2 | **RQ1b-LoRA** 3 seeds | GPD 9060XT (hoặc 5060Ti thầy) | ~1h | mean±std acc + TTP |
 | 3 | RQ2 multi-seed A2 | Nitro CPU | ~2h | 0.47 ± std |
 | 4 | RQ3 ensemble 3×0.5B | GPD CPU | ~1h | majority-vote acc vs 1×0.5B |
-| 5 | RQ4 GGUF Q8_0 | GPD GPU | ~30m | go/no-go quantized |
+| 5 | RQ4 GGUF Q8_0 | GPD GPU | ~30m | go/no-go quantized — Done NO-GO |
+| 5b | RQ4b Bonsai-2 ternary | sus (Linux, Vulkan) | ~2h | NO-GO xác nhận ternary |
 | 6 | Word/tổng hợp cuối | Nitro | ~1h | bảng tổng + note thầy |
 
 ## 8) Kỳ vọng đóng Paper 2
 
 - Sau bước 1–5: **P3 đủ cấu trúc RQ1a → RQ1b → RQ2 → RQ3 → RQ4** khép trọn phương pháp đánh giá.
-- Phần viết: methodology (P2 + P3), bảng so sánh rule vs SLM vs teacher, phân tích hal-content, khuyến nghị deployment (fp32 CPU trước — quantized có rủi ro sụp).
+- Phần viết: methodology (P2 + P3), bảng so sánh rule vs SLM vs teacher, phân tích hal-content, khuyến nghị deployment (fp32 CPU trước — quantized + ternary đều sụp 0.09–0.29 trên scoring fine-grained).
 - Deliverable cho thầy: 1 Word tổng hợp + 1 HTML kết luận 1 trang (theme xanh) + git tag.
