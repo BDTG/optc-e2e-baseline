@@ -1,0 +1,22 @@
+{
+ "config": "v2 reduced budget: EPOCHS=1, MAXLEN=256 (vs full 2/512)",
+ "seeds": [
+  42,
+  43,
+  44,
+  45,
+  46
+ ],
+ "slm_means": [
+  0.4185,
+  0.4332,
+  0.3269,
+  0.3901,
+  0.4191
+ ],
+ "slm_mean": 0.3976,
+ "slm_std": 0.0425,
+ "tfidf_mean": 0.4591,
+ "full_budget_seed42": 0.4732,
+ "conclusion": "v2: SLM 0.3976+-0.0425 < TF 0.4591; full: 0.4733 > 0.4591 - budget quyet dinh"
+}

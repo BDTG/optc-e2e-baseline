@@ -1,7 +1,0 @@
-{
- "seed": 42,
- "config": "v2 EPOCHS=1 MAXLEN=256",
- "tfidf_mean": 0.4591,
- "slm_mean": 0.4185,
- "note": "recovered from console log (ren file overwrite)"
-}
