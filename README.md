@@ -16,11 +16,17 @@ optc-e2e-baseline/
 │   ├── Output/                  # logs_flash.log, logs_magic.log, flash_magic_report.md
 │   └── gt/                      # ground truth OpTC
 │
-├── P1/                          # Phase 1: ORTHRUS + Velox + SLM tier-2 (tầng 1 GNN + tầng 2 SLM)
-│   ├── Code/                    # orthrus.yml, velox worktree, patches OpTC H051,
-│   │                            # tier2_lora_train.py, tier2_bert_train.py, tier2_distill.py,
-│   │                            # tier3_ttp_build.py, benchmark_hw_grid.py, tier2_*.bat
-│   └── Output/                  # xem §5 chi tiết bên dưới
+├── P1/                          # Phase 1: ORTHRUS + Velox tier-1 GNN
+│   ├── Code/                    # orthrus.yml, velox worktree, orthrus_src, patches, launch_scripts
+│   └── Output/                  # data/, results_phase0/, results_phase1/, results_phase2/ (P2 KQ), results_phase3/ (P3 KQ), models/, benchmarks/
+│
+├── P2/                          # Phase 2: SLM tier-2 grid (constrained explain, judge, compliance, FT-head, SecBERT, AD-GEN)
+│   ├── Code/                    # tier2_*.py, explain_*.py, judge, bench_cpu, p3b/ (a1_full/a2/a3 FT-head)
+│   └── Output/                  # symlink → ../P1/Output/results_phase2
+│
+├── P3/                          # Phase 3: đánh giá phương pháp RQ1a–RQ4b (cascade thật, quant, ternary)
+│   ├── Code/                    # rq1a_*.py, rq1b_*.py, a2_multiseed, rq3_ensemble, gguf_quality_gpu3, rq4_*
+│   └── Output/                  # symlink → ../P1/Output/results_phase3
 │
 └── data/                        # (gitignored) raw data OpTC + WSL vhdx 16GB
     ├── orthrus/velox/           # ground truth + edge tables
