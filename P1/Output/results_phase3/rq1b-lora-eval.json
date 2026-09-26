@@ -1,0 +1,145 @@
+{
+ "summary": {
+  "seed": 44,
+  "n_train": 160,
+  "mal_train": 84,
+  "ben_train": 76,
+  "eval_flagged": 21,
+  "TP": 12,
+  "TN": 0,
+  "FP": 9,
+  "FN": 0,
+  "acc": 0.5714,
+  "precision": 0.5714,
+  "recall": 1.0,
+  "adapter": "C:/Users/BDTG/AppData/Local/Temp/rq1b4-adapter-44"
+ },
+ "recs": [
+  {
+   "nid": "8191",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: {verdic"
+  },
+  {
+   "nid": "8187",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: {\"verdi"
+  },
+  {
+   "nid": "9242",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8673",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8917",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8198",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8889",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8676",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "9779",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8927",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8752",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8921",
+   "label": 1,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant (API"
+  },
+  {
+   "nid": "8182",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: [S11"
+  },
+  {
+   "nid": "8202",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "9740",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8188",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "8293",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "2608",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Assistant: {\"v"
+  },
+  {
+   "nid": "9747",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: {\"verdi"
+  },
+  {
+   "nid": "8245",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: {\"verdi"
+  },
+  {
+   "nid": "9692",
+   "label": 0,
+   "pred": 1,
+   "gen": "{\"verdict\":\"MALICIOUS\",\"technique_id\":\"T1059\"}Human: {\"verdi"
+  }
+ ]
+}

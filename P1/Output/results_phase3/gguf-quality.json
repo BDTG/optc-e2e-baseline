@@ -1,0 +1,14 @@
+{
+ "n_total": 704,
+ "verdict_acc": 0.2585,
+ "TP": 182,
+ "TN": 0,
+ "FP": 0,
+ "FN": 522,
+ "ttp_acc_on_gt": 0.0469,
+ "ttp_n": 704,
+ "s_per_sample": 0.37,
+ "wall_s": 261,
+ "backend": "GPU vulkan ngl=-99",
+ "endpoint": "chat+chat_template_kwargs disable_thinking"
+}

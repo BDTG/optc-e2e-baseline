@@ -311,3 +311,16 @@ Script đã đưa hết vào `P1/Code/p3b/` (`a1_full.py` ensemble, `a2.py` doma
 - `P1/Output/results_phase2/full-benchmark-table.html` — section 8/9/10/10b (mở bằng browser)
 - `P1/Output/results_phase2/chuong-p2-draft.md` — draft chương P2
 - `P1/Output/results_phase2/mindmap-note.html` + `roadmap-note.html` — vị trí hiện tại
+
+## 8. Phân phase kết quả (26/09 — tách P2/P3)
+
+Thu trước 26/09 mọi KQ P3 (RQ1a–RQ4b) nằm chung results_phase2 — đã tách:
+
+- `P1/Output/results_phase2/` — P2 thôi (tier2-explain, judge, teacher, CPU bench, 3 size, SecBERT, adgen-bench, human-eval, action). Còn 5 file `p3b-*` cổ (A1 ensemble / A3 size-test / probs.npy) của giai đoạn FT-head thuộc P2 grid — giữ nguyên vì kết quả trong full-benchmark-table.html mục 9 tham chiếu trực tiếp.
+- `P1/Output/results_phase3/` — P3/RQ:
+  - RQ1a: rq1a-subset-result.json, raw-explain-rq1a.json
+  - RQ1b: rq1b-hybrid-result.json, rq1b-lora-eval.json, rq1b5-lora-eval.json, rq1b-final.json
+  - RQ2: p3b-da-seed42..46.json, p3b-da-fullbudget-seed42.json, p3b-domainadapt-*.json, rq2-final.json, p3b-Ytest.json
+  - RQ3: rq3-ensemble.json, rq3-final.json
+  - RQ4: gguf-quality.json, rq4-q80-quality.json, rq4-final.json, rq4b-bonsai-ptq10.json
+- full-benchmark-table.html mục 18a–18g đọc file trong results_phase3 (path mới) — nội dung số không đổi.
