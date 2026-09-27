@@ -1,6 +1,6 @@
 # Yeu cau cho 6 run explain (AD-GEN constrained logprob)
-transformers==5.2.0
-tokenizers==0.22.2
+transformers>=5.10.0  # fix PYSEC-2026-2289/2290/3929 (security)
+tokenizers>=0.23.0
 accelerate
 numpy
 scikit-learn
