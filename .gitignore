@@ -28,3 +28,10 @@ P1/Output/models/bert-150m/cv-fold-*/
 logs/
 __pycache__/
 *.tmp
+
+# === EVE / AD-GEN pipeline (commit code only) ===
+.venv/
+optc-explain-pack/output/
+optc-explain-pack/results/
+*.zip
+P1/Output/results_phase2/
