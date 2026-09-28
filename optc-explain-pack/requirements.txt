@@ -1,0 +1,10 @@
+# Yeu cau cho 6 run explain (AD-GEN constrained logprob)
+transformers>=5.10.0  # fix PYSEC-2026-2289/2290/3929 (security)
+tokenizers>=0.23.0
+accelerate
+numpy
+scikit-learn
+# torch: chon 1 trong cac cach sau
+#   GPU NVIDIA (Windows/Linux):  pip install torch --index-url https://download.pytorch.org/whl/cu128
+#   GPU AMD (Linux/ROCm):        pip install torch --index-url https://download.pytorch.org/whl/rocm6.4
+#   CPU:                         pip install torch --index-url https://download.pytorch.org/whl/cpu

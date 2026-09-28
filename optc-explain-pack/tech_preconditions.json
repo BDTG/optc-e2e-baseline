@@ -1,0 +1,562 @@
+{
+  "version": "0.1",
+  "attack_version": "v15",
+  "note": "Necessary conditions phi_t over Sysmon fields. A clause holds on one event when every field condition holds. Sources are descriptive and must be cross-checked against Sigma/CAR before publication.",
+  "enum": {
+    "T1059": "Command and Scripting Interpreter",
+    "T1547": "Boot or Logon Autostart Execution",
+    "T1055": "Process Injection",
+    "T1543": "Create or Modify System Process",
+    "T1003": "OS Credential Dumping",
+    "T1562": "Impair Defenses",
+    "T1046": "Network Service Discovery",
+    "T1490": "Inhibit System Recovery",
+    "T1553": "Subvert Trust Controls",
+    "T1036": "Masquerading",
+    "T1070": "Indicator Removal",
+    "T1218": "System Binary Proxy Execution",
+    "T1574": "Hijack Execution Flow",
+    "T1595": "Active Scanning",
+    "T1071": "Application Layer Protocol",
+    "T1083": "File and Directory Discovery",
+    "T1082": "System Information Discovery",
+    "T1047": "Windows Management Instrumentation",
+    "T1053": "Scheduled Task/Job",
+    "T1204": "User Execution"
+  },
+  "techniques": {
+    "T1003": {
+      "name": "OS Credential Dumping",
+      "tactics": [
+        "TA0006"
+      ],
+      "clauses": [
+        {
+          "id": "lsass_read_access",
+          "sub": "T1003.001",
+          "eid": [
+            10
+          ],
+          "all": {
+            "TargetImage": {
+              "endswith": [
+                "\\lsass.exe"
+              ]
+            },
+            "GrantedAccess": {
+              "hex_mask_all": "0x10"
+            }
+          },
+          "source": "ATT&CK T1003.001 detection: process access to lsass with PROCESS_VM_READ"
+        },
+        {
+          "id": "lsass_dump_cmdline",
+          "sub": "T1003.001",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "(procdump.*lsass|comsvcs(\\.dll)?[, ]+#?(minidump|24)|sekurlsa|mimikatz)"
+            }
+          },
+          "source": "ATT&CK T1003.001 procedure examples: procdump, comsvcs MiniDump, mimikatz"
+        },
+        {
+          "id": "lsass_dump_file",
+          "sub": "T1003.001",
+          "eid": [
+            11
+          ],
+          "all": {
+            "TargetFilename": {
+              "regex": "lsass.*\\.dmp$"
+            }
+          },
+          "source": "ATT&CK T1003.001: creation of lsass memory dump file"
+        },
+        {
+          "id": "registry_hive_save",
+          "sub": "T1003.002",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "reg(\\.exe)?\\s+save\\s+hklm\\\\(sam|system|security)"
+            }
+          },
+          "source": "ATT&CK T1003.002: reg save of SAM/SYSTEM/SECURITY hives"
+        }
+      ]
+    },
+    "T1055": {
+      "name": "Process Injection",
+      "tactics": [
+        "TA0004",
+        "TA0005"
+      ],
+      "clauses": [
+        {
+          "id": "create_remote_thread",
+          "eid": [
+            8
+          ],
+          "all": {
+            "SourceImage": {
+              "exists": true
+            },
+            "TargetImage": {
+              "exists": true
+            }
+          },
+          "cmp": [
+            {
+              "op": "neq",
+              "a": "SourceImage",
+              "b": "TargetImage"
+            }
+          ],
+          "source": "ATT&CK T1055 data component: CreateRemoteThread into another process"
+        },
+        {
+          "id": "cross_process_write_access",
+          "eid": [
+            10
+          ],
+          "all": {
+            "GrantedAccess": {
+              "hex_mask_all": "0x28"
+            }
+          },
+          "cmp": [
+            {
+              "op": "neq",
+              "a": "SourceImage",
+              "b": "TargetImage"
+            }
+          ],
+          "source": "ATT&CK T1055: process access with PROCESS_VM_OPERATION|PROCESS_VM_WRITE to another process"
+        },
+        {
+          "id": "unknown_calltrace",
+          "eid": [
+            10
+          ],
+          "all": {
+            "CallTrace": {
+              "contains": [
+                "unknown("
+              ]
+            }
+          },
+          "cmp": [
+            {
+              "op": "neq",
+              "a": "SourceImage",
+              "b": "TargetImage"
+            }
+          ],
+          "source": "Process access originating from unbacked memory (UNKNOWN in CallTrace)"
+        }
+      ]
+    },
+    "T1543": {
+      "name": "Create or Modify System Process",
+      "tactics": [
+        "TA0003",
+        "TA0004"
+      ],
+      "clauses": [
+        {
+          "id": "service_registry_key",
+          "sub": "T1543.003",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "regex": "\\\\(currentcontrolset|controlset\\d{3})\\\\services\\\\"
+            }
+          },
+          "source": "ATT&CK T1543.003 data component: Windows Registry key creation/modification under Services"
+        },
+        {
+          "id": "sc_create_config",
+          "sub": "T1543.003",
+          "eid": [
+            1
+          ],
+          "all": {
+            "Image": {
+              "endswith": [
+                "\\sc.exe"
+              ]
+            },
+            "CommandLine": {
+              "regex": "\\b(create|config)\\b"
+            }
+          },
+          "source": "ATT&CK T1543.003: sc.exe create/config"
+        },
+        {
+          "id": "powershell_new_service",
+          "sub": "T1543.003",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "(new-service|set-service)"
+            }
+          },
+          "source": "ATT&CK T1543.003: New-Service / Set-Service"
+        }
+      ]
+    },
+    "T1490": {
+      "name": "Inhibit System Recovery",
+      "tactics": [
+        "TA0040"
+      ],
+      "clauses": [
+        {
+          "id": "recovery_tool_cmdline",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "(vssadmin.*(delete|resize)\\s+shadow|wmic.*shadowcopy.*delete|bcdedit.*(recoveryenabled\\s+no|bootstatuspolicy\\s+ignoreallfailures)|wbadmin.*delete\\s+(catalog|systemstatebackup))"
+            }
+          },
+          "source": "ATT&CK T1490 procedure examples"
+        },
+        {
+          "id": "recovery_tool_process",
+          "all": {
+            "Image|SourceImage": {
+              "endswith": [
+                "\\vssadmin.exe",
+                "\\wbadmin.exe",
+                "\\bcdedit.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1490: execution of shadow copy / boot configuration utilities"
+        }
+      ]
+    },
+    "T1553": {
+      "name": "Subvert Trust Controls",
+      "tactics": [
+        "TA0005"
+      ],
+      "clauses": [
+        {
+          "id": "root_cert_registry",
+          "sub": "T1553.004",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "regex": "\\\\systemcertificates\\\\(root|authroot|ca|trustedpublisher|disallowed)\\\\certificates\\\\"
+            }
+          },
+          "source": "ATT&CK T1553.004: registry modification of certificate stores"
+        },
+        {
+          "id": "certutil_addstore",
+          "sub": "T1553.004",
+          "eid": [
+            1
+          ],
+          "all": {
+            "Image": {
+              "endswith": [
+                "\\certutil.exe"
+              ]
+            },
+            "CommandLine": {
+              "contains": [
+                "addstore"
+              ]
+            }
+          },
+          "source": "ATT&CK T1553.004: certutil -addstore"
+        }
+      ]
+    },
+    "T1574": {
+      "name": "Hijack Execution Flow",
+      "tactics": [
+        "TA0003",
+        "TA0004",
+        "TA0005"
+      ],
+      "clauses": [
+        {
+          "id": "unsigned_dll_outside_windows",
+          "sub": "T1574.002",
+          "eid": [
+            7
+          ],
+          "all": {
+            "Signed": {
+              "equals": [
+                "false"
+              ]
+            },
+            "ImageLoaded": {
+              "not_startswith": [
+                "c:\\windows\\"
+              ]
+            }
+          },
+          "source": "ATT&CK T1574.002 data component: module load of unsigned DLL"
+        },
+        {
+          "id": "dll_from_writable_dir",
+          "sub": "T1574.001",
+          "eid": [
+            7
+          ],
+          "all": {
+            "ImageLoaded": {
+              "regex": "\\\\(appdata|temp|users\\\\public|programdata)\\\\.*\\.dll$"
+            }
+          },
+          "source": "ATT&CK T1574.001: DLL loaded from user-writable directory"
+        },
+        {
+          "id": "hijack_registry",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "regex": "(cor_profiler|\\\\environment\\\\(windir|systemroot)|\\\\services\\\\[^\\\\]+\\\\(imagepath|parameters\\\\servicedll))"
+            }
+          },
+          "source": "ATT&CK T1574.011/.012: registry keys controlling load path"
+        }
+      ]
+    },
+    "T1047": {
+      "name": "Windows Management Instrumentation",
+      "tactics": [
+        "TA0002"
+      ],
+      "clauses": [
+        {
+          "id": "wmi_process",
+          "all": {
+            "Image|SourceImage": {
+              "endswith": [
+                "\\wmiprvse.exe",
+                "\\wmic.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1047: activity by WMI provider host or wmic"
+        },
+        {
+          "id": "wmi_parent",
+          "eid": [
+            1
+          ],
+          "all": {
+            "ParentImage": {
+              "endswith": [
+                "\\wmiprvse.exe",
+                "\\wmic.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1047: process spawned by WMI"
+        },
+        {
+          "id": "wmi_cmdline",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "(invoke-wmimethod|get-wmiobject|get-ciminstance|invoke-cimmethod|win32_process)"
+            }
+          },
+          "source": "ATT&CK T1047 procedure examples"
+        }
+      ]
+    },
+    "T1059": {
+      "name": "Command and Scripting Interpreter",
+      "tactics": [
+        "TA0002"
+      ],
+      "clauses": [
+        {
+          "id": "interpreter_process",
+          "all": {
+            "Image|SourceImage": {
+              "endswith": [
+                "\\powershell.exe",
+                "\\pwsh.exe",
+                "\\cmd.exe",
+                "\\wscript.exe",
+                "\\cscript.exe",
+                "\\powershell_ise.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1059 data component: command/script execution by an interpreter"
+        },
+        {
+          "id": "interpreter_parent",
+          "eid": [
+            1
+          ],
+          "all": {
+            "ParentImage": {
+              "endswith": [
+                "\\powershell.exe",
+                "\\pwsh.exe",
+                "\\cmd.exe",
+                "\\wscript.exe",
+                "\\cscript.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1059: process spawned by an interpreter"
+        },
+        {
+          "id": "powershell_engine_load",
+          "sub": "T1059.001",
+          "eid": [
+            7
+          ],
+          "all": {
+            "ImageLoaded": {
+              "endswith": [
+                "\\system.management.automation.dll",
+                "\\system.management.automation.ni.dll"
+              ]
+            }
+          },
+          "source": "ATT&CK T1059.001: PowerShell engine loaded into a host process"
+        }
+      ]
+    },
+    "T1218": {
+      "name": "System Binary Proxy Execution",
+      "tactics": [
+        "TA0005"
+      ],
+      "clauses": [
+        {
+          "id": "lolbin_process",
+          "all": {
+            "Image|SourceImage": {
+              "endswith": [
+                "\\rundll32.exe",
+                "\\regsvr32.exe",
+                "\\mshta.exe",
+                "\\msiexec.exe",
+                "\\cmstp.exe",
+                "\\installutil.exe",
+                "\\regasm.exe",
+                "\\regsvcs.exe",
+                "\\odbcconf.exe",
+                "\\mavinject.exe",
+                "\\control.exe",
+                "\\verclsid.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1218 sub-techniques: signed system binaries used to proxy execution"
+        },
+        {
+          "id": "lolbin_parent",
+          "eid": [
+            1
+          ],
+          "all": {
+            "ParentImage": {
+              "endswith": [
+                "\\rundll32.exe",
+                "\\regsvr32.exe",
+                "\\mshta.exe",
+                "\\msiexec.exe",
+                "\\cmstp.exe",
+                "\\installutil.exe",
+                "\\regasm.exe",
+                "\\regsvcs.exe",
+                "\\odbcconf.exe"
+              ]
+            }
+          },
+          "source": "ATT&CK T1218: child process of a proxy-execution binary"
+        }
+      ]
+    },
+    "T1036": {
+      "name": "Masquerading",
+      "tactics": [
+        "TA0005"
+      ],
+      "clauses": [
+        {
+          "id": "renamed_binary",
+          "sub": "T1036.003",
+          "eid": [
+            1
+          ],
+          "all": {
+            "Image": {
+              "exists": true
+            },
+            "OriginalFileName": {
+              "regex": "\\.(exe|dll)$"
+            }
+          },
+          "cmp": [
+            {
+              "op": "basename_neq",
+              "a": "Image",
+              "b": "OriginalFileName"
+            }
+          ],
+          "source": "ATT&CK T1036.003: image name differs from PE OriginalFileName"
+        },
+        {
+          "id": "system_name_wrong_path",
+          "sub": "T1036.005",
+          "all": {
+            "Image": {
+              "regex": "\\\\(svchost|lsass|csrss|services|smss|winlogon|wininit|explorer|spoolsv|taskhost|taskhostw|conhost|dllhost|rundll32)\\.exe$",
+              "not_regex": "^c:\\\\windows\\\\((system32|syswow64)\\\\)?[^\\\\]+$|^c:\\\\windows\\\\winsxs\\\\"
+            }
+          },
+          "source": "ATT&CK T1036.005: system binary name outside system directories"
+        },
+        {
+          "id": "double_extension",
+          "sub": "T1036.007",
+          "all": {
+            "Image|TargetFilename": {
+              "regex": "\\.(pdf|docx?|xlsx?|pptx?|txt|jpe?g|png|zip|rar)\\.(exe|scr|com|bat|cmd|js|vbs|ps1|lnk)$"
+            }
+          },
+          "source": "ATT&CK T1036.007: double file extension"
+        }
+      ]
+    }
+  }
+}
