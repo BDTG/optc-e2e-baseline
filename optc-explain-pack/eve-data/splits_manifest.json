@@ -1,0 +1,171 @@
+{
+ "source": "P1/Output/data/adgen-v2.jsonl",
+ "seed": 42,
+ "edges": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  8,
+  11,
+  21,
+  51,
+  101
+ ],
+ "pool": {
+  "LAB|0": 134,
+  "LAB|1": 14,
+  "REAL|0": 184246,
+  "REAL|1": 5299
+ },
+ "requested": {
+  "n_test": 500,
+  "n_dev": 200,
+  "n_calib": 1000,
+  "n_nontrivial": 500
+ },
+ "splits": {
+  "REAL_test_matched": {
+   "n": 1000,
+   "mal": 500,
+   "ben": 500,
+   "with_technique": 283,
+   "nontrivial_evidence": 59,
+   "auc_length_events": 0.499926,
+   "auc_length_chars": 0.5321400000000001,
+   "bins": {
+    "mal": {
+     "1": 184,
+     "2": 96,
+     "3": 59,
+     "4": 13,
+     "5": 15,
+     "6": 13,
+     "8": 10,
+     "11": 19,
+     "21": 35,
+     "51": 21,
+     "101": 35
+    },
+    "ben": {
+     "1": 184,
+     "2": 96,
+     "3": 59,
+     "4": 13,
+     "5": 15,
+     "6": 13,
+     "8": 10,
+     "11": 19,
+     "21": 35,
+     "51": 21,
+     "101": 35
+    }
+   }
+  },
+  "REAL_test_random": {
+   "n": 1000,
+   "mal": 500,
+   "ben": 500,
+   "with_technique": 279,
+   "nontrivial_evidence": 54,
+   "auc_length_events": 0.421934,
+   "auc_length_chars": 0.44100599999999995,
+   "bins": {
+    "mal": {
+     "1": 191,
+     "2": 97,
+     "3": 64,
+     "4": 7,
+     "5": 17,
+     "6": 15,
+     "8": 5,
+     "11": 25,
+     "21": 36,
+     "51": 15,
+     "101": 28
+    },
+    "ben": {
+     "1": 110,
+     "2": 53,
+     "3": 75,
+     "4": 61,
+     "5": 180,
+     "6": 5,
+     "11": 1,
+     "21": 2,
+     "51": 5,
+     "101": 8
+    }
+   }
+  },
+  "REAL_nontrivial": {
+   "n": 500,
+   "mal": 500,
+   "ben": 0,
+   "with_technique": 500,
+   "nontrivial_evidence": 500,
+   "auc_length_events": null,
+   "auc_length_chars": null,
+   "bins": {
+    "mal": {
+     "2": 152,
+     "3": 57,
+     "4": 13,
+     "5": 20,
+     "6": 17,
+     "8": 15,
+     "11": 21,
+     "21": 164,
+     "51": 20,
+     "101": 21
+    },
+    "ben": {}
+   }
+  },
+  "LAB_dev_matched": {
+   "n": 22,
+   "mal": 11,
+   "ben": 11,
+   "with_technique": 7,
+   "nontrivial_evidence": 3,
+   "auc_length_events": 0.5165289256198348,
+   "auc_length_chars": 0.48760330578512395,
+   "bins": {
+    "mal": {
+     "1": 2,
+     "2": 3,
+     "3": 1,
+     "4": 1,
+     "11": 1,
+     "21": 2,
+     "51": 1
+    },
+    "ben": {
+     "1": 2,
+     "2": 3,
+     "3": 1,
+     "4": 1,
+     "11": 1,
+     "21": 2,
+     "51": 1
+    }
+   }
+  },
+  "LAB_calib": {
+   "n": 0,
+   "mal": 0,
+   "ben": 0,
+   "with_technique": 0,
+   "nontrivial_evidence": 0,
+   "auc_length_events": null,
+   "auc_length_chars": null,
+   "bins": {
+    "mal": {},
+    "ben": {}
+   }
+  }
+ },
+ "overlap_test_matched_random": 110
+}
