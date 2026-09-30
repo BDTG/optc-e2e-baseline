@@ -68,8 +68,8 @@ def random_balanced(pool, n, seed, tag):
     return mal + ben
 
 
-def describe(ids, idx, edges):
-    rs = [idx[i] for i in ids]
+def describe(ids, idx, edges, env):
+    rs = [idx[(env, i)] for i in ids]
     y = [r["label"] for r in rs]
     hist = {"mal": collections.Counter(), "ben": collections.Counter()}
     for r in rs:
@@ -102,7 +102,7 @@ def main(argv=None):
     for r in read_jsonl(a.data):
         n_ev = len(r["events"])
         gt = r.get("evidence_gt_events") or []
-        idx[r["sample_id"]] = {
+        idx[(r["env"], r["sample_id"])] = {
             "id": r["sample_id"], "env": r["env"], "label": int(r["label"]), "n_events": n_ev,
             "n_chars": len(r.get("text", "")), "has_tech": int(bool(r.get("techniques_base"))),
             "nontrivial": int(bool(gt) and len(gt) < n_ev),
@@ -139,12 +139,13 @@ def main(argv=None):
     out.mkdir(parents=True, exist_ok=True)
     member = collections.defaultdict(list)
     for name, ids in splits.items():
+        senv = a.test_env if name.startswith(a.test_env) else a.calib_env
         for i in ids:
-            member[i].append(name)
+            member[(senv, i)].append(name)
     handles = {name: open(out / f"{name}.jsonl", "w", encoding="utf-8") for name in splits}
     try:
         for line_rec in read_jsonl(a.data):
-            for name in member.get(line_rec["sample_id"], []):
+            for name in member.get((line_rec["env"], line_rec["sample_id"]), []):
                 handles[name].write(json.dumps(line_rec, ensure_ascii=False) + "\n")
     finally:
         for h in handles.values():
@@ -153,7 +154,8 @@ def main(argv=None):
     manifest = {
         "source": str(a.data), "seed": a.seed, "edges": edges, "pool": {f"{e}|{y}": n for (e, y), n in sorted(envs.items())},
         "requested": {"n_test": a.n_test, "n_dev": a.n_dev, "n_calib": a.n_calib, "n_nontrivial": a.n_nontrivial},
-        "splits": {name: describe(ids, idx, edges) for name, ids in splits.items()},
+        "splits": {name: describe(ids, idx, edges, a.test_env if name.startswith(a.test_env) else a.calib_env)
+                   for name, ids in splits.items()},
         "overlap_test_matched_random": len(set(test_m) & set(test_r)),
     }
     (out / "splits_manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")

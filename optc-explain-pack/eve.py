@@ -19,7 +19,7 @@ VERDICT_HEAD = '{"verdict": "'
 TECH_HEAD = '{"verdict": "malicious", '
 EVID_RE = re.compile(r'E(\d+)\.([A-Za-z]+)=([^"\]\n]+)')
 TECH_RE = re.compile(r"T\d{4}(?:\.\d{3})?")
-MODES = ("eve", "anchored", "json_enum", "json", "free")
+MODES = ("eve", "kb_only", "anchored", "json_enum", "json", "free")
 
 
 def read_jsonl(path):
@@ -230,9 +230,94 @@ def load_valid_ids(path):
     return set(d.get("valid", [])) | {x[:5] for x in d.get("valid", [])}
 
 
+def run_kb_only(rec, kb, rule, max_witnesses=24, attested_only=False):
+    """Baseline xep hang deu (kb_only): chon technique bang luat thuan, khong model.
+    Rule: first = witness o event som nhat; alpha = ma technique nho nhat;
+    specific = co sub-technique truoc, roi nhieu item hon, roi event som hon.
+    technique_probs deu tren C(E) (xep hang deu). Verdict luat: co witness thi malicious.
+    """
+    t0 = time.time()
+    ws = kb.witnesses(rec["events"])
+    if attested_only:
+        ws = [w for w in ws if w.attested]
+    ws = cap_witnesses(ws, max_witnesses)
+    if not ws:
+        out = {"technique": None, "technique_sub": None, "technique_probs": {}, "candidates": [],
+               "evidence": [], "witness_clause": None, "status": "undetermined", "n_witnesses": 0}
+    else:
+        if rule == "alpha":
+            pick = min(range(len(ws)), key=lambda i: (ws[i].technique, i))
+        elif rule == "specific":
+            pick = min(range(len(ws)), key=lambda i: (not bool(ws[i].sub), -len(ws[i].as_items()), ws[i].event, i))
+        else:
+            pick = min(range(len(ws)), key=lambda i: (ws[i].event, i))
+        w = ws[pick]
+        cands = sorted({x.technique for x in ws})
+        out = {"technique": w.technique, "technique_sub": w.sub,
+               "technique_probs": {t: 1.0 / len(cands) for t in cands},
+               "candidates": cands, "evidence": w.as_items(), "witness_clause": w.clause,
+               "evidence_attested": w.attested, "status": "entailed", "n_witnesses": len(ws)}
+    t = out.get("technique")
+    ev = out.get("evidence") or []
+    out["entailment_ok"] = bool(t) and bool(ev) and kb.covers(t) and kb.entails(t, ev)
+    out["minimal_ok"] = out["entailment_ok"] and kb.minimal(t, ev)
+    ws_all = kb.witnesses(rec["events"])
+    out["kb_candidates"] = sorted({w.technique for w in ws_all if w.attested or not attested_only})
+    out.update({
+        "sample_id": rec.get("sample_id"), "env": rec.get("env"), "mode": "kb_only",
+        "kb_rule": rule, "model": None, "label": rec.get("label"), "attested_only": attested_only,
+        "gold_techniques": rec.get("techniques_base") or [],
+        "verdict_margin_raw": 1.0 if out["candidates"] else -1.0,
+        "verdict_margin": 1.0 if out["candidates"] else -1.0,
+        "verdict": "malicious" if out["candidates"] else "benign",
+        "n_events": len(rec["events"]), "latency_ms": round(1000 * (time.time() - t0), 1),
+    })
+    return out
+
+
+def cmd_run_kb_only(a, kb):
+    done = set()
+    out_path = Path(a.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if a.resume and out_path.exists():
+        done = {r["sample_id"] for r in read_jsonl(out_path)}
+    stats = collections.Counter()
+    lat = []
+    with open(out_path, "a" if a.resume else "w", encoding="utf-8") as f:
+        for i, rec in enumerate(read_jsonl(a.data)):
+            if a.limit and i >= a.limit:
+                break
+            if rec.get("sample_id") in done:
+                continue
+            if a.only_malicious and not rec.get("label"):
+                continue
+            r = run_kb_only(rec, kb, a.kb_rule, a.max_witnesses, a.attested_only)
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+            f.flush()
+            stats[r["status"]] += 1
+            stats["entailment_ok"] += int(r["entailment_ok"])
+            stats["with_technique"] += int(bool(r.get("technique")))
+            stats["n"] += 1
+            lat.append(r["latency_ms"])
+            if a.progress and stats["n"] % a.progress == 0:
+                print(f"[{stats['n']}] {dict(stats)} mean_ms={sum(lat) / len(lat):.0f}", flush=True)
+    summary = {"mode": "kb_only", "kb_rule": a.kb_rule, "model": None, "n": stats["n"],
+               "counts": dict(stats),
+               "entailment_ok_rate_among_predicted": stats["entailment_ok"] / max(stats["with_technique"], 1),
+               "latency_ms_mean": sum(lat) / len(lat) if lat else None,
+               "latency_ms_p90": sorted(lat)[int(0.9 * (len(lat) - 1))] if lat else None,
+               "cf_verdict_margin": None, "n_forward": 0}
+    Path(str(out_path) + ".summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    print(json.dumps(summary, indent=1))
+
+
 def cmd_run(a):
-    from slm import Scorer
     kb = KB(a.kb)
+    if a.mode == "kb_only":
+        return cmd_run_kb_only(a, kb)
+    if not a.model:
+        raise SystemExit("--model is required except for --mode kb_only")
+    from slm import Scorer
     scorer = Scorer(a.model, device=a.device, dtype=a.dtype, batch_size=a.batch_size,
                     max_len=a.max_len, threads=a.threads, prefix_cache=not a.no_prefix_cache)
     ex = Explainer(scorer, kb, a.mode, a.max_witnesses, a.max_spans, a.topk_evidence,
@@ -341,8 +426,9 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")
     r.add_argument("--data", required=True)
-    r.add_argument("--model", required=True)
+    r.add_argument("--model", default=None)
     r.add_argument("--mode", choices=MODES, default="eve")
+    r.add_argument("--kb_rule", choices=("specific", "first", "alpha"), default="first")
     r.add_argument("--kb", default=str(Path(__file__).with_name("tech_preconditions.json")))
     r.add_argument("--out", required=True)
     r.add_argument("--device", default="cpu")

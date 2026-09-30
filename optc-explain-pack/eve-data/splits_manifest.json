@@ -1,5 +1,5 @@
 {
- "source": "P1/Output/data/adgen-v2.jsonl",
+ "source": "../P1/Output/data/adgen-v2.jsonl",
  "seed": 42,
  "edges": [
   1,
@@ -15,8 +15,8 @@
   101
  ],
  "pool": {
-  "LAB|0": 134,
-  "LAB|1": 14,
+  "LAB|0": 44691,
+  "LAB|1": 5579,
   "REAL|0": 184246,
   "REAL|1": 5299
  },
@@ -125,44 +125,64 @@
    }
   },
   "LAB_dev_matched": {
-   "n": 22,
-   "mal": 11,
-   "ben": 11,
-   "with_technique": 7,
-   "nontrivial_evidence": 3,
-   "auc_length_events": 0.5165289256198348,
-   "auc_length_chars": 0.48760330578512395,
+   "n": 400,
+   "mal": 200,
+   "ben": 200,
+   "with_technique": 130,
+   "nontrivial_evidence": 41,
+   "auc_length_events": 0.499475,
+   "auc_length_chars": 0.46299999999999997,
    "bins": {
     "mal": {
-     "1": 2,
-     "2": 3,
-     "3": 1,
-     "4": 1,
-     "11": 1,
-     "21": 2,
-     "51": 1
+     "1": 51,
+     "2": 37,
+     "3": 10,
+     "4": 6,
+     "5": 5,
+     "6": 13,
+     "8": 11,
+     "11": 10,
+     "21": 14,
+     "51": 12,
+     "101": 31
     },
     "ben": {
-     "1": 2,
-     "2": 3,
-     "3": 1,
-     "4": 1,
-     "11": 1,
-     "21": 2,
-     "51": 1
+     "1": 51,
+     "2": 37,
+     "3": 10,
+     "4": 6,
+     "5": 5,
+     "6": 13,
+     "8": 11,
+     "11": 10,
+     "21": 14,
+     "51": 12,
+     "101": 31
     }
    }
   },
   "LAB_calib": {
-   "n": 0,
-   "mal": 0,
+   "n": 1000,
+   "mal": 1000,
    "ben": 0,
-   "with_technique": 0,
-   "nontrivial_evidence": 0,
+   "with_technique": 1000,
+   "nontrivial_evidence": 335,
    "auc_length_events": null,
    "auc_length_chars": null,
    "bins": {
-    "mal": {},
+    "mal": {
+     "1": 339,
+     "2": 171,
+     "3": 49,
+     "4": 31,
+     "5": 32,
+     "6": 81,
+     "8": 72,
+     "11": 37,
+     "21": 58,
+     "51": 24,
+     "101": 106
+    },
     "ben": {}
    }
   }
