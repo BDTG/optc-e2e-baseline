@@ -1,0 +1,18 @@
+{
+ "mode": "kb_only",
+ "kb_rule": "first",
+ "model": null,
+ "n": 1000,
+ "counts": {
+  "entailed": 648,
+  "entailment_ok": 648,
+  "with_technique": 648,
+  "n": 1000,
+  "undetermined": 352
+ },
+ "entailment_ok_rate_among_predicted": 1.0,
+ "latency_ms_mean": 0.4566,
+ "latency_ms_p90": 2.0,
+ "cf_verdict_margin": null,
+ "n_forward": 0
+}

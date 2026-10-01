@@ -1,0 +1,102 @@
+{
+ "calib": "results/q05_LAB_calib_eve.jsonl",
+ "test": "results/q05_REAL_eve.jsonl",
+ "unweighted": [
+  {
+   "alpha": 0.05,
+   "qhat": 0.9999998909654532,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.95,
+   "avg_set_size_inscope": 1.0175438596491229,
+   "empty_set_rate_inscope": 0.0,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.6471731448763252,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.1,
+   "qhat": 7.32992854524106e-07,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.392226148409894,
+   "coverage_inscope": 0.9736842105263158,
+   "target_inscope": 0.9,
+   "avg_set_size_inscope": 0.9824561403508771,
+   "empty_set_rate_inscope": 0.017543859649122806,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.010600706713780883,
+   "bound_knowledge_plus_alpha": 0.6971731448763251,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.2,
+   "qhat": 0.0,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.392226148409894,
+   "coverage_inscope": 0.9736842105263158,
+   "target_inscope": 0.8,
+   "avg_set_size_inscope": 0.9824561403508771,
+   "empty_set_rate_inscope": 0.017543859649122806,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.010600706713780883,
+   "bound_knowledge_plus_alpha": 0.7971731448763251,
+   "bound_holds": true
+  }
+ ],
+ "weighted": [
+  {
+   "alpha": 0.05,
+   "qhat": null,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.95,
+   "avg_set_size_inscope": 1.043859649122807,
+   "empty_set_rate_inscope": 0.0,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.6471731448763252,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.1,
+   "qhat": null,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.9,
+   "avg_set_size_inscope": 1.0175438596491229,
+   "empty_set_rate_inscope": 0.0,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.6971731448763251,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.2,
+   "qhat": null,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.392226148409894,
+   "coverage_inscope": 0.9736842105263158,
+   "target_inscope": 0.8,
+   "avg_set_size_inscope": 0.9824561403508771,
+   "empty_set_rate_inscope": 0.017543859649122806,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.010600706713780883,
+   "bound_knowledge_plus_alpha": 0.7971731448763251,
+   "bound_holds": true
+  }
+ ],
+ "weight_stats": {
+  "calib_mean": 0.26800648671696137,
+  "test_mean": 9.797125841808121
+ }
+}

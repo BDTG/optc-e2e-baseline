@@ -1,0 +1,25 @@
+{
+ "task": "verdict",
+ "backend": "tfidf",
+ "model": "tfidf-char2-5",
+ "split": "LAB->REAL",
+ "seeds": [
+  42
+ ],
+ "metric": "auc",
+ "mean": 0.7516,
+ "std": 0.0,
+ "runs": [
+  {
+   "seed": 42,
+   "n_train": 11158,
+   "n_test": 1000,
+   "labels": [
+    "malicious"
+   ],
+   "train_s": 13.5,
+   "auc": 0.7516,
+   "ap": 0.7953
+  }
+ ]
+}

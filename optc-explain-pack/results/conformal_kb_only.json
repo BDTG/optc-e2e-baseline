@@ -1,0 +1,51 @@
+{
+ "calib": "results/kb_only_LAB_calib_first.jsonl",
+ "test": "results/kb_only_first.jsonl",
+ "unweighted": [
+  {
+   "alpha": 0.05,
+   "qhat": 0.6666666666666667,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.95,
+   "avg_set_size_inscope": 1.0614035087719298,
+   "empty_set_rate_inscope": 0.008771929824561403,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.6471731448763252,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.1,
+   "qhat": 0.6666666666666667,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.9,
+   "avg_set_size_inscope": 1.0614035087719298,
+   "empty_set_rate_inscope": 0.008771929824561403,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.6971731448763251,
+   "bound_holds": true
+  },
+  {
+   "alpha": 0.2,
+   "qhat": 0.5,
+   "n_calib_inscope": 464,
+   "n_test": 283,
+   "coverage": 0.3992932862190812,
+   "coverage_inscope": 0.9912280701754386,
+   "target_inscope": 0.8,
+   "avg_set_size_inscope": 1.0614035087719298,
+   "empty_set_rate_inscope": 0.008771929824561403,
+   "knowledge_miss": 0.5971731448763251,
+   "model_miss": 0.0035335689045936647,
+   "bound_knowledge_plus_alpha": 0.7971731448763251,
+   "bound_holds": true
+  }
+ ]
+}

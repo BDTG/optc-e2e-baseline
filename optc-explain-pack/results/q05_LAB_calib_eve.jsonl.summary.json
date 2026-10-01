@@ -1,0 +1,19 @@
+{
+ "mode": "eve",
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "n": 1000,
+ "counts": {
+  "entailed": 648,
+  "entailment_ok": 648,
+  "with_technique": 648,
+  "verdict_tie": 0,
+  "n": 1000,
+  "undetermined": 352
+ },
+ "entailment_ok_rate_among_predicted": 1.0,
+ "verdict_tie_rate": 0.0,
+ "latency_ms_mean": 427.0686,
+ "latency_ms_p90": 1177.1,
+ "cf_verdict_margin": 2.5020713806152344,
+ "n_forward": 4766
+}
