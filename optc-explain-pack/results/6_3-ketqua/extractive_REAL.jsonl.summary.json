@@ -1,0 +1,9 @@
+{
+ "mode": "extractive",
+ "n": 1000,
+ "train_records": 50000,
+ "event_train_rows": 59161,
+ "event_train_pos": 19051,
+ "technique_classes": 57,
+ "train_s": 41.1
+}

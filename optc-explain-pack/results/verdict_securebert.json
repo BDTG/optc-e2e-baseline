@@ -1,0 +1,25 @@
+{
+ "task": "verdict",
+ "backend": "hf",
+ "model": "cisco-ai/SecureBERT2.0-base",
+ "split": "LAB->REAL",
+ "seeds": [
+  42
+ ],
+ "metric": "auc",
+ "mean": 0.7705,
+ "std": 0.0,
+ "runs": [
+  {
+   "seed": 42,
+   "n_train": 11158,
+   "n_test": 1000,
+   "labels": [
+    "malicious"
+   ],
+   "train_s": 2031.0,
+   "auc": 0.7705,
+   "ap": 0.8042
+  }
+ ]
+}
