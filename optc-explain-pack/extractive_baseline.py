@@ -37,6 +37,8 @@ def main(argv=None):
     kb = KB(a.kb)
     t0 = time.time()
     tr = load_train(a.train, a.max_train, a.seed)
+    if not tr:
+        raise SystemExit("--train co 0 record env=LAB; baseline nay can du lieu AD-GEN (LAB/REAL).")
 
     ev_x, ev_y = [], []
     for r in tr:
@@ -46,11 +48,17 @@ def main(argv=None):
         for e in r["events"]:
             ev_x.append(event_text(e))
             ev_y.append(int(e["idx"] in gt))
-    ev_vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), max_features=100_000, min_df=2, sublinear_tf=True)
-    ev_clf = LogisticRegression(max_iter=3000, class_weight="balanced", random_state=a.seed)
-    ev_clf.fit(ev_vec.fit_transform(ev_x), ev_y)
+    ev_vec = ev_clf = None
+    if ev_x and len(set(ev_y)) >= 2:
+        ev_vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), max_features=100_000, min_df=2, sublinear_tf=True)
+        ev_clf = LogisticRegression(max_iter=3000, class_weight="balanced", random_state=a.seed)
+        ev_clf.fit(ev_vec.fit_transform(ev_x), ev_y)
+    else:
+        print("WARN: khong du du lieu evidence 2 lop -> bo model evidence (fallback topk dau)", flush=True)
 
     tt = [(r.get("text", ""), sorted(r["techniques_base"])[0]) for r in tr if r.get("label") and r.get("techniques_base")]
+    if len({y for _, y in tt}) < 2:
+        raise SystemExit("train co <2 lop technique; can da dang technique hon.")
     tvec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), max_features=100_000, min_df=2, sublinear_tf=True)
     tclf = LogisticRegression(max_iter=3000, class_weight="balanced", random_state=a.seed)
     tclf.fit(tvec.fit_transform([x for x, _ in tt]), [y for _, y in tt])
@@ -59,6 +67,8 @@ def main(argv=None):
     neg = [r for r in tr if not r.get("label")]
     rng = random.Random(a.seed)
     k = min(len(pos), len(neg))
+    if k == 0:
+        raise SystemExit("train thieu lop verdict (can ca malicious lan benign).")
     vtr = rng.sample(pos, k) + rng.sample(neg, k)
     vvec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), max_features=100_000, min_df=2, sublinear_tf=True)
     vclf = LogisticRegression(max_iter=3000, class_weight="balanced", random_state=a.seed)
@@ -72,8 +82,11 @@ def main(argv=None):
         for r in read_jsonl(a.test):
             t1 = time.time()
             evs = r["events"]
-            s = ev_clf.decision_function(ev_vec.transform([event_text(e) for e in evs])) if evs else np.array([])
-            top = sorted(range(len(evs)), key=lambda i: -s[i])[:a.topk]
+            if evs and ev_clf is not None:
+                s = ev_clf.decision_function(ev_vec.transform([event_text(e) for e in evs]))
+                top = sorted(range(len(evs)), key=lambda i: -s[i])[:a.topk]
+            else:
+                top = list(range(min(a.topk, len(evs))))
             evidence = [{"event": evs[i]["idx"], "eid": evs[i].get("eid"), "field": f, "value": str(v)}
                         for i in sorted(top) for f, v in evs[i].get("fields", {}).items()]
             text = r.get("text", "")
