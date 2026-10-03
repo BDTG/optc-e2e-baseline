@@ -1,4 +1,4 @@
-"""STT43: chon ~150 mau tu REAL_test_matched de gan gold.
+"""Chon ~150 mau tu REAL_test_matched de gan gold.
 Phan tang theo technique (base), uu tien mau co |C(E)|>1 (KB nhieu ung vien -> can gold phan xu),
 kem mot it benign. Xuat gold_pack.jsonl (ban ghi day du) + gold_pack.csv (de gan tay neu can).
 KHONG kem output EVE de tranh thien lech."""

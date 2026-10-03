@@ -1,4 +1,4 @@
-"""STT43: chuyen output annotate (eve mode json cua 7B teacher) -> gold.jsonl cho eval_eve --gold.
+"""Chuyen output annotate (eve mode json cua 7B teacher) -> gold.jsonl cho eval_eve --gold.
 Moi dong gold: {sample_id, techniques:[T####], evidence:[{event, field}], verdict}.
 Day la gold do model gan (silver), doc lap voi co che EVE constrained (mode json = unconstrained generative)."""
 import argparse
