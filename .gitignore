@@ -29,9 +29,44 @@ logs/
 __pycache__/
 *.tmp
 
-# === EVE / AD-GEN pipeline (commit code only) ===
+# === Virtual environments ===
 .venv/
-optc-explain-pack/output/
+venv/
+env/
+
+# === Python caches ===
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# === EVE / AD-GEN / OpTC / attack_data — GENERATED outputs (commit CODE only) ===
+# Code is kept: *.py, *.md, *.txt, *.sh, *.bat, tech_preconditions.json, tests/*.py
 optc-explain-pack/results/
-*.zip
+optc-explain-pack/output/
+optc-explain-pack/logs/
 P1/Output/results_phase2/
+# note: converted/split/benchmark jsonl live under a data/ dir -> already ignored by "data/" above
+
+# === External corpora cloned in-tree (Splunk attack_data, DARPA OpTC) ===
+attack_data/
+optc-explain-pack/attack_data/
+
+# === Archives ===
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+
+# === Model weights / binaries (never commit, large) — safety globals ===
+*.gguf
+*.onnx
+
+# === OS / editor junk ===
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp

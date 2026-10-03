@@ -32,7 +32,7 @@ def load_points(paths, metric, label_map):
         for t in json.loads(Path(p).read_text(encoding="utf-8")):
             q = (t.get(sec) or {}).get(key)
             lat = (t.get("latency") or {}).get("mean_ms")
-            if q is None or lat is None:
+            if q is None or lat is None or q != q or lat != lat:
                 continue
             name = label_map.get(t["file"]) or f"{t.get('mode')} ({short_model(t.get('model'))})"
             pts.append({"name": name, "file": t["file"], "quality": float(q), "latency_ms": max(float(lat), 0.01),
@@ -42,6 +42,11 @@ def load_points(paths, metric, label_map):
         if x["file"] not in seen:
             seen.add(x["file"])
             uniq.append(x)
+    import collections
+    nc = collections.Counter(x["name"] for x in uniq)
+    for x in uniq:
+        if nc[x["name"]] > 1:
+            x["name"] = f'{x["name"]} [{Path(x["file"]).stem}]'
     return uniq
 
 
@@ -65,6 +70,7 @@ def main(argv=None):
     ap.add_argument("--title", default=None)
     ap.add_argument("--baseline", type=float, default=None)
     ap.add_argument("--baseline_label", default="majority")
+    ap.add_argument("--device", default=None, help="ghi chu thiet bi do latency tren truc X, vd 'GPU RTX 5090'")
     a = ap.parse_args(argv)
     label_map = dict(x.split("=", 1) for x in a.labels if "=" in x)
     pts = load_points(a.evals, a.metric, label_map)
@@ -90,7 +96,7 @@ def main(argv=None):
         ax.text(min(x["latency_ms"] for x in pts), a.baseline, f" {a.baseline_label}",
                 color="#c0504d", fontsize=8, va="bottom")
     ax.set_xscale("log")
-    ax.set_xlabel("Mean latency per alert (ms, log scale, CPU)")
+    ax.set_xlabel("Mean latency per alert (ms, log scale" + (f", {a.device})" if a.device else ")"))
     ax.set_ylabel(METRICS[a.metric][2])
     ax.set_title(a.title or f"Quality vs latency: {METRICS[a.metric][2]}")
     ax.grid(True, which="both", alpha=0.3)

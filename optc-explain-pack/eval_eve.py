@@ -12,8 +12,9 @@ from kb import KB
 
 def safe(f, *a):
     try:
-        return float(f(*a))
-    except ValueError:
+        v = f(*a)
+        return float(v) if v is not None else None
+    except (ValueError, TypeError):
         return None
 
 

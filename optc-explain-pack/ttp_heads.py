@@ -174,24 +174,32 @@ def run_once(a, seed, cache):
                         "AUC": round(float(roc_auc_score(y, P[:, j])), 4) if 0 < y.sum() < len(y) else None,
                         "n_train_pos": int(Ytr[:, j].sum()), "n_test_pos": int(y.sum())})
         info["per_ttp"] = per
-        info["mean_AP"] = round(float(np.mean([p["AP"] for p in per])), 4) if per else None
-        info["mean_AP_ci"] = boot_mean_ap(Yte, P, seed) if per else None
+        _scored = [p["AP"] for p in per if p["n_train_pos"] > 0]
+        info["mean_AP"] = round(float(np.mean(_scored)), 4) if _scored else None
+        info["n_ttp_scored"] = len(_scored)
+        # CI tinh tren cung tap technique voi mean_AP (co train pos)
+        cols = [j for j, p in enumerate(per) if p["n_train_pos"] > 0]
+        info["mean_AP_ci"] = boot_mean_ap(Yte, P, seed, cols=cols) if cols else None
     else:
         y = Yte[:, 0]
-        info["auc"] = round(float(roc_auc_score(y, P[:, 0])), 4)
-        info["ap"] = round(float(average_precision_score(y, P[:, 0])), 4)
+        two = 0 < int(y.sum()) < len(y)
+        info["auc"] = round(float(roc_auc_score(y, P[:, 0])), 4) if two else None
+        info["ap"] = round(float(average_precision_score(y, P[:, 0])), 4) if two else None
+        if not two:
+            info["warning"] = "verdict test set single-class; auc/ap undefined"
         if a.save_scores:
             ids = [x["id"] for x in real]
             Path(a.save_scores).write_text(json.dumps(dict(zip(ids, P[:, 0].tolist()))), encoding="utf-8")
     return info
 
 
-def boot_mean_ap(Y, P, seed, n=300):
+def boot_mean_ap(Y, P, seed, n=300, cols=None):
     rng = np.random.RandomState(seed)
+    cols = range(Y.shape[1]) if cols is None else cols
     vals = []
     for _ in range(n):
         idx = rng.randint(0, len(Y), len(Y))
-        aps = [average_precision_score(Y[idx, j], P[idx, j]) for j in range(Y.shape[1]) if Y[idx, j].sum() > 0]
+        aps = [average_precision_score(Y[idx, j], P[idx, j]) for j in cols if Y[idx, j].sum() > 0]
         if aps:
             vals.append(float(np.mean(aps)))
     vals.sort()
@@ -227,7 +235,7 @@ def main(argv=None):
         raise SystemExit("--task verdict needs --test_file (e.g. REAL_test_matched.jsonl)")
     runs = [run_once(a, s, None) for s in a.seeds]
     key = "mean_AP" if a.task == "ttp" else "auc"
-    vals = [r[key] for r in runs if r.get(key) is not None]
+    vals = [r[key] for r in runs if r.get(key) is not None and r[key] == r[key]]
     summary = {"task": a.task, "backend": a.backend, "model": a.model if a.backend == "hf" else "tfidf-char2-5",
                "split": "LAB->REAL", "seeds": a.seeds, "metric": key,
                "mean": round(statistics.mean(vals), 4) if vals else None,
