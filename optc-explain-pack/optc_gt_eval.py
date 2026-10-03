@@ -35,14 +35,13 @@ def main():
     res = list(read_jsonl(a.results))
     ev_total = ev_hit = 0
     alerts_with_ev = alerts_hit = 0
-    surfaced = set()          # GT node ma evidence EVE cham toi
+    surfaced = set()
     for r in res:
         evs = r.get("evidence") or []
         o = data.get(r["sample_id"])
         if not o:
             continue
-        has = bool(r.get("technique")) and bool(evs)
-        alerts_with_ev += int(has)
+        alerts_with_ev += int(bool(evs))
         hit_this = False
         for it in evs:
             ev_total += 1

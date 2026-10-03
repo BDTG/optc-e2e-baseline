@@ -23,7 +23,6 @@ MODES = {
     "json": ("JSON", "Unconstrained generation", "#94a3b8"),
     "free": ("Free-text", "Unconstrained generation", "#94a3b8"),
 }
-# kich thuoc model -> hinh marker
 SHAPES = [("0.5B", "circle", "Qwen2.5-0.5B"), ("1.5B", "triangle", "Qwen2.5-1.5B"),
           ("7B", "diamond", "Qwen2.5-7B"), ("", "square", "no LLM")]
 
@@ -36,12 +35,18 @@ def size_of(model):
     return ""
 
 
+def plot_default_name(mode, model):
+    """Ten pareto_plot.py tu sinh khi khong co --labels (khop short_model ben do)."""
+    m = str(model).rsplit("/", 1)[-1] if model else ""
+    short = next((k for k in ("0.5B", "1.5B", "7B") if k in m), m[:14]) if m else "no-model"
+    return f"{mode} ({short})"
+
+
 def fmt_ms(v):
     return f"{v / 1000:g} s" if v >= 1000 else f"{v:g} ms"
 
 
 def text_w(s, size):
-    """Uoc luong be rong chu (px) cho font sans."""
     return sum(0.62 if (c.isupper() or c.isdigit()) else 0.3 if c in " .,:;|" else 0.52 for c in s) * size
 
 
@@ -101,13 +106,11 @@ def render(pts, a):
     e(f'<text x="{L}" y="62" font-size="14" fill="#475569">{html.escape(a.subtitle)}</text>')
     e(f'<rect x="{L}" y="{T}" width="{pw}" height="{ph}" fill="#f8fafc"/>')
 
-    # luoi Y (moi 10%)
     for k in range(int(round(ymax * 10)) + 1):
         q = k / 10
         y = Y(q)
         e(f'<line x1="{L}" x2="{L + pw}" y1="{y:.1f}" y2="{y:.1f}" stroke="#e2e8f0"/>')
         e(f'<text x="{L - 10}" y="{y + 4.5:.1f}" font-size="13" text-anchor="end" fill="#475569">{q * 100:.0f}%</text>')
-    # luoi X log: decade dam + nhan, minor nhat
     for d in range(math.floor(lo), math.ceil(hi) + 1):
         for m in range(1, 10):
             v = m * 10 ** d
@@ -129,7 +132,6 @@ def render(pts, a):
         p["x"], p["y"] = round(X(p["lat"]), 1), round(Y(p["q"]), 1)
         lay.add((p["x"] - 11, p["y"] - 11, p["x"] + 11, p["y"] + 11))
 
-    # Pareto frontier dang bac thang + to vung bi chi phoi
     front = sorted((p for p in pts if p["pareto"]), key=lambda p: p["lat"])
     if front:
         path = [(X(front[0]["lat"]), Y(front[0]["q"]))]
@@ -150,7 +152,6 @@ def render(pts, a):
         tw = text_w(tx, 12)
         lay.add((fx - tw / 2 - 4, fy - 14, fx + tw / 2 + 4, fy + 4))
 
-    # duong majority
     if a.baseline is not None:
         y = Y(a.baseline)
         e(f'<line x1="{L}" x2="{L + pw}" y1="{y:.1f}" y2="{y:.1f}" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>')
@@ -159,7 +160,6 @@ def render(pts, a):
         lay.add((L + 6, y - 20, L + 12 + text_w(tx, 12), y - 2))
         lay.add((L, y - 3, L + pw, y + 3))
 
-    # chu thich: hai kich thuoc EVE cung do chinh xac -> nhanh hon N lan
     eves = sorted((p for p in pts if p["mode"] == "eve"), key=lambda p: p["lat"])
     if len(eves) >= 2 and abs(eves[0]["q"] - eves[-1]["q"]) < 0.05:
         s, b = eves[0], eves[-1]
@@ -168,14 +168,13 @@ def render(pts, a):
         e('<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" '
           'orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker></defs>')
         e(f'<line x1="{x1:.1f}" y1="{y:.1f}" x2="{x0:.1f}" y2="{y:.1f}" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ah)"/>')
-        tx = f"same accuracy, {b['lat'] / s['lat']:.0f}\u00d7 faster with 0.5B"
+        tx = f"same accuracy, {b['lat'] / s['lat']:.0f}\u00d7 faster with {s['label']}"
         cx = (x0 + x1) / 2
         e(f'<text x="{cx:.1f}" y="{y - 8:.1f}" font-size="13" text-anchor="middle" fill="#1d4ed8" font-weight="600" '
           f'paint-order="stroke" stroke="#f8fafc" stroke-width="4">{html.escape(tx)}</text>')
         tw = text_w(tx, 13)
         lay.add((min(x0, cx - tw / 2), y - 24, max(x1, cx + tw / 2), y + 4))
 
-    # nhan diem: diem Pareto truoc, roi tu tren xuong
     labels = []
     for p in sorted(pts, key=lambda p: (not p["pareto"], p["y"])):
         tx = f'{p["label"]} \u00b7 {p["q"] * 100:.1f}%'
@@ -211,7 +210,6 @@ def render(pts, a):
         e(f'<text x="{bx[0]:.1f}" y="{bx[3] - 5:.1f}" font-size="{fs}" font-weight="{wt}" fill="{col}" '
           f'paint-order="stroke" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round">{html.escape(tx)}</text>')
 
-    # legend: mau = nhom phuong phap, hinh = kich thuoc model
     ly, x = T + ph + 80, L
     groups = []
     for p in pts:
@@ -245,9 +243,12 @@ def export_png(svg, png, w, h, scale):
         return False
     if png.exists():
         png.unlink()
-    subprocess.run([exe, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--window-size={w},{h}",
-                    f"--force-device-scale-factor={scale}", "--default-background-color=FFFFFFFF",
-                    f"--screenshot={png.resolve()}", svg.resolve().as_uri()], capture_output=True, timeout=60)
+    try:
+        subprocess.run([exe, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--window-size={w},{h}",
+                        f"--force-device-scale-factor={scale}", "--default-background-color=FFFFFFFF",
+                        f"--screenshot={png.resolve()}", svg.resolve().as_uri()], capture_output=True, timeout=60)
+    except (subprocess.TimeoutExpired, OSError):
+        return False
     return png.exists()
 
 
@@ -270,8 +271,10 @@ def main(argv=None):
         for r in csv.DictReader(f):
             short, group, color = MODES.get(r["mode"], (r["mode"], r["mode"], "#64748b"))
             sz = size_of(r["model"])
+            name = (r.get("name") or "").strip()
+            label = name if name and name != plot_default_name(r["mode"], r["model"]) else f"{short} {sz}".strip()
             pts.append({"mode": r["mode"], "size": sz, "q": float(r["quality"]), "lat": float(r["latency_ms"]),
-                        "pareto": r["pareto"] == "True", "label": f"{short} {sz}".strip(),
+                        "pareto": r["pareto"] == "True", "label": label,
                         "group": group, "color": color})
     if not pts:
         raise SystemExit("CSV rong")

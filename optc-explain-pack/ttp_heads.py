@@ -177,7 +177,9 @@ def run_once(a, seed, cache):
         _scored = [p["AP"] for p in per if p["n_train_pos"] > 0]
         info["mean_AP"] = round(float(np.mean(_scored)), 4) if _scored else None
         info["n_ttp_scored"] = len(_scored)
-        info["mean_AP_ci"] = boot_mean_ap(Yte, P, seed) if per else None
+        # CI tinh tren cung tap technique voi mean_AP (co train pos)
+        cols = [j for j, p in enumerate(per) if p["n_train_pos"] > 0]
+        info["mean_AP_ci"] = boot_mean_ap(Yte, P, seed, cols=cols) if cols else None
     else:
         y = Yte[:, 0]
         two = 0 < int(y.sum()) < len(y)
@@ -191,12 +193,13 @@ def run_once(a, seed, cache):
     return info
 
 
-def boot_mean_ap(Y, P, seed, n=300):
+def boot_mean_ap(Y, P, seed, n=300, cols=None):
     rng = np.random.RandomState(seed)
+    cols = range(Y.shape[1]) if cols is None else cols
     vals = []
     for _ in range(n):
         idx = rng.randint(0, len(Y), len(Y))
-        aps = [average_precision_score(Y[idx, j], P[idx, j]) for j in range(Y.shape[1]) if Y[idx, j].sum() > 0]
+        aps = [average_precision_score(Y[idx, j], P[idx, j]) for j in cols if Y[idx, j].sum() > 0]
         if aps:
             vals.append(float(np.mean(aps)))
     vals.sort()
