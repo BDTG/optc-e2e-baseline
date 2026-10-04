@@ -13,13 +13,22 @@ echo  Tong thoi gian du kien: 4-7 gio (7B teacher lau nhat)
 echo ============================================================
 echo.
 
-for %%s in (explain_05b.py explain_3shot_05b.py explain_11b.py explain_15b.py explain_teacher.py explain_05b_int8.py) do (
-  echo [START] %%s  %TIME%
-  python %%s
-  echo [END]   %%s  %TIME%
-  echo.
-)
+call :run 05b       explain_slm.py --model Qwen/Qwen2.5-0.5B-Instruct --out output/raw-explain-05b-rerun.json
+call :run 3shot_05b explain_slm.py --model Qwen/Qwen2.5-0.5B-Instruct --shots 3 --out output/raw-explain-3shot-05b-rerun.json
+call :run 11b       explain_slm.py --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 --out output/raw-explain-11b-rerun.json
+call :run 15b       explain_slm.py --model Qwen/Qwen2.5-1.5B-Instruct --out output/raw-explain-15b-rerun.json
+call :run teacher   explain_slm.py --model Qwen/Qwen2.5-7B-Instruct --dtype bf16 --resume --out output/raw-explain-teacher-rerun.json
+call :run int8      explain_05b_int8.py
 
 echo [ALL DONE] %TIME%
 echo Gui lai toan bo file trong thu muc output\ de tong hop ket qua.
 pause
+goto :eof
+
+:run
+echo [START] %1  %TIME%
+shift
+python %1 %2 %3 %4 %5 %6 %7 %8 %9
+echo [END]   %TIME%
+echo.
+goto :eof
