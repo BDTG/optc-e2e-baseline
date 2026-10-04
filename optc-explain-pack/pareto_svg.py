@@ -1,6 +1,7 @@
 """Ve lai bieu do Pareto (quality vs latency) thanh SVG de doc + xuat PNG qua Edge/Chrome headless.
 
-Doc CSV do pareto_plot.py sinh ra (name, mode, model, quality, latency_ms, pareto, file).
+Doc CSV do pareto_plot.py sinh ra (name, mode, model, quality, latency_ms, pareto, file);
+cot tuy chon ci_lo, ci_hi -> ve thanh CI doc.
   python pareto_svg.py --csv results/adgen/stt58_pareto/pareto_ttp.csv --baseline 0.229 \
       --note "Latency: SLM on GPU, tf-idf on CPU" --out results/adgen/stt58_pareto/pareto_ttp_v2.svg
 """
@@ -90,7 +91,7 @@ def render(pts, a):
     pw, ph = W - L - R, H - T - B
     lo = math.log10(min(p["lat"] for p in pts)) - 0.35
     hi = math.log10(max(p["lat"] for p in pts)) + 0.35
-    ymax = math.ceil(max([p["q"] for p in pts] + [a.baseline or 0]) * 10 + 0.5) / 10
+    ymax = math.ceil(max([p.get("ci_hi") or p["q"] for p in pts] + [a.baseline or 0]) * 10 + 0.5) / 10
 
     def X(v):
         return L + (math.log10(v) - lo) / (hi - lo) * pw
@@ -131,6 +132,8 @@ def render(pts, a):
     for p in pts:
         p["x"], p["y"] = round(X(p["lat"]), 1), round(Y(p["q"]), 1)
         lay.add((p["x"] - 11, p["y"] - 11, p["x"] + 11, p["y"] + 11))
+        if p.get("ci_lo") is not None:
+            lay.add((p["x"] - 6, Y(p["ci_hi"]) - 2, p["x"] + 6, Y(p["ci_lo"]) + 2))
 
     front = sorted((p for p in pts if p["pareto"]), key=lambda p: p["lat"])
     if front:
@@ -144,12 +147,12 @@ def render(pts, a):
         for (x0, y0), (x1, y1) in zip(path, path[1:]):
             lay.add((min(x0, x1) - 3, min(y0, y1) - 3, max(x0, x1) + 3, max(y0, y1) + 3))
         tx = "Pareto frontier"
-        if len(path) >= 3:
-            fx, fy = (path[0][0] + path[1][0]) / 2, path[0][1] + 19
-        else:
-            fx, fy = L + pw - 8 - text_w(tx, 12) / 2, path[-1][1] + 19
-        e(f'<text x="{fx:.1f}" y="{fy:.1f}" font-size="12" text-anchor="middle" fill="#1e3a8a" font-style="italic">{tx}</text>')
         tw = text_w(tx, 12)
+        x0, x1, ly = path[0][0], path[1][0], path[0][1]
+        cands = [(x0 + (x1 - x0) * f, ly + dy) for dy in (19, -9) for f in (0.5, 0.3, 0.7, 0.15, 0.85)]
+        fx, fy = next(((x, y) for x, y in cands if lay.free((x - tw / 2 - 4, y - 14, x + tw / 2 + 4, y + 4))),
+                      cands[0])
+        e(f'<text x="{fx:.1f}" y="{fy:.1f}" font-size="12" text-anchor="middle" fill="#1e3a8a" font-style="italic">{tx}</text>')
         lay.add((fx - tw / 2 - 4, fy - 14, fx + tw / 2 + 4, fy + 4))
 
     if a.baseline is not None:
@@ -164,7 +167,7 @@ def render(pts, a):
     if len(eves) >= 2 and abs(eves[0]["q"] - eves[-1]["q"]) < 0.05:
         s, b = eves[0], eves[-1]
         x0, x1 = s["x"] + 14, b["x"] - 14
-        y = min(s["y"], b["y"]) - 26
+        y = min([s["y"], b["y"]] + [Y(p["ci_hi"]) for p in eves if p.get("ci_hi") is not None]) - 26
         e('<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" '
           'orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker></defs>')
         e(f'<line x1="{x1:.1f}" y1="{y:.1f}" x2="{x0:.1f}" y2="{y:.1f}" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ah)"/>')
@@ -203,6 +206,12 @@ def render(pts, a):
             cx = min(max(p["x"], bx[0]), bx[2])
             cy = min(max(p["y"], bx[1]), bx[3])
             e(f'<line x1="{p["x"]}" y1="{p["y"]}" x2="{cx:.1f}" y2="{cy:.1f}" stroke="#94a3b8" stroke-width="1"/>')
+    for p in pts:
+        if p.get("ci_lo") is not None:
+            y0, y1 = Y(p["ci_lo"]), Y(p["ci_hi"])
+            e(f'<g stroke="{p["color"]}" stroke-width="1.4" stroke-opacity="0.55"><line x1="{p["x"]}" x2="{p["x"]}" '
+              f'y1="{y0:.1f}" y2="{y1:.1f}"/><line x1="{p["x"] - 5}" x2="{p["x"] + 5}" y1="{y0:.1f}" y2="{y0:.1f}"/>'
+              f'<line x1="{p["x"] - 5}" x2="{p["x"] + 5}" y1="{y1:.1f}" y2="{y1:.1f}"/></g>')
     for p in sorted(pts, key=lambda p: p["pareto"]):
         e(marker(p, p["x"], p["y"]))
     for p, tx, fs, (bx, _) in labels:
@@ -228,6 +237,10 @@ def render(pts, a):
             x += 20 + text_w(name, 12.5) + 24
     e(f'<circle cx="{x + 7}" cy="{ly - 4}" r="7" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>')
     e(f'<text x="{x + 20}" y="{ly}" font-size="12.5" fill="#334155">dark outline = Pareto-optimal</text>')
+    if any(p.get("ci_lo") is not None for p in pts):
+        x += 20 + text_w("dark outline = Pareto-optimal", 12.5) + 24
+        e(f'<line x1="{x + 7}" x2="{x + 7}" y1="{ly - 12}" y2="{ly + 4}" stroke="#64748b" stroke-width="1.4"/>')
+        e(f'<text x="{x + 16}" y="{ly}" font-size="12.5" fill="#334155">95% bootstrap CI</text>')
     if a.note:
         e(f'<text x="{W - R}" y="{H - 12}" font-size="11.5" text-anchor="end" fill="#64748b">{html.escape(a.note)}</text>')
     e("</svg>")
@@ -273,9 +286,10 @@ def main(argv=None):
             sz = size_of(r["model"])
             name = (r.get("name") or "").strip()
             label = name if name and name != plot_default_name(r["mode"], r["model"]) else f"{short} {sz}".strip()
+            ci = [float(r[k]) if r.get(k) not in (None, "") else None for k in ("ci_lo", "ci_hi")]
             pts.append({"mode": r["mode"], "size": sz, "q": float(r["quality"]), "lat": float(r["latency_ms"]),
                         "pareto": r["pareto"] == "True", "label": label,
-                        "group": group, "color": color})
+                        "group": group, "color": color, "ci_lo": ci[0], "ci_hi": ci[1]})
     if not pts:
         raise SystemExit("CSV rong")
     svg, W, H = render(pts, a)

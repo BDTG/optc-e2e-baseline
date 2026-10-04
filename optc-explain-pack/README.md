@@ -16,10 +16,17 @@ Yêu cầu: `torch`, `transformers` (4.4x hoặc 5.x), `scikit-learn`, `tokenize
 | `conformal.py` | Tập technique có bảo đảm phủ, bản weighted cho LAB→REAL, phân rã lỗi (Định lý 3) |
 | `make_splits.py` | Tạo tập đánh giá cân theo độ dài, bản ngẫu nhiên, dev, calib, nontrivial, kèm manifest |
 | `attackdata_to_eve.py` | Chuyển log Sysmon của Splunk attack_data sang schema adgen-v2 (nhãn technique độc lập, STT 43) |
-| `inject.py` | RQ4: tạo dữ liệu bị chèn chuỗi tấn công, so tỉ lệ bị lật |
-| `pareto_svg.py` | Vẽ lại Pareto từ CSV của `pareto_plot.py` thành SVG (nhãn tự tránh chồng, frontier bậc thang) + xuất PNG qua Edge/Chrome headless |
-| `newrun.py` | Tạo thư mục kết quả riêng cho mỗi lần chạy: `results/<dataset>/<tag>/` (+ `logs/`, `run.json`) |
-| `tests/` | `test_kb.py` (không cần model), `smoke.py` (đầu-cuối với model tí hon) |
+| `inject.py` | RQ4: tạo dữ liệu bị chèn chuỗi tấn công, so tỉ lệ bị lật. Payload thích ứng `attested_rename`, `attested_instruction` nhắm vào `Image` (field attested) |
+| `make_attack_map.py` | Tạo `attack_id_map_v15.json` (ID technique ATT&CK v15.1 hợp lệ) cho `--attack_map` |
+| `conformal_route.py` | Định tuyến theo tập conformal: giữ SLM nhỏ khi tập có 1 technique, escalate lên model lớn khi còn lại. `--lat_small`/`--lat_big` lấy latency từ file đo trên CPU |
+| `paired_bootstrap.py` | Bootstrap CI ghép cặp TTP top-1 giữa hai hệ thống (+ McNemar exact), tùy chọn `--gold` |
+| `json_enum_check.py` | Kiểm tra đủ n và phân phối technique dự đoán của file kết quả |
+| `inject_persample.py` | Kiểm injection theo từng mẫu: technique đổi thì C(E)/evidence có đổi không, evidence có nằm trên field bị chèn không; tách theo nhãn |
+| `attackdata_stats.py`, `attackdata_silver_gold.py` | Mô tả tập attack_data; so nhãn silver (.yml) với gold (atomic test trong cây tiến trình), kappa, tách tree/rare |
+| `measure_rss.py` | Chạy một lệnh trong process riêng, lấy mẫu RSS bằng psutil (RAM thật trên CPU) |
+| `pareto_svg.py` | Vẽ lại Pareto từ CSV của `pareto_plot.py` thành SVG (nhãn tự tránh chồng, frontier bậc thang, cột tùy chọn `ci_lo`/`ci_hi` để vẽ CI) + xuất PNG qua Edge/Chrome headless |
+| `newrun.py` | Tạo thư mục kết quả riêng cho mỗi lần chạy: `results/<dataset>/<tag>/` (+ `logs/`, `run.json` ghi commit của thư mục code `--code` và số file chưa commit) |
+| `tests/` | `test_kb.py` (không cần model), `test_parse_gen.py` (parser mode sinh), `smoke.py` (đầu-cuối với model tí hon) |
 
 ## Kiểm tra cài đặt
 
@@ -115,7 +122,8 @@ Lặp lại với `--attested_only` (bản chỉ dùng field do hệ thống ghi
 - `--max_witnesses 24`, `--max_spans 48`, `--topk_evidence 2`.
 - `--attested_only`.
 - `--resume`.
-- `--attack_map` (dùng `attack_id_map_v15.json` để kiểm ID technique của mode sinh).
+- `--attack_map` (dùng `attack_id_map_v15.json` để kiểm ID technique của mode sinh; tạo bằng `python make_attack_map.py`).
+- `--max_new_tokens` (mặc định 384; 192 làm cụt JSON của mode `free`/`json`). Parser mode sinh đọc trường `technique` trong JSON (không lấy ID nằm trong đường dẫn evidence), chịu được code fence quanh JSON, escape `\` sai và JSON bị cắt.
 
 ## Dataset độc lập: Splunk attack_data (STT 43)
 
