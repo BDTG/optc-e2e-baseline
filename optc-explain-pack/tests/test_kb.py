@@ -16,7 +16,7 @@ POS = {
     "T1055": [ev(0, 8, SourceImage=r"C:\Users\a\evil.exe", TargetImage=r"C:\Windows\explorer.exe", StartFunction="LoadLibraryA")],
     "T1543": [ev(0, 13, Image=r"C:\Windows\system32\services.exe", TargetObject=r"HKLM\System\CurrentControlSet\Services\evilsvc\ImagePath", Details="c:\\evil.exe")],
     "T1490": [ev(0, 1, Image=r"C:\Windows\System32\vssadmin.exe", CommandLine="vssadmin.exe delete shadows /all /quiet")],
-    "T1553": [ev(0, 13, Image=r"C:\Windows\system32\certutil.exe", TargetObject=r"HKLM\SOFTWARE\Microsoft\SystemCertificates\ROOT\Certificates\ABCD\Blob")],
+    "T1553": [ev(0, 13, Image=r"C:\Windows\system32\certutil.exe", TargetObject=r"HKLM\SOFTWARE\Microsoft\SystemCertificates\ROOT\Certificates\A43489159A520F0D93D032CCAF37E7FE20A8B419\Blob")],
     "T1574": [ev(0, 7, Image=r"C:\Program Files\App\app.exe", ImageLoaded=r"C:\Users\a\AppData\Local\Temp\version.dll", Signed="false")],
     "T1047": [ev(0, 1, Image=r"C:\Windows\System32\cmd.exe", ParentImage=r"C:\Windows\System32\wbem\WmiPrvSE.exe", CommandLine="cmd /c whoami")],
     "T1059": [ev(0, 1, Image=r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", CommandLine="powershell -enc AAAA")],

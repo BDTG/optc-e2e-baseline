@@ -1,7 +1,7 @@
 {
-  "version": "0.1",
+  "version": "0.2",
   "attack_version": "v15",
-  "note": "Necessary conditions phi_t over Sysmon fields. A clause holds on one event when every field condition holds. Sources are descriptive and must be cross-checked against Sigma/CAR before publication.",
+  "note": "Necessary conditions phi_t over Sysmon fields. A clause holds on one event when every field condition holds. Sources are descriptive and must be cross-checked against Sigma/CAR before publication. v0.2: viet lai T1036 (renamed system binary, masquerade named pipe), T1553 (khoa thumbprint, writer ngoai thu muc he thong; sua regex ...\\Certificates khong co '' cuoi), T1047 (wmic process, WMI client module load, WMI security registry; bo clause bat moi event wmiprvse).",
   "enum": {
     "T1059": "Command and Scripting Interpreter",
     "T1547": "Boot or Logon Autostart Execution",
@@ -256,7 +256,7 @@
       ],
       "clauses": [
         {
-          "id": "root_cert_registry",
+          "id": "root_cert_install",
           "sub": "T1553.004",
           "eid": [
             12,
@@ -265,10 +265,28 @@
           ],
           "all": {
             "TargetObject": {
-              "regex": "\\\\systemcertificates\\\\(root|authroot|ca|trustedpublisher|disallowed)\\\\certificates\\\\"
+              "regex": "\\\\systemcertificates\\\\(root|authroot|ca|trustedpublisher)\\\\certificates\\\\[0-9a-f]{40}"
             }
           },
-          "source": "ATT&CK T1553.004: registry modification of certificate stores"
+          "source": "ATT&CK T1553.004: tao/ghi khoa chung chi (thumbprint) trong kho Root/AuthRoot/CA/TrustedPublisher"
+        },
+        {
+          "id": "cert_store_nonsystem_writer",
+          "sub": "T1553.004",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "regex": "\\\\systemcertificates\\\\(root|authroot|ca|trustedpublisher|disallowed)\\\\certificates(\\\\|$)"
+            },
+            "Image": {
+              "not_regex": "^c:\\\\windows\\\\(system32|syswow64|winsxs|systemapps)\\\\|^c:\\\\program files\\\\windows defender\\\\"
+            }
+          },
+          "source": "ATT&CK T1553.004: process ngoai thu muc he thong mo/tao khoa kho chung chi (CreateKey cua crypto API he thong bi loai)"
         },
         {
           "id": "certutil_addstore",
@@ -289,6 +307,34 @@
             }
           },
           "source": "ATT&CK T1553.004: certutil -addstore"
+        },
+        {
+          "id": "import_certificate_ps",
+          "sub": "T1553.004",
+          "eid": [
+            1
+          ],
+          "all": {
+            "CommandLine": {
+              "regex": "import-certificate.*cert:\\\\(localmachine|currentuser)\\\\(root|authroot)"
+            }
+          },
+          "source": "ATT&CK T1553.004 procedure: PowerShell Import-Certificate vao kho Root"
+        },
+        {
+          "id": "sip_trust_provider",
+          "sub": "T1553.003",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "regex": "\\\\microsoft\\\\cryptography\\\\(oid\\\\encodingtype 0\\\\cryptsip|providers\\\\trust\\\\)"
+            }
+          },
+          "source": "ATT&CK T1553.003: sua SIP / trust provider registry"
         }
       ]
     },
@@ -356,16 +402,18 @@
       ],
       "clauses": [
         {
-          "id": "wmi_process",
+          "id": "wmic_process",
+          "eid": [
+            1
+          ],
           "all": {
-            "Image|SourceImage": {
+            "Image": {
               "endswith": [
-                "\\wmiprvse.exe",
                 "\\wmic.exe"
               ]
             }
           },
-          "source": "ATT&CK T1047: activity by WMI provider host or wmic"
+          "source": "ATT&CK T1047: tao process wmic.exe (thay clause cu bat moi event cua wmiprvse)"
         },
         {
           "id": "wmi_parent",
@@ -393,6 +441,41 @@
             }
           },
           "source": "ATT&CK T1047 procedure examples"
+        },
+        {
+          "id": "wmi_client_load",
+          "eid": [
+            7
+          ],
+          "all": {
+            "ImageLoaded": {
+              "endswith": [
+                "\\wbem\\wmiutils.dll",
+                "\\wbem\\fastprox.dll",
+                "\\wbem\\wbemprox.dll"
+              ]
+            },
+            "Image": {
+              "not_regex": "^c:\\\\windows\\\\(system32|syswow64)\\\\"
+            }
+          },
+          "source": "ATT&CK T1047 (DS0009/DS0011 module load): process ngoai thu muc he thong nap thu vien WMI client"
+        },
+        {
+          "id": "wmi_security_registry",
+          "eid": [
+            12,
+            13,
+            14
+          ],
+          "all": {
+            "TargetObject": {
+              "contains": [
+                "\\control\\wmi\\security"
+              ]
+            }
+          },
+          "source": "ATT&CK T1047: sua descriptor bao mat WMI trong registry"
         }
       ]
     },
@@ -513,7 +596,7 @@
       ],
       "clauses": [
         {
-          "id": "renamed_binary",
+          "id": "renamed_system_binary",
           "sub": "T1036.003",
           "eid": [
             1
@@ -523,7 +606,42 @@
               "exists": true
             },
             "OriginalFileName": {
-              "regex": "\\.(exe|dll)$"
+              "in": [
+                "cmd.exe",
+                "powershell.exe",
+                "pwsh.dll",
+                "rundll32.exe",
+                "regsvr32.exe",
+                "mshta.exe",
+                "certutil.exe",
+                "wscript.exe",
+                "cscript.exe",
+                "schtasks.exe",
+                "wmic.exe",
+                "net.exe",
+                "net1.exe",
+                "bitsadmin.exe",
+                "msbuild.exe",
+                "installutil.exe",
+                "regasm.exe",
+                "regsvcs.exe",
+                "psexec.c",
+                "psexesvc.exe",
+                "procdump",
+                "reg.exe",
+                "sc.exe",
+                "vssadmin.exe",
+                "wevtutil.exe",
+                "nltest.exe",
+                "whoami.exe",
+                "msiexec.exe",
+                "svchost.exe",
+                "lsass.exe",
+                "explorer.exe",
+                "conhost.exe",
+                "taskhostw.exe",
+                "dllhost.exe"
+              ]
             }
           },
           "cmp": [
@@ -533,7 +651,7 @@
               "b": "OriginalFileName"
             }
           ],
-          "source": "ATT&CK T1036.003: image name differs from PE OriginalFileName"
+          "source": "ATT&CK T1036.003 + Sigma 'Renamed System Binary': PE OriginalFileName la binary he thong/LOLBin nhung ten Image khac"
         },
         {
           "id": "system_name_wrong_path",
@@ -555,6 +673,19 @@
             }
           },
           "source": "ATT&CK T1036.007: double file extension"
+        },
+        {
+          "id": "masquerade_named_pipe",
+          "eid": [
+            17,
+            18
+          ],
+          "all": {
+            "PipeName": {
+              "regex": "^\\\\(netsvc\\\\|msagent_|postex_|status_|mojo\\.5688\\.8052\\.|msse-|ntsvcs|scerpc|win_svc)"
+            }
+          },
+          "source": "Sigma 'CobaltStrike Named Pipe Patterns': ten pipe gia dang dich vu Windows (netsvc/ntsvcs/scerpc/msagent)"
         }
       ]
     }
