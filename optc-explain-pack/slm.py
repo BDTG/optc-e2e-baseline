@@ -50,7 +50,8 @@ class Scorer:
     def chat_prefix(self, system, user, assistant_prefix=""):
         msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
         if getattr(self.tok, "chat_template", None):
-            p = self.tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
+            # enable_thinking=False: Qwen3 se mo <think> neu khong tat; template khac bo qua bien nay
+            p = self.tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
         else:
             p = f"{system}\n\n{user}\n\n"
         return p + assistant_prefix
