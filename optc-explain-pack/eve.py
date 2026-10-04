@@ -18,7 +18,13 @@ CF_TEXT = "N/A"
 VERDICT_HEAD = '{"verdict": "'
 TECH_HEAD = '{"verdict": "malicious", '
 EVID_RE = re.compile(r'E(\d+)\.([A-Za-z]+)=([^"\]\n]+)')
-TECH_RE = re.compile(r"T\d{4}(?:\.\d{3})?")
+TECH_RE = re.compile(r"\bT\d{4}(?:[._]\d{3})?(?!\d)")
+EVENT_TAG_RE = re.compile(r"^\s*\[?E(\d+)\]?")
+KV_RE = re.compile(r"([A-Za-z][A-Za-z0-9]*)\s*[:=]\s*([^|\n]+)")
+ESC_RE = re.compile(r'\\(["\\/bfnrt]|u[0-9a-fA-F]{4})?')
+VERDICT_RE = re.compile(r"\b(not\s+)?(malicious|benign)\b", re.I)
+EVENT_KEYS = ("event", "eventindex", "event_index", "eventidx", "idx", "index", "e")
+TEXT_KEYS = ("evidence", "value", "details", "description", "text")
 MODES = ("eve", "kb_only", "anchored", "json_enum", "json", "free")
 
 
@@ -40,6 +46,85 @@ def render(events, max_val=200, max_chars=6000):
         out.append(ln)
         n += len(ln) + 1
     return "\n".join(out)
+
+
+def loads_lenient(gen):
+    """JSON dau tien trong output sinh; bo ```json, va dong ngoac neu bi cat do max_new_tokens."""
+    s = gen.replace("```json", "").replace("```", "")
+    i = s.find("{")
+    if i < 0:
+        return None, "text"
+    s = s[i:]
+    fixed = ESC_RE.sub(lambda m: m.group(0) if m.group(1) else "\\\\", s)
+    for cand in (s, fixed):
+        try:
+            return json.JSONDecoder().raw_decode(cand)[0], "json"
+        except ValueError:
+            pass
+    s = fixed
+    stack, in_str, esc = [], False, False
+    for ch in s:
+        if in_str:
+            esc = ch == "\\" and not esc
+            if ch == '"' and not esc:
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch in "{[":
+            stack.append("}" if ch == "{" else "]")
+        elif ch in "}]" and stack:
+            stack.pop()
+    tail = s if in_str else s.rstrip().rstrip(",")
+    if in_str:
+        tail = (tail[:-1] if esc else tail) + '"'
+    try:
+        return json.loads(tail + "".join(reversed(stack))), "json_repaired"
+    except ValueError:
+        return None, "text"
+
+
+def get_ci(d, key):
+    return next((v for k, v in d.items() if k.lower() == key), None) if isinstance(d, dict) else None
+
+
+def event_idx(v):
+    m = re.search(r"\d+", str(v))
+    return int(m.group()) if m else None
+
+
+def evidence_claims(obj, gen):
+    """(event|None, field, value) tu nhieu dang evidence ma SLM hay sinh."""
+    claims = []
+
+    def from_text(s, ev=None):
+        hit = [(int(m.group(1)), m.group(2), m.group(3)) for m in EVID_RE.finditer(s)]
+        if hit:
+            return hit
+        m = EVENT_TAG_RE.match(s)
+        ev = int(m.group(1)) if m else ev
+        return [(ev, k, v) for k, v in KV_RE.findall(s)]
+
+    items = get_ci(obj, "evidence")
+    if items is None:
+        return from_text(gen) if obj is None else []
+    for it in items if isinstance(items, list) else [items]:
+        if isinstance(it, str):
+            claims += from_text(it)
+        elif isinstance(it, dict):
+            ev = next((event_idx(v) for k, v in it.items() if k.lower() in EVENT_KEYS), None)
+            fld, val = get_ci(it, "field"), get_ci(it, "value")
+            if isinstance(fld, str) and val is not None:
+                claims.append((ev, fld, str(val)))
+                continue
+            for k, v in it.items():
+                if k.lower() in EVENT_KEYS:
+                    continue
+                if k.lower() in TEXT_KEYS and isinstance(v, str):
+                    claims += from_text(v, ev)
+                elif isinstance(v, (str, int, float)):
+                    claims.append((ev, k, str(v)))
+    return claims
 
 
 def ev_str(item, max_val=160):
@@ -85,7 +170,7 @@ def cap_witnesses(ws, cap):
 
 class Explainer:
     def __init__(self, scorer, kb, mode, max_witnesses=24, max_spans=48, topk_evidence=2,
-                 max_new_tokens=192, valid_ids=None, attested_only=False):
+                 max_new_tokens=384, valid_ids=None, attested_only=False):
         if mode not in MODES:
             raise ValueError(mode)
         self.s, self.kb, self.mode = scorer, kb, mode
@@ -167,24 +252,42 @@ class Explainer:
                 "evidence": chosen, "witness_clause": None, "status": "unconstrained"}
 
     def parse_generation(self, rec, gen):
-        fields = {(e["idx"], k): (e.get("eid"), str(v)) for e in rec["events"] for k, v in e.get("fields", {}).items()}
-        items, fabricated = [], 0
-        for m in EVID_RE.finditer(gen):
-            ev, fld, val = int(m.group(1)), m.group(2), m.group(3).strip().rstrip("\\").strip()
-            ok = (ev, fld) in fields and len(val) >= 3 and (
-                val.lower() in fields[(ev, fld)][1].lower() or fields[(ev, fld)][1].lower().startswith(val.lower()))
-            if ok:
-                items.append({"event": ev, "eid": fields[(ev, fld)][0], "field": fld, "value": fields[(ev, fld)][1]})
-            else:
+        fields = collections.defaultdict(dict)
+        for e in rec["events"]:
+            for k, v in e.get("fields", {}).items():
+                fields[e["idx"]][k.lower()] = (k, str(v), e.get("eid"))
+        obj, parse = loads_lenient(gen)
+
+        def match(ev, fld, val):
+            val = str(val).replace("\\\\", "\\").strip().strip('"').rstrip("\\").strip()
+            if len(val) < 3:
+                return None
+            for i in ([ev] if ev in fields else list(fields)):
+                hit = fields[i].get(str(fld).lower())
+                if hit and (val.lower() in hit[1].lower() or hit[1].lower().startswith(val.lower())):
+                    return {"event": i, "eid": hit[2], "field": hit[0], "value": hit[1]}
+            return None
+
+        items, seen, fabricated = [], set(), 0
+        for ev, fld, val in evidence_claims(obj, gen):
+            it = match(ev, fld, val)
+            if it is None:
                 fabricated += 1
-        ids = TECH_RE.findall(gen)
-        t = ids[0] if ids else None
-        low = gen.lower()
-        vg = "malicious" if "malicious" in low else ("benign" if "benign" in low else None)
-        valid = None if t is None else (t in self.valid_ids if self.valid_ids else True)
+            elif (it["event"], it["field"]) not in seen:
+                seen.add((it["event"], it["field"]))
+                items.append(it)
+
+        tech_src = get_ci(obj, "technique")
+        tech_txt = json.dumps(tech_src) if tech_src is not None else gen
+        ids = TECH_RE.findall(tech_txt) or (TECH_RE.findall(gen) if tech_src is None else [])
+        t = ids[0].replace("_", ".") if ids else None
+        vsrc = get_ci(obj, "verdict")
+        vm = VERDICT_RE.search(str(vsrc) if vsrc is not None else gen)
+        vg = None if vm is None else ("benign" if vm.group(1) else vm.group(2).lower())
+        valid = None if t is None else (t in self.valid_ids or t[:5] in self.valid_ids if self.valid_ids else True)
         return {"technique": t[:5] if t else None, "technique_sub": t if t and "." in t else None,
                 "technique_probs": {}, "candidates": [], "evidence": items, "witness_clause": None,
-                "status": "unconstrained", "generation": gen, "verdict_gen": vg,
+                "status": "unconstrained", "generation": gen, "verdict_gen": vg, "parse": parse,
                 "n_evidence_generated": len(items) + fabricated, "n_evidence_fabricated": fabricated,
                 "technique_valid_id": valid}
 
@@ -275,53 +378,21 @@ def run_kb_only(rec, kb, rule, max_witnesses=24, attested_only=False):
     return out
 
 
-def cmd_run_kb_only(a, kb):
-    done = set()
-    out_path = Path(a.out)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    if a.resume and out_path.exists():
-        done = {r["sample_id"] for r in read_jsonl(out_path)}
-    stats = collections.Counter()
-    lat = []
-    with open(out_path, "a" if a.resume else "w", encoding="utf-8") as f:
-        for i, rec in enumerate(read_jsonl(a.data)):
-            if a.limit and i >= a.limit:
-                break
-            if rec.get("sample_id") in done:
-                continue
-            if a.only_malicious and not rec.get("label"):
-                continue
-            r = run_kb_only(rec, kb, a.kb_rule, a.max_witnesses, a.attested_only)
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-            f.flush()
-            stats[r["status"]] += 1
-            stats["entailment_ok"] += int(r["entailment_ok"])
-            stats["with_technique"] += int(bool(r.get("technique")))
-            stats["n"] += 1
-            lat.append(r["latency_ms"])
-            if a.progress and stats["n"] % a.progress == 0:
-                print(f"[{stats['n']}] {dict(stats)} mean_ms={sum(lat) / len(lat):.0f}", flush=True)
-    summary = {"mode": "kb_only", "kb_rule": a.kb_rule, "model": None, "n": stats["n"],
-               "counts": dict(stats),
-               "entailment_ok_rate_among_predicted": stats["entailment_ok"] / max(stats["with_technique"], 1),
-               "latency_ms_mean": sum(lat) / len(lat) if lat else None,
-               "latency_ms_p90": sorted(lat)[int(0.9 * (len(lat) - 1))] if lat else None,
-               "cf_verdict_margin": None, "n_forward": 0}
-    Path(str(out_path) + ".summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
-    print(json.dumps(summary, indent=1))
-
-
 def cmd_run(a):
     kb = KB(a.kb)
-    if a.mode == "kb_only":
-        return cmd_run_kb_only(a, kb)
-    if not a.model:
-        raise SystemExit("--model is required except for --mode kb_only")
-    from slm import Scorer
-    scorer = Scorer(a.model, device=a.device, dtype=a.dtype, batch_size=a.batch_size,
-                    max_len=a.max_len, threads=a.threads, prefix_cache=not a.no_prefix_cache)
-    ex = Explainer(scorer, kb, a.mode, a.max_witnesses, a.max_spans, a.topk_evidence,
-                   a.max_new_tokens, load_valid_ids(a.attack_map), a.attested_only)
+    kb_only = a.mode == "kb_only"
+    if kb_only:
+        scorer = ex = None
+        explain = lambda rec: run_kb_only(rec, kb, a.kb_rule, a.max_witnesses, a.attested_only)  # noqa: E731
+    else:
+        if not a.model:
+            raise SystemExit("--model is required except for --mode kb_only")
+        from slm import Scorer
+        scorer = Scorer(a.model, device=a.device, dtype=a.dtype, batch_size=a.batch_size,
+                        max_len=a.max_len, threads=a.threads, prefix_cache=not a.no_prefix_cache)
+        ex = Explainer(scorer, kb, a.mode, a.max_witnesses, a.max_spans, a.topk_evidence,
+                       a.max_new_tokens, load_valid_ids(a.attack_map), a.attested_only)
+        explain = ex.explain
     done = set()
     out_path = Path(a.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -338,8 +409,10 @@ def cmd_run(a):
             if a.only_malicious and not rec.get("label"):
                 continue
             try:
-                r = ex.explain(rec)
+                r = explain(rec)
             except ValueError as e:
+                if kb_only:
+                    raise
                 stats["skipped_" + type(e).__name__] += 1
                 print(f"skip {rec.get('sample_id')}: {e}", file=sys.stderr)
                 continue
@@ -348,20 +421,24 @@ def cmd_run(a):
             stats[r["status"]] += 1
             stats["entailment_ok"] += int(r["entailment_ok"])
             stats["with_technique"] += int(bool(r.get("technique")))
-            stats["verdict_tie"] += int(abs(r["verdict_margin_raw"]) < 1e-6)
+            if not kb_only:
+                stats["verdict_tie"] += int(abs(r["verdict_margin_raw"]) < 1e-6)
             stats["n"] += 1
             lat.append(r["latency_ms"])
             if a.progress and stats["n"] % a.progress == 0:
                 print(f"[{stats['n']}] {dict(stats)} mean_ms={sum(lat) / len(lat):.0f}", flush=True)
     n = max(stats["n"], 1)
-    summary = {"mode": a.mode, "model": a.model, "n": stats["n"], "counts": dict(stats),
-               "entailment_ok_rate_among_predicted": stats["entailment_ok"] / max(stats["with_technique"], 1), "verdict_tie_rate": stats["verdict_tie"] / n,
+    summary = {"mode": a.mode, **({"kb_rule": a.kb_rule} if kb_only else {}),
+               "model": None if kb_only else a.model, "n": stats["n"], "counts": dict(stats),
+               "entailment_ok_rate_among_predicted": stats["entailment_ok"] / max(stats["with_technique"], 1),
+               **({} if kb_only else {"verdict_tie_rate": stats["verdict_tie"] / n}),
                "latency_ms_mean": sum(lat) / len(lat) if lat else None,
                "latency_ms_p90": sorted(lat)[int(0.9 * (len(lat) - 1))] if lat else None,
-               "cf_verdict_margin": ex.cf_margin, "n_forward": scorer.n_forward}
+               "cf_verdict_margin": None if kb_only else ex.cf_margin,
+               "n_forward": 0 if kb_only else scorer.n_forward}
     Path(str(out_path) + ".summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     print(json.dumps(summary, indent=1))
-    if summary["verdict_tie_rate"] > 0.01:
+    if summary.get("verdict_tie_rate", 0) > 0.01:
         print("WARNING verdict tie rate > 1%: check dtype/numerics", file=sys.stderr)
 
 
@@ -440,7 +517,7 @@ def main(argv=None):
     r.add_argument("--max_witnesses", type=int, default=24)
     r.add_argument("--max_spans", type=int, default=48)
     r.add_argument("--topk_evidence", type=int, default=2)
-    r.add_argument("--max_new_tokens", type=int, default=192)
+    r.add_argument("--max_new_tokens", type=int, default=384)
     r.add_argument("--attack_map", default=None)
     r.add_argument("--attested_only", action="store_true")
     r.add_argument("--limit", type=int, default=0)

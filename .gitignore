@@ -42,6 +42,7 @@ env/
 # === EVE / AD-GEN / OpTC / attack_data — GENERATED outputs (commit CODE only) ===
 # Code is kept: *.py, *.md, *.txt, *.sh, *.bat, tech_preconditions.json, tests/*.py
 optc-explain-pack/results/
+optc-explain-pack/archives/
 optc-explain-pack/output/
 optc-explain-pack/logs/
 P1/Output/results_phase2/

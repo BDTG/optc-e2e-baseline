@@ -1,4 +1,5 @@
 import argparse
+import collections
 import csv
 import json
 from pathlib import Path
@@ -42,7 +43,6 @@ def load_points(paths, metric, label_map):
         if x["file"] not in seen:
             seen.add(x["file"])
             uniq.append(x)
-    import collections
     nc = collections.Counter(x["name"] for x in uniq)
     for x in uniq:
         if nc[x["name"]] > 1:

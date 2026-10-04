@@ -110,7 +110,11 @@ def main(argv=None):
         wq = WeightedQuantile([r["score"] for r in cal], [wc[r["id"]] for r in cal])
         tst = [r for r in test if r["id"] in wt]
         res["weighted"] = [evaluate(cal, tst, al, wq, wt) for al in a.alphas]
-        res["weight_stats"] = {"calib_mean": sum(wc.values()) / len(wc), "test_mean": sum(wt.values()) / len(wt)}
+        w = [wc[r["id"]] for r in cal]
+        ess = sum(w) ** 2 / sum(x * x for x in w)
+        res["weight_stats"] = {"calib_mean": sum(wc.values()) / len(wc), "test_mean": sum(wt.values()) / len(wt),
+                               "calib_n": len(w), "calib_ess": ess, "calib_ess_ratio": ess / len(w),
+                               "calib_w_max": max(w), "calib_w_min": min(w)}
     txt = json.dumps(res, indent=1)
     if a.out:
         Path(a.out).parent.mkdir(parents=True, exist_ok=True)

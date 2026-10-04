@@ -10,12 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-
-def read_jsonl(path):
-    with open(path, encoding="utf-8") as f:
-        for line in f:
-            if line.strip():
-                yield json.loads(line)
+from eve import read_jsonl
 
 
 def load_ttp(data, min_pos, max_train, seed):
