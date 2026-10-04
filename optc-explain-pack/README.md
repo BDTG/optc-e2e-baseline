@@ -21,6 +21,8 @@ Yêu cầu: `torch`, `transformers` (4.4x hoặc 5.x), `scikit-learn`, `tokenize
 | `conformal_route.py` | Định tuyến theo tập conformal: giữ SLM nhỏ khi tập có 1 technique, escalate lên model lớn khi còn lại. `--lat_small`/`--lat_big` lấy latency từ file đo trên CPU |
 | `paired_bootstrap.py` | Bootstrap CI ghép cặp TTP top-1 giữa hai hệ thống (+ McNemar exact), tùy chọn `--gold` |
 | `json_enum_check.py` | Kiểm tra đủ n và phân phối technique dự đoán của file kết quả |
+| `random_in_c.py` | So hệ thống với chọn ngẫu nhiên đều trong C(E): kỳ vọng, Monte Carlo, p một phía, tách nhóm \|C\| ≥ 2 |
+| `kb_field_control.py` | Biến thể KB đối chứng chéo field: `anyfield` (khớp từ khóa ở mọi field), `cross<seed>` (đổi mỗi field sang field khác) |
 | `inject_persample.py` | Kiểm injection theo từng mẫu: technique đổi thì C(E)/evidence có đổi không, evidence có nằm trên field bị chèn không; tách theo nhãn |
 | `attackdata_stats.py`, `attackdata_silver_gold.py` | Mô tả tập attack_data; so nhãn silver (.yml) với gold (atomic test trong cây tiến trình), kappa, tách tree/rare |
 | `measure_rss.py` | Chạy một lệnh trong process riêng, lấy mẫu RSS bằng psutil (RAM thật trên CPU) |
